@@ -67,11 +67,6 @@ npm install
 npm run dev
 ```
 
-4. **Open your browser**
-Navigate to `http://localhost:3000` to start your emotional reflection journey.
-
-## 📱 Screenshots
-
 ### 🏠 Home Page
 Beautiful floating mood cards with smooth animations and gradient backgrounds.
 
