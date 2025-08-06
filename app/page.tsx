@@ -168,7 +168,7 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur"
+              className="mt-8 text-center"
             >
               <Link href={`/mood/${selectedMood}`}>
                 <motion.button
