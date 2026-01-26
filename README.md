@@ -2,6 +2,12 @@
 
 A beautifully animated emotional wellness platform that helps users explore, visualize, and understand their feelings through interactive mood tracking, 3D visualizations, and personalized insights.
 
+<div align="center">
+
+![Apertre 3.0](https://img.shields.io/badge/Apertre_3.0-Contributor_Favorite-FF4B2B?style=for-the-badge&logo=opensourceinitiative&logoColor=white)
+![Open Source Love](https://img.shields.io/badge/Open_Source-❤️-pink?style=for-the-badge)
+
+</div>
 ## ✨ Features
 
 ### 🎨 Mood Selection
