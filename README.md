@@ -8,6 +8,9 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 ![Open Source Love](https://img.shields.io/badge/Open_Source-❤️-pink?style=for-the-badge)
 
 </div>
+
+---
+
 ## ✨ Features
 
 ### 🎨 Mood Selection
@@ -37,6 +40,8 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 - **Interactive Player**: Play/pause functionality with beautiful UI
 - **Mood-Based Organization**: Easy switching between emotional soundscapes
 
+---
+
 ## 🛠️ Tech Stack
 
 - **Frontend**: Next.js 13 with App Router
@@ -45,6 +50,8 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 - **Icons**: Lucide React for consistent iconography
 - **Data Storage**: Local Storage for client-side persistence
 - **TypeScript**: Full type safety throughout the application
+
+---
 
 ## 🎯 Design Philosophy
 
@@ -55,11 +62,13 @@ InnerHue follows **Apple-level design aesthetics** with:
 - **Responsive Design**: Mobile-first approach with perfect cross-device experience
 - **Accessibility**: High contrast ratios and intuitive navigation
 
+---
+
 ## 🚀 Getting Started
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/innerhue.git
+git clone https://github.com/Nitya-003/innerhue.git
 cd innerhue
 ```
 
@@ -73,17 +82,7 @@ npm install
 npm run dev
 ```
 
-### 🏠 Home Page
-Beautiful floating mood cards with smooth animations and gradient backgrounds.
-
-### 🔮 Mood Visualization
-Interactive 3D orbs with dynamic colors, particles, and emotional insights.
-
-### 📊 Analytics
-Comprehensive mood tracking with beautiful charts and statistics.
-
-### 🎵 Music Player
-Curated playlists with a Spotify-inspired interface.
+---
 
 ## 🎨 Color System
 
@@ -94,6 +93,8 @@ InnerHue uses a comprehensive emotional color palette:
 - **Excited**: Vibrant purples (#AB47BC)
 - **Anxious**: Warm oranges (#FF7043)
 
+---
+
 ## 🔄 Future Enhancements
 
 - [ ] **Backend Integration**: Express.js API with MongoDB
@@ -102,6 +103,8 @@ InnerHue uses a comprehensive emotional color palette:
 - [ ] **Voice Journaling**: Audio recordings with sentiment analysis
 - [ ] **Meditation Timer**: Guided meditation based on current mood
 - [ ] **Wearable Integration**: Apple Watch and Fitbit mood tracking
+
+---
 
 ## 🤝 Contributing
 
