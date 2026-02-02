@@ -1,0 +1,38 @@
+name: Welcome Message
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Welcome New Issue
+        if: github.event_name == 'issues'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "👋 Hello! Thank you for raising this issue. \n\nOur team (Nitya-003) will review it shortly. In the meantime, please ensure you've provided all necessary details in the description. \n\n🌟 **Feel free to Star the repo if you like our work!**"
+            })
+
+      - name: Welcome New PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "🚀 Wow! Thanks for the Pull Request. \n\nWe appreciate your contribution to **InnerHue/CropChain**. We will review your changes and get back to you soon. Please make sure your PR follows our 'Apple-level' design standards! \n\n✨ Happy Coding!"
+            })
