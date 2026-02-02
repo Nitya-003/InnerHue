@@ -53,6 +53,27 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 
 ---
 
+## 🗺️ System Architecture
+To understand how InnerHue processes your emotional data, here is the high-level logic flow:
+```mermaid
+graph TD
+    A[User Selection] -->|Select Mood| B(Mood Engine)
+    B --> C{Dynamic Mapping}
+    C -->|Update| D[3D Orb Visualizer]
+    C -->|Fetch| E[AI Suggestions & Quotes]
+    C -->|Filter| F[Curated Music Playlists]
+    D --> G[Local Storage Persistence]
+    E --> G
+    F --> G
+    G --> H[Analytics Dashboard]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style D fill:#6272a4,stroke:#333,stroke-width:2px,color:#fff
+    style H fill:#50fa7b,stroke:#333,stroke-width:2px
+```
+
+---
+
 ## 🎯 Design Philosophy
 
 InnerHue follows **Apple-level design aesthetics** with:
