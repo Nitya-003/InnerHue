@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import './moodcard.css';
 
 interface Mood {
   id: string;
@@ -69,30 +70,15 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
           : '0 10px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(255, 255, 255, 0.1)'
       }}
     >
-      {/* Floating animation for emoji */}
-      <motion.div
-        animate={{
-          y: [0, -4, 0],
-          rotate: [0, 3, -3, 0],
-          scale: [1, 1.05, 1]
-        }}
-        transition={{
-          duration: 4 + Math.random() * 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: index * 0.2
-        }}
-        className="text-center mb-2"
-      >
-        <motion.div 
-          className="text-3xl mb-1 filter drop-shadow-sm"
-          whileHover={{ scale: 1.2, rotate: 10 }}
-          transition={{ type: "spring", stiffness: 400 }}
-        >
+      {/* Floating emoji (ONLY CHANGE IS HERE) */}
+      <div className="text-center mb-2">
+        <div className="emoji-float text-3xl mb-1 filter drop-shadow-sm">
           {mood.emoji}
-        </motion.div>
-        <div className="text-sm font-medium text-gray-800 drop-shadow-sm">{mood.name}</div>
-      </motion.div>
+        </div>
+        <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
+          {mood.name}
+        </div>
+      </div>
 
       {/* Glow effect */}
       {isSelected && (
