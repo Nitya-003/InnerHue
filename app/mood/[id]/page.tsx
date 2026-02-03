@@ -17,22 +17,64 @@ interface MoodPageProps {
 export default function MoodPage({ params }: MoodPageProps) {
   const [moodData, setMoodData] = useState<any>(null);
   const [suggestions, setSuggestions] = useState<any>(null);
-  
+
+  // Use a ref to prevent strict mode double-execution
+  const dataSavedRef = useState(false); // Using useState initializer logic is cleaner but for strict mode ref is better
+  // Actually, for strict mode, a ref initialized to false, set to true.
+
   useEffect(() => {
     const mood = MoodData.getMoodById(params.id);
     const moodSuggestions = MoodData.getSuggestions(params.id);
-    
+
     setMoodData(mood);
     setSuggestions(moodSuggestions);
-    
+
     // Save to local storage for analytics
-    const savedMoods = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    savedMoods.push({
-      mood: params.id,
-      timestamp: new Date().toISOString(),
-      date: new Date().toDateString()
-    });
-    localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
+    // In a real app we might want to allow multiple visits, but for "Moment to moment" maybe just once per mount?
+    // Let's rely on a session constraint or just a simple check.
+
+    const saveMoodEntry = () => {
+      try {
+        let history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+
+        // Prevent duplicate save if the last entry was made recently (5s debounce)
+        const lastEntry = history[history.length - 1];
+        const now = Date.now();
+
+        if (lastEntry &&
+          lastEntry.mood === params.id &&
+          (now - new Date(lastEntry.timestamp).getTime() < 5000)) {
+          return;
+        }
+
+        const newEntry = {
+          id: crypto.randomUUID(),
+          mood: params.id,
+          emotion: mood ? mood.name : params.id,
+          timestamp: new Date().toISOString(),
+          color: mood ? mood.color : '#cbd5e1',
+          note: ''
+        };
+
+        history.push(newEntry);
+
+        // Keep only the last 13 entries
+        if (history.length > 13) {
+          history = history.slice(history.length - 13);
+        }
+
+        localStorage.setItem('moodHistory', JSON.stringify(history));
+
+        // Notify other components
+        window.dispatchEvent(new Event('storage'));
+      } catch (err) {
+        console.error('Failed to save mood:', err);
+      }
+    };
+
+    if (mood) {
+      saveMoodEntry();
+    }
   }, [params.id]);
 
   if (!moodData || !suggestions) {
@@ -50,7 +92,7 @@ export default function MoodPage({ params }: MoodPageProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       {/* Header */}
-      <motion.header 
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="p-6 relative z-10"
@@ -66,14 +108,14 @@ export default function MoodPage({ params }: MoodPageProps) {
               <span className="text-purple-600 font-medium">Back</span>
             </motion.button>
           </Link>
-          
+
           <div className="flex items-center space-x-2">
             <span className="text-2xl">{moodData.emoji}</span>
             <h1 className="text-2xl font-bold text-gray-800">
               Feeling {moodData.name}
             </h1>
           </div>
-          
+
           <div className="flex space-x-2">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -112,8 +154,8 @@ export default function MoodPage({ params }: MoodPageProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <SuggestionPanel 
-                suggestions={suggestions} 
+              <SuggestionPanel
+                suggestions={suggestions}
                 mood={moodData}
                 onRefresh={() => {
                   const newSuggestions = MoodData.getSuggestions(params.id);
