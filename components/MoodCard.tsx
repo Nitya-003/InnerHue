@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import './moodcard.css';
 
 interface Mood {
   id: string;
@@ -104,9 +105,11 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
           transition={{ type: "spring", stiffness: 400 }}
         >
           {mood.emoji}
-        </motion.div>
-        <div className="text-sm font-medium text-gray-800 drop-shadow-sm">{mood.name}</div>
-      </motion.div>
+        </div>
+        <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
+          {mood.name}
+        </div>
+      </div>
 
       {/* Glow effect */}
       {isSelected && (

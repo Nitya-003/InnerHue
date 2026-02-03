@@ -68,7 +68,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       {/* Header */}
-      <motion.header 
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="p-6 relative z-10"
@@ -84,7 +84,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
               <span className="text-purple-600 font-medium">Back</span>
             </motion.button>
           </Link>
-          
+
           <div className="flex items-center space-x-2">
             {moodData.length > 1 ? (
               <div className="flex items-center space-x-2">
@@ -127,7 +127,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
               </>
             )}
           </div>
-          
+
           <div className="flex space-x-2">
             <motion.button
               whileHover={{ scale: 1.05 }}

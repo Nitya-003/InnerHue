@@ -1,5 +1,6 @@
 import './globals.css';
 import { Footer } from '@/components/Footer';
+import { BackToTop } from '@/components/BackToTop';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {children}
         <Footer />
+        <BackToTop />
       </body>
     </html>
   );

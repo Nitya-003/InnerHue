@@ -2,6 +2,12 @@
 
 import { motion } from 'framer-motion';
 import { RefreshCw, MessageCircle, Quote, Hash, Music } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface SuggestionPanelProps {
   suggestions: {
@@ -23,14 +29,28 @@ export function SuggestionPanel({ suggestions, mood, onRefresh }: SuggestionPane
         <h3 className="text-2xl font-bold text-gray-800">
           Personalized Insights
         </h3>
-        <motion.button
-          whileHover={{ scale: 1.05, rotate: 180 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={onRefresh}
-          className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
-        >
-          <RefreshCw className="w-5 h-5 text-purple-600" />
-        </motion.button>
+        <TooltipProvider delayDuration={500}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="px-2 pt-2 pb-[1px] rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all">
+                <motion.button
+                  whileHover={{ scale: 1.05, rotate: 180 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={onRefresh}
+                  className="transition-all"
+                >
+                  <RefreshCw className="w-5 text-purple-600" />
+                </motion.button>
+              </div>
+            </TooltipTrigger>
+
+            <TooltipContent
+              className="bg-white/80 backdrop-blur-md border-white/50 text-gray-800 shadow-xl"
+            >
+              <p>Refresh Insights</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {/* Journal Prompt */}
