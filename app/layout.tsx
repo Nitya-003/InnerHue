@@ -1,5 +1,7 @@
 import './globals.css';
 import { ClientLayout } from '@/components/ClientLayout';
+import { Footer } from '@/components/Footer';
+import { BackToTop } from '@/components/BackToTop';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
@@ -9,6 +11,8 @@ export const metadata: Metadata = {
   title: 'InnerHue',
   description: 'Emotional Reflection Web App',
 };
+
+import { Toaster } from 'react-hot-toast';
 
 export default function RootLayout({
   children,
@@ -21,6 +25,10 @@ export default function RootLayout({
         <ClientLayout>
           {children}
         </ClientLayout>
+        {children}
+        <Footer />
+        <BackToTop />
+        <Toaster position="top-right" />
       </body>
     </html>
   );

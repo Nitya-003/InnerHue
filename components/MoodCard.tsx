@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { memo } from 'react';
+import './moodcard.css';
 
 interface Mood {
   id: string;
@@ -70,6 +71,35 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
     >
       {/* Emoji container - simplified animation */}
       <div className="text-center">
+      {/* Selection indicator */}
+      {isSelected && (
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className="absolute -top-2 -right-2 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center z-10"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="w-3 h-3 bg-white rounded-full"
+          />
+        </motion.div>
+      )}
+      {/* Floating animation for emoji */}
+      <motion.div
+        animate={{
+          y: [0, -4, 0],
+          rotate: [0, 3, -3, 0],
+          scale: [1, 1.05, 1]
+        }}
+        transition={{
+          duration: 4 + Math.random() * 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: index * 0.2
+        }}
+        className="text-center mb-2"
+      >
         <motion.div 
           className="text-3xl mb-1 select-none"
           whileHover={{ 
@@ -81,6 +111,10 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
         </motion.div>
         <div className="text-sm font-medium text-gray-800">{mood.name}</div>
       </div>
+        <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
+          {mood.name}
+        </div>
+      </motion.div>
 
       {/* Glow effect - only when selected */}
       {isSelected && (
