@@ -30,16 +30,14 @@ export default function MoodPage({ params }: MoodPageProps) {
     setSuggestions(moodSuggestions);
 
     // Save to local storage for analytics
-    // Check if we already saved this specific instance to prevent Strict Mode duplicates
     // In a real app we might want to allow multiple visits, but for "Moment to moment" maybe just once per mount?
     // Let's rely on a session constraint or just a simple check.
 
     const saveMoodEntry = () => {
       try {
-        const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+        let history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
 
-        // Prevent duplicate save if the last entry was made less than 5 seconds ago for the same mood
-        // This is a simple heuristic to prevent strict-mode double firing or rapid refresh spam
+        // Prevent duplicate save if the last entry was made recently (5s debounce)
         const lastEntry = history[history.length - 1];
         const now = Date.now();
 
@@ -51,17 +49,26 @@ export default function MoodPage({ params }: MoodPageProps) {
 
         const newEntry = {
           id: crypto.randomUUID(),
-          mood: params.id, // Keeping ID for reference
-          emotion: mood ? mood.name : params.id, // Saving human readable name
-          timestamp: new Date().toISOString(), // ISO string for robust parsing
-          color: mood ? mood.color : '#cbd5e1', // Save color for history UI
-          note: '' // Optional snippet placeholder
+          mood: params.id,
+          emotion: mood ? mood.name : params.id,
+          timestamp: new Date().toISOString(),
+          color: mood ? mood.color : '#cbd5e1',
+          note: ''
         };
 
         history.push(newEntry);
+
+        // Keep only the last 13 entries
+        if (history.length > 13) {
+          history = history.slice(history.length - 13);
+        }
+
         localStorage.setItem('moodHistory', JSON.stringify(history));
+
+        // Notify other components
+        window.dispatchEvent(new Event('storage'));
       } catch (err) {
-        console.error('Failed to save mood history:', err);
+        console.error('Failed to save mood:', err);
       }
     };
 

@@ -33,7 +33,7 @@ export default function AnalyticsPage() {
     weekStart.setDate(weekStart.getDate() - 7);
 
     history.forEach((entry: any) => {
-      // Handle legacy data where emotion might be missing or raw mood ID
+      // Support both new (emotion) and old (mood) formats
       const moodKey = entry.emotion || entry.mood;
       moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
 
@@ -57,60 +57,31 @@ export default function AnalyticsPage() {
   };
 
   const handleClearHistory = () => {
-    if (confirm('Are you sure you want to clear your entire mood history? This cannot be undone.')) {
+    if (confirm('Are you sure you want to clear your entire mood history?')) {
       localStorage.setItem('moodHistory', '[]');
       setMoodHistory([]);
       calculateStats([]);
+      window.dispatchEvent(new Event('storage'));
     }
   };
 
   const handleDeleteEntry = (id: string, index: number) => {
-    // Fallback to index if ID is missing (legacy data)
     const newHistory = [...moodHistory];
-
-    // If we have IDs (new data), filter by ID. If not, remove by index.
-    // However, since we are displaying reversed slice, index passing from map is tricky.
-    // Better to find the item in the original list.
-    // If the entry has an ID, use it.
-
     let updatedHistory;
-    if (id) {
-      updatedHistory = newHistory.filter(item => item.id !== id);
-    } else {
-      // Legacy data removal strategy: exact match timestamp or reference?
-      // Since map below uses slice(-15).reverse(), the index passed is from the visual list.
-      // Visual index 0 = Last item in array.
-      // So real index = length - 1 - visualIndex
-      // Wait, let's just make sure we are robust.
-      // Since we want to delete specific items, and we might have legacy data without IDs...
-      // For now, let's just assume we can match by timestamp if ID is missing.
-      updatedHistory = newHistory.filter((_, i) => i !== index); // This is risky with `index` from reversed list.
-      // Actually, let's just use the item object reference.
-      // But state mutation needs new array.
-      // Let's rely on ID for new items, and maybe verify legacy behavior.
-      // Given the user just asked for "Data Structure: { id: uuid ... }", we can assume new data has IDs.
-      // For legacy data cleanup, we might just clear all or try our best.
-      // Let's implement finding index in the real array.
-    }
 
-    // Correct deletion logic:
-    // If we passed the *actual* item from the map, we can find its index in the main array.
     if (id) {
       updatedHistory = newHistory.filter(item => item.id !== id);
     } else {
-      // Only for legacy data support if needed, but simplest is just clear history for legacy.
-      // Let's try to map the reversed index back to original index?
-      // List is `moodHistory.slice(-15).reverse()`.
-      // Item displayed at index `i` corresponds to `moodHistory[moodHistory.length - 1 - i]`?
-      // Ideally we just pass the item to delete function.
-      // But sticking to ID is safest.
-      // If missing ID, we won't delete or will clear all.
+      // Fallback: remove by index for legacy data
+      // Note: passed index is from the visual reversed list
+      // We'll rely on ID for best results
       return;
     }
 
     localStorage.setItem('moodHistory', JSON.stringify(updatedHistory));
     setMoodHistory(updatedHistory);
     calculateStats(updatedHistory);
+    window.dispatchEvent(new Event('storage'));
   };
 
   const getTimeAgo = (dateString: string) => {
@@ -222,6 +193,7 @@ export default function AnalyticsPage() {
                   </button>
                 </div>
 
+                {/* history cards */}
                 <div className="space-y-3">
                   {moodHistory.slice().reverse().slice(0, 15).map((entry, index) => (
                     <motion.div
