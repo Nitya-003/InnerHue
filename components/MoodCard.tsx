@@ -69,6 +69,20 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
           : '0 10px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(255, 255, 255, 0.1)'
       }}
     >
+      {/* Selection indicator */}
+      {isSelected && (
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className="absolute -top-2 -right-2 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center z-10"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="w-3 h-3 bg-white rounded-full"
+          />
+        </motion.div>
+      )}
       {/* Floating animation for emoji */}
       <motion.div
         animate={{
