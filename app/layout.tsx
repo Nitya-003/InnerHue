@@ -1,5 +1,5 @@
 import './globals.css';
-import { Footer } from '@/components/Footer';
+import { ClientLayout } from '@/components/ClientLayout';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
@@ -18,8 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
-        <Footer />
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );
