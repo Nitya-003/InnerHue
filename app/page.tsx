@@ -49,7 +49,8 @@ const moods = [
 ];
 
 export default function Home() {
-  const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+  const maxSelections = 3;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
@@ -157,26 +158,65 @@ export default function Home() {
                 key={mood.id}
                 mood={mood}
                 index={index}
-                isSelected={selectedMood === mood.id}
-                onSelect={() => setSelectedMood(mood.id)}
+                isSelected={selectedMoods.includes(mood.id)}
+                onSelect={() => {
+                  setSelectedMoods(prev => {
+                    if (prev.includes(mood.id)) {
+                      // Remove if already selected
+                      return prev.filter(id => id !== mood.id);
+                    } else if (prev.length < maxSelections) {
+                      // Add if under limit
+                      return [...prev, mood.id];
+                    }
+                    // Do nothing if at limit and not removing
+                    return prev;
+                  });
+                }}
               />
             ))}
           </motion.div>
 
-          {/* Continue Button */}
-          {selectedMood && (
+          {/* Selected Moods Display */}
+          {selectedMoods.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-8 text-center"
+              className="mt-6 text-center"
             >
-              <Link href={`/mood/${selectedMood}`}>
+              <p className="text-white mb-4">
+                Selected {selectedMoods.length} of {maxSelections} moods
+                {selectedMoods.length >= maxSelections && " (maximum reached)"}
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                {selectedMoods.map(moodId => {
+                  const mood = moods.find(m => m.id === moodId);
+                  return mood ? (
+                    <span
+                      key={moodId}
+                      className="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-white text-sm flex items-center gap-1"
+                    >
+                      {mood.emoji} {mood.name}
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Continue Button */}
+          {selectedMoods.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-4 text-center"
+            >
+              <Link href={`/mood/${selectedMoods[0]}?moods=${selectedMoods.join(',')}`}>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                 >
-                  Explore Your Mood
+                  Explore Your Moods ({selectedMoods.length})
                 </motion.button>
               </Link>
             </motion.div>

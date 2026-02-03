@@ -12,72 +12,46 @@ interface MoodPageProps {
   params: {
     id: string;
   };
+  searchParams?: {
+    moods?: string;
+  };
 }
 
-export default function MoodPage({ params }: MoodPageProps) {
-  const [moodData, setMoodData] = useState<any>(null);
+export default function MoodPage({ params, searchParams }: MoodPageProps) {
+  const [moodData, setMoodData] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any>(null);
-
-  // Use a ref to prevent strict mode double-execution
-  const dataSavedRef = useState(false); // Using useState initializer logic is cleaner but for strict mode ref is better
-  // Actually, for strict mode, a ref initialized to false, set to true.
-
+  const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
+  
   useEffect(() => {
-    const mood = MoodData.getMoodById(params.id);
-    const moodSuggestions = MoodData.getSuggestions(params.id);
-
-    setMoodData(mood);
-    setSuggestions(moodSuggestions);
-
-    // Save to local storage for analytics
-    // In a real app we might want to allow multiple visits, but for "Moment to moment" maybe just once per mount?
-    // Let's rely on a session constraint or just a simple check.
-
-    const saveMoodEntry = () => {
-      try {
-        let history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-
-        // Prevent duplicate save if the last entry was made recently (5s debounce)
-        const lastEntry = history[history.length - 1];
-        const now = Date.now();
-
-        if (lastEntry &&
-          lastEntry.mood === params.id &&
-          (now - new Date(lastEntry.timestamp).getTime() < 5000)) {
-          return;
-        }
-
-        const newEntry = {
-          id: crypto.randomUUID(),
-          mood: params.id,
-          emotion: mood ? mood.name : params.id,
-          timestamp: new Date().toISOString(),
-          color: mood ? mood.color : '#cbd5e1',
-          note: ''
-        };
-
-        history.push(newEntry);
-
-        // Keep only the last 13 entries
-        if (history.length > 13) {
-          history = history.slice(history.length - 13);
-        }
-
-        localStorage.setItem('moodHistory', JSON.stringify(history));
-
-        // Notify other components
-        window.dispatchEvent(new Event('storage'));
-      } catch (err) {
-        console.error('Failed to save mood:', err);
-      }
-    };
-
-    if (mood) {
-      saveMoodEntry();
+    // Get all selected moods from query param, fallback to single mood from URL
+    const moodIds = searchParams?.moods ? searchParams.moods.split(',') : [params.id];
+    
+    // Get mood data for all selected moods
+    const moodsData = moodIds
+      .map(id => MoodData.getMoodById(id))
+      .filter(Boolean);
+    
+    setMoodData(moodsData);
+    
+    if (moodsData.length > 0) {
+      // Get suggestions for the first mood initially
+      const moodSuggestions = MoodData.getSuggestions(moodsData[0].id);
+      setSuggestions(moodSuggestions);
     }
-  }, [params.id]);
+    
+    // Save to local storage for analytics
+    const savedMoods = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+    moodIds.forEach(moodId => {
+      savedMoods.push({
+        mood: moodId,
+        timestamp: new Date().toISOString(),
+        date: new Date().toDateString()
+      });
+    });
+    localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
+  }, [params.id, searchParams?.moods]);
 
-  if (!moodData || !suggestions) {
+  if (!moodData.length || !suggestions) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center">
         <motion.div
@@ -88,6 +62,8 @@ export default function MoodPage({ params }: MoodPageProps) {
       </div>
     );
   }
+
+  const currentMood = moodData[currentMoodIndex] || moodData[0];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
@@ -110,10 +86,46 @@ export default function MoodPage({ params }: MoodPageProps) {
           </Link>
 
           <div className="flex items-center space-x-2">
-            <span className="text-2xl">{moodData.emoji}</span>
-            <h1 className="text-2xl font-bold text-gray-800">
-              Feeling {moodData.name}
-            </h1>
+            {moodData.length > 1 ? (
+              <div className="flex items-center space-x-2">
+                <div className="flex space-x-1">
+                  {moodData.map((mood, index) => (
+                    <motion.button
+                      key={mood.id}
+                      onClick={() => {
+                        setCurrentMoodIndex(index);
+                        const newSuggestions = MoodData.getSuggestions(mood.id);
+                        setSuggestions(newSuggestions);
+                      }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`text-2xl p-1 rounded-full transition-all ${
+                        index === currentMoodIndex 
+                          ? 'bg-white/30 ring-2 ring-purple-400' 
+                          : 'hover:bg-white/20'
+                      }`}
+                    >
+                      {mood.emoji}
+                    </motion.button>
+                  ))}
+                </div>
+                <h1 className="text-2xl font-bold text-gray-800">
+                  Feeling {currentMood.name}
+                  {moodData.length > 1 && (
+                    <span className="text-sm text-gray-600 ml-2">
+                      ({currentMoodIndex + 1} of {moodData.length})
+                    </span>
+                  )}
+                </h1>
+              </div>
+            ) : (
+              <>
+                <span className="text-2xl">{currentMood.emoji}</span>
+                <h1 className="text-2xl font-bold text-gray-800">
+                  Feeling {currentMood.name}
+                </h1>
+              </>
+            )}
           </div>
 
           <div className="flex space-x-2">
@@ -145,7 +157,7 @@ export default function MoodPage({ params }: MoodPageProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <OrbVisualizer mood={moodData} />
+              <OrbVisualizer mood={currentMood} />
             </motion.div>
 
             {/* Right Side - Suggestions */}
@@ -154,11 +166,11 @@ export default function MoodPage({ params }: MoodPageProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <SuggestionPanel
-                suggestions={suggestions}
-                mood={moodData}
+              <SuggestionPanel 
+                suggestions={suggestions} 
+                mood={currentMood}
                 onRefresh={() => {
-                  const newSuggestions = MoodData.getSuggestions(params.id);
+                  const newSuggestions = MoodData.getSuggestions(currentMood.id);
                   setSuggestions(newSuggestions);
                 }}
               />

@@ -70,9 +70,40 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
           : '0 10px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(255, 255, 255, 0.1)'
       }}
     >
-      {/* Floating emoji (ONLY CHANGE IS HERE) */}
-      <div className="text-center mb-2">
-        <div className="emoji-float text-3xl mb-1 filter drop-shadow-sm">
+      {/* Selection indicator */}
+      {isSelected && (
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className="absolute -top-2 -right-2 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center z-10"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="w-3 h-3 bg-white rounded-full"
+          />
+        </motion.div>
+      )}
+      {/* Floating animation for emoji */}
+      <motion.div
+        animate={{
+          y: [0, -4, 0],
+          rotate: [0, 3, -3, 0],
+          scale: [1, 1.05, 1]
+        }}
+        transition={{
+          duration: 4 + Math.random() * 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: index * 0.2
+        }}
+        className="text-center mb-2"
+      >
+        <motion.div 
+          className="text-3xl mb-1 filter drop-shadow-sm"
+          whileHover={{ scale: 1.2, rotate: 10 }}
+          transition={{ type: "spring", stiffness: 400 }}
+        >
           {mood.emoji}
         </div>
         <div className="text-sm font-medium text-gray-800 drop-shadow-sm">

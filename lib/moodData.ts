@@ -442,6 +442,195 @@ export const MoodData = {
         keywords: ["vision", "possibility", "faith", "dreams", "optimism", "future"],
         music: "Inspiring orchestral - Film soundtracks, Hans Zimmer"
       }
+    ],
+    stressed: [
+      {
+        prompt: "What would help you feel more supported right now? Imagine releasing this tension like untying a knot.",
+        quote: "You have been assigned this mountain to show others it can be moved.",
+        author: "Mel Robbins",
+        keywords: ["release", "support", "coping", "pressure", "relief", "breathing"],
+        music: "Calming nature sounds - Rain, ocean waves, forest ambience"
+      }
+    ],
+    peaceful: [
+      {
+        prompt: "Savor this moment of tranquility. What simple pleasures bring you the deepest peace?",
+        quote: "Peace cannot be kept by force; it can only be achieved by understanding.",
+        author: "Albert Einstein",
+        keywords: ["tranquility", "serenity", "calm", "mindfulness", "stillness", "presence"],
+        music: "Peaceful meditation music - Singing bowls, soft instrumentals"
+      }
+    ],
+    energized: [
+      {
+        prompt: "This energy is a gift! How can you channel it into something meaningful or creative?",
+        quote: "Energy and persistence conquer all things.",
+        author: "Benjamin Franklin",
+        keywords: ["vitality", "power", "momentum", "action", "enthusiasm", "drive"],
+        music: "Uplifting electronic - Artists like ODESZA, Flume"
+      }
+    ],
+    overwhelmed: [
+      {
+        prompt: "Break this feeling down into smaller pieces. What's one small step you can take right now?",
+        quote: "You don't have to see the whole staircase, just take the first step.",
+        author: "Martin Luther King Jr.",
+        keywords: ["simplify", "prioritize", "breathe", "focus", "manageable", "support"],
+        music: "Gentle instrumental - Ambient piano, soft strings"
+      }
+    ],
+    content: [
+      {
+        prompt: "This satisfaction feels complete and whole. What aspects of your life are you most content with?",
+        quote: "Contentment is not the fulfillment of what you want, but the realization of how much you already have.",
+        author: "Unknown",
+        keywords: ["satisfaction", "fulfillment", "appreciation", "wholeness", "enough", "peace"],
+        music: "Mellow folk - Artists like Iron & Wine, Nick Drake"
+      }
+    ],
+    frustrated: [
+      {
+        prompt: "What boundary needs to be set or what change needs to happen? How can you channel this energy constructively?",
+        quote: "Frustration is the wet nurse of violence.",
+        author: "David Abrahamsen",
+        keywords: ["boundaries", "change", "expression", "constructive", "release", "clarity"],
+        music: "Cathartic rock - Artists like Arctic Monkeys, The Strokes"
+      }
+    ],
+    inspired: [
+      {
+        prompt: "This spark of inspiration is precious. What creative vision is calling to you right now?",
+        quote: "The way to get started is to quit talking and begin doing.",
+        author: "Walt Disney",
+        keywords: ["creativity", "vision", "passion", "creation", "possibility", "flow"],
+        music: "Inspiring indie - Artists like Arcade Fire, The National"
+      }
+    ],
+    melancholy: [
+      {
+        prompt: "There's beauty in this bittersweet feeling. What memories or thoughts are stirring within you?",
+        quote: "The good old days are now.",
+        author: "Tom Clancy",
+        keywords: ["reflection", "nostalgia", "bittersweetness", "depth", "contemplation", "memory"],
+        music: "Melancholic indie - Artists like Radiohead, Sigur Rós"
+      }
+    ],
+    motivated: [
+      {
+        prompt: "This drive is powerful! What goal or vision is pulling you forward with such force?",
+        quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+        author: "Winston Churchill",
+        keywords: ["drive", "determination", "goals", "achievement", "persistence", "ambition"],
+        music: "Motivational rock - Artists like Imagine Dragons, OneRepublic"
+      }
+    ],
+    vulnerable: [
+      {
+        prompt: "Vulnerability takes courage. What truth are you ready to acknowledge or share?",
+        quote: "Vulnerability is not weakness; it's our greatest measure of courage.",
+        author: "Brené Brown",
+        keywords: ["courage", "openness", "authenticity", "truth", "connection", "honesty"],
+        music: "Intimate acoustic - Artists like Sufjan Stevens, Phoebe Bridgers"
+      }
+    ],
+    empowered: [
+      {
+        prompt: "You feel your own strength and capability. What will you accomplish with this sense of personal power?",
+        quote: "The most common way people give up their power is by thinking they don't have any.",
+        author: "Alice Walker",
+        keywords: ["strength", "capability", "confidence", "power", "achievement", "self-efficacy"],
+        music: "Empowering anthems - Artists like Beyoncé, Lizzo"
+      }
+    ],
+    nostalgic: [
+      {
+        prompt: "What memory or time period is calling to you? How does the past inform your present?",
+        quote: "Nostalgia is a file that removes the rough edges from the good old days.",
+        author: "Doug Larson",
+        keywords: ["memory", "past", "reflection", "longing", "connection", "time"],
+        music: "Nostalgic classics - Music from your favorite era or childhood"
+      }
+    ],
+    determined: [
+      {
+        prompt: "This resolve feels unshakeable. What challenge are you ready to face head-on?",
+        quote: "It does not matter how slowly you go as long as you do not stop.",
+        author: "Confucius",
+        keywords: ["resolve", "persistence", "commitment", "focus", "strength", "endurance"],
+        music: "Determined rock - Artists like Foo Fighters, Rise Against"
+      }
+    ],
+    embarrassed: [
+      {
+        prompt: "This feeling will pass. How can you extend compassion to yourself in this moment?",
+        quote: "You are imperfect, you are wired for struggle, but you are worthy of love and belonging.",
+        author: "Brené Brown",
+        keywords: ["self-compassion", "forgiveness", "humanity", "imperfection", "growth", "acceptance"],
+        music: "Comforting indie - Artists like The Paper Kites, Daughter"
+      }
+    ],
+    disgusted: [
+      {
+        prompt: "What values or boundaries are being challenged right now? How can you honor your authentic response?",
+        quote: "Disgust is the appropriate response to most situations.",
+        author: "Charles Bukowski",
+        keywords: ["boundaries", "values", "authenticity", "standards", "rejection", "clarity"],
+        music: "Alternative rock - Artists like Nine Inch Nails, Tool"
+      }
+    ],
+    adventurous: [
+      {
+        prompt: "Where is this wanderlust calling you? What new experience or journey are you craving?",
+        quote: "Adventure is not outside man; it is within.",
+        author: "George Eliot",
+        keywords: ["exploration", "journey", "discovery", "courage", "novelty", "freedom"],
+        music: "Adventure soundtrack - Epic film scores, world music"
+      }
+    ],
+    romantic: [
+      {
+        prompt: "Love fills the air around you. What or who makes your heart flutter with warmth and affection?",
+        quote: "Love is composed of a single soul inhabiting two bodies.",
+        author: "Aristotle",
+        keywords: ["love", "affection", "connection", "tenderness", "beauty", "intimacy"],
+        music: "Romantic ballads - Artists like John Legend, Norah Jones"
+      }
+    ],
+    creative: [
+      {
+        prompt: "Your imagination is flowing freely. What artistic vision or creative project is calling to you?",
+        quote: "Creativity takes courage.",
+        author: "Henri Matisse",
+        keywords: ["imagination", "art", "expression", "innovation", "creation", "flow"],
+        music: "Creative instrumentals - Artists like GoGo Penguin, Kiasmos"
+      }
+    ],
+    philosophical: [
+      {
+        prompt: "What deep questions about life, existence, or meaning are occupying your thoughts?",
+        quote: "The unexamined life is not worth living.",
+        author: "Socrates",
+        keywords: ["wisdom", "contemplation", "meaning", "existence", "truth", "understanding"],
+        music: "Contemplative classical - Bach, Beethoven, minimalist composers"
+      }
+    ],
+    rebellious: [
+      {
+        prompt: "What convention or expectation are you ready to challenge? How can you express your independence constructively?",
+        quote: "The only way to deal with an unfree world is to become so absolutely free that your very existence is an act of rebellion.",
+        author: "Albert Camus",
+        keywords: ["independence", "freedom", "challenge", "authenticity", "nonconformity", "change"],
+        music: "Rebellious punk/rock - Artists like The Clash, Rage Against The Machine"
+      }
+    ],
+    silly: [
+      {
+        prompt: "Embrace this lightness! What makes you laugh until your sides hurt?",
+        quote: "Life is too important to be taken seriously.",
+        author: "Oscar Wilde",
+        keywords: ["humor", "lightness", "joy", "playfulness", "laughter", "fun"],
+        music: "Fun pop hits - Upbeat, silly songs that make you dance"
+      }
     ]
   },
 
