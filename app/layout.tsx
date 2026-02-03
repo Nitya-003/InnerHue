@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   description: 'Emotional Reflection Web App',
 };
 
+import { Toaster } from 'react-hot-toast';
+
 export default function RootLayout({
   children,
 }: {
@@ -22,6 +24,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <BackToTop />
+        <Toaster position="top-right" />
       </body>
     </html>
   );
