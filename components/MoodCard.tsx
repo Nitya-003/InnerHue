@@ -105,11 +105,11 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
           transition={{ type: "spring", stiffness: 400 }}
         >
           {mood.emoji}
-        </div>
+        </motion.div>
         <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
           {mood.name}
         </div>
-      </div>
+      </motion.div>
 
       {/* Glow effect */}
       {isSelected && (
