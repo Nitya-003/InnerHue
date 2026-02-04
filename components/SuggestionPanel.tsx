@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
@@ -24,6 +25,17 @@ interface SuggestionPanelProps {
 }
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
+  const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsPlayerLoaded(false);
+  }, [mood.id]);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(`"${suggestions.quote}" - ${suggestions.author}`);
+    toast.success('Quote copied to clipboard');
+  };
+
   return (
     <TooltipProvider delayDuration={500}>
       <div className="space-y-6">

@@ -1,34 +1,14 @@
 'use client';
 
 import { useLottie } from "lottie-react";
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import animationData from "@/public/background-lottie.json";
 
 export const LottieBackground = () => {
-  const [animationData, setAnimationData] = useState(null);
-
-  useEffect(() => {
-    // Fetching a high-quality gradient abstract background
-    // This adds a fluid, organic feel without heavy GPU usage of complex CSS shapes
-    // TODO: For production, download this JSON and import it locally to avoid network requests
-    // import animationData from '@/public/background-lottie.json';
-    fetch('https://lottie.host/02096756-3213-4522-901d-551139459529/03X2XkC28C.json')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to load animation');
-        return res.json();
-      })
-      .then(data => setAnimationData(data))
-      .catch(err => {
-        console.error("Failed to load lottie background", err);
-        // Fallback or retry logic could go here
-      });
-  }, []);
-
   const options = {
     animationData: animationData,
     loop: true,
     autoplay: true,
-    renderer: 'canvas', // Canvas is more performant for large backgrounds
     rendererSettings: {
       preserveAspectRatio: 'xMidYMid slice'
     }
