@@ -19,7 +19,7 @@ interface SuggestionPanelProps {
     music: string;
   };
   mood: any;
-  onRefresh: () => void;
+  onRefresh: () => void | Promise<void>;
   isRefreshing?: boolean;
 }
 
