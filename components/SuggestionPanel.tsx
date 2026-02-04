@@ -19,107 +19,39 @@ interface SuggestionPanelProps {
     music: string;
   };
   mood: any;
-  onRefresh: () => void;
+  onRefresh: () => void | Promise<void>;
+  isRefreshing?: boolean;
 }
 
-export function SuggestionPanel({ suggestions, mood, onRefresh }: SuggestionPanelProps) {
-
-  const handleCopy = () => {
-    toast.dismiss();
-
-    const textToCopy = `"${suggestions.quote}" — ${suggestions.author}`;
-
-    const showSuccessToast = () => {
-      toast.success('Copied to clipboard! ✨', {
-        duration: 2000,
-        style: {
-          borderRadius: '10px',
-          background: 'rgba(254, 255, 255, 0.8)',
-          color: '#333',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.5)',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-        },
-      });
-    };
-
-    const showErrorToast = () => {
-      toast.error('Failed to copy', {
-        duration: 2000,
-        style: {
-          borderRadius: '10px',
-          background: 'rgba(255, 255, 255, 0.7)',
-          backdropFilter: 'blur(10px)',
-        }
-      });
-    };
-
-    // Fallback for secure context requirement
-
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(textToCopy)
-        .then(showSuccessToast)
-        .catch((err) => {
-          showErrorToast();
-        });
-
-    } else {
-
-      // Fallback mechanism
-      const textArea = document.createElement("textarea");
-      textArea.value = textToCopy;
-      textArea.style.position = "fixed";
-      textArea.style.left = "-9999px";
-      textArea.style.top = "0";
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-
-      try {
-        const successful = document.execCommand('copy');
-
-        if (successful) showSuccessToast();
-        else showErrorToast();
-
-      } catch (err: any) {
-        showErrorToast();
-      }
-      document.body.removeChild(textArea);
-    }
-
-  };
-
-
+export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-bold text-gray-800">
-          Personalized Insights
-        </h3>
-        <TooltipProvider delayDuration={500}>
+    <TooltipProvider delayDuration={500}>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-bold text-gray-800">
+            Personalized Insights
+          </h3>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="px-2 pt-2 pb-[1px] rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all">
-                <motion.button
-                  whileHover={{ scale: 1.05, rotate: 180 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={onRefresh}
-                  className="transition-all"
-                >
-                  <RefreshCw className="w-5 text-purple-600" />
-                </motion.button>
-              </div>
+              <motion.button
+                whileHover={{ scale: 1.05, rotate: isRefreshing ? 360 : 180 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onRefresh}
+                disabled={isRefreshing}
+                className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+                aria-label={isRefreshing ? 'Refreshing insights' : 'Refresh all insights'}
+              >
+                <RefreshCw className={`w-5 h-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </motion.button>
             </TooltipTrigger>
-
             <TooltipContent
               className="bg-white/80 backdrop-blur-md border-white/50 text-gray-800 shadow-xl"
             >
-              <p>Refresh Insights</p>
+              <p>{isRefreshing ? 'Refreshing insights...' : 'Refresh all insights (prompt, quote, keywords, music)'}</p>
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider>
-      </div>
+        </div>
 
       {/* Journal Prompt */}
       <motion.div
@@ -232,5 +164,6 @@ export function SuggestionPanel({ suggestions, mood, onRefresh }: SuggestionPane
         </div>
       </motion.div>
     </div>
+    </TooltipProvider>
   );
 }
