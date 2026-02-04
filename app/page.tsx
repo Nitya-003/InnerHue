@@ -96,6 +96,61 @@ export default function Home() {
 
   return (
     <motion.div
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { Heart, Brain, Music, BarChart3, Sparkles, ArrowRight } from 'lucide-react';
+import { FloatingBackground } from '@/components/FloatingBackground';
+
+export default function LandingPage() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-x-hidden">
+      
+      {/* Lottie Background Integration */}
+      <LottieBackground />
+      {/* Background elements */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden">
+          {backgroundElements.map((element, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full opacity-20"
+              style={{
+                background: `radial-gradient(circle, ${element.color} 0%, transparent 70%)`,
+                width: element.width,
+                height: element.height,
+                left: `${element.left}%`,
+                top: `${element.top}%`,
+              }}
+              animate={{
+                x: [0, element.animateX],
+                y: [0, element.animateY],
+                scale: [1, 1.2, 1],
+                opacity: [0.1, 0.3, 0.1]
+              }}
+              transition={{
+                duration: element.duration,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.5
+              }}
+            />
+          ))}
+        </div>
+        <FloatingBackground />
+      </div>
+      
+      {/* Header */}
+      <motion.header 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10 p-4 md:p-6"
+      >
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <Heart className="text-pink-400 w-6 h-6 md:w-8 md:h-8" />
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+
+    <motion.div 
       variants={pageVariants}
       initial="initial"
       animate="animate"
@@ -109,31 +164,23 @@ export default function Home() {
             key={i}
             className="absolute rounded-full"
             style={{
-              background: `radial-gradient(circle, ${[
-                'rgba(139, 92, 246, 0.15)',
-                'rgba(236, 72, 153, 0.12)',
-                'rgba(59, 130, 246, 0.15)',
-                'rgba(167, 139, 250, 0.12)',
-                'rgba(244, 114, 182, 0.10)',
-                'rgba(96, 165, 250, 0.12)'
-              ][i]} 0%, transparent 70%)`,
-              width: 300 + i * 50,
-              height: 300 + i * 50,
-              left: `${[10, 70, 20, 80, 50, 30][i]}%`,
-              top: `${[20, 60, 70, 10, 40, 80][i]}%`,
-              transform: 'translate(-50%, -50%)',
+              background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'][i]} 0%, transparent 70%)`,
+              width: Math.random() * 200 + 150,
+              height: Math.random() * 200 + 150,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
             }}
             animate={{
-              x: [0, 30, -30, 0],
-              y: [0, -20, 20, 0],
-              scale: [1, 1.1, 0.95, 1],
-              opacity: [0.3, 0.5, 0.3],
+              x: [0, Math.random() * 50 - 25],
+              y: [0, Math.random() * 50 - 25],
+              scale: [1, 1.1, 1],
+              opacity: [0.1, 0.25, 0.1]
             }}
             transition={{
-              duration: 15 + i * 2,
+              duration: 6 + Math.random() * 4,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 1.5,
+              delay: i * 0.8
             }}
           />
         ))}
@@ -152,8 +199,11 @@ export default function Home() {
           <div className="flex items-center space-x-2">
             <Heart className="text-pink-400 w-7 h-7" />
             <span className="text-2xl font-semibold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+          <div className="flex items-center space-x-3">
+            <Heart className="text-pink-400 w-10 h-10" />
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
               InnerHue
-            </span>
+            </h1>
           </div>
 
           <nav className="flex space-x-3">
@@ -193,9 +243,30 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
+          
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link 
+              href="/emotions" 
+              className="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium"
+            >
+              Skip to App
+            </Link>
+          </motion.div>
+        </div>
+      </motion.header>
+
+      {/* Main Content */}
+      <main className="relative z-10 px-4 md:px-6 pb-20">
+        <div className="max-w-6xl mx-auto">
+          {/* Hero Section */}
+          <motion.section 
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-center mb-8 md:mb-12"
+            className="text-center py-12 md:py-16 lg:py-24 px-4"
           >
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-3 md:mb-4 drop-shadow-lg px-2">
               How are you feeling today?
@@ -249,45 +320,166 @@ export default function Home() {
               </motion.div>
             )}
           </div>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="mb-6 sm:mb-8"
+            >
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 sm:mb-6 drop-shadow-lg leading-tight">
+                Understand your emotions,{' '}
+                <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                  one feeling at a time
+                </span>
+              </h2>
+              
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed px-4">
+                Discover the depth of your emotional landscape with personalized insights, 
+                therapeutic music, and guided reflection journeys tailored to your feelings.
+              </p>
+            </motion.div>
 
-          {!isLoading && !error && selectedMoods.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-6 text-center fixed bottom-8 left-0 right-0 z-20 pointer-events-none"
+              transition={{ delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4"
             >
-              <div className="inline-block bg-black/60 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-2xl pointer-events-auto mx-4">
-                <p className="text-white mb-3 text-sm md:text-base">
-                  Selected {selectedMoods.length} of {maxSelections} moods
-                </p>
-                <div className="flex flex-wrap justify-center gap-2 mb-4">
-                  {selectedMoods.map(moodId => {
-                    const mood = moods.find(m => m.id === moodId);
-                    return mood ? (
-                      <span
-                        key={moodId}
-                        className="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-white text-xs md:text-sm flex items-center gap-1 border border-white/20"
-                      >
-                        {mood.emoji} {mood.name}
-                      </span>
-                    ) : null;
-                  })}
-                </div>
-
-                <Link href={`/mood/${selectedMoods[0]}?moods=${selectedMoods.join(',')}`} aria-label="Continue to your personal mood journey">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl shadow-lg hover:shadow-purple-500/50 transition-all duration-300 text-sm md:text-base w-full"
-                  >
-                    Continue Journey →
-                  </motion.button>
-                </Link>
-              </div>
+              <Link href="/emotions">
+                <motion.button
+                  whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(147, 51, 234, 0.4)' }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-base sm:text-lg font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 group"
+                >
+                  Start Reflecting
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+              </Link>
+              
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="w-full sm:w-auto px-4 sm:px-6 py-3 sm:py-4 bg-white/10 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300 cursor-pointer text-center text-sm sm:text-base"
+              >
+                Learn More
+              </motion.div>
             </motion.div>
-          )}
+          </motion.section>
+
+          {/* Features Section */}
+          <motion.section 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="py-12 sm:py-16 px-4"
+          >
+            <div className="text-center mb-12 sm:mb-16">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
+                How InnerHue Works
+              </h3>
+              <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto">
+                A comprehensive approach to emotional wellness and self-discovery
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+              {[
+                {
+                  icon: Brain,
+                  title: 'Emotion Reflection',
+                  description: 'Select from 38 distinct emotional states and dive deep into your feelings with guided introspection.',
+                  color: 'from-purple-500 to-indigo-500'
+                },
+                {
+                  icon: Sparkles,
+                  title: 'Personalized Insights',
+                  description: 'Get tailored prompts, affirmations, and thoughtful questions based on your current emotional state.',
+                  color: 'from-pink-500 to-rose-500'
+                },
+                {
+                  icon: Music,
+                  title: 'Therapeutic Music',
+                  description: 'Discover curated playlists and ambient sounds designed to complement and enhance your emotional journey.',
+                  color: 'from-blue-500 to-cyan-500'
+                },
+                {
+                  icon: BarChart3,
+                  title: 'Mood Analytics',
+                  description: 'Track emotional patterns over time with beautiful visualizations and gain insights into your well-being.',
+                  color: 'from-green-500 to-emerald-500'
+                }
+              ].map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 + index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="p-4 sm:p-6 bg-white/10 backdrop-blur rounded-xl sm:rounded-2xl border border-white/20 hover:bg-white/15 transition-all duration-300 text-center sm:text-left"
+                >
+                  <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 sm:mb-4 mx-auto sm:mx-0`}>
+                    <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                  </div>
+                  
+                  <h4 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">
+                    {feature.title}
+                  </h4>
+                  
+                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                    {feature.description}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
+
+          {/* Call to Action */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+            className="text-center py-12 sm:py-16 px-4"
+          >
+            <div className="max-w-3xl mx-auto">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+                Ready to explore your inner world?
+              </h3>
+              
+              <p className="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8">
+                Join thousands who have discovered deeper self-awareness through InnerHue's 
+                guided emotional reflection experience.
+              </p>
+              
+              <Link href="/emotions">
+                <motion.button
+                  whileHover={{ 
+                    scale: 1.05, 
+                    boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)' 
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg sm:text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 mx-auto group"
+                >
+                  <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
+                  Begin Your Journey
+                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+              </Link>
+            </div>
+          </motion.section>
         </div>
       </main>
     </motion.div>
+      
+      {/* Footer */}
+      <motion.footer
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4 }}
+        className="relative z-10 p-6 border-t border-white/20"
+      >
+        <div className="max-w-6xl mx-auto text-center text-gray-400">
+          <p>&copy; 2026 InnerHue. Crafted with care for emotional well-being.</p>
+        </div>
+      </motion.footer>
+    </div>
   );
 }

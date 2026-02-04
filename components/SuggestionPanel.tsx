@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
@@ -27,6 +28,15 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
   const handleCopy = () => {
     navigator.clipboard.writeText(`"${suggestions.quote}" — ${suggestions.author}`);
     toast.success('Quote copied to clipboard!');
+  const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsPlayerLoaded(false);
+  }, [mood.id]);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(`"${suggestions.quote}" - ${suggestions.author}`);
+    toast.success('Quote copied to clipboard');
   };
 
   return (
@@ -166,6 +176,44 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
                 Listen on Spotify
               </motion.button>
             </div>
+      {/* Music Suggestion */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+      >
+        <div className="flex items-start space-x-3">
+          <div className="p-2 rounded-lg bg-green-100">
+            <Music className="w-5 h-5 text-green-600" />
+          </div>
+          <div className="flex-1 space-y-3">
+            <h4 className="font-semibold text-gray-800">Soundscape</h4>
+            
+            <div className="relative w-full h-[152px] rounded-xl overflow-hidden bg-white/50 backdrop-blur-md shadow-inner border border-white/20">
+              {!isPlayerLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50 backdrop-blur animate-pulse">
+                  <div className="flex flex-col items-center space-y-2">
+                    <Music className="w-8 h-8 text-green-400/50 animate-bounce" />
+                    <span className="text-gray-500 text-sm font-medium">Loading Soundscape...</span>
+                  </div>
+                </div>
+              )}
+              <iframe
+                src={`https://open.spotify.com/embed/playlist/${mood.spotifyPlaylistId || '37i9dQZF1DX3Ogo9pFno96'}?utm_source=generator&theme=0`}
+                width="100%"
+                height="152"
+                frameBorder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+                className={`w-full h-full transition-opacity duration-500 ${isPlayerLoaded ? 'opacity-100' : 'opacity-0'}`}
+                onLoad={() => setIsPlayerLoaded(true)}
+              />
+            </div>
+            
+            <p className="text-sm text-gray-600 italic">
+              <span className="font-medium text-green-600">Suggested:</span> {suggestions.music}
+            </p>
           </div>
         </motion.div>
       </div>
