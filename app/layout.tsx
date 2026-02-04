@@ -25,7 +25,6 @@ export default function RootLayout({
         <ClientLayout>
           {children}
         </ClientLayout>
-        {children}
         <Footer />
         <BackToTop />
         <Toaster position="top-right" />
