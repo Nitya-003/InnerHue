@@ -114,7 +114,7 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
           {mood.emoji}
         </motion.div>
 
-        <div className={`text-sm font-medium transition-colors ${isSelected ? 'text-gray-900' : 'text-gray-800'}`}>
+        <div className={`text-sm font-medium transition-colors drop-shadow-sm ${isSelected ? 'text-gray-900' : 'text-gray-800'}`}>
           {mood.name}
         </div>
       </motion.div>
