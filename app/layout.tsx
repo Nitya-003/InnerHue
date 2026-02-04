@@ -9,6 +9,16 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'InnerHue',
   description: 'Emotional Reflection Web App',
+    appleWebApp: {
+    capable: true,
+    title: 'InnerHue',
+    statusBarStyle: 'black-translucent',
+  },
+
+  
+  icons: {
+    apple: '/',
+  },
 };
 
 import { Toaster } from 'react-hot-toast';
