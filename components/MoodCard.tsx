@@ -23,7 +23,7 @@ interface MoodCardProps {
 export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
   return (
     <motion.button
-      // 1. Semantic HTML: Use 'button' instead of 'div' for keyboard focus
+      // 1. Semantic HTML: Use 'button' instead of 'div' for keyboard focus (Accessibility Improvement)
       onClick={onSelect}
       
       // 2. ARIA Labels: Tells screen readers what this is and its state
