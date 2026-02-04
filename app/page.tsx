@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
-import { StarryBackground } from '@/components/StarryBackground';
+import { LottieBackground } from '@/components/LottieBackground';
 import { ErrorState } from '@/components/ErrorState';
 import { Heart, BarChart3, Music } from 'lucide-react';
 
@@ -70,10 +70,10 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-x-hidden">
       
-      {/* Starry 3D Background Integration */}
-      <StarryBackground />
+      {/* Lottie Background Integration */}
+      <LottieBackground />
       
       {/* Header */}
       <motion.header 

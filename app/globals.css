@@ -77,6 +77,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-slate-950 text-foreground; /* Changed from bg-background to bg-slate-950 for dark theme consistency */
+    @apply bg-background text-foreground;
   }
 }

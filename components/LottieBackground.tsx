@@ -43,18 +43,18 @@ export const LottieBackground = () => {
       transition={{ duration: 1.5 }}
       className="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
     >
-      {/* Base gradient as fallback and underlay - Matches original site aesthetic */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900" />
+      {/* Base gradient as fallback and underlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900" />
 
       {/* Lottie Animation Layer */}
       {animationData && (
-        <div className="absolute inset-0 opacity-80 scale-125 mix-blend-screen">
+        <div className="absolute inset-0 opacity-60 scale-110">
           {View}
         </div>
       )}
 
       {/* Glassmorphism Overlay - Creates the "Apple-like" diffused look */}
-      <div className="absolute inset-0 backdrop-blur-[50px] bg-black/5" />
+      <div className="absolute inset-0 backdrop-blur-[80px] bg-black/10" />
       
       {/* Noise texture for texture (optional, adds premium feel) */}
       <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" 

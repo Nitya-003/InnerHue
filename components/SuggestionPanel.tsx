@@ -24,12 +24,6 @@ interface SuggestionPanelProps {
 }
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
-  const handleCopy = () => {
-    const textToCopy = `"${suggestions.quote}" — ${suggestions.author}`;
-    navigator.clipboard.writeText(textToCopy);
-    toast.success('Quote copied to clipboard!');
-  };
-
   return (
     <TooltipProvider delayDuration={500}>
       <div className="space-y-6">
