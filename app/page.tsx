@@ -11,6 +11,37 @@ export default function LandingPage() {
       
       {/* Lottie Background Integration */}
       <LottieBackground />
+      {/* Background elements */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden">
+          {backgroundElements.map((element, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full opacity-20"
+              style={{
+                background: `radial-gradient(circle, ${element.color} 0%, transparent 70%)`,
+                width: element.width,
+                height: element.height,
+                left: `${element.left}%`,
+                top: `${element.top}%`,
+              }}
+              animate={{
+                x: [0, element.animateX],
+                y: [0, element.animateY],
+                scale: [1, 1.2, 1],
+                opacity: [0.1, 0.3, 0.1]
+              }}
+              transition={{
+                duration: element.duration,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.5
+              }}
+            />
+          ))}
+        </div>
+        <FloatingBackground />
+      </div>
       
       {/* Header */}
       <motion.header 
