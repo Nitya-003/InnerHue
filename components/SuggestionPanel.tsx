@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { RefreshCw, MessageCircle, Quote, Hash, Music } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface SuggestionPanelProps {
   suggestions: {
@@ -13,25 +14,35 @@ interface SuggestionPanelProps {
   };
   mood: any;
   onRefresh: () => void;
+  isRefreshing?: boolean;
 }
 
-export function SuggestionPanel({ suggestions, mood, onRefresh }: SuggestionPanelProps) {
+export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-bold text-gray-800">
-          Personalized Insights
-        </h3>
-        <motion.button
-          whileHover={{ scale: 1.05, rotate: 180 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={onRefresh}
-          className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
-        >
-          <RefreshCw className="w-5 h-5 text-purple-600" />
-        </motion.button>
-      </div>
+    <TooltipProvider>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-bold text-gray-800">
+            Personalized Insights
+          </h3>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <motion.button
+                whileHover={{ scale: 1.05, rotate: isRefreshing ? 360 : 180 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onRefresh}
+                disabled={isRefreshing}
+                className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+              >
+                <RefreshCw className={`w-5 h-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </motion.button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{isRefreshing ? 'Refreshing insights...' : 'Refresh all insights (prompt, quote, keywords, music)'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
 
       {/* Journal Prompt */}
       <motion.div
@@ -130,5 +141,6 @@ export function SuggestionPanel({ suggestions, mood, onRefresh }: SuggestionPane
         </div>
       </motion.div>
     </div>
+    </TooltipProvider>
   );
 }

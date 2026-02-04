@@ -324,6 +324,20 @@ export const MoodData = {
         author: "Walt Disney",
         keywords: ["creation", "action", "passion", "momentum", "possibility", "adventure"],
         music: "High-energy electronic - Artists like ODESZA, Porter Robinson"
+      },
+      {
+        prompt: "Your excitement is contagious! Who could you share this energy with? Plan something fun with a friend or loved one.",
+        quote: "Enthusiasm is the electricity of life. How do you increase it? You turn up the connections.",
+        author: "Gordon Parks",
+        keywords: ["sharing", "connection", "fun", "celebration", "enthusiasm", "joy"],
+        music: "Upbeat pop anthems - Artists like Dua Lipa, The Weeknd"
+      },
+      {
+        prompt: "What new adventure or challenge has been calling your name? Use this excited energy to take the first step.",
+        quote: "Life is either a daring adventure or nothing at all.",
+        author: "Helen Keller",
+        keywords: ["adventure", "risk", "growth", "courage", "exploration", "boldness"],
+        music: "Energetic rock - Artists like Imagine Dragons, OneRepublic"
       }
     ],
     calm: [
@@ -333,6 +347,20 @@ export const MoodData = {
         author: "Buddha",
         keywords: ["serenity", "balance", "gratitude", "mindfulness", "harmony", "stillness"],
         music: "Peaceful classical - Ludovico Einaudi, Max Richter"
+      },
+      {
+        prompt: "Take five deep breaths and notice the sensations in your body. What does true relaxation feel like to you?",
+        quote: "The present moment is the only time over which we have dominion.",
+        author: "Thích Nhất Hạnh",
+        keywords: ["presence", "breathing", "awareness", "relaxation", "body", "now"],
+        music: "Nature sounds with soft piano - Rain, ocean waves, gentle instrumentals"
+      },
+      {
+        prompt: "Imagine your perfect peaceful place. Describe every detail - the sounds, smells, colors, and textures.",
+        quote: "Calmness is the cradle of power.",
+        author: "Josiah Gilbert Holland",
+        keywords: ["visualization", "sanctuary", "imagination", "peace", "comfort", "safety"],
+        music: "Ambient meditation music - Singing bowls, soft chimes"
       }
     ],
     angry: [
@@ -342,6 +370,20 @@ export const MoodData = {
         author: "Mark Twain",
         keywords: ["boundaries", "justice", "power", "transformation", "release", "clarity"],
         music: "Cathartic rock - Artists like Foo Fighters, Queens of the Stone Age"
+      },
+      {
+        prompt: "Write a letter to your anger. What is it trying to protect you from? What message does it have for you?",
+        quote: "Anger, if not restrained, is frequently more hurtful to us than the injury that provokes it.",
+        author: "Seneca",
+        keywords: ["protection", "message", "understanding", "communication", "insight", "wisdom"],
+        music: "Intense alternative rock - Artists like Breaking Benjamin, Three Days Grace"
+      },
+      {
+        prompt: "Channel this fiery energy into physical movement. How can you release this intensity in a healthy way?",
+        quote: "The best fighter is never angry.",
+        author: "Lao Tzu",
+        keywords: ["movement", "exercise", "release", "physical", "channel", "transformation"],
+        music: "High-energy workout music - Hip hop, metal, electronic dance"
       }
     ],
     confused: [
@@ -351,6 +393,20 @@ export const MoodData = {
         author: "Alan Watts",
         keywords: ["questions", "exploration", "patience", "discovery", "uncertainty", "growth"],
         music: "Contemplative indie - Artists like Radiohead, Thom Yorke"
+      },
+      {
+        prompt: "Confusion often signals growth. What old beliefs or patterns might be ready to evolve in your life?",
+        quote: "In the midst of winter, I found there was, within me, an invincible summer.",
+        author: "Albert Camus",
+        keywords: ["evolution", "change", "transformation", "beliefs", "patterns", "growth"],
+        music: "Reflective indie folk - Artists like Bon Iver, Fleet Foxes"
+      },
+      {
+        prompt: "What would happen if you embraced not knowing for a while? How might uncertainty become a doorway?",
+        quote: "The important thing is not to stop questioning. Curiosity has its own reason for existence.",
+        author: "Albert Einstein",
+        keywords: ["embrace", "uncertainty", "doorway", "curiosity", "questioning", "mystery"],
+        music: "Ambient experimental - Artists like Brian Eno, Stars of the Lid"
       }
     ],
     grateful: [
@@ -360,6 +416,20 @@ export const MoodData = {
         author: "Melody Beattie",
         keywords: ["appreciation", "abundance", "kindness", "connection", "blessing", "warmth"],
         music: "Uplifting soul music - Artists like Leon Bridges, Aloe Blacc"
+      },
+      {
+        prompt: "List five things you can see right now that you've never properly appreciated. What makes each one special?",
+        quote: "Be thankful for what you have; you'll end up having more.",
+        author: "Oprah Winfrey",
+        keywords: ["observation", "appreciation", "abundance", "awareness", "beauty", "presence"],
+        music: "Warm acoustic - Artists like James Taylor, Norah Jones"
+      },
+      {
+        prompt: "Think of someone who shaped your life positively. How can you honor their influence today?",
+        quote: "Gratitude is not only the greatest of virtues but the parent of all others.",
+        author: "Cicero",
+        keywords: ["influence", "honor", "legacy", "impact", "virtue", "remembrance"],
+        music: "Heartfelt indie - Artists like The Head and the Heart, Of Monsters and Men"
       }
     ],
     lonely: [
@@ -369,6 +439,20 @@ export const MoodData = {
         author: "Michel de Montaigne",
         keywords: ["self-compassion", "solitude", "connection", "belonging", "understanding", "comfort"],
         music: "Warm indie folk - Artists like Phoebe Bridgers, Julien Baker"
+      },
+      {
+        prompt: "Write a letter to your future self about this moment. What wisdom would you want to remember?",
+        quote: "Loneliness is not lack of company, loneliness is lack of purpose.",
+        author: "Guillermo Maldonado",
+        keywords: ["future", "wisdom", "purpose", "reflection", "growth", "meaning"],
+        music: "Comforting singer-songwriter - Artists like Sufjan Stevens, Elliott Smith"
+      },
+      {
+        prompt: "What's one small way you could reach out and brighten someone else's day? Sometimes giving connection helps us find it.",
+        quote: "We are all alone, born alone, die alone, and—in spite of True Romance magazines—we shall all someday look back on our lives and see that, in spite of our company, we were alone the whole way.",
+        author: "Hunter S. Thompson",
+        keywords: ["giving", "reaching", "connection", "service", "empathy", "community"],
+        music: "Uplifting folk - Artists like The Lumineers, Mumford & Sons"
       }
     ],
     jealous: [
@@ -378,6 +462,20 @@ export const MoodData = {
         author: "Theodore Roosevelt",
         keywords: ["comparison", "growth", "values", "self-worth", "transformation", "focus"],
         music: "Introspective indie - Artists like Phoebe Bridgers, Clairo"
+      },
+      {
+        prompt: "Instead of focusing on what others have, what can you celebrate about your own unique journey and achievements?",
+        quote: "Jealousy is simply and clearly the fear that you do not have value.",
+        author: "Jennifer James",
+        keywords: ["celebration", "unique", "journey", "achievements", "value", "self-worth"],
+        music: "Empowering pop - Artists like Lizzo, Dua Lipa"
+      },
+      {
+        prompt: "How can you transform this jealous energy into motivation? What specific steps could you take toward your own goals?",
+        quote: "The jealous are troublesome to others, but a torment to themselves.",
+        author: "William Penn",
+        keywords: ["transformation", "motivation", "goals", "action", "progress", "ambition"],
+        music: "Motivational hip-hop - Artists like Kendrick Lamar, J. Cole"
       }
     ],
     proud: [
@@ -387,6 +485,20 @@ export const MoodData = {
         author: "Uncle Iroh",
         keywords: ["achievement", "success", "confidence", "growth", "celebration", "humility"],
         music: "Triumphant orchestral - Epic movie soundtracks, Two Steps From Hell"
+      },
+      {
+        prompt: "How can you use this sense of accomplishment to inspire and encourage others on their journey?",
+        quote: "Be proud of how hard you are trying.",
+        author: "Unknown",
+        keywords: ["inspiration", "encouragement", "sharing", "mentoring", "support", "leadership"],
+        music: "Uplifting contemporary - Artists like Coldplay, U2"
+      },
+      {
+        prompt: "Reflect on the person you were before this achievement. What growth and learning brought you to this moment?",
+        quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+        author: "Winston Churchill",
+        keywords: ["growth", "learning", "journey", "courage", "perseverance", "evolution"],
+        music: "Reflective alternative - Artists like Imagine Dragons, OneRepublic"
       }
     ],
     curious: [
@@ -396,6 +508,20 @@ export const MoodData = {
         author: "Albert Einstein",
         keywords: ["wonder", "exploration", "learning", "discovery", "questions", "growth"],
         music: "Ambient electronic - Artists like Boards of Canada, Tycho"
+      },
+      {
+        prompt: "Think of a skill or subject you've always wanted to learn. What's the first small step you could take today?",
+        quote: "Curiosity is one of the great secrets of happiness.",
+        author: "Bryant H. McGill",
+        keywords: ["learning", "skill", "beginning", "happiness", "progress", "adventure"],
+        music: "Inspiring instrumental - Artists like Explosions in the Sky, God Is an Astronaut"
+      },
+      {
+        prompt: "What mystery in your daily life have you stopped noticing? How might you look at familiar things with fresh eyes?",
+        quote: "The important thing is not to stop questioning.",
+        author: "Albert Einstein",
+        keywords: ["mystery", "fresh", "perspective", "observation", "wonder", "awareness"],
+        music: "Dreamy shoegaze - Artists like Beach House, Slowdive"
       }
     ],
     bored: [

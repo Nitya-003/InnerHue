@@ -21,6 +21,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [moodData, setMoodData] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
   useEffect(() => {
     // Get all selected moods from query param, fallback to single mood from URL
@@ -169,9 +170,15 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
               <SuggestionPanel 
                 suggestions={suggestions} 
                 mood={currentMood}
-                onRefresh={() => {
+                isRefreshing={isRefreshing}
+                onRefresh={async () => {
+                  setIsRefreshing(true);
+                  // Small delay to show visual feedback
+                  await new Promise(resolve => setTimeout(resolve, 300));
                   const newSuggestions = MoodData.getSuggestions(currentMood.id);
-                  setSuggestions(newSuggestions);
+                  console.log('Refreshing suggestions:', newSuggestions);
+                  setSuggestions({ ...newSuggestions });
+                  setIsRefreshing(false);
                 }}
               />
             </motion.div>
