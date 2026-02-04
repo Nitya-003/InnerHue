@@ -1,45 +1,16 @@
 'use client';
 
-
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { Heart, BarChart3, Music } from 'lucide-react';
 import { MoodCard } from '@/components/MoodCard';
 import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { ErrorState } from '@/components/ErrorState';
-
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { FloatingBackground } from '@/components/FloatingBackground';
 import { Hero } from '@/components/landing/Hero';
 import { usePageTransition } from '@/components/TransitionProvider';
 
-import { Heart, BarChart3, Music } from 'lucide-react';
-
-export default function LandingPage() {
-  const { startTransition } = usePageTransition();
-  // Page transition variants
-  const pageVariants = {
-    initial: { 
-      opacity: 0,
-    },
-    animate: { 
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      }
-    },
-    exit: { 
-      opacity: 0,
-      scale: 0.98,
-      transition: {
-        duration: 0.4,
-        ease: 'easeInOut',
-      }
-    }
-  };
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
   { id: 'sad', name: 'Sad', emoji: '😢', color: '#42A5F5', glow: '#64B5F6' },
@@ -82,10 +53,33 @@ const moods = [
 ];
 
 export default function Home() {
+  const { startTransition } = usePageTransition();
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
   const maxSelections = 3;
+
+  // Page transition variants
+  const pageVariants = {
+    initial: {
+      opacity: 0,
+    },
+    animate: {
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94] as any, // Cast to any to avoid cubic-bezier type strictness issues
+      }
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.98,
+      transition: {
+        duration: 0.4,
+        ease: 'easeInOut' as any,
+      }
+    }
+  };
 
   // Simulate API Fetch
   const fetchData = () => {
@@ -101,55 +95,7 @@ export default function Home() {
   }, []);
 
   return (
-
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-x-hidden">
-      
-      {/* ACCESSIBILITY UPDATE: 
-        Added aria-hidden="true" to background elements so screen readers ignore them.
-      */}
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(8)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute rounded-full opacity-20"
-              style={{
-                background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'][i]} 0%, transparent 70%)`,
-                width: Math.random() * 300 + 100,
-                height: Math.random() * 300 + 100,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                x: [0, Math.random() * 100 - 50],
-                y: [0, Math.random() * 100 - 50],
-                scale: [1, 1.2, 1],
-                opacity: [0.1, 0.3, 0.1]
-              }}
-              transition={{
-                duration: 8 + Math.random() * 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: i * 0.5
-              }}
-            />
-          ))}
-        </div>
-        <FloatingBackground />
-      </div>
-      
-      {/* Header */}
-      <motion.header 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 p-4 md:p-6"
-      >
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <Heart className="text-pink-400 w-6 h-6 md:w-8 md:h-8" />
-            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-
-    <motion.div 
+    <motion.div
       variants={pageVariants}
       initial="initial"
       animate="animate"
@@ -206,53 +152,33 @@ export default function Home() {
           <div className="flex items-center space-x-2">
             <Heart className="text-pink-400 w-7 h-7" />
             <span className="text-2xl font-semibold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-
               InnerHue
             </span>
           </div>
-
-          
-          <nav className="flex space-x-3 md:space-x-4">
-            <Link href="/analytics" aria-label="View Analytics">
-              <motion.div 
-
 
           <nav className="flex space-x-3">
             <motion.button
               onClick={() => startTransition('/explore')}
               whileHover={{ scale: 1.05 }}
               className="px-4 py-2 rounded-full bg-white/5 backdrop-blur-xl text-white/70 text-sm font-medium 
-                         hover:bg-white/10 hover:text-white transition-all duration-300 border border-white/10"
+         hover:bg-white/10 hover:text-white transition-all duration-300 border border-white/10"
             >
               Explore
             </motion.button>
-            <Link href="/analytics">
+            <Link href="/analytics" aria-label="View Analytics">
               <motion.div
-
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
               >
-
                 <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
             </Link>
             <Link href="/music" aria-label="Relaxing Music">
-              <motion.div 
-
-                <BarChart3 className="w-5 h-5 text-white/70 hover:text-white" />
-              </motion.div>
-            </Link>
-            <Link href="/music">
               <motion.div
-
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
               >
-
                 <Music className="w-5 h-5 md:w-6 md:h-6 text-white" />
-
-                <Music className="w-5 h-5 text-white/70 hover:text-white" />
-
               </motion.div>
             </Link>
           </nav>
@@ -261,11 +187,11 @@ export default function Home() {
 
       {/* Hero Section */}
       <Hero />
-    </motion.div>
+
       {/* Main Content */}
       <main className="relative z-10 px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -282,12 +208,12 @@ export default function Home() {
           {/* Grid Area: Error, Loading, or Success */}
           <div className="min-h-[300px] flex items-center justify-center w-full">
             {error ? (
-              <ErrorState 
-                message="We couldn't load your mood data. Please check your connection." 
-                onRetry={fetchData} 
+              <ErrorState
+                message="We couldn't load your mood data. Please check your connection."
+                onRetry={fetchData}
               />
             ) : (
-              <motion.div 
+              <motion.div
                 className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4 max-w-7xl mx-auto w-full"
                 initial="hidden"
                 animate="visible"
@@ -362,6 +288,6 @@ export default function Home() {
           )}
         </div>
       </main>
-    </div>
+    </motion.div>
   );
 }
