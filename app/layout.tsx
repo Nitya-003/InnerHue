@@ -34,6 +34,8 @@ export default function RootLayout({
         <ClientLayout>
           {children}
         </ClientLayout>
+
+
         <BackToTop />
         <Toaster position="top-right" />
       </body>
