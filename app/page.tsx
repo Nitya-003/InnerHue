@@ -7,33 +7,30 @@ import { FloatingBackground } from '@/components/FloatingBackground';
 
 export default function LandingPage() {
   return (
-
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-x-hidden">
       
-      {/* ACCESSIBILITY UPDATE: 
-        Added aria-hidden="true" to background elements so screen readers ignore them.
-      */}
+      {/* Background elements */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 overflow-hidden">
-          {[...Array(8)].map((_, i) => (
+          {backgroundElements.map((element, i) => (
             <motion.div
               key={i}
               className="absolute rounded-full opacity-20"
               style={{
-                background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'][i]} 0%, transparent 70%)`,
-                width: Math.random() * 300 + 100,
-                height: Math.random() * 300 + 100,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
+                background: `radial-gradient(circle, ${element.color} 0%, transparent 70%)`,
+                width: element.width,
+                height: element.height,
+                left: `${element.left}%`,
+                top: `${element.top}%`,
               }}
               animate={{
-                x: [0, Math.random() * 100 - 50],
-                y: [0, Math.random() * 100 - 50],
+                x: [0, element.animateX],
+                y: [0, element.animateY],
                 scale: [1, 1.2, 1],
                 opacity: [0.1, 0.3, 0.1]
               }}
               transition={{
-                duration: 8 + Math.random() * 4,
+                duration: element.duration,
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: i * 0.5
@@ -105,9 +102,8 @@ export default function LandingPage() {
             <Heart className="text-pink-400 w-10 h-10" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
               InnerHue
-            </span>
+            </h1>
           </div>
-
           
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -123,9 +119,6 @@ export default function LandingPage() {
         </div>
       </motion.header>
 
-      {/* Hero Section */}
-      <Hero />
-    </motion.div>
       {/* Main Content */}
       <main className="relative z-10 px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
