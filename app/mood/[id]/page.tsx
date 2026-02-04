@@ -85,7 +85,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             </motion.button>
           </Link>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center  space-x-2">
             {moodData.length > 1 ? (
               <div className="flex items-center space-x-2">
                 <div className="flex space-x-1">
