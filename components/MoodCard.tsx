@@ -122,75 +122,66 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         >
           {mood.emoji}
         </motion.div>
-
-        {/* Enhanced text with better hierarchy */}
-        <div className={`text-xs sm:text-sm font-bold transition-all duration-300 ${isSelected
-            ? 'text-gray-800 text-sm sm:text-base'
-            : 'text-white group-hover:text-gray-100'
-          } drop-shadow-lg leading-tight`}>
-          {mood.name}
-        </div>
-
-        {/* Category indicator - hidden on small screens when not selected */}
-        {isSelected && (
-          <motion.div
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-xs text-gray-600 mt-1 font-medium capitalize hidden sm:block"
-          >
-            {mood.category}
-          </motion.div>
-        )}
-      </motion.div>
-
-      {/* Enhanced glow effect */}
-      {isSelected && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="absolute inset-0 rounded-3xl -z-10"
-          style={{
-            background: `radial-gradient(circle, ${mood.glow}40 0%, ${mood.color}25 30%, transparent 70%)`,
-            filter: 'blur(20px)'
-          }}
-        />
-      )}
-
-      {/* Enhanced shimmer effect */}
-      <motion.div
-        className="absolute inset-0 rounded-3xl opacity-0 pointer-events-none overflow-hidden"
-        animate={{
-          opacity: [0, 0.5, 0],
-          x: [-100, 100]
-        }}
-        transition={{
-          duration: 4 + Math.random() * 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: index * 0.2
-        }}
-        style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)',
-          width: '50%'
-        }}
-      />
-
-      {/* Enhanced 3D depth indicator */}
-      <motion.div
-        className="absolute inset-0 rounded-3xl -z-20"
-        style={{
-          background: `linear-gradient(145deg, ${mood.color}15, ${mood.glow}8)`,
-          filter: 'blur(3px)',
-          transform: 'translate(2px, 2px)'
-        }}
-        animate={{
-          opacity: isSelected ? 0.8 : 0.3
-        }}
-      />
-
-      {/* Category border accent */}
-      <div className="absolute inset-0 rounded-3xl border border-white/20 pointer-events-none" />
+        <div className="text-sm font-medium text-gray-800">{mood.name}</div>
+      </div>
+      <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
+        {mood.name}
+      </div>
     </motion.div>
+
+      {/* Glow effect - only when selected */ }
+>>>>>>> main
+
+  {/* Enhanced glow effect */ }
+  {
+    isSelected && (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="absolute inset-0 rounded-3xl -z-10"
+        style={{
+          background: `radial-gradient(circle, ${mood.glow}40 0%, ${mood.color}25 30%, transparent 70%)`,
+          filter: 'blur(20px)'
+        }}
+      />
+    )
+  }
+
+  {/* Enhanced shimmer effect */ }
+  <motion.div
+    className="absolute inset-0 rounded-3xl opacity-0 pointer-events-none overflow-hidden"
+    animate={{
+      opacity: [0, 0.5, 0],
+      x: [-100, 100]
+    }}
+    transition={{
+      duration: 4 + Math.random() * 2,
+      repeat: Infinity,
+      ease: "easeInOut",
+      delay: index * 0.2
+    }}
+    style={{
+      background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)',
+      width: '50%'
+    }}
+  />
+
+  {/* Enhanced 3D depth indicator */ }
+  <motion.div
+    className="absolute inset-0 rounded-3xl -z-20"
+    style={{
+      background: `linear-gradient(145deg, ${mood.color}15, ${mood.glow}8)`,
+      filter: 'blur(3px)',
+      transform: 'translate(2px, 2px)'
+    }}
+    animate={{
+      opacity: isSelected ? 0.8 : 0.3
+    }}
+  />
+
+  {/* Category border accent */ }
+  <div className="absolute inset-0 rounded-3xl border border-white/20 pointer-events-none" />
+    </motion.div >
   );
 }
 
