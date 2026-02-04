@@ -449,8 +449,8 @@ export const MoodData = {
       },
       {
         prompt: "What's one small way you could reach out and brighten someone else's day? Sometimes giving connection helps us find it.",
-        quote: "We are all alone, born alone, die alone, and—in spite of True Romance magazines—we shall all someday look back on our lives and see that, in spite of our company, we were alone the whole way.",
-        author: "Hunter S. Thompson",
+        quote: "The best way to find yourself is to lose yourself in the service of others.",
+        author: "Mahatma Gandhi",
         keywords: ["giving", "reaching", "connection", "service", "empathy", "community"],
         music: "Uplifting folk - Artists like The Lumineers, Mumford & Sons"
       }

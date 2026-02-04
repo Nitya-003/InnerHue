@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { RefreshCw, MessageCircle, Quote, Hash, Music } from 'lucide-react';
+import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
+import toast from 'react-hot-toast';
 import {
   Tooltip,
   TooltipContent,
@@ -18,7 +19,7 @@ interface SuggestionPanelProps {
     music: string;
   };
   mood: any;
-  onRefresh: () => void;
+  onRefresh: () => void | Promise<void>;
   isRefreshing?: boolean;
 }
 
@@ -39,6 +40,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
                 onClick={onRefresh}
                 disabled={isRefreshing}
                 className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+                aria-label={isRefreshing ? 'Refreshing insights' : 'Refresh all insights'}
               >
                 <RefreshCw className={`w-5 h-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
               </motion.button>
@@ -76,16 +78,30 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
         transition={{ delay: 0.2 }}
         className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
       >
-        <div className="flex items-start space-x-3">
+        <div className="flex items-start space-x-3 relative">
           <div className="p-2 rounded-lg bg-pink-100">
             <Quote className="w-5 h-5 text-pink-600" />
           </div>
           <div>
-            <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
+            <div className="flex items-start justify-between">
+              <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
+            </div>
             <blockquote className="text-gray-700 italic leading-relaxed mb-2">
               "{suggestions.quote}"
             </blockquote>
             <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
+          </div>
+
+          <div className="absolute right-2">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleCopy}
+              className="p-[6px] rounded-full text-pink-400 hover:bg-pink-50 hover:text-pink-600 transition-colors opacity-70 hover:opacity-100"
+              aria-label="Copy quote"
+            >
+              <Copy className="w-4 h-4" />
+            </motion.button>
           </div>
         </div>
       </motion.div>

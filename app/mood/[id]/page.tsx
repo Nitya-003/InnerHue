@@ -86,7 +86,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             </motion.button>
           </Link>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center  space-x-2">
             {moodData.length > 1 ? (
               <div className="flex items-center space-x-2">
                 <div className="flex space-x-1">
@@ -176,7 +176,6 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                   // Small delay to show visual feedback
                   await new Promise(resolve => setTimeout(resolve, 300));
                   const newSuggestions = MoodData.getSuggestions(currentMood.id);
-                  console.log('Refreshing suggestions:', newSuggestions);
                   setSuggestions({ ...newSuggestions });
                   setIsRefreshing(false);
                 }}

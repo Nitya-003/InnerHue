@@ -7,13 +7,67 @@ import { FloatingBackground } from '@/components/FloatingBackground';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-      {/* Animated Background Orbs */}
+
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-x-hidden">
+      
+      {/* ACCESSIBILITY UPDATE: 
+        Added aria-hidden="true" to background elements so screen readers ignore them.
+      */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full opacity-20"
+              style={{
+                background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'][i]} 0%, transparent 70%)`,
+                width: Math.random() * 300 + 100,
+                height: Math.random() * 300 + 100,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                x: [0, Math.random() * 100 - 50],
+                y: [0, Math.random() * 100 - 50],
+                scale: [1, 1.2, 1],
+                opacity: [0.1, 0.3, 0.1]
+              }}
+              transition={{
+                duration: 8 + Math.random() * 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.5
+              }}
+            />
+          ))}
+        </div>
+        <FloatingBackground />
+      </div>
+      
+      {/* Header */}
+      <motion.header 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10 p-4 md:p-6"
+      >
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <Heart className="text-pink-400 w-6 h-6 md:w-8 md:h-8" />
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+
+    <motion.div 
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden"
+    >
+      {/* Soft Animated Background - Slower and more subtle for landing */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute rounded-full opacity-20"
+            className="absolute rounded-full"
             style={{
               background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'][i]} 0%, transparent 70%)`,
               width: Math.random() * 200 + 150,
@@ -36,13 +90,14 @@ export default function LandingPage() {
           />
         ))}
       </div>
-      
+
       <FloatingBackground />
-      
-      {/* Header */}
-      <motion.header 
+
+      {/* Minimal Header for Landing */}
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
         className="relative z-10 p-6"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
@@ -50,8 +105,9 @@ export default function LandingPage() {
             <Heart className="text-pink-400 w-10 h-10" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
               InnerHue
-            </h1>
+            </span>
           </div>
+
           
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -67,8 +123,11 @@ export default function LandingPage() {
         </div>
       </motion.header>
 
+      {/* Hero Section */}
+      <Hero />
+    </motion.div>
       {/* Main Content */}
-      <main className="relative z-10 px-6 pb-20">
+      <main className="relative z-10 px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
           <motion.section 

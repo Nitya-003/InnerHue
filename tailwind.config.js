@@ -7,6 +7,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      // --- ADDED THIS SECTION FOR SKELETON LOADING ---
+      keyframes: {
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
+        },
+      },
+      animation: {
+        shimmer: "shimmer 1.5s infinite",
+      },
+      // -----------------------------------------------
+
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
