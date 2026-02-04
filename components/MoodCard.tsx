@@ -170,14 +170,20 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
         >
           {mood.emoji}
         </motion.div>
+<<<<<<< main
+=======
         <div className="text-sm font-medium text-gray-800">{mood.name}</div>
       </div>
+>>>>>>> main
         <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
           {mood.name}
         </div>
       </motion.div>
+<<<<<<< main
+=======
 
       {/* Glow effect - only when selected */}
+>>>>>>> main
 
       {isSelected && (
         <motion.div
