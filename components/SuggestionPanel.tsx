@@ -40,6 +40,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
                 onClick={onRefresh}
                 disabled={isRefreshing}
                 className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+                aria-label={isRefreshing ? 'Refreshing insights' : 'Refresh all insights'}
               >
                 <RefreshCw className={`w-5 h-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
               </motion.button>
