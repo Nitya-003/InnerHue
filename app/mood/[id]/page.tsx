@@ -176,7 +176,6 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                   // Small delay to show visual feedback
                   await new Promise(resolve => setTimeout(resolve, 300));
                   const newSuggestions = MoodData.getSuggestions(currentMood.id);
-                  console.log('Refreshing suggestions:', newSuggestions);
                   setSuggestions({ ...newSuggestions });
                   setIsRefreshing(false);
                 }}
