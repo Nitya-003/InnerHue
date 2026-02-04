@@ -180,7 +180,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
       <motion.div 
         className="absolute inset-0 rounded-3xl -z-20"
         style={{
-          background: `linear-gradient(145deg, ${mood.color}15, ${mood.glow}8)`,
+          background: `linear-gradient(145deg, ${mood.color}15, ${mood.glow}10)`,
           filter: 'blur(3px)',
           transform: 'translate(2px, 2px)'
         }}
