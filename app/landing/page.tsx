@@ -75,22 +75,22 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-center py-12 md:py-16 lg:py-24 px-4"
+            className="text-center py-16 md:py-24"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="mb-6 sm:mb-8"
+              className="mb-8"
             >
-              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 sm:mb-6 drop-shadow-lg leading-tight">
+              <h2 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 drop-shadow-lg leading-tight">
                 Understand your emotions,{' '}
                 <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                   one feeling at a time
                 </span>
               </h2>
               
-              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed px-4">
+              <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed">
                 Discover the depth of your emotional landscape with personalized insights, 
                 therapeutic music, and guided reflection journeys tailored to your feelings.
               </p>
@@ -100,22 +100,22 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4"
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Link href="/emotions">
                 <motion.button
                   whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(147, 51, 234, 0.4)' }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-base sm:text-lg font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 group"
+                  className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-2 group"
                 >
                   Start Reflecting
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </Link>
               
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="w-full sm:w-auto px-4 sm:px-6 py-3 sm:py-4 bg-white/10 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300 cursor-pointer text-center text-sm sm:text-base"
+                className="px-6 py-4 bg-white/10 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300 cursor-pointer"
               >
                 Learn More
               </motion.div>
@@ -127,18 +127,18 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="py-12 sm:py-16 px-4"
+            className="py-16"
           >
-            <div className="text-center mb-12 sm:mb-16">
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
+            <div className="text-center mb-16">
+              <h3 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 How InnerHue Works
               </h3>
-              <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto">
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
                 A comprehensive approach to emotional wellness and self-discovery
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
                 {
                   icon: Brain,
@@ -171,17 +171,17 @@ export default function LandingPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.9 + index * 0.1 }}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  className="p-4 sm:p-6 bg-white/10 backdrop-blur rounded-xl sm:rounded-2xl border border-white/20 hover:bg-white/15 transition-all duration-300 text-center sm:text-left"
+                  className="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 hover:bg-white/15 transition-all duration-300"
                 >
-                  <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 sm:mb-4 mx-auto sm:mx-0`}>
-                    <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4`}>
+                    <feature.icon className="w-8 h-8 text-white" />
                   </div>
                   
-                  <h4 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">
+                  <h4 className="text-xl font-bold text-white mb-3">
                     {feature.title}
                   </h4>
                   
-                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                  <p className="text-gray-300 leading-relaxed">
                     {feature.description}
                   </p>
                 </motion.div>
@@ -194,14 +194,14 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
-            className="text-center py-12 sm:py-16 px-4"
+            className="text-center py-16"
           >
             <div className="max-w-3xl mx-auto">
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+              <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 Ready to explore your inner world?
               </h3>
               
-              <p className="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8">
+              <p className="text-xl text-gray-300 mb-8">
                 Join thousands who have discovered deeper self-awareness through InnerHue's 
                 guided emotional reflection experience.
               </p>
@@ -213,11 +213,11 @@ export default function LandingPage() {
                     boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)' 
                   }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg sm:text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 mx-auto group"
+                  className="px-12 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-3 mx-auto group"
                 >
-                  <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <Heart className="w-6 h-6" />
                   Begin Your Journey
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </Link>
             </div>
