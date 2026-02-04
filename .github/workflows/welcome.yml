@@ -6,16 +6,21 @@ on:
   pull_request:
     types: [opened]
 
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
 jobs:
   welcome:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Welcome New Issue
         if: github.event_name == 'issues'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.createComment({
@@ -27,12 +32,12 @@ jobs:
 
       - name: Welcome New PR
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "🚀 Wow! Thanks for the Pull Request. \n\nWe appreciate your contribution to **InnerHue/CropChain**. We will review your changes and get back to you soon. Please make sure your PR follows our 'Apple-level' design standards! \n\n✨ Happy Coding!"
+              body: "🚀 Wow! Thanks for the Pull Request. \n\nWe appreciate your contribution to **InnerHue**. We will review your changes and get back to you soon. Please make sure your PR follows our 'Apple-level' design standards! \n\n✨ Happy Coding!"
             })

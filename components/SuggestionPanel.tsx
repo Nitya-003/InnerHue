@@ -2,7 +2,12 @@
 
 import { motion } from 'framer-motion';
 import { RefreshCw, MessageCircle, Quote, Hash, Music } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface SuggestionPanelProps {
   suggestions: {
@@ -19,7 +24,7 @@ interface SuggestionPanelProps {
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={500}>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -38,7 +43,9 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
                 <RefreshCw className={`w-5 h-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
               </motion.button>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent
+              className="bg-white/80 backdrop-blur-md border-white/50 text-gray-800 shadow-xl"
+            >
               <p>{isRefreshing ? 'Refreshing insights...' : 'Refresh all insights (prompt, quote, keywords, music)'}</p>
             </TooltipContent>
           </Tooltip>
