@@ -17,6 +17,7 @@ interface OrbVisualizerProps {
 
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showPulse, setShowPulse] = useState(false);
 
   const orbVariants: Variants = {
     idle: {
@@ -39,29 +40,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
-  const particleVariants: Variants = {
-    animate: {
-      y: [0, -20, 0],
-      opacity: [0, 1, 0],
-      scale: [0, 1, 0],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-  };
 
-  const [particles, setParticles] = useState<any[]>([]);
-
-  useEffect(() => {
-    setParticles(Array.from({ length: 12 }, (_, i) => ({
-      id: i,
-      angle: (i * 30) * (Math.PI / 180),
-      distance: 150 + Math.random() * 50,
-      duration: 3 + Math.random() * 2
-    })));
-  }, []);
 
   return (
     <div className="relative">
@@ -76,30 +55,22 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
         </div>
 
         <div className="relative h-80 flex items-center justify-center">
-          {particles.map((particle) => (
-            <motion.div
-              key={particle.id}
-              className="absolute w-2 h-2 rounded-full"
-              style={{
-                background: mood.glow,
-                left: `calc(50% + ${Math.cos(particle.angle) * particle.distance}px)`,
-                top: `calc(50% + ${Math.sin(particle.angle) * particle.distance}px)`,
-              }}
-              variants={particleVariants}
-              initial="animate"
-              animate="animate"
-              transition={{
-                delay: particle.id * 0.2,
-                duration: particle.duration,
-              }}
-            />
-          ))}
+
 
           <motion.div
-            className="relative"
+            className="relative flex items-center justify-center w-48 h-48 cursor-grab active:cursor-grabbing z-10"
             variants={orbVariants}
             initial="idle"
             animate={isPlaying ? "active" : "idle"}
+            drag
+            dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
+            dragElastic={0.2}
+            dragSnapToOrigin
+            whileDrag={{ scale: 1.1, cursor: "grabbing" }}
+            onDragEnd={() => {
+              setShowPulse(true);
+              setTimeout(() => setShowPulse(false), 1000);
+            }}
           >
             <motion.div
               className="absolute inset-0 rounded-full"
@@ -108,7 +79,8 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
                 width: 200,
                 height: 200,
                 filter: 'blur(20px)',
-                transform: 'translate(-50%, -50%)',
+                x: '-50%',
+                y: '-50%',
                 left: '50%',
                 top: '50%',
               }}
@@ -168,14 +140,15 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute rounded-full border-2 opacity-30"
+              className="absolute rounded-full border-2 opacity-30 pointer-events-none"
               style={{
                 borderColor: mood.color,
                 width: 160 + i * 40,
                 height: 160 + i * 40,
                 left: '50%',
                 top: '50%',
-                transform: 'translate(-50%, -50%)',
+                x: '-50%',
+                y: '-50%',
               }}
               animate={{
                 scale: [1, 1.2, 1],
@@ -189,6 +162,23 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               }}
             />
           ))}
+
+          {/* Drag Pulse Effect */}
+          {showPulse && (
+            <motion.div
+              className="absolute rounded-full border-4 pointer-events-none"
+              style={{
+                borderColor: mood.glow,
+                left: '50%',
+                top: '50%',
+                x: '-50%',
+                y: '-50%',
+              }}
+              initial={{ width: 200, height: 200, opacity: 0.8, borderWidth: 4 }}
+              animate={{ width: 400, height: 400, opacity: 0, borderWidth: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+          )}
         </div>
 
         <div className="text-center mt-8">
@@ -205,3 +195,4 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     </div>
   );
 }
+
