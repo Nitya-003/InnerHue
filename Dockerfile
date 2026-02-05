@@ -1,25 +1,16 @@
 # Multi-stage Docker build for Next.js application
-FROM node:18-alpine AS deps
+FROM node:18-alpine AS builder
 
-# Install dependencies only when needed
+# Install dependencies and tools only when needed
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package files
+# Copy package files and install all dependencies (including devDependencies)
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
-
-# Rebuild the source code only when needed
-FROM node:18-alpine AS builder
-WORKDIR /app
-
-# Copy node modules from deps stage
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-# Install all dependencies (including devDependencies)
 RUN npm ci
 
+# Rebuild the source code only when needed
+COPY . .
 # Build the application
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
