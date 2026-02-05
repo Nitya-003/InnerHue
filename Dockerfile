@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+RUN npm install --legacy-peer-deps --only=production
 
 # Rebuild the source code only when needed
 FROM node:18-alpine AS builder
@@ -18,7 +18,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Install all dependencies (including devDependencies)
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 # Build the application
 ENV NEXT_TELEMETRY_DISABLED 1
