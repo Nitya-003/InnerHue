@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Mood {
   id: string;
@@ -18,6 +18,38 @@ interface OrbVisualizerProps {
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPulse, setShowPulse] = useState(false);
+  const [confetti, setConfetti] = useState<{ id: number; x: number; y: number; angle: number; drift: number }[]>([]);
+  const clickCountRef = useRef(0);
+  const lastClickTimeRef = useRef(0);
+
+  const handleEmojiClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const now = Date.now();
+
+    if (now - lastClickTimeRef.current > 500) {
+      clickCountRef.current = 0;
+    }
+
+    clickCountRef.current += 1;
+    lastClickTimeRef.current = now;
+
+    if (clickCountRef.current === 3) {
+      triggerConfetti();
+      clickCountRef.current = 0;
+    }
+  };
+
+  const triggerConfetti = () => {
+    const newConfetti = Array.from({ length: 20 }, (_, i) => ({
+      id: Date.now() + i,
+      x: 0,
+      y: 0,
+      angle: (i * 18) * (Math.PI / 180),
+      drift: Math.random() * 50 - 25
+    }));
+    setConfetti(newConfetti);
+    setTimeout(() => setConfetti([]), 2000);
+  };
 
   const orbVariants: Variants = {
     idle: {
@@ -118,13 +150,17 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
                 }}
               />
 
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div
+                className="absolute inset-0 flex items-center justify-center cursor-pointer z-20"
+                onClick={handleEmojiClick}
+              >
                 <motion.span
-                  className="text-4xl"
+                  className="text-4xl select-none"
                   animate={{
                     scale: [1, 1.1, 1],
                     rotate: [0, 5, -5, 0],
                   }}
+                  whileTap={{ scale: 0.8 }}
                   transition={{
                     duration: 4,
                     repeat: Infinity,
@@ -179,6 +215,31 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               transition={{ duration: 0.8, ease: "easeOut" }}
             />
           )}
+
+          {/* Confetti Effect */}
+          {confetti.map((particle) => (
+            <motion.div
+              key={particle.id}
+              className="absolute text-xl pointer-events-none z-30"
+              style={{
+                left: '50%',
+                top: '50%',
+                x: '-50%',
+                y: '-50%',
+              }}
+              initial={{ scale: 0, opacity: 1, x: '-50%', y: '-50%' }}
+              animate={{
+                scale: [0, 1.5, 0],
+                opacity: [1, 1, 0],
+                x: `calc(-50% + ${Math.cos(particle.angle) * 200 + particle.drift}px)`,
+                y: `calc(-50% + ${Math.sin(particle.angle) * 200 + particle.drift}px)`,
+                rotate: [0, 360 * (Math.random() > 0.5 ? 1 : -1)]
+              }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+            >
+              {mood.emoji}
+            </motion.div>
+          ))}
         </div>
 
         <div className="text-center mt-8">
