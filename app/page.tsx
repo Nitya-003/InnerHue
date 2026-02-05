@@ -4,8 +4,11 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Heart, Brain, Music, BarChart3, Sparkles, ArrowRight } from 'lucide-react';
 import { FloatingBackground } from '@/components/FloatingBackground';
+import { usePageTransition } from '@/components/TransitionProvider';
 
 export default function LandingPage() {
+  const { startTransition, isTransitioning } = usePageTransition();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-x-hidden">
 
@@ -29,17 +32,15 @@ export default function LandingPage() {
             </h1>
           </div>
 
-          <motion.div
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => startTransition('/emotions')}
+            disabled={isTransitioning}
+            className="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Link
-              href="/emotions"
-              className="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium"
-            >
-              Skip to App
-            </Link>
-          </motion.div>
+            Skip to App
+          </motion.button>
         </div>
       </motion.header>
 
@@ -78,16 +79,16 @@ export default function LandingPage() {
               transition={{ delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4"
             >
-              <Link href="/emotions">
-                <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(147, 51, 234, 0.4)' }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-base sm:text-lg font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 group"
-                >
-                  Start Reflecting
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-                </motion.button>
-              </Link>
+              <motion.button
+                onClick={() => startTransition('/emotions')}
+                disabled={isTransitioning}
+                whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(147, 51, 234, 0.4)' }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-base sm:text-lg font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Start Reflecting
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
 
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -182,20 +183,20 @@ export default function LandingPage() {
                 guided emotional reflection experience.
               </p>
 
-              <Link href="/emotions">
-                <motion.button
-                  whileHover={{
-                    scale: 1.05,
-                    boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)'
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg sm:text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 mx-auto group"
-                >
-                  <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
-                  Begin Your Journey
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
-                </motion.button>
-              </Link>
+              <motion.button
+                onClick={() => startTransition('/emotions')}
+                disabled={isTransitioning}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)'
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg sm:text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 mx-auto group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
+                Begin Your Journey
+                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
             </div>
           </motion.section>
         </div>

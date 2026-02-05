@@ -206,7 +206,9 @@ export default function EmotionsPage() {
               visible: {
                 opacity: 1,
                 transition: {
-                  staggerChildren: 0.03
+                  staggerChildren: 0.02,
+                  delayChildren: 0.1,
+                  ease: [0.4, 0, 0.2, 1]
                 }
               }
             }}
