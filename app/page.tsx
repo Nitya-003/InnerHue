@@ -4,45 +4,24 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Heart, Brain, Music, BarChart3, Sparkles, ArrowRight } from 'lucide-react';
 import { FloatingBackground } from '@/components/FloatingBackground';
+import { usePageTransition } from '@/components/TransitionProvider';
 
 export default function LandingPage() {
+  const { startTransition, isTransitioning } = usePageTransition();
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-      {/* Animated Background Orbs */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full opacity-20"
-            style={{
-              background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'][i]} 0%, transparent 70%)`,
-              width: Math.random() * 200 + 150,
-              height: Math.random() * 200 + 150,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, Math.random() * 50 - 25],
-              y: [0, Math.random() * 50 - 25],
-              scale: [1, 1.1, 1],
-              opacity: [0.1, 0.25, 0.1]
-            }}
-            transition={{
-              duration: 6 + Math.random() * 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.8
-            }}
-          />
-        ))}
-      </div>
-      
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-x-hidden">
+
+      {/* Lottie Background Integration */}
+      {/* <LottieBackground /> - assuming this might be needed later or removed, keeping concise */}
+
       <FloatingBackground />
-      
-      {/* Header */}
-      <motion.header 
+
+      {/* Minimal Header for Landing */}
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
         className="relative z-10 p-6"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
@@ -52,26 +31,24 @@ export default function LandingPage() {
               InnerHue
             </h1>
           </div>
-          
-          <motion.div
+
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => startTransition('/emotions')}
+            disabled={isTransitioning}
+            className="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Link 
-              href="/emotions" 
-              className="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium"
-            >
-              Skip to App
-            </Link>
-          </motion.div>
+            Skip to App
+          </motion.button>
         </div>
       </motion.header>
 
       {/* Main Content */}
-      <main className="relative z-10 px-6 pb-20">
+      <main className="relative z-10 px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
-          <motion.section 
+          <motion.section
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -89,9 +66,9 @@ export default function LandingPage() {
                   one feeling at a time
                 </span>
               </h2>
-              
+
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed px-4">
-                Discover the depth of your emotional landscape with personalized insights, 
+                Discover the depth of your emotional landscape with personalized insights,
                 therapeutic music, and guided reflection journeys tailored to your feelings.
               </p>
             </motion.div>
@@ -102,17 +79,17 @@ export default function LandingPage() {
               transition={{ delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4"
             >
-              <Link href="/emotions">
-                <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(147, 51, 234, 0.4)' }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-base sm:text-lg font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 group"
-                >
-                  Start Reflecting
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-                </motion.button>
-              </Link>
-              
+              <motion.button
+                onClick={() => startTransition('/emotions')}
+                disabled={isTransitioning}
+                whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(147, 51, 234, 0.4)' }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-base sm:text-lg font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Start Reflecting
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="w-full sm:w-auto px-4 sm:px-6 py-3 sm:py-4 bg-white/10 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300 cursor-pointer text-center text-sm sm:text-base"
@@ -123,7 +100,7 @@ export default function LandingPage() {
           </motion.section>
 
           {/* Features Section */}
-          <motion.section 
+          <motion.section
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
@@ -176,11 +153,11 @@ export default function LandingPage() {
                   <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 sm:mb-4 mx-auto sm:mx-0`}>
                     <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  
+
                   <h4 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">
                     {feature.title}
                   </h4>
-                  
+
                   <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                     {feature.description}
                   </p>
@@ -200,31 +177,31 @@ export default function LandingPage() {
               <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
                 Ready to explore your inner world?
               </h3>
-              
+
               <p className="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8">
                 Join thousands who have discovered deeper self-awareness through InnerHue&apos;s 
                 guided emotional reflection experience.
               </p>
-              
-              <Link href="/emotions">
-                <motion.button
-                  whileHover={{ 
-                    scale: 1.05, 
-                    boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)' 
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg sm:text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 mx-auto group"
-                >
-                  <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
-                  Begin Your Journey
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
-                </motion.button>
-              </Link>
+
+              <motion.button
+                onClick={() => startTransition('/emotions')}
+                disabled={isTransitioning}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)'
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg sm:text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 mx-auto group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
+                Begin Your Journey
+                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
             </div>
           </motion.section>
         </div>
       </main>
-      
+
       {/* Footer */}
       <motion.footer
         initial={{ opacity: 0 }}
