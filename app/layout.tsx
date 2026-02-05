@@ -1,4 +1,5 @@
 import './globals.css';
+import { ClientLayout } from '@/components/ClientLayout';
 import { Footer } from '@/components/Footer';
 import { BackToTop } from '@/components/BackToTop';
 import type { Metadata } from 'next';
@@ -21,6 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
         {children}
         <Footer />
         <BackToTop />
