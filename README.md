@@ -126,6 +126,14 @@ InnerHue uses a comprehensive emotional color palette:
 - [ ] **Wearable Integration**: Apple Watch and Fitbit mood tracking
 
 ---
+## 👥 Contributors
+
+Thanks to these amazing people for contributing 💙
+
+<a href="https://github.com/Nitya-003/InnerHue/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Nitya-003/InnerHue" />
+</a>
+
 
 ## 🤝 Contributing
 
