@@ -11,4 +11,4 @@
 *.sh            text eol=lf
 
 # Lockfile: keep tracked, prevent line-based merges
-# package-lock.json -text merge=binary
+package-lock.json -text merge=binary
