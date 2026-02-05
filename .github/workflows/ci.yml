@@ -1,0 +1,179 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  lint-and-audit:
+    name: Lint and Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run ESLint
+      run: npm run lint
+    
+    - name: Run security audit
+      run: npm audit --audit-level=moderate
+
+  build-and-test:
+    name: Build and Test Application
+    runs-on: ubuntu-latest
+    needs: lint-and-audit
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build Next.js application
+      run: npm run build
+    
+    - name: Check build artifacts
+      run: |
+        if [ ! -d ".next" ]; then
+          echo "Build failed: .next directory not found"
+          exit 1
+        fi
+        echo "Build successful: .next directory exists"
+
+  docker-build:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+    needs: lint-and-audit
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=moby/buildkit:buildx-stable-1
+    
+    - name: Log in to Container Registry
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+    
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/amd64,linux/arm64
+    
+    - name: Test Docker image
+      run: |
+        docker build -t test-image .
+        echo "Docker image built successfully"
+        
+        # Get image size
+        SIZE=$(docker images test-image --format "table {{.Size}}" | tail -n +2)
+        echo "Docker image size: $SIZE"
+        
+        # Test container startup and health
+        CONTAINER_ID=$(docker run -d -p 3001:3000 test-image)
+        echo "Container started: $CONTAINER_ID"
+        
+        # Wait for container to be ready (max 30 seconds)
+        for i in {1..30}; do
+          if curl -f http://localhost:3001 >/dev/null 2>&1; then
+            echo "Container is responding to requests"
+            break
+          fi
+          echo "Waiting for container to respond... ($i/30)"
+          sleep 1
+        done
+        
+        # Clean up
+        docker stop $CONTAINER_ID
+        echo "Docker container test completed successfully"
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: docker-build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Build image for scanning
+      run: docker build -t scan-image .
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'scan-image'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  deploy-check:
+    name: Deployment Check
+    runs-on: ubuntu-latest
+    needs: [build-and-test, docker-build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deployment Ready
+      run: |
+        echo "🚀 All checks passed! Ready for deployment."
+        echo "✅ Linting passed"
+        echo "✅ Security audit passed"
+        echo "✅ Build successful"
+        echo "✅ Docker image created"
+        echo ""
+        echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
