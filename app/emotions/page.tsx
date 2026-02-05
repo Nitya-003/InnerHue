@@ -198,7 +198,7 @@ export default function EmotionsPage() {
 
           {/* Enhanced Mood Cards Grid - Improved Mobile Responsiveness */}
           <motion.div 
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3 sm:gap-4 max-w-8xl mx-auto px-2 sm:px-0"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3 sm:gap-4 max-w-7xl mx-auto px-2 sm:px-0"
             initial="hidden"
             animate="visible"
             variants={{
@@ -206,7 +206,9 @@ export default function EmotionsPage() {
               visible: {
                 opacity: 1,
                 transition: {
-                  staggerChildren: 0.03
+                  staggerChildren: 0.02,
+                  delayChildren: 0.1,
+                  ease: [0.4, 0, 0.2, 1]
                 }
               }
             }}

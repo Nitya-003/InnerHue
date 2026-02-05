@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import './moodcard.css';
 
 interface Mood {
@@ -36,161 +36,205 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
 
   return (
     <motion.div
+      layout
+      layoutId={`mood-card-${mood.id}`}
       variants={{
-        hidden: { 
-          opacity: 0, 
-          y: 50,
-          rotateX: -25,
-          rotateY: -10,
-          scale: 0.8
+        hidden: {
+          opacity: 0,
+          y: 30,
+          scale: 0.9
         },
-        visible: { 
-          opacity: 1, 
+        visible: {
+          opacity: 1,
           y: 0,
-          rotateX: 0,
-          rotateY: 0,
           scale: 1,
           transition: {
             type: "spring",
-            stiffness: 120,
-            damping: 12,
-            delay: index * 0.03
+            stiffness: 300,
+            damping: 25,
+            delay: index * 0.02
           }
         }
       }}
-      whileHover={{ 
-        scale: 1.12,
-        rotateY: 8,
-        rotateX: 5,
-        z: 30,
-        y: -10,
-        transition: { duration: 0.4, type: "spring", stiffness: 350 }
+      whileHover={{
+        scale: isSelected ? 1.02 : 1.08,
+        y: -8,
+        transition: { 
+          type: "spring", 
+          stiffness: 400, 
+          damping: 20 
+        }
       }}
-      whileTap={{ 
-        scale: 0.92,
-        rotateX: -8,
-        transition: { duration: 0.15 }
+      whileTap={{
+        scale: 0.95,
+        transition: { 
+          type: "spring", 
+          stiffness: 500, 
+          damping: 30 
+        }
+      }}
+      animate={{
+        scale: isSelected ? 1.05 : 1,
+        y: isSelected ? -5 : 0,
+        transition: {
+          type: "spring",
+          stiffness: 400,
+          damping: 25
+        }
       }}
       className={`
-        relative cursor-pointer p-3 sm:p-5 rounded-2xl sm:rounded-3xl backdrop-blur-md border-2 transition-all duration-500 transform-gpu group
-        ${isSelected 
-          ? `bg-gradient-to-br from-white/95 to-white/85 shadow-2xl border-2 transform scale-105 sm:scale-110 z-20` 
+        relative cursor-pointer p-3 sm:p-5 rounded-2xl sm:rounded-3xl backdrop-blur-md border-2 transform-gpu group
+        ${isSelected
+          ? `bg-gradient-to-br from-white/95 to-white/85 shadow-2xl z-20`
           : `bg-white/25 shadow-xl border-white/30 hover:bg-white/40 ${getCategoryStyle(mood.category)}`
         }
       `}
       onClick={onSelect}
+      aria-label={`Select ${mood.name} mood`}
+      aria-pressed={isSelected}
       style={{
-        boxShadow: isSelected 
-          ? `0 30px 60px rgba(139, 92, 246, 0.5), 0 0 0 4px ${mood.color}70, 0 0 30px ${mood.glow}50, inset 0 1px 0 rgba(255,255,255,0.8)` 
-          : '0 15px 35px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255,255,255,0.4)'
+        boxShadow: isSelected
+          ? `0 25px 50px rgba(139, 92, 246, 0.4), 0 0 0 3px ${mood.color}80, 0 0 40px ${mood.glow}40`
+          : '0 10px 30px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(255, 255, 255, 0.08)',
+        borderColor: isSelected ? mood.color : undefined,
+        transition: 'box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease'
       }}
     >
-      {/* Enhanced selection indicator */}
-      {isSelected && (
-        <motion.div
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          className="absolute -top-3 -right-3 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center z-30 shadow-lg border-2 border-white"
-        >
+      {/* Enhanced selection indicator with AnimatePresence */}
+      <AnimatePresence>
+        {isSelected && (
           <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="w-3 h-3 bg-white rounded-full"
-          />
-        </motion.div>
-      )}
-      {/* Enhanced floating animation for emoji */}
-      <motion.div
-        animate={{
-          y: [0, -6, 0],
-          rotate: [0, 5, -5, 0],
-          scale: [1, 1.08, 1]
-        }}
-        transition={{
-          duration: 5 + Math.random() * 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: index * 0.15
-        }}
-        className="text-center mb-2 sm:mb-3"
-      >
-        <motion.div 
+            initial={{ scale: 0, rotate: -180, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            exit={{ scale: 0, rotate: 180, opacity: 0 }}
+            transition={{ 
+              type: "spring", 
+              stiffness: 500, 
+              damping: 25 
+            }}
+            className="absolute -top-2.5 -right-2.5 w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center z-30 shadow-lg border-2 border-white"
+          >
+            <motion.svg
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ delay: 0.15, duration: 0.3 }}
+              className="w-3.5 h-3.5 text-white"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <motion.path d="M5 12l5 5L20 7" />
+            </motion.svg>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Smooth floating animation for emoji */}
+      <div className="text-center mb-2 sm:mb-3">
+        <motion.div
           className="text-2xl sm:text-4xl mb-1 sm:mb-2 filter drop-shadow-lg"
-          whileHover={{ scale: 1.2, rotate: 15, y: -3 }}
-          transition={{ type: "spring", stiffness: 500, damping: 15 }}
+          animate={{
+            y: isSelected ? -2 : [0, -4, 0],
+            scale: isSelected ? 1.1 : 1,
+          }}
+          transition={{
+            y: isSelected 
+              ? { type: "spring", stiffness: 300, damping: 20 }
+              : { duration: 3, repeat: Infinity, ease: "easeInOut" },
+            scale: { type: "spring", stiffness: 300, damping: 20 }
+          }}
         >
           {mood.emoji}
         </motion.div>
-        
-        {/* Enhanced text with better hierarchy */}
-        <div className={`text-xs sm:text-sm font-bold transition-all duration-300 ${
-          isSelected 
-            ? 'text-gray-800 text-sm sm:text-base' 
-            : 'text-white group-hover:text-gray-100'
-        } drop-shadow-lg leading-tight`}>
+
+        {/* Enhanced text with smooth color transition */}
+        <motion.div 
+          className={`text-xs sm:text-sm font-bold drop-shadow-lg leading-tight`}
+          animate={{
+            color: isSelected ? '#1f2937' : '#ffffff',
+            scale: isSelected ? 1.05 : 1
+          }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
           {mood.name}
-        </div>
-        
-        {/* Category indicator - hidden on small screens when not selected */}
+        </motion.div>
+
+        {/* Category indicator with AnimatePresence */}
+        <AnimatePresence>
+          {isSelected && (
+            <motion.div
+              initial={{ opacity: 0, y: 8, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, y: -5, height: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="text-xs text-gray-600 mt-1 font-medium capitalize hidden sm:block overflow-hidden"
+            >
+              {mood.category}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Smooth glow effect with AnimatePresence */}
+      <AnimatePresence>
         {isSelected && (
           <motion.div
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-xs text-gray-600 mt-1 font-medium capitalize hidden sm:block"
-          >
-            {mood.category}
-          </motion.div>
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1.1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ 
+              duration: 0.4, 
+              ease: [0.4, 0, 0.2, 1] 
+            }}
+            className="absolute inset-0 rounded-3xl -z-10"
+            style={{
+              background: `radial-gradient(circle, ${mood.glow}50 0%, ${mood.color}30 40%, transparent 70%)`,
+              filter: 'blur(25px)'
+            }}
+          />
         )}
-      </motion.div>
+      </AnimatePresence>
 
-      {/* Enhanced glow effect */}
-      {isSelected && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="absolute inset-0 rounded-3xl -z-10"
-          style={{
-            background: `radial-gradient(circle, ${mood.glow}40 0%, ${mood.color}25 30%, transparent 70%)`,
-            filter: 'blur(20px)'
-          }}
-        />
-      )}
+      {/* Subtle pulse ring on selection */}
+      <AnimatePresence>
+        {isSelected && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ 
+              opacity: [0.6, 0],
+              scale: [1, 1.3]
+            }}
+            transition={{ 
+              duration: 0.8,
+              ease: "easeOut",
+              repeat: Infinity,
+              repeatDelay: 1.5
+            }}
+            className="absolute inset-0 rounded-3xl -z-10 pointer-events-none"
+            style={{
+              border: `2px solid ${mood.color}`,
+            }}
+          />
+        )}
+      </AnimatePresence>
 
-      {/* Enhanced shimmer effect */}
+      {/* Soft inner glow */}
       <motion.div
-        className="absolute inset-0 rounded-3xl opacity-0 pointer-events-none overflow-hidden"
+        className="absolute inset-0 rounded-2xl sm:rounded-3xl -z-10 pointer-events-none"
         animate={{
-          opacity: [0, 0.5, 0],
-          x: [-100, 100]
+          opacity: isSelected ? 0.5 : 0.15
         }}
-        transition={{
-          duration: 4 + Math.random() * 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: index * 0.2
-        }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)',
-          width: '50%'
+          background: `linear-gradient(135deg, ${mood.color}20, ${mood.glow}10)`,
         }}
       />
-      
-      {/* Enhanced 3D depth indicator */}
-      <motion.div 
-        className="absolute inset-0 rounded-3xl -z-20"
-        style={{
-          background: `linear-gradient(145deg, ${mood.color}15, ${mood.glow}8)`,
-          filter: 'blur(3px)',
-          transform: 'translate(2px, 2px)'
-        }}
-        animate={{
-          opacity: isSelected ? 0.8 : 0.3
-        }}
-      />
-      
+
       {/* Category border accent */}
-      <div className="absolute inset-0 rounded-3xl border border-white/20 pointer-events-none" />
+      <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border border-white/20 pointer-events-none" />
     </motion.div>
   );
 }

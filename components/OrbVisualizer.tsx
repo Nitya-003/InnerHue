@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Mood {
   id: string;
@@ -52,11 +52,16 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
-  const particles = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    angle: (i * 30) * (Math.PI / 180),
-    distance: 150 + Math.random() * 50,
-  }));
+  const [particles, setParticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    setParticles(Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      angle: (i * 30) * (Math.PI / 180),
+      distance: 150 + Math.random() * 50,
+      duration: 3 + Math.random() * 2
+    })));
+  }, []);
 
   return (
     <div className="relative">
@@ -85,7 +90,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               animate="animate"
               transition={{
                 delay: particle.id * 0.2,
-                duration: 3 + Math.random() * 2,
+                duration: particle.duration,
               }}
             />
           ))}
