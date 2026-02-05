@@ -88,13 +88,13 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 relative"
       >
         <div className="flex items-start space-x-3">
           <div className="p-2 rounded-lg bg-pink-100">
             <Quote className="w-5 h-5 text-pink-600" />
           </div>
-          <div>
+          <div className="flex-1">
             <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
             <blockquote className="text-gray-700 italic leading-relaxed mb-2">
               &ldquo;{suggestions.quote}&rdquo;
@@ -102,21 +102,18 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
             <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
           </div>
         </div>
+        <div className="absolute right-2 top-2">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleCopy}
+            className="p-[6px] rounded-full text-pink-400 hover:bg-pink-50 hover:text-pink-600 transition-colors opacity-70 hover:opacity-100"
+            aria-label="Copy quote"
+          >
+            <Copy className="w-4 h-4" />
+          </motion.button>
+        </div>
       </motion.div>
-
-            <div className="absolute right-2">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleCopy}
-                className="p-[6px] rounded-full text-pink-400 hover:bg-pink-50 hover:text-pink-600 transition-colors opacity-70 hover:opacity-100"
-                aria-label="Copy quote"
-              >
-                <Copy className="w-4 h-4" />
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
 
         {/* Keywords Cloud */}
         <motion.div
