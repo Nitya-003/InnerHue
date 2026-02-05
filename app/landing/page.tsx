@@ -202,7 +202,7 @@ export default function LandingPage() {
               </h3>
               
               <p className="text-xl text-gray-300 mb-8">
-                Join thousands who have discovered deeper self-awareness through InnerHue's 
+                Join thousands who have discovered deeper self-awareness through InnerHue&apos;s 
                 guided emotional reflection experience.
               </p>
               
