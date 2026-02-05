@@ -23,13 +23,16 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
+        # Disable cache to avoid issues
     
     - name: Install dependencies
       run: |
-        # Clear npm cache and use npm install for better compatibility
-        npm cache clean --force
+        # Remove node_modules and package-lock to start fresh
+        rm -rf node_modules package-lock.json
+        # Install dependencies 
         npm install
+        # Verify installation worked
+        ls -la node_modules/.bin/ | head -5
     
     - name: Run ESLint
       run: npm run lint
@@ -52,11 +55,11 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
+        # Disable cache to avoid issues
     
     - name: Install dependencies
       run: |
-        npm cache clean --force
+        rm -rf node_modules package-lock.json
         npm install
     
     - name: Build Next.js application
