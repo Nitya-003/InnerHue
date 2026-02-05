@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
+import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
   Tooltip,
@@ -25,10 +25,8 @@ interface SuggestionPanelProps {
 }
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
-  const handleCopy = () => {
-    navigator.clipboard.writeText(`"${suggestions.quote}" — ${suggestions.author}`);
-    toast.success('Quote copied to clipboard!');
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   useEffect(() => {
     setIsPlayerLoaded(false);
@@ -39,114 +37,322 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
     toast.success('Quote copied to clipboard');
   };
 
+  // Card animation variants
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { type: "spring", stiffness: 100, damping: 15 }
+    },
+    hover: {
+      scale: 1.03,
+      y: -8,
+      transition: { type: "spring", stiffness: 400, damping: 25 }
+    }
+  };
+
   return (
     <TooltipProvider delayDuration={500}>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold text-gray-800">
+      <motion.div 
+        className="space-y-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        {/* Header with animated gradient */}
+        <motion.div 
+          className="flex items-center justify-between p-5 rounded-2xl relative overflow-hidden"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{
+            background: `linear-gradient(135deg, ${mood.color}20, ${mood.glow}15, transparent)`,
+          }}
+        >
+          {/* Animated background shimmer */}
+          <motion.div
+            className="absolute inset-0 opacity-40"
+            animate={{
+              x: ['-100%', '100%'],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            style={{
+              background: `linear-gradient(90deg, transparent, ${mood.glow}30, transparent)`,
+              width: '50%',
+            }}
+          />
+          
+          {/* Floating sparkles */}
+          <div className="absolute inset-0 overflow-hidden">
+            {[...Array(6)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute"
+                style={{
+                  left: `${15 + i * 15}%`,
+                  top: `${20 + (i % 3) * 25}%`,
+                }}
+                animate={{
+                  y: [0, -15, 0],
+                  opacity: [0.3, 0.8, 0.3],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 2 + i * 0.3,
+                  repeat: Infinity,
+                  delay: i * 0.2,
+                }}
+              >
+                <Sparkles className="w-3 h-3" style={{ color: mood.glow }} />
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.h3 
+            className="text-2xl font-bold relative z-10 flex items-center gap-2"
+            style={{
+              background: `linear-gradient(135deg, ${mood.color}, ${mood.glow})`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <motion.span
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              ✨
+            </motion.span>
             Personalized Insights
-          </h3>
+          </motion.h3>
+
           <Tooltip>
             <TooltipTrigger asChild>
               <motion.button
-                whileHover={{ scale: 1.05, rotate: isRefreshing ? 360 : 180 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.1, rotate: 180 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={onRefresh}
                 disabled={isRefreshing}
-                className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+                className="p-3 rounded-xl backdrop-blur shadow-lg hover:shadow-xl transition-all disabled:opacity-50 relative z-10"
+                style={{
+                  background: `linear-gradient(135deg, ${mood.color}30, ${mood.glow}20)`,
+                  border: `1px solid ${mood.color}30`,
+                }}
                 aria-label={isRefreshing ? 'Refreshing insights' : 'Refresh all insights'}
               >
-                <RefreshCw className={`w-5 h-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} style={{ color: mood.color }} />
               </motion.button>
             </TooltipTrigger>
-            <TooltipContent
-              className="bg-white/80 backdrop-blur-md border-white/50 text-gray-800 shadow-xl"
-            >
-              <p>{isRefreshing ? 'Refreshing insights...' : 'Refresh all insights (prompt, quote, keywords, music)'}</p>
+            <TooltipContent className="bg-white/90 backdrop-blur-md border-white/50 text-gray-800 shadow-xl">
+              <p>{isRefreshing ? 'Refreshing insights...' : 'Refresh all insights'}</p>
             </TooltipContent>
           </Tooltip>
-        </div>
+        </motion.div>
 
         {/* Journal Prompt */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          variants={cardVariants}
+          initial="hidden"
+          animate="visible"
+          whileHover="hover"
+          onHoverStart={() => setHoveredCard('prompt')}
+          onHoverEnd={() => setHoveredCard(null)}
           transition={{ delay: 0.1 }}
-          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+          className="backdrop-blur-md rounded-2xl p-6 shadow-lg border cursor-pointer transition-all duration-300 relative overflow-hidden group"
+          style={{
+            background: `linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))`,
+            borderColor: hoveredCard === 'prompt' ? mood.color : 'rgba(255,255,255,0.5)',
+            boxShadow: hoveredCard === 'prompt' 
+              ? `0 25px 50px ${mood.color}30, 0 0 0 1px ${mood.glow}40` 
+              : '0 10px 30px rgba(0,0,0,0.1)',
+          }}
         >
-          <div className="flex items-start space-x-3">
-            <div className="p-2 rounded-lg bg-purple-100">
-              <MessageCircle className="w-5 h-5 text-purple-600" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-800 mb-2">Journal Prompt</h4>
-              <p className="text-gray-700 leading-relaxed">{suggestions.prompt}</p>
+          {/* Hover gradient overlay */}
+          <motion.div 
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{
+              background: `linear-gradient(135deg, ${mood.color}10, ${mood.glow}08)`,
+            }}
+          />
+          
+          {/* Glowing orb effect on hover */}
+          <motion.div
+            className="absolute -right-10 -top-10 w-32 h-32 rounded-full opacity-0 group-hover:opacity-40 transition-opacity duration-500"
+            style={{
+              background: `radial-gradient(circle, ${mood.glow}, transparent)`,
+              filter: 'blur(20px)',
+            }}
+          />
+
+          <div className="flex items-start space-x-4 relative z-10">
+            <motion.div 
+              className="p-3 rounded-xl shadow-md"
+              style={{ background: `linear-gradient(135deg, ${mood.color}30, ${mood.glow}20)` }}
+              whileHover={{ rotate: [0, -10, 10, 0], scale: 1.15 }}
+              transition={{ duration: 0.5 }}
+            >
+              <MessageCircle className="w-6 h-6" style={{ color: mood.color }} />
+            </motion.div>
+            <div className="flex-1">
+              <h4 className="font-bold text-gray-800 mb-2 text-lg group-hover:text-gray-900 transition-colors flex items-center gap-2">
+                Journal Prompt
+                <motion.span
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="text-xs px-2 py-0.5 rounded-full"
+                  style={{ background: `${mood.color}20`, color: mood.color }}
+                >
+                  Today
+                </motion.span>
+              </h4>
+              <p className="text-gray-700 leading-relaxed group-hover:text-gray-800 transition-colors">{suggestions.prompt}</p>
             </div>
           </div>
         </motion.div>
 
         {/* Quote */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          variants={cardVariants}
+          initial="hidden"
+          animate="visible"
+          whileHover="hover"
+          onHoverStart={() => setHoveredCard('quote')}
+          onHoverEnd={() => setHoveredCard(null)}
           transition={{ delay: 0.2 }}
-          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+          className="backdrop-blur-md rounded-2xl p-6 shadow-lg border cursor-pointer transition-all duration-300 relative overflow-hidden group"
+          style={{
+            background: `linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))`,
+            borderColor: hoveredCard === 'quote' ? mood.glow : 'rgba(255,255,255,0.5)',
+            boxShadow: hoveredCard === 'quote' 
+              ? `0 25px 50px ${mood.glow}30, 0 0 0 1px ${mood.color}40` 
+              : '0 10px 30px rgba(0,0,0,0.1)',
+          }}
         >
-          <div className="flex items-start space-x-3 relative">
-            <div className="p-2 rounded-lg bg-pink-100">
-              <Quote className="w-5 h-5 text-pink-600" />
-            </div>
-            <div>
-              <div className="flex items-start justify-between">
-                <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
+          {/* Animated quote marks background */}
+          <motion.div 
+            className="absolute right-6 top-4 text-8xl font-serif opacity-5 group-hover:opacity-15 transition-opacity duration-500"
+            style={{ color: mood.color }}
+            animate={{ rotate: [0, 5, 0], scale: [1, 1.05, 1] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          >
+            "
+          </motion.div>
+
+          <div className="flex items-start space-x-4 relative z-10">
+            <motion.div 
+              className="p-3 rounded-xl shadow-md"
+              style={{ background: `linear-gradient(135deg, ${mood.glow}30, ${mood.color}20)` }}
+              whileHover={{ rotate: [0, -10, 10, 0], scale: 1.15 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Quote className="w-6 h-6" style={{ color: mood.glow }} />
+            </motion.div>
+            <div className="flex-1">
+              <div className="flex items-start justify-between mb-2">
+                <h4 className="font-bold text-gray-800 text-lg group-hover:text-gray-900 transition-colors">Inspirational Quote</h4>
+                <motion.button
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleCopy}
+                  className="p-2 rounded-full transition-all opacity-60 hover:opacity-100"
+                  style={{ background: `${mood.glow}20` }}
+                  aria-label="Copy quote"
+                >
+                  <Copy className="w-4 h-4" style={{ color: mood.glow }} />
+                </motion.button>
               </div>
-              <blockquote className="text-gray-700 italic leading-relaxed mb-2">
+              <blockquote className="text-gray-700 italic leading-relaxed mb-3 text-lg group-hover:text-gray-800 transition-colors">
                 "{suggestions.quote}"
               </blockquote>
-              <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
-            </div>
-
-            <div className="absolute right-2">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleCopy}
-                className="p-[6px] rounded-full text-pink-400 hover:bg-pink-50 hover:text-pink-600 transition-colors opacity-70 hover:opacity-100"
-                aria-label="Copy quote"
+              <motion.cite 
+                className="text-sm font-medium flex items-center gap-2"
+                style={{ color: mood.color }}
               >
-                <Copy className="w-4 h-4" />
-              </motion.button>
+                <span className="w-8 h-0.5 rounded-full" style={{ background: mood.color }} />
+                {suggestions.author}
+              </motion.cite>
             </div>
           </div>
         </motion.div>
 
         {/* Keywords Cloud */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          variants={cardVariants}
+          initial="hidden"
+          animate="visible"
+          whileHover="hover"
+          onHoverStart={() => setHoveredCard('keywords')}
+          onHoverEnd={() => setHoveredCard(null)}
           transition={{ delay: 0.3 }}
-          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+          className="backdrop-blur-md rounded-2xl p-6 shadow-lg border cursor-pointer transition-all duration-300 relative overflow-hidden group"
+          style={{
+            background: `linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))`,
+            borderColor: hoveredCard === 'keywords' ? mood.color : 'rgba(255,255,255,0.5)',
+            boxShadow: hoveredCard === 'keywords' 
+              ? `0 25px 50px ${mood.color}25, 0 0 0 1px ${mood.glow}35` 
+              : '0 10px 30px rgba(0,0,0,0.1)',
+          }}
         >
-          <div className="flex items-start space-x-3">
-            <div className="p-2 rounded-lg bg-blue-100">
-              <Hash className="w-5 h-5 text-blue-600" />
-            </div>
+          {/* Floating particles background */}
+          <div className="absolute inset-0 overflow-hidden opacity-20 group-hover:opacity-50 transition-opacity duration-500">
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-3 h-3 rounded-full"
+                style={{ 
+                  background: i % 2 === 0 ? mood.color : mood.glow,
+                  left: `${10 + i * 12}%`,
+                  top: `${20 + (i % 4) * 20}%`,
+                }}
+                animate={{
+                  y: [0, -20, 0],
+                  x: [0, 10, 0],
+                  opacity: [0.3, 0.8, 0.3],
+                  scale: [1, 1.3, 1],
+                }}
+                transition={{
+                  duration: 3 + i * 0.5,
+                  repeat: Infinity,
+                  delay: i * 0.2,
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="flex items-start space-x-4 relative z-10">
+            <motion.div 
+              className="p-3 rounded-xl shadow-md"
+              style={{ background: `linear-gradient(135deg, ${mood.color}30, ${mood.glow}20)` }}
+              whileHover={{ rotate: 360, scale: 1.15 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Hash className="w-6 h-6" style={{ color: mood.color }} />
+            </motion.div>
             <div className="flex-1">
-              <h4 className="font-semibold text-gray-800 mb-3">Emotion Keywords</h4>
-              <div className="flex flex-wrap gap-2">
+              <h4 className="font-bold text-gray-800 mb-4 text-lg group-hover:text-gray-900">Emotion Keywords</h4>
+              <div className="flex flex-wrap gap-3">
                 {suggestions.keywords.map((keyword, index) => (
                   <motion.span
                     key={keyword}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                    className="px-3 py-1 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-sm font-medium hover:shadow-sm transition-all cursor-default"
+                    initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ delay: 0.4 + index * 0.1, type: "spring", stiffness: 200 }}
+                    whileHover={{ 
+                      scale: 1.2, 
+                      y: -5,
+                      boxShadow: `0 10px 25px ${mood.color}50`,
+                    }}
+                    className="px-4 py-2 rounded-full text-sm font-semibold cursor-pointer transition-all duration-200"
                     style={{
-                      background: `linear-gradient(135deg, ${mood.color}20, ${mood.glow}20)`
+                      background: `linear-gradient(135deg, ${mood.color}35, ${mood.glow}30)`,
+                      color: mood.color,
+                      border: `2px solid ${mood.color}40`,
                     }}
                   >
-                    {keyword}
+                    #{keyword}
                   </motion.span>
                 ))}
               </div>
@@ -156,67 +362,96 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
 
         {/* Music Suggestion */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          variants={cardVariants}
+          initial="hidden"
+          animate="visible"
+          whileHover="hover"
+          onHoverStart={() => setHoveredCard('music')}
+          onHoverEnd={() => setHoveredCard(null)}
           transition={{ delay: 0.4 }}
-          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+          className="backdrop-blur-md rounded-2xl p-6 shadow-lg border cursor-pointer transition-all duration-300 relative overflow-hidden group"
+          style={{
+            background: `linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))`,
+            borderColor: hoveredCard === 'music' ? mood.color : 'rgba(255,255,255,0.5)',
+            boxShadow: hoveredCard === 'music' 
+              ? `0 25px 50px ${mood.color}25, 0 0 0 1px ${mood.glow}35` 
+              : '0 10px 30px rgba(0,0,0,0.1)',
+          }}
         >
-          <div className="flex items-start space-x-3">
-            <div className="p-2 rounded-lg bg-green-100">
-              <Music className="w-5 h-5 text-green-600" />
-            </div>
-            <div className="flex-1">
-              <h4 className="font-semibold text-gray-800 mb-2">Music Recommendation</h4>
-              <p className="text-gray-700 mb-3">{suggestions.music}</p>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white text-sm font-medium rounded-lg hover:shadow-md transition-all"
-              >
-                Listen on Spotify
-              </motion.button>
-            </div>
-      {/* Music Suggestion */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
-      >
-        <div className="flex items-start space-x-3">
-          <div className="p-2 rounded-lg bg-green-100">
-            <Music className="w-5 h-5 text-green-600" />
-          </div>
-          <div className="flex-1 space-y-3">
-            <h4 className="font-semibold text-gray-800">Soundscape</h4>
-            
-            <div className="relative w-full h-[152px] rounded-xl overflow-hidden bg-white/50 backdrop-blur-md shadow-inner border border-white/20">
-              {!isPlayerLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50 backdrop-blur animate-pulse">
-                  <div className="flex flex-col items-center space-y-2">
-                    <Music className="w-8 h-8 text-green-400/50 animate-bounce" />
-                    <span className="text-gray-500 text-sm font-medium">Loading Soundscape...</span>
-                  </div>
-                </div>
-              )}
-              <iframe
-                src={`https://open.spotify.com/embed/playlist/${mood.spotifyPlaylistId || '37i9dQZF1DX3Ogo9pFno96'}?utm_source=generator&theme=0`}
-                width="100%"
-                height="152"
-                frameBorder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-                className={`w-full h-full transition-opacity duration-500 ${isPlayerLoaded ? 'opacity-100' : 'opacity-0'}`}
-                onLoad={() => setIsPlayerLoaded(true)}
+          {/* Audio wave animation background */}
+          <div className="absolute bottom-0 left-0 right-0 h-20 opacity-15 group-hover:opacity-30 transition-opacity duration-500 flex items-end justify-center gap-1 overflow-hidden">
+            {[...Array(25)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="w-1.5 rounded-full"
+                style={{ background: `linear-gradient(to top, ${mood.color}, ${mood.glow})` }}
+                animate={{
+                  height: [8, 30 + Math.random() * 35, 8],
+                }}
+                transition={{
+                  duration: 0.6 + Math.random() * 0.4,
+                  repeat: Infinity,
+                  delay: i * 0.05,
+                }}
               />
+            ))}
+          </div>
+
+          <div className="flex items-start space-x-4 relative z-10">
+            <motion.div 
+              className="p-3 rounded-xl shadow-md"
+              style={{ background: `linear-gradient(135deg, ${mood.color}30, ${mood.glow}20)` }}
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Music className="w-6 h-6" style={{ color: mood.color }} />
+            </motion.div>
+            <div className="flex-1 space-y-4">
+              <h4 className="font-bold text-gray-800 text-lg group-hover:text-gray-900">Soundscape</h4>
+              
+              <div className="relative w-full h-[152px] rounded-xl overflow-hidden shadow-inner"
+                style={{ 
+                  background: `linear-gradient(135deg, ${mood.color}10, ${mood.glow}08)`,
+                  border: `1px solid ${mood.color}20`,
+                }}
+              >
+                {!isPlayerLoaded && (
+                  <div className="absolute inset-0 flex items-center justify-center backdrop-blur animate-pulse">
+                    <div className="flex flex-col items-center space-y-2">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                      >
+                        <Music className="w-10 h-10" style={{ color: `${mood.color}60` }} />
+                      </motion.div>
+                      <span className="text-sm font-medium" style={{ color: mood.color }}>Loading Soundscape...</span>
+                    </div>
+                  </div>
+                )}
+                <iframe
+                  src={`https://open.spotify.com/embed/playlist/${mood.spotifyPlaylistId || '37i9dQZF1DX3Ogo9pFno96'}?utm_source=generator&theme=0`}
+                  width="100%"
+                  height="152"
+                  frameBorder="0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  className={`w-full h-full transition-opacity duration-500 ${isPlayerLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onLoad={() => setIsPlayerLoaded(true)}
+                />
+              </div>
+              
+              <motion.p 
+                className="text-sm italic flex items-center gap-2"
+                style={{ color: mood.color }}
+              >
+                <Sparkles className="w-4 h-4" />
+                <span className="font-semibold">Suggested:</span> 
+                <span className="text-gray-600">{suggestions.music}</span>
+              </motion.p>
             </div>
-            
-            <p className="text-sm text-gray-600 italic">
-              <span className="font-medium text-green-600">Suggested:</span> {suggestions.music}
-            </p>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </TooltipProvider>
   );
 }
