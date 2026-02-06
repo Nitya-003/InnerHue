@@ -21,8 +21,13 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [moodData, setMoodData] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
+  // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
+    // 🔥 Reset index when route/params change
+    setCurrentMoodIndex(0);
+
     // Get all selected moods from query param, fallback to single mood from URL
     const moodIds = searchParams?.moods ? searchParams.moods.split(',') : [params.id];
     
@@ -33,11 +38,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     
     setMoodData(moodsData);
     
-    if (moodsData.length > 0) {
-      // Get suggestions for the first mood initially
-      const moodSuggestions = MoodData.getSuggestions(moodsData[0].id);
-      setSuggestions(moodSuggestions);
-    }
+    // Note: We removed the manual setSuggestions here. 
+    // The new useEffect below handles the initial suggestion load automatically.
     
     // Save to local storage for analytics
     const savedMoods = JSON.parse(localStorage.getItem('moodHistory') || '[]');
@@ -50,6 +52,17 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     });
     localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
   }, [params.id, searchParams?.moods]);
+
+  // Fix 2: Sync suggestions automatically when Index or Data changes
+  useEffect(() => {
+    if (!moodData.length) return;
+
+    const mood = moodData[currentMoodIndex];
+    if (mood) {
+        const newSuggestions = MoodData.getSuggestions(mood.id);
+        setSuggestions(newSuggestions);
+    }
+  }, [currentMoodIndex, moodData]);
 
   if (!moodData.length || !suggestions) {
     return (
@@ -85,7 +98,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             </motion.button>
           </Link>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center  space-x-2">
             {moodData.length > 1 ? (
               <div className="flex items-center space-x-2">
                 <div className="flex space-x-1">
@@ -93,9 +106,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                     <motion.button
                       key={mood.id}
                       onClick={() => {
+                        // Logic simplified: The useEffect handles the suggestion sync
                         setCurrentMoodIndex(index);
-                        const newSuggestions = MoodData.getSuggestions(mood.id);
-                        setSuggestions(newSuggestions);
                       }}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
@@ -157,7 +169,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <OrbVisualizer mood={currentMood} />
+              {/* Fix 3: Added key prop to force re-render on mood change */}
+              <OrbVisualizer key={currentMood.id} mood={currentMood} />
             </motion.div>
 
             {/* Right Side - Suggestions */}
@@ -169,9 +182,14 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
               <SuggestionPanel 
                 suggestions={suggestions} 
                 mood={currentMood}
-                onRefresh={() => {
+                isRefreshing={isRefreshing}
+                onRefresh={async () => {
+                  setIsRefreshing(true);
+                  // Small delay to show visual feedback
+                  await new Promise(resolve => setTimeout(resolve, 300));
                   const newSuggestions = MoodData.getSuggestions(currentMood.id);
-                  setSuggestions(newSuggestions);
+                  setSuggestions({ ...newSuggestions });
+                  setIsRefreshing(false);
                 }}
               />
             </motion.div>
