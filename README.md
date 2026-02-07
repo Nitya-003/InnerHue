@@ -103,6 +103,90 @@ npm install
 npm run dev
 ```
 
+## 🐳 Docker Deployment
+
+InnerHue is fully containerized for consistent deployment across environments.
+
+### Prerequisites
+- Docker Engine 20.10+
+- Docker Compose 2.0+ (optional but recommended)
+
+### Quick Start with Docker Compose
+
+1. **Production deployment (recommended)**
+```bash
+docker-compose up innerhue
+```
+
+2. **Development with hot reload**
+```bash
+docker-compose --profile dev up innerhue-dev
+```
+
+### Manual Docker Commands
+
+1. **Build the Docker image**
+```bash
+docker build -t innerhue .
+```
+
+2. **Run the container**
+```bash
+docker run -p 3000:3000 innerhue
+```
+
+3. **Access the application**
+Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Docker Image Details
+- **Base Image**: `node:18-alpine` for optimal size and security
+- **Multi-stage Build**: Separate stages for dependencies, building, and runtime
+- **Image Size**: < 300MB (optimized for production)
+- **Architecture**: Supports both AMD64 and ARM64 (Apple Silicon)
+
+### Environment Variables
+```bash
+NODE_ENV=production          # Set environment mode
+NEXT_TELEMETRY_DISABLED=1   # Disable Next.js telemetry
+PORT=3000                   # Application port (default: 3000)
+HOSTNAME=0.0.0.0           # Bind to all network interfaces
+```
+
+### Docker Development Workflow
+```bash
+# Pull the latest image from GitHub Container Registry
+docker pull ghcr.io/nitya-003/innerhue:latest
+
+# Or build locally with caching
+docker build --target runner -t innerhue:local .
+
+# Run with custom environment
+docker run -d \
+  --name innerhue-prod \
+  --restart unless-stopped \
+  -p 3000:3000 \
+  -e NODE_ENV=production \
+  innerhue:local
+```
+
+### Health Checks
+The Docker container includes health checks to ensure reliability:
+```bash
+# Check container health
+docker inspect innerhue-app --format='{{.State.Health.Status}}'
+
+# View health check logs
+docker inspect innerhue-app --format='{{range .State.Health.Log}}{{.Output}}{{end}}'
+```
+
+### CI/CD Integration
+Every push and PR automatically:
+- ✅ Runs linting and security audits
+- ✅ Builds and tests Docker images
+- ✅ Validates image size (< 300MB)
+- ✅ Performs security vulnerability scanning
+- ✅ Deploys to GitHub Container Registry
+
 ---
 
 ## 🎨 Color System

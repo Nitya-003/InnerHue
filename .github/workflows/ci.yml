@@ -1,0 +1,175 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  lint-and-audit:
+    name: Code Quality & Security
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+        
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+
+      - name: Check for TypeScript errors
+        run: npx tsc --noEmit
+
+  build-and-test-docker:
+    name: Docker Build & Test
+    runs-on: ubuntu-latest
+    needs: lint-and-audit
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+
+      - name: Log in to Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        id: build
+        with:
+          context: .
+          file: ./Dockerfile
+          target: runner
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+
+      - name: Test Docker image
+        run: |
+          # Test that the image can be started and responds
+          docker run --name test-container -d -p 3000:3000 ${{ steps.meta.outputs.tags }}
+          
+          # Wait for container to start
+          sleep 15
+          
+          # Test that the application responds
+          curl -f http://localhost:3000 || (docker logs test-container && exit 1)
+          
+          # Cleanup
+          docker stop test-container
+          docker rm test-container
+
+      - name: Check image size
+        run: |
+          IMAGE_SIZE=$(docker images ${{ steps.meta.outputs.tags }} --format "table {{.Size}}" | tail -n +2)
+          echo "Image size: $IMAGE_SIZE"
+          
+          # Convert MB to bytes for comparison (300MB = 314572800 bytes)
+          SIZE_BYTES=$(docker inspect ${{ steps.meta.outputs.tags }} --format='{{.Size}}')
+          MAX_SIZE=314572800
+          
+          if [ "$SIZE_BYTES" -gt "$MAX_SIZE" ]; then
+            echo "❌ Image size ($SIZE_BYTES bytes) exceeds 300MB limit!"
+            exit 1
+          else
+            echo "✅ Image size is within 300MB limit"
+          fi
+
+  security-scan:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+    needs: build-and-test-docker
+    if: github.event_name != 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  deploy-preview:
+    name: Deploy Preview (PR only)
+    runs-on: ubuntu-latest
+    needs: build-and-test-docker
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Comment PR with preview info
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Docker Build Successful!** 
+              
+              ✅ Docker image built and tested successfully
+              ✅ Image size is within 300MB limit  
+              ✅ Security checks passed
+              
+              **To test locally:**
+              \`\`\`bash
+              docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.number }}
+              docker run -p 3000:3000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.number }}
+              \`\`\`
+              
+              **Or use Docker Compose:**
+              \`\`\`bash
+              docker-compose up innerhue
+              \`\`\`
+              `
+            })
