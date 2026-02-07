@@ -147,6 +147,12 @@ export default function Home() {
       {/* Main Content */}
       <main className="relative z-10 px-6 pb-20">
         <div className="max-w-6xl mx-auto">
+          
+          {/* NEW QUOTE CARD COMPONENT */}
+          <QuoteCard />
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
           {/* Hero Section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
