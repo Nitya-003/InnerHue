@@ -31,11 +31,19 @@ jobs:
       - name: Run linter
         run: npm run lint
         
-      - name: Check for critical vulnerabilities 
+      - name: Check for critical vulnerabilities (blocking on main)
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         run: |
-          echo "Checking for critical security vulnerabilities..."
+          echo "Checking for critical security vulnerabilities (blocking on main)..."
+          npm audit --audit-level=critical --production
+          echo "Security audit completed with no critical vulnerabilities on main"
+
+      - name: Check for critical vulnerabilities (non-blocking on PRs/other branches)
+        if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/main' }}
+        run: |
+          echo "Checking for critical security vulnerabilities (non-blocking)..."
           npm audit --audit-level=critical --production || true
-          echo "Security audit completed (issues logged but not blocking CI)"
+          echo "Security audit completed (issues logged but not blocking CI for this event)"
 
       - name: Check for TypeScript errors
         run: npx tsc --noEmit
