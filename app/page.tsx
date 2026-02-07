@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { Heart, BarChart3, Music } from 'lucide-react';
+import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
@@ -49,7 +50,31 @@ const moods = [
 ];
 
 export default function Home() {
-  const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+  
+  const toggleMood = (moodId: string) => {
+    setSelectedMoods(prev => {
+      if (prev.includes(moodId)) {
+        return prev.filter(id => id !== moodId);
+      } else {
+        if (prev.length < 3) {
+          return [...prev, moodId];
+        }
+        return prev;
+      }
+    });
+  };
+  
+  const handleEmotionDetected = (emotions: string[]) => {
+    setSelectedMoods(emotions.slice(0, 3));
+  };
+
+  const handleAutoNavigate = () => {
+    const exploreButton = document.querySelector('a[href^="/mood/"]') as HTMLAnchorElement;
+    if (exploreButton) {
+      exploreButton.click();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
@@ -122,6 +147,12 @@ export default function Home() {
       {/* Main Content */}
       <main className="relative z-10 px-6 pb-20">
         <div className="max-w-6xl mx-auto">
+          
+          {/* NEW QUOTE CARD COMPONENT */}
+          <QuoteCard />
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
           {/* Hero Section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -157,32 +188,38 @@ export default function Home() {
                 key={mood.id}
                 mood={mood}
                 index={index}
-                isSelected={selectedMood === mood.id}
-                onSelect={() => setSelectedMood(mood.id)}
+                isSelected={selectedMoods.includes(mood.id)}
+                onSelect={() => toggleMood(mood.id)}
               />
             ))}
           </motion.div>
 
           {/* Continue Button */}
-          {selectedMood && (
+          {selectedMoods.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="mt-8 text-center"
             >
-              <Link href={`/mood/${selectedMood}`}>
+              <Link href={`/mood/${selectedMoods[0]}`}>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                 >
-                  Explore Your Mood
+                  Explore Your Mood{selectedMoods.length > 1 ? 's' : ''}
                 </motion.button>
               </Link>
             </motion.div>
           )}
         </div>
       </main>
+
+      {/* Chatbot */}
+      <SimpleLangFlowChatbot
+        onEmotionDetected={handleEmotionDetected}
+        onAutoNavigate={handleAutoNavigate}
+      />
     </div>
   );
 }

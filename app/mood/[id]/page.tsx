@@ -12,30 +12,59 @@ interface MoodPageProps {
   params: {
     id: string;
   };
+  searchParams?: {
+    moods?: string;
+  };
 }
 
-export default function MoodPage({ params }: MoodPageProps) {
-  const [moodData, setMoodData] = useState<any>(null);
+export default function MoodPage({ params, searchParams }: MoodPageProps) {
+  const [moodData, setMoodData] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any>(null);
+  const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
+  // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
-    const mood = MoodData.getMoodById(params.id);
-    const moodSuggestions = MoodData.getSuggestions(params.id);
+    // 🔥 Reset index when route/params change
+    setCurrentMoodIndex(0);
+
+    // Get all selected moods from query param, fallback to single mood from URL
+    const moodIds = searchParams?.moods ? searchParams.moods.split(',') : [params.id];
     
-    setMoodData(mood);
-    setSuggestions(moodSuggestions);
+    // Get mood data for all selected moods
+    const moodsData = moodIds
+      .map(id => MoodData.getMoodById(id))
+      .filter(Boolean);
+    
+    setMoodData(moodsData);
+    
+    // Note: We removed the manual setSuggestions here. 
+    // The new useEffect below handles the initial suggestion load automatically.
     
     // Save to local storage for analytics
     const savedMoods = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    savedMoods.push({
-      mood: params.id,
-      timestamp: new Date().toISOString(),
-      date: new Date().toDateString()
+    moodIds.forEach(moodId => {
+      savedMoods.push({
+        mood: moodId,
+        timestamp: new Date().toISOString(),
+        date: new Date().toDateString()
+      });
     });
     localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
-  }, [params.id]);
+  }, [params.id, searchParams?.moods]);
 
-  if (!moodData || !suggestions) {
+  // Fix 2: Sync suggestions automatically when Index or Data changes
+  useEffect(() => {
+    if (!moodData.length) return;
+
+    const mood = moodData[currentMoodIndex];
+    if (mood) {
+        const newSuggestions = MoodData.getSuggestions(mood.id);
+        setSuggestions(newSuggestions);
+    }
+  }, [currentMoodIndex, moodData]);
+
+  if (!moodData.length || !suggestions) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center">
         <motion.div
@@ -47,10 +76,12 @@ export default function MoodPage({ params }: MoodPageProps) {
     );
   }
 
+  const currentMood = moodData[currentMoodIndex] || moodData[0];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       {/* Header */}
-      <motion.header 
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="p-6 relative z-10"
@@ -66,14 +97,49 @@ export default function MoodPage({ params }: MoodPageProps) {
               <span className="text-purple-600 font-medium">Back</span>
             </motion.button>
           </Link>
-          
-          <div className="flex items-center space-x-2">
-            <span className="text-2xl">{moodData.emoji}</span>
-            <h1 className="text-2xl font-bold text-gray-800">
-              Feeling {moodData.name}
-            </h1>
+
+          <div className="flex items-center  space-x-2">
+            {moodData.length > 1 ? (
+              <div className="flex items-center space-x-2">
+                <div className="flex space-x-1">
+                  {moodData.map((mood, index) => (
+                    <motion.button
+                      key={mood.id}
+                      onClick={() => {
+                        // Logic simplified: The useEffect handles the suggestion sync
+                        setCurrentMoodIndex(index);
+                      }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`text-2xl p-1 rounded-full transition-all ${
+                        index === currentMoodIndex 
+                          ? 'bg-white/30 ring-2 ring-purple-400' 
+                          : 'hover:bg-white/20'
+                      }`}
+                    >
+                      {mood.emoji}
+                    </motion.button>
+                  ))}
+                </div>
+                <h1 className="text-2xl font-bold text-gray-800">
+                  Feeling {currentMood.name}
+                  {moodData.length > 1 && (
+                    <span className="text-sm text-gray-600 ml-2">
+                      ({currentMoodIndex + 1} of {moodData.length})
+                    </span>
+                  )}
+                </h1>
+              </div>
+            ) : (
+              <>
+                <span className="text-2xl">{currentMood.emoji}</span>
+                <h1 className="text-2xl font-bold text-gray-800">
+                  Feeling {currentMood.name}
+                </h1>
+              </>
+            )}
           </div>
-          
+
           <div className="flex space-x-2">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -103,7 +169,8 @@ export default function MoodPage({ params }: MoodPageProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <OrbVisualizer mood={moodData} />
+              {/* Fix 3: Added key prop to force re-render on mood change */}
+              <OrbVisualizer key={currentMood.id} mood={currentMood} />
             </motion.div>
 
             {/* Right Side - Suggestions */}
@@ -114,10 +181,15 @@ export default function MoodPage({ params }: MoodPageProps) {
             >
               <SuggestionPanel 
                 suggestions={suggestions} 
-                mood={moodData}
-                onRefresh={() => {
-                  const newSuggestions = MoodData.getSuggestions(params.id);
-                  setSuggestions(newSuggestions);
+                mood={currentMood}
+                isRefreshing={isRefreshing}
+                onRefresh={async () => {
+                  setIsRefreshing(true);
+                  // Small delay to show visual feedback
+                  await new Promise(resolve => setTimeout(resolve, 300));
+                  const newSuggestions = MoodData.getSuggestions(currentMood.id);
+                  setSuggestions({ ...newSuggestions });
+                  setIsRefreshing(false);
                 }}
               />
             </motion.div>

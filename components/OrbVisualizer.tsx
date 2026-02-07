@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Mood {
   id: string;
@@ -17,6 +17,39 @@ interface OrbVisualizerProps {
 
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showPulse, setShowPulse] = useState(false);
+  const [confetti, setConfetti] = useState<{ id: number; x: number; y: number; angle: number; drift: number }[]>([]);
+  const clickCountRef = useRef(0);
+  const lastClickTimeRef = useRef(0);
+
+  const handleEmojiClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const now = Date.now();
+
+    if (now - lastClickTimeRef.current > 500) {
+      clickCountRef.current = 0;
+    }
+
+    clickCountRef.current += 1;
+    lastClickTimeRef.current = now;
+
+    if (clickCountRef.current === 3) {
+      triggerConfetti();
+      clickCountRef.current = 0;
+    }
+  };
+
+  const triggerConfetti = () => {
+    const newConfetti = Array.from({ length: 20 }, (_, i) => ({
+      id: Date.now() + i,
+      x: 0,
+      y: 0,
+      angle: (i * 18) * (Math.PI / 180),
+      drift: Math.random() * 50 - 25
+    }));
+    setConfetti(newConfetti);
+    setTimeout(() => setConfetti([]), 2000);
+  };
 
   const orbVariants: Variants = {
     idle: {
@@ -39,24 +72,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
-  const particleVariants: Variants = {
-    animate: {
-      y: [0, -20, 0],
-      opacity: [0, 1, 0],
-      scale: [0, 1, 0],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-  };
 
-  const particles = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    angle: (i * 30) * (Math.PI / 180),
-    distance: 150 + Math.random() * 50,
-  }));
 
   return (
     <div className="relative">
@@ -71,30 +87,22 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
         </div>
 
         <div className="relative h-80 flex items-center justify-center">
-          {particles.map((particle) => (
-            <motion.div
-              key={particle.id}
-              className="absolute w-2 h-2 rounded-full"
-              style={{
-                background: mood.glow,
-                left: `calc(50% + ${Math.cos(particle.angle) * particle.distance}px)`,
-                top: `calc(50% + ${Math.sin(particle.angle) * particle.distance}px)`,
-              }}
-              variants={particleVariants}
-              initial="animate"
-              animate="animate"
-              transition={{
-                delay: particle.id * 0.2,
-                duration: 3 + Math.random() * 2,
-              }}
-            />
-          ))}
+
 
           <motion.div
-            className="relative"
+            className="relative flex items-center justify-center w-48 h-48 cursor-grab active:cursor-grabbing z-10"
             variants={orbVariants}
             initial="idle"
             animate={isPlaying ? "active" : "idle"}
+            drag
+            dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
+            dragElastic={0.2}
+            dragSnapToOrigin
+            whileDrag={{ scale: 1.1, cursor: "grabbing" }}
+            onDragEnd={() => {
+              setShowPulse(true);
+              setTimeout(() => setShowPulse(false), 1000);
+            }}
           >
             <motion.div
               className="absolute inset-0 rounded-full"
@@ -103,7 +111,8 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
                 width: 200,
                 height: 200,
                 filter: 'blur(20px)',
-                transform: 'translate(-50%, -50%)',
+                x: '-50%',
+                y: '-50%',
                 left: '50%',
                 top: '50%',
               }}
@@ -141,13 +150,17 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
                 }}
               />
 
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div
+                className="absolute inset-0 flex items-center justify-center cursor-pointer z-20"
+                onClick={handleEmojiClick}
+              >
                 <motion.span
-                  className="text-4xl"
+                  className="text-4xl select-none"
                   animate={{
                     scale: [1, 1.1, 1],
                     rotate: [0, 5, -5, 0],
                   }}
+                  whileTap={{ scale: 0.8 }}
                   transition={{
                     duration: 4,
                     repeat: Infinity,
@@ -163,14 +176,15 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute rounded-full border-2 opacity-30"
+              className="absolute rounded-full border-2 opacity-30 pointer-events-none"
               style={{
                 borderColor: mood.color,
                 width: 160 + i * 40,
                 height: 160 + i * 40,
                 left: '50%',
                 top: '50%',
-                transform: 'translate(-50%, -50%)',
+                x: '-50%',
+                y: '-50%',
               }}
               animate={{
                 scale: [1, 1.2, 1],
@@ -183,6 +197,48 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
                 delay: i * 0.5,
               }}
             />
+          ))}
+
+          {/* Drag Pulse Effect */}
+          {showPulse && (
+            <motion.div
+              className="absolute rounded-full border-4 pointer-events-none"
+              style={{
+                borderColor: mood.glow,
+                left: '50%',
+                top: '50%',
+                x: '-50%',
+                y: '-50%',
+              }}
+              initial={{ width: 200, height: 200, opacity: 0.8, borderWidth: 4 }}
+              animate={{ width: 400, height: 400, opacity: 0, borderWidth: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+          )}
+
+          {/* Confetti Effect */}
+          {confetti.map((particle) => (
+            <motion.div
+              key={particle.id}
+              className="absolute text-xl pointer-events-none z-30"
+              style={{
+                left: '50%',
+                top: '50%',
+                x: '-50%',
+                y: '-50%',
+              }}
+              initial={{ scale: 0, opacity: 1, x: '-50%', y: '-50%' }}
+              animate={{
+                scale: [0, 1.5, 0],
+                opacity: [1, 1, 0],
+                x: `calc(-50% + ${Math.cos(particle.angle) * 200 + particle.drift}px)`,
+                y: `calc(-50% + ${Math.sin(particle.angle) * 200 + particle.drift}px)`,
+                rotate: [0, 360 * (Math.random() > 0.5 ? 1 : -1)]
+              }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+            >
+              {mood.emoji}
+            </motion.div>
           ))}
         </div>
 
@@ -200,3 +256,4 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     </div>
   );
 }
+

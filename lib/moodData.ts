@@ -5,266 +5,304 @@ export const MoodData = {
       name: 'Happy',
       emoji: '😊',
       color: '#FFD93D',
-      glow: '#FFF176'
+      glow: '#FFF176',
+      spotifyPlaylistId: '37i9dQZF1DX3rxVfibe1L0'
     },
     sad: {
       id: 'sad',
       name: 'Sad',
       emoji: '😢',
       color: '#42A5F5',
-      glow: '#64B5F6'
+      glow: '#64B5F6',
+      spotifyPlaylistId: '37i9dQZF1DX3YSRoSdA634'
     },
     anxious: {
       id: 'anxious',
       name: 'Anxious',
       emoji: '😰',
       color: '#FF7043',
-      glow: '#FF8A65'
+      glow: '#FF8A65',
+      spotifyPlaylistId: '37i9dQZF1DX1s9ktjP51O3'
     },
     excited: {
       id: 'excited',
       name: 'Excited',
       emoji: '🤩',
       color: '#AB47BC',
-      glow: '#BA68C8'
+      glow: '#BA68C8',
+      spotifyPlaylistId: '37i9dQZF1DX4eRPd9frC1m'
     },
     calm: {
       id: 'calm',
       name: 'Calm',
       emoji: '😌',
       color: '#66BB6A',
-      glow: '#81C784'
+      glow: '#81C784',
+      spotifyPlaylistId: '37i9dQZF1DX4sWSpwq3LiO'
     },
     angry: {
       id: 'angry',
       name: 'Angry',
       emoji: '😡',
       color: '#EF5350',
-      glow: '#E57373'
+      glow: '#E57373',
+      spotifyPlaylistId: '37i9dQZF1DX3ladn16YrLx'
     },
     confused: {
       id: 'confused',
       name: 'Confused',
       emoji: '😕',
       color: '#FFA726',
-      glow: '#FFB74D'
+      glow: '#FFB74D',
+      spotifyPlaylistId: '37i9dQZF1DX8Uebhn9wzrS'
     },
     grateful: {
       id: 'grateful',
       name: 'Grateful',
       emoji: '🙏',
       color: '#26A69A',
-      glow: '#4DB6AC'
+      glow: '#4DB6AC',
+      spotifyPlaylistId: '37i9dQZF1DWYBO1MoTDhZI'
     },
     lonely: {
       id: 'lonely',
       name: 'Lonely',
       emoji: '😔',
       color: '#7E57C2',
-      glow: '#9575CD'
+      glow: '#9575CD',
+      spotifyPlaylistId: '37i9dQZF1DWSqBruwoIXkA'
     },
     hopeful: {
       id: 'hopeful',
       name: 'Hopeful',
       emoji: '🌟',
       color: '#FFCA28',
-      glow: '#FFD54F'
+      glow: '#FFD54F',
+      spotifyPlaylistId: '37i9dQZF1DX4fpCWaHOned'
     },
     stressed: {
       id: 'stressed',
       name: 'Stressed',
       emoji: '😤',
       color: '#FF5722',
-      glow: '#FF6F00'
+      glow: '#FF6F00',
+      spotifyPlaylistId: '37i9dQZF1DWXe9gFZP0gtP'
     },
     peaceful: {
       id: 'peaceful',
       name: 'Peaceful',
       emoji: '🕊️',
       color: '#4FC3F7',
-      glow: '#81D4FA'
+      glow: '#81D4FA',
+      spotifyPlaylistId: '37i9dQZF1DWZqd5JICZI0u'
     },
     energized: {
       id: 'energized',
       name: 'Energized',
       emoji: '⚡',
       color: '#FFEB3B',
-      glow: '#FFF176'
+      glow: '#FFF176',
+      spotifyPlaylistId: '37i9dQZF1DX76Wlfdnj7AP'
     },
     overwhelmed: {
       id: 'overwhelmed',
       name: 'Overwhelmed',
       emoji: '🤯',
       color: '#F06292',
-      glow: '#F48FB1'
+      glow: '#F48FB1',
+      spotifyPlaylistId: '37i9dQZF1DWZeKCadgRdKQ'
     },
     content: {
       id: 'content',
       name: 'Content',
       emoji: '😊',
       color: '#AED581',
-      glow: '#C5E1A5'
+      glow: '#C5E1A5',
+      spotifyPlaylistId: '37i9dQZF1DX4WYpdgoICN6'
     },
     frustrated: {
       id: 'frustrated',
       name: 'Frustrated',
       emoji: '😠',
       color: '#FF8A65',
-      glow: '#FFAB91'
+      glow: '#FFAB91',
+      spotifyPlaylistId: '37i9dQZF1DWTx0xog3gjnC'
     },
     inspired: {
       id: 'inspired',
       name: 'Inspired',
       emoji: '💡',
       color: '#FFD740',
-      glow: '#FFE082'
+      glow: '#FFE082',
+      spotifyPlaylistId: '37i9dQZF1DXa2SPFyPhl9V'
     },
     melancholy: {
       id: 'melancholy',
       name: 'Melancholy',
       emoji: '🌧️',
       color: '#90A4AE',
-      glow: '#B0BEC5'
+      glow: '#B0BEC5',
+      spotifyPlaylistId: '37i9dQZF1DX59NCqCqJtoH'
     },
     motivated: {
       id: 'motivated',
       name: 'Motivated',
       emoji: '🔥',
       color: '#FF6D00',
-      glow: '#FF8F00'
+      glow: '#FF8F00',
+      spotifyPlaylistId: '37i9dQZF1DXdxcBWuJkbcy'
     },
     vulnerable: {
       id: 'vulnerable',
       name: 'Vulnerable',
       emoji: '🥺',
       color: '#F8BBD9',
-      glow: '#FCE4EC'
+      glow: '#FCE4EC',
+      spotifyPlaylistId: '37i9dQZF1DX36edUJpD76c'
     },
     empowered: {
       id: 'empowered',
       name: 'Empowered',
       emoji: '💪',
       color: '#6A1B9A',
-      glow: '#8E24AA'
+      glow: '#8E24AA',
+      spotifyPlaylistId: '37i9dQZF1DWUW2bvSkjcJ6'
     },
     nostalgic: {
       id: 'nostalgic',
       name: 'Nostalgic',
       emoji: '📸',
       color: '#D4A574',
-      glow: '#DDBF94'
+      glow: '#DDBF94',
+      spotifyPlaylistId: '37i9dQZF1DX4o1oenSJRJd'
     },
     jealous: {
       id: 'jealous',
       name: 'Jealous',
       emoji: '😒',
       color: '#8BC34A',
-      glow: '#9CCC65'
+      glow: '#9CCC65',
+      spotifyPlaylistId: '37i9dQZF1DX2pSTOxoPbx9'
     },
     proud: {
       id: 'proud',
       name: 'Proud',
       emoji: '😤',
       color: '#FF9800',
-      glow: '#FFB74D'
+      glow: '#FFB74D',
+      spotifyPlaylistId: '37i9dQZF1DX0SM0LYsmbMT'
     },
     curious: {
       id: 'curious',
       name: 'Curious',
       emoji: '🤔',
       color: '#9C27B0',
-      glow: '#BA68C8'
+      glow: '#BA68C8',
+      spotifyPlaylistId: '37i9dQZF1DWXLeA8Omikj7'
     },
     bored: {
       id: 'bored',
       name: 'Bored',
       emoji: '😑',
       color: '#607D8B',
-      glow: '#78909C'
+      glow: '#78909C',
+      spotifyPlaylistId: '37i9dQZF1DX4JAvHpjipBk'
     },
     surprised: {
       id: 'surprised',
       name: 'Surprised',
       emoji: '😲',
       color: '#FF5722',
-      glow: '#FF7043'
+      glow: '#FF7043',
+      spotifyPlaylistId: '37i9dQZF1DX2L0iB23Enbq'
     },
     disgusted: {
       id: 'disgusted',
       name: 'Disgusted',
       emoji: '🤢',
       color: '#4CAF50',
-      glow: '#66BB6A'
+      glow: '#66BB6A',
+      spotifyPlaylistId: '37i9dQZF1DX3LDIBRoa8TV'
     },
     embarrassed: {
       id: 'embarrassed',
       name: 'Embarrassed',
       emoji: '😳',
       color: '#E91E63',
-      glow: '#F06292'
+      glow: '#F06292',
+      spotifyPlaylistId: '37i9dQZF1DWVlYsZJXqdym'
     },
     determined: {
       id: 'determined',
       name: 'Determined',
       emoji: '😤',
       color: '#3F51B5',
-      glow: '#5C6BC0'
+      glow: '#5C6BC0',
+      spotifyPlaylistId: '37i9dQZF1DX76Wlfdnj7AP'
     },
     playful: {
       id: 'playful',
       name: 'Playful',
       emoji: '😜',
       color: '#FF4081',
-      glow: '#FF80AB'
+      glow: '#FF80AB',
+      spotifyPlaylistId: '37i9dQZF1DXdPec7S3qG93'
     },
     dreamy: {
       id: 'dreamy',
       name: 'Dreamy',
       emoji: '😴',
       color: '#9FA8DA',
-      glow: '#C5CAE9'
+      glow: '#C5CAE9',
+      spotifyPlaylistId: '37i9dQZF1DX2mFHE8XNn7g'
     },
     adventurous: {
       id: 'adventurous',
       name: 'Adventurous',
       emoji: '🗺️',
       color: '#FF6F00',
-      glow: '#FF8F00'
+      glow: '#FF8F00',
+      spotifyPlaylistId: '37i9dQZF1DWWMOmoXKqHTD'
     },
     romantic: {
       id: 'romantic',
       name: 'Romantic',
       emoji: '💕',
       color: '#E1BEE7',
-      glow: '#F3E5F5'
+      glow: '#F3E5F5',
+      spotifyPlaylistId: '37i9dQZF1DX50QitC6McUH'
     },
     creative: {
       id: 'creative',
       name: 'Creative',
       emoji: '🎨',
       color: '#FF7043',
-      glow: '#FFAB91'
+      glow: '#FFAB91',
+      spotifyPlaylistId: '37i9dQZF1DXdxcBWuJkbcy'
     },
     philosophical: {
       id: 'philosophical',
       name: 'Philosophical',
       emoji: '🤯',
       color: '#5E35B1',
-      glow: '#7E57C2'
+      glow: '#7E57C2',
+      spotifyPlaylistId: '37i9dQZF1DWWEJlAGA9gs0'
     },
     rebellious: {
       id: 'rebellious',
       name: 'Rebellious',
       emoji: '😈',
       color: '#D32F2F',
-      glow: '#F44336'
+      glow: '#F44336',
+      spotifyPlaylistId: '37i9dQZF1DWXRqgorJj26U'
     },
     silly: {
       id: 'silly',
       name: 'Silly',
       emoji: '🤪',
       color: '#FFC107',
-      glow: '#FFD54F'
+      glow: '#FFD54F',
+      spotifyPlaylistId: '37i9dQZF1DX4pUKG1kS0hS'
     }
   },
 
@@ -324,6 +362,20 @@ export const MoodData = {
         author: "Walt Disney",
         keywords: ["creation", "action", "passion", "momentum", "possibility", "adventure"],
         music: "High-energy electronic - Artists like ODESZA, Porter Robinson"
+      },
+      {
+        prompt: "Your excitement is contagious! Who could you share this energy with? Plan something fun with a friend or loved one.",
+        quote: "Enthusiasm is the electricity of life. How do you increase it? You turn up the connections.",
+        author: "Gordon Parks",
+        keywords: ["sharing", "connection", "fun", "celebration", "enthusiasm", "joy"],
+        music: "Upbeat pop anthems - Artists like Dua Lipa, The Weeknd"
+      },
+      {
+        prompt: "What new adventure or challenge has been calling your name? Use this excited energy to take the first step.",
+        quote: "Life is either a daring adventure or nothing at all.",
+        author: "Helen Keller",
+        keywords: ["adventure", "risk", "growth", "courage", "exploration", "boldness"],
+        music: "Energetic rock - Artists like Imagine Dragons, OneRepublic"
       }
     ],
     calm: [
@@ -333,6 +385,20 @@ export const MoodData = {
         author: "Buddha",
         keywords: ["serenity", "balance", "gratitude", "mindfulness", "harmony", "stillness"],
         music: "Peaceful classical - Ludovico Einaudi, Max Richter"
+      },
+      {
+        prompt: "Take five deep breaths and notice the sensations in your body. What does true relaxation feel like to you?",
+        quote: "The present moment is the only time over which we have dominion.",
+        author: "Thích Nhất Hạnh",
+        keywords: ["presence", "breathing", "awareness", "relaxation", "body", "now"],
+        music: "Nature sounds with soft piano - Rain, ocean waves, gentle instrumentals"
+      },
+      {
+        prompt: "Imagine your perfect peaceful place. Describe every detail - the sounds, smells, colors, and textures.",
+        quote: "Calmness is the cradle of power.",
+        author: "Josiah Gilbert Holland",
+        keywords: ["visualization", "sanctuary", "imagination", "peace", "comfort", "safety"],
+        music: "Ambient meditation music - Singing bowls, soft chimes"
       }
     ],
     angry: [
@@ -342,6 +408,20 @@ export const MoodData = {
         author: "Mark Twain",
         keywords: ["boundaries", "justice", "power", "transformation", "release", "clarity"],
         music: "Cathartic rock - Artists like Foo Fighters, Queens of the Stone Age"
+      },
+      {
+        prompt: "Write a letter to your anger. What is it trying to protect you from? What message does it have for you?",
+        quote: "Anger, if not restrained, is frequently more hurtful to us than the injury that provokes it.",
+        author: "Seneca",
+        keywords: ["protection", "message", "understanding", "communication", "insight", "wisdom"],
+        music: "Intense alternative rock - Artists like Breaking Benjamin, Three Days Grace"
+      },
+      {
+        prompt: "Channel this fiery energy into physical movement. How can you release this intensity in a healthy way?",
+        quote: "The best fighter is never angry.",
+        author: "Lao Tzu",
+        keywords: ["movement", "exercise", "release", "physical", "channel", "transformation"],
+        music: "High-energy workout music - Hip hop, metal, electronic dance"
       }
     ],
     confused: [
@@ -351,6 +431,20 @@ export const MoodData = {
         author: "Alan Watts",
         keywords: ["questions", "exploration", "patience", "discovery", "uncertainty", "growth"],
         music: "Contemplative indie - Artists like Radiohead, Thom Yorke"
+      },
+      {
+        prompt: "Confusion often signals growth. What old beliefs or patterns might be ready to evolve in your life?",
+        quote: "In the midst of winter, I found there was, within me, an invincible summer.",
+        author: "Albert Camus",
+        keywords: ["evolution", "change", "transformation", "beliefs", "patterns", "growth"],
+        music: "Reflective indie folk - Artists like Bon Iver, Fleet Foxes"
+      },
+      {
+        prompt: "What would happen if you embraced not knowing for a while? How might uncertainty become a doorway?",
+        quote: "The important thing is not to stop questioning. Curiosity has its own reason for existence.",
+        author: "Albert Einstein",
+        keywords: ["embrace", "uncertainty", "doorway", "curiosity", "questioning", "mystery"],
+        music: "Ambient experimental - Artists like Brian Eno, Stars of the Lid"
       }
     ],
     grateful: [
@@ -360,6 +454,20 @@ export const MoodData = {
         author: "Melody Beattie",
         keywords: ["appreciation", "abundance", "kindness", "connection", "blessing", "warmth"],
         music: "Uplifting soul music - Artists like Leon Bridges, Aloe Blacc"
+      },
+      {
+        prompt: "List five things you can see right now that you've never properly appreciated. What makes each one special?",
+        quote: "Be thankful for what you have; you'll end up having more.",
+        author: "Oprah Winfrey",
+        keywords: ["observation", "appreciation", "abundance", "awareness", "beauty", "presence"],
+        music: "Warm acoustic - Artists like James Taylor, Norah Jones"
+      },
+      {
+        prompt: "Think of someone who shaped your life positively. How can you honor their influence today?",
+        quote: "Gratitude is not only the greatest of virtues but the parent of all others.",
+        author: "Cicero",
+        keywords: ["influence", "honor", "legacy", "impact", "virtue", "remembrance"],
+        music: "Heartfelt indie - Artists like The Head and the Heart, Of Monsters and Men"
       }
     ],
     lonely: [
@@ -369,6 +477,20 @@ export const MoodData = {
         author: "Michel de Montaigne",
         keywords: ["self-compassion", "solitude", "connection", "belonging", "understanding", "comfort"],
         music: "Warm indie folk - Artists like Phoebe Bridgers, Julien Baker"
+      },
+      {
+        prompt: "Write a letter to your future self about this moment. What wisdom would you want to remember?",
+        quote: "Loneliness is not lack of company, loneliness is lack of purpose.",
+        author: "Guillermo Maldonado",
+        keywords: ["future", "wisdom", "purpose", "reflection", "growth", "meaning"],
+        music: "Comforting singer-songwriter - Artists like Sufjan Stevens, Elliott Smith"
+      },
+      {
+        prompt: "What's one small way you could reach out and brighten someone else's day? Sometimes giving connection helps us find it.",
+        quote: "The best way to find yourself is to lose yourself in the service of others.",
+        author: "Mahatma Gandhi",
+        keywords: ["giving", "reaching", "connection", "service", "empathy", "community"],
+        music: "Uplifting folk - Artists like The Lumineers, Mumford & Sons"
       }
     ],
     jealous: [
@@ -378,6 +500,20 @@ export const MoodData = {
         author: "Theodore Roosevelt",
         keywords: ["comparison", "growth", "values", "self-worth", "transformation", "focus"],
         music: "Introspective indie - Artists like Phoebe Bridgers, Clairo"
+      },
+      {
+        prompt: "Instead of focusing on what others have, what can you celebrate about your own unique journey and achievements?",
+        quote: "Jealousy is simply and clearly the fear that you do not have value.",
+        author: "Jennifer James",
+        keywords: ["celebration", "unique", "journey", "achievements", "value", "self-worth"],
+        music: "Empowering pop - Artists like Lizzo, Dua Lipa"
+      },
+      {
+        prompt: "How can you transform this jealous energy into motivation? What specific steps could you take toward your own goals?",
+        quote: "The jealous are troublesome to others, but a torment to themselves.",
+        author: "William Penn",
+        keywords: ["transformation", "motivation", "goals", "action", "progress", "ambition"],
+        music: "Motivational hip-hop - Artists like Kendrick Lamar, J. Cole"
       }
     ],
     proud: [
@@ -387,62 +523,55 @@ export const MoodData = {
         author: "Uncle Iroh",
         keywords: ["achievement", "success", "confidence", "growth", "celebration", "humility"],
         music: "Triumphant orchestral - Epic movie soundtracks, Two Steps From Hell"
+      },
+      {
+        prompt: "How can you use this sense of accomplishment to inspire and encourage others on their journey?",
+        quote: "Be proud of how hard you are trying.",
+        author: "Unknown",
+        keywords: ["inspiration", "encouragement", "sharing", "mentoring", "support", "leadership"],
+        music: "Uplifting contemporary - Artists like Coldplay, U2"
+      },
+      {
+        prompt: "Reflect on the person you were before this achievement. What growth and learning brought you to this moment?",
+        quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+        author: "Winston Churchill",
+        keywords: ["growth", "learning", "journey", "courage", "perseverance", "evolution"],
+        music: "Reflective alternative - Artists like Imagine Dragons, OneRepublic"
       }
     ],
     curious: [
       {
-        prompt: "What question has been burning in your mind lately? What would you explore if you had unlimited time and resources?",
+        prompt: "What is one thing you've always wondered about? How could you start exploring that topic today?",
         quote: "I have no special talent. I am only passionately curious.",
         author: "Albert Einstein",
-        keywords: ["wonder", "exploration", "learning", "discovery", "questions", "growth"],
-        music: "Ambient electronic - Artists like Boards of Canada, Tycho"
+        keywords: ["learning", "exploration", "wonder", "discovery", "passion", "questions"],
+        music: "Intriguing electronic - Artists like Aphex Twin, Boards of Canada"
+      },
+      {
+        prompt: "Look at a familiar object in your room as if you're seeing it for the first time. What new details do you notice?",
+        quote: "Curiosity is the wick in the candle of learning.",
+        author: "William Arthur Ward",
+        keywords: ["observation", "details", "perspective", "learning", "mindfulness", "freshness"],
+        music: "Playful jazz - Artists like Dave Brubeck, Thelonious Monk"
       }
     ],
     bored: [
       {
-        prompt: "Sometimes boredom is creativity waiting to emerge. What would you create if you had no limitations?",
+        prompt: "Boredom is often the birthplace of creativity. If you could create anything right now without limits, what would it be?",
         quote: "Boredom is the dream bird that hatches the egg of experience.",
         author: "Walter Benjamin",
-        keywords: ["creativity", "potential", "imagination", "opportunity", "stillness", "inspiration"],
-        music: "Chill lo-fi beats - Study playlists, ambient hip-hop"
-      }
-    ],
-    surprised: [
+        keywords: ["creativity", "imagination", "potential", "dreaming", "innovation", "spark"],
+        music: "Experimental pop - Artists like Glass Animals, Gorillaz"
+      },
       {
-        prompt: "What unexpected moment caught you off guard today? How do surprises change your perspective?",
-        quote: "The real voyage of discovery consists not in seeking new landscapes, but in having new eyes.",
-        author: "Marcel Proust",
-        keywords: ["unexpected", "wonder", "perspective", "discovery", "openness", "awareness"],
-        music: "Upbeat indie pop - Artists like Vampire Weekend, Foster the People"
-      }
-    ],
-    playful: [
-      {
-        prompt: "When did you last feel completely carefree? What brings out your inner child?",
-        quote: "We don't stop playing because we grow old; we grow old because we stop playing.",
-        author: "George Bernard Shaw",
-        keywords: ["joy", "freedom", "childlike", "fun", "spontaneity", "laughter"],
-        music: "Fun pop hits - Artists like Dua Lipa, The 1975"
-      }
-    ],
-    dreamy: [
-      {
-        prompt: "What dreams or visions fill your mind when you let it wander? What do they tell you about your desires?",
-        quote: "All that we see or seem is but a dream within a dream.",
-        author: "Edgar Allan Poe",
-        keywords: ["imagination", "visions", "subconscious", "desires", "fantasy", "peace"],
-        music: "Dreamy shoegaze - Artists like Beach House, Slowdive"
-      }
-    ],
-    hopeful: [
-      {
-        prompt: "What vision of the future fills you with the most hope? Describe it in vivid detail.",
-        quote: "Hope is being able to see that there is light despite all of the darkness.",
-        author: "Desmond Tutu",
-        keywords: ["vision", "possibility", "faith", "dreams", "optimism", "future"],
-        music: "Inspiring orchestral - Film soundtracks, Hans Zimmer"
+        prompt: "What is a hobby or skill you've neglected recently? How would it feel to pick it up again for just 15 minutes?",
+        quote: "To be bored is an insult to oneself.",
+        author: "Jules Renard",
+        keywords: ["hobbies", "skills", "reconnection", "engagement", "activity", "interest"],
+        music: "Upbeat funk - Artists like Vulfpeck, Thundercat"
       }
     ]
+    // Note: Additional suggestions for other moods would be added here in a full implementation
   },
 
   getMoodById(id: string) {
