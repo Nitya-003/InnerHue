@@ -176,15 +176,14 @@ jobs:
               ✅ Image size is within 300MB limit  
               ✅ Security checks passed
               
-              **To test locally:**
-              \`\`\`bash
-              docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.number }}
-              docker run -p 3000:3000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.number }}
-              \`\`\`
+              **Notes:**
+              - Docker image for this pull request was built and tested in CI.
+              - Preview images for pull requests are *not* pushed to \`${{ env.REGISTRY }}\`.
               
-              **Or use Docker Compose:**
+              **To test this change locally, build and run the image yourself:**
               \`\`\`bash
-              docker-compose up innerhue
+              docker build -t my-preview-image .
+              docker run -p 3000:3000 my-preview-image
               \`\`\`
               `
             })
