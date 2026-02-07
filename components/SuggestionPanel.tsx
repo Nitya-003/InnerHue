@@ -65,7 +65,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh }: SuggestionPane
           <div>
             <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
             <blockquote className="text-gray-700 italic leading-relaxed mb-2">
-              "{suggestions.quote}"
+              &ldquo;{suggestions.quote}&rdquo;
             </blockquote>
             <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
           </div>
