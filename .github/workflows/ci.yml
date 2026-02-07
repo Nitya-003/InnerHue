@@ -91,14 +91,21 @@ jobs:
 
       - name: Test Docker image
         run: |
+          # Get the first tag from the list
+          TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+          echo "Testing with tag: $TAG"
+          
           # Test that the image can be started and responds
-          docker run --name test-container -d -p 3000:3000 ${{ steps.meta.outputs.tags }}
+          docker run --name test-container -d -p 3000:3000 "$TAG"
           
           # Wait for container to start
-          sleep 15
+          sleep 20
+          
+          # Install curl if not available
+          which curl || (apt-get update && apt-get install -y curl)
           
           # Test that the application responds
-          curl -f http://localhost:3000 || (docker logs test-container && exit 1)
+          curl -f http://localhost:3000 || (echo "App not responding, checking logs:" && docker logs test-container && exit 1)
           
           # Cleanup
           docker stop test-container
@@ -106,11 +113,12 @@ jobs:
 
       - name: Check image size
         run: |
-          IMAGE_SIZE=$(docker images ${{ steps.meta.outputs.tags }} --format "table {{.Size}}" | tail -n +2)
+          TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+          IMAGE_SIZE=$(docker images "$TAG" --format "table {{.Size}}" | tail -n +2)
           echo "Image size: $IMAGE_SIZE"
           
           # Convert MB to bytes for comparison (300MB = 314572800 bytes)
-          SIZE_BYTES=$(docker inspect ${{ steps.meta.outputs.tags }} --format='{{.Size}}')
+          SIZE_BYTES=$(docker inspect "$TAG" --format='{{.Size}}')
           MAX_SIZE=314572800
           
           if [ "$SIZE_BYTES" -gt "$MAX_SIZE" ]; then
