@@ -575,10 +575,70 @@ export const MoodData = {
   },
 
   getMoodById(id: string) {
-    return this.moods[id as keyof typeof this.moods] || null;
+    // First check default moods
+    const defaultMood = this.moods[id as keyof typeof this.moods];
+    if (defaultMood) return defaultMood;
+    
+    // Then check custom moods
+    if (typeof window !== 'undefined') {
+      const { CustomMoodStorage } = require('./customMoods');
+      const customMoods = CustomMoodStorage.getCustomMoods();
+      return customMoods.find((mood: any) => mood.id === id) || null;
+    }
+    
+    return null;
+  },
+
+  getAllMoods() {
+    // Get default moods
+    const defaultMoods = Object.values(this.moods);
+    
+    // Get custom moods if in browser environment
+    if (typeof window !== 'undefined') {
+      const { CustomMoodStorage } = require('./customMoods');
+      const customMoods = CustomMoodStorage.getCustomMoods();
+      const allMoods = [...defaultMoods, ...customMoods];
+      
+      // Add isCustom flag to distinguish between default and custom moods
+      return allMoods.map(mood => ({
+        ...mood,
+        isCustom: mood.hasOwnProperty('isCustom') ? mood.isCustom : false
+      }));
+    }
+    
+    // Add isCustom: false to all default moods when on server
+    return defaultMoods.map(mood => ({
+      ...mood,
+      isCustom: false
+    }));
+  },
+
+  getCustomMoods() {
+    if (typeof window !== 'undefined') {
+      const { CustomMoodStorage } = require('./customMoods');
+      return CustomMoodStorage.getCustomMoods();
+    }
+    return [];
+  },
+
+  getDefaultMoods() {
+    return Object.values(this.moods);
   },
 
   getSuggestions(moodId: string) {
+    // Check if it's a custom mood
+    if (typeof window !== 'undefined' && moodId.startsWith('custom_')) {
+      // Return generic suggestions for custom moods
+      return {
+        prompt: "Take a moment to breathe deeply and reflect on this unique feeling.",
+        quote: "Every emotion, even the ones we create ourselves, has value in our journey.",
+        author: "InnerHue",
+        keywords: ["reflection", "custom", "personal", "awareness"],
+        music: "Personalized ambient music"
+      };
+    }
+
+    // Default mood suggestions
     const moodSuggestions = this.suggestions[moodId as keyof typeof this.suggestions] || [];
     return moodSuggestions[Math.floor(Math.random() * moodSuggestions.length)] || {
       prompt: "Take a moment to breathe deeply and reflect on this feeling.",
