@@ -1,14 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
-import { Heart, BarChart3, Music, ArrowLeft } from 'lucide-react';
+import { AddMoodModal } from '@/components/AddMoodModal';
+import { Heart, BarChart3, Music, ArrowLeft, Plus } from 'lucide-react';
+import { MoodData } from '@/lib/moodData';
+import { CustomMood, CustomMoodStorage } from '@/lib/customMoods';
 
-// Enhanced mood data with categories for better color coding
-const moods = [
+// Enhanced mood data with categories for better color coding - now loaded dynamically
+const defaultMoods = [
   // Positive/Happy Category
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176', category: 'positive' },
   { id: 'excited', name: 'Excited', emoji: '🤩', color: '#AB47BC', glow: '#BA68C8', category: 'energetic' },
@@ -64,34 +67,109 @@ const moods = [
 
 export default function EmotionsPage() {
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+  const [moods, setMoods] = useState(defaultMoods);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [backgroundOrbs, setBackgroundOrbs] = useState<Array<{
+    id: number;
+    color: string;
+    width: number;
+    height: number;
+    left: string;
+    top: string;
+    x: number;
+    y: number;
+  }>>([]);
   const maxSelections = 3;
+
+
+
+  // Generate background orbs on client side only to avoid hydration issues
+  useEffect(() => {
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'];
+    const orbs = Array.from({ length: 8 }, (_, i) => ({
+      id: i,
+      color: colors[i],
+      width: Math.random() * 300 + 100,
+      height: Math.random() * 300 + 100,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      x: Math.random() * 100 - 50,
+      y: Math.random() * 100 - 50
+    }));
+    setBackgroundOrbs(orbs);
+  }, []);
+
+  // Load all moods (default + custom) on component mount
+  useEffect(() => {
+    const loadAllMoods = () => {
+      console.log('Loading all moods...');
+      // Use MoodData to get combined moods
+      const allMoods = MoodData.getAllMoods();
+      console.log('All moods loaded:', allMoods.length, allMoods);
+      setMoods(allMoods);
+    };
+
+    loadAllMoods();
+
+    // Listen for custom mood updates
+    const handleCustomMoodsUpdate = () => {
+      loadAllMoods();
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('customMoodsUpdated', handleCustomMoodsUpdate);
+      return () => {
+        window.removeEventListener('customMoodsUpdated', handleCustomMoodsUpdate);
+      };
+    }
+  }, []);
+
+  // Handle new mood creation
+  const handleMoodAdded = (newMood: CustomMood) => {
+    // Reload all moods to include the new custom mood
+    const allMoods = MoodData.getAllMoods();
+    setMoods(allMoods);
+    setIsAddModalOpen(false);
+  };
+
+  // Handle custom mood deletion
+  const handleMoodDeleted = (moodId: string) => {
+    const success = CustomMoodStorage.deleteCustomMood(moodId);
+    if (success) {
+      // Reload all moods to reflect the deletion
+      const allMoods = MoodData.getAllMoods();
+      setMoods(allMoods);
+      // Remove from selected moods if it was selected
+      setSelectedMoods(prev => prev.filter(id => id !== moodId));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(8)].map((_, i) => (
+        {backgroundOrbs.map((orb) => (
           <motion.div
-            key={i}
+            key={orb.id}
             className="absolute rounded-full opacity-20"
             style={{
-              background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'][i]} 0%, transparent 70%)`,
-              width: Math.random() * 300 + 100,
-              height: Math.random() * 300 + 100,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
+              width: orb.width,
+              height: orb.height,
+              left: orb.left,
+              top: orb.top,
             }}
             animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
+              x: [0, orb.x],
+              y: [0, orb.y],
               scale: [1, 1.2, 1],
               opacity: [0.1, 0.3, 0.1]
             }}
             transition={{
-              duration: 8 + Math.random() * 4,
+              duration: 8 + (orb.id * 0.5),
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.5
+              delay: orb.id * 0.5
             }}
           />
         ))}
@@ -125,6 +203,18 @@ export default function EmotionsPage() {
           </div>
           
           <nav className="flex space-x-4">
+            <motion.button
+              onClick={() => {
+                setIsAddModalOpen(true);
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30 flex items-center gap-2 text-white font-medium"
+              title="Create Custom Mood"
+            >
+              <Plus className="w-5 h-5" />
+              <span className="hidden sm:inline text-sm">Create Mood</span>
+            </motion.button>
             <Link href="/analytics">
               <motion.div 
                 whileHover={{ scale: 1.05 }}
@@ -232,6 +322,7 @@ export default function EmotionsPage() {
                     return prev;
                   });
                 }}
+                onDelete={handleMoodDeleted}
               />
             ))}
           </motion.div>
@@ -290,6 +381,13 @@ export default function EmotionsPage() {
           )}
         </div>
       </main>
+
+      {/* Add Mood Modal */}
+      <AddMoodModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onMoodAdded={handleMoodAdded}
+      />
     </div>
   );
 }
