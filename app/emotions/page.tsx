@@ -102,10 +102,15 @@ export default function EmotionsPage() {
   // Load all moods (default + custom) on component mount
   useEffect(() => {
     const loadAllMoods = () => {
-      console.log('Loading all moods...');
+      const isDev = process.env.NODE_ENV !== 'production';
+      if (isDev) {
+        console.log('Loading all moods...');
+      }
       // Use MoodData to get combined moods
       const allMoods = MoodData.getAllMoods();
-      console.log('All moods loaded:', allMoods.length, allMoods);
+      if (isDev) {
+        console.log('All moods loaded:', allMoods.length, allMoods);
+      }
       setMoods(allMoods);
     };
 

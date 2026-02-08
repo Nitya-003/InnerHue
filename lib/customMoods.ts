@@ -50,7 +50,7 @@ export const CustomMoodStorage = {
     
     const newMood: CustomMood = {
       ...mood,
-      id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `custom_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
       isCustom: true,
       createdAt: new Date().toISOString()
     };

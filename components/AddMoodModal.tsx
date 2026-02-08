@@ -96,7 +96,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
       onMoodAdded(newMood);
       handleClose();
-    } catch (error) {
+    } catch (err) {
       setError('Failed to create mood. Please try again.');
       setIsSubmitting(false);
     }
@@ -173,9 +173,9 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                       Choose Emoji
                     </label>
                     <div className="grid grid-cols-8 gap-2 max-h-32 overflow-y-auto border border-gray-200 rounded-md p-3">
-                      {EMOJI_OPTIONS.map((emoji) => (
+                      {EMOJI_OPTIONS.map((emoji, index) => (
                         <button
-                          key={emoji}
+                          key={`${emoji}-${index}`}
                           type="button"
                           onClick={() => setFormData(prev => ({ ...prev, emoji }))}
                           className={`p-2 rounded-md text-lg hover:bg-gray-100 transition-colors ${
@@ -195,9 +195,9 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                       Choose Color
                     </label>
                     <div className="grid grid-cols-8 gap-2">
-                      {COLOR_OPTIONS.map((color) => (
+                      {COLOR_OPTIONS.map((color, index) => (
                         <button
-                          key={color}
+                          key={`${color}-${index}`}
                           type="button"
                           onClick={() => setFormData(prev => ({ ...prev, color }))}
                           className={`w-8 h-8 rounded-full transition-all ${
