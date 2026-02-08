@@ -31,8 +31,11 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
     setIsPlayerLoaded(false);
   }, [mood.id]);
 
-      {/* Quote */}
-      <motion.div
+  return (
+    <TooltipProvider>
+      <div className="space-y-6">
+        {/* Quote */}
+        <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
