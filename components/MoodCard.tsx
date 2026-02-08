@@ -33,8 +33,10 @@ const MoodCardBase = ({ mood, index, isSelected, onSelect, onDelete }: MoodCardP
   };
 
   return (
-    <motion.button
+    <motion.div
       onClick={onSelect}
+      role="button"
+      tabIndex={0}
       aria-label={`Select ${mood.name} mood`}
       aria-pressed={isSelected}
       initial={{ opacity: 0, y: 20 }}
@@ -42,8 +44,14 @@ const MoodCardBase = ({ mood, index, isSelected, onSelect, onDelete }: MoodCardP
       transition={{ delay: index * 0.05 }}
       whileHover={{ scale: 1.05, y: -5 }}
       whileTap={{ scale: 0.95 }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
       className={`
-        relative group p-4 rounded-2xl border transition-all duration-300 w-full aspect-square flex flex-col items-center justify-center gap-3
+        relative group p-4 rounded-2xl border transition-all duration-300 w-full aspect-square flex flex-col items-center justify-center gap-3 cursor-pointer
         focus:outline-none focus-visible:ring-4 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black
         ${isSelected 
           ? "bg-white/20 border-white/50 shadow-[0_0_30px_rgba(255,255,255,0.3)]" 
@@ -104,7 +112,7 @@ const MoodCardBase = ({ mood, index, isSelected, onSelect, onDelete }: MoodCardP
           <Sparkles className="absolute bottom-3 right-3 w-3 h-3 text-white opacity-50 animate-bounce" />
         </motion.div>
       )}
-    </motion.button>
+    </motion.div>
   );
 };
 

@@ -4,12 +4,6 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
 import toast from 'react-hot-toast';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 
 interface SuggestionPanelProps {
   suggestions: {
@@ -31,11 +25,16 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
     setIsPlayerLoaded(false);
   }, [mood.id]);
 
+  const handleCopy = () => {
+    const textToCopy = `"${suggestions.quote}" — ${suggestions.author}`;
+    navigator.clipboard.writeText(textToCopy);
+    toast.success('Quote copied to clipboard!');
+  };
+
   return (
-    <TooltipProvider>
-      <div className="space-y-6">
-        {/* Quote */}
-        <motion.div
+    <div className="space-y-6">
+      {/* Quote */}
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
@@ -53,13 +52,14 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
             <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
           </div>
         </div>
+      </motion.div>
 
-        {/* Journal Prompt */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+      {/* Journal Prompt */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
         >
           <div className="flex items-start space-x-3">
             <div className="p-2 rounded-lg bg-purple-100">
@@ -182,6 +182,5 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
           </div>
         </motion.div>
       </div>
-    </TooltipProvider>
   );
 }
