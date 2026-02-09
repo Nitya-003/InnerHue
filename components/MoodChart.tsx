@@ -3,13 +3,14 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { BarChart3, PieChart, Activity } from 'lucide-react';
+import { useMoodStore } from '@/lib/useMoodStore';
 
-interface MoodChartProps {
-  moodHistory: any[];
-  stats: any;
-}
-
-export function MoodChart({ moodHistory, stats }: MoodChartProps) {
+export function MoodChart() {
+  // Get data from Zustand store with selective subscriptions
+  const moodHistory = useMoodStore(state => state.moodHistory);
+  const stats = useMoodStore(state => state.stats);
+  
+  // Keep chartType as local UI state
   const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
 
   const moodColors: { [key: string]: string } = {

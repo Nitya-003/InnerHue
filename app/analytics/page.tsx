@@ -1,87 +1,29 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide-react';
 import { MoodChart } from '@/components/MoodChart';
 import { MoodStats } from '@/components/MoodStats';
+import { useMoodStore } from '@/lib/useMoodStore';
 
 export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>({});
-
-  useEffect(() => {
-    loadData();
-
-    // Listen for updates from other tabs/components
-    window.addEventListener('storage', loadData);
-    return () => window.removeEventListener('storage', loadData);
-  }, []);
-
-  const loadData = () => {
-    const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    setMoodHistory(history);
-    calculateStats(history);
-  };
-
-  const calculateStats = (history: any[]) => {
-    const moodCounts: { [key: string]: number } = {};
-    const today = new Date().toDateString();
-    const thisWeek: any[] = [];
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 7);
-
-    history.forEach((entry: any) => {
-      // Support both new (emotion) and old (mood) formats
-      const moodKey = entry.emotion || entry.mood;
-      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
-
-      const entryDate = new Date(entry.timestamp);
-      if (entryDate >= weekStart) {
-        thisWeek.push(entry);
-      }
-    });
-
-    const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => (b as number) - (a as number))[0];
-
-    setStats({
-      totalEntries: history.length,
-      todayEntries: history.filter((entry: any) => new Date(entry.timestamp).toDateString() === today).length,
-      weekEntries: thisWeek.length,
-      mostCommonMood: mostCommon ? mostCommon[0] : null,
-      moodCounts,
-      weeklyData: thisWeek
-    });
-  };
+  // Get data from Zustand store with selective subscriptions
+  const moodHistory = useMoodStore(state => state.moodHistory);
+  const stats = useMoodStore(state => state.stats);
+  const clearHistory = useMoodStore(state => state.clearHistory);
+  const deleteMood = useMoodStore(state => state.deleteMood);
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
-      localStorage.setItem('moodHistory', '[]');
-      setMoodHistory([]);
-      calculateStats([]);
-      window.dispatchEvent(new Event('storage'));
+      clearHistory();
     }
   };
 
-  const handleDeleteEntry = (id: string, index: number) => {
-    const newHistory = [...moodHistory];
-    let updatedHistory;
-
+  const handleDeleteEntry = (id: string) => {
     if (id) {
-      updatedHistory = newHistory.filter(item => item.id !== id);
-    } else {
-      // Fallback: remove by index for legacy data
-      // Note: passed index is from the visual reversed list
-      // We'll rely on ID for best results
-      return;
+      deleteMood(id);
     }
-
-    localStorage.setItem('moodHistory', JSON.stringify(updatedHistory));
-    setMoodHistory(updatedHistory);
-    calculateStats(updatedHistory);
-    window.dispatchEvent(new Event('storage'));
   };
 
   const getTimeAgo = (dateString: string) => {
@@ -160,7 +102,7 @@ export default function AnalyticsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <MoodStats stats={stats} />
+                <MoodStats />
               </motion.div>
 
               {/* Charts */}
@@ -169,7 +111,7 @@ export default function AnalyticsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <MoodChart moodHistory={moodHistory} stats={stats} />
+                <MoodChart />
               </motion.div>
 
               {/* History Dashboard */}
@@ -226,7 +168,7 @@ export default function AnalyticsPage() {
                         </div>
 
                         <button
-                          onClick={() => handleDeleteEntry(entry.id, index)}
+                          onClick={() => handleDeleteEntry(entry.id)}
                           className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
                           title="Delete entry"
                         >
