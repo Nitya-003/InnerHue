@@ -4,12 +4,6 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
 import toast from 'react-hot-toast';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 
 interface SuggestionPanelProps {
   suggestions: {
@@ -25,9 +19,6 @@ interface SuggestionPanelProps {
 }
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
-  const handleCopy = () => {
-    navigator.clipboard.writeText(`"${suggestions.quote}" — ${suggestions.author}`);
-    toast.success('Quote copied to clipboard!');
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
 
   useEffect(() => {
@@ -35,45 +26,40 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
   }, [mood.id]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`"${suggestions.quote}" - ${suggestions.author}`);
-    toast.success('Quote copied to clipboard');
+    const textToCopy = `"${suggestions.quote}" — ${suggestions.author}`;
+    navigator.clipboard.writeText(textToCopy);
+    toast.success('Quote copied to clipboard!');
   };
 
   return (
-    <TooltipProvider delayDuration={500}>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold text-gray-800">
-            Personalized Insights
-          </h3>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <motion.button
-                whileHover={{ scale: 1.05, rotate: isRefreshing ? 360 : 180 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={onRefresh}
-                disabled={isRefreshing}
-                className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all disabled:opacity-50"
-                aria-label={isRefreshing ? 'Refreshing insights' : 'Refresh all insights'}
-              >
-                <RefreshCw className={`w-5 h-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </motion.button>
-            </TooltipTrigger>
-            <TooltipContent
-              className="bg-white/80 backdrop-blur-md border-white/50 text-gray-800 shadow-xl"
-            >
-              <p>{isRefreshing ? 'Refreshing insights...' : 'Refresh all insights (prompt, quote, keywords, music)'}</p>
-            </TooltipContent>
-          </Tooltip>
+    <div className="space-y-6">
+      {/* Quote */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+      >
+        <div className="flex items-start space-x-3">
+          <div className="p-2 rounded-lg bg-pink-100">
+            <Quote className="w-5 h-5 text-pink-600" />
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
+            <blockquote className="text-gray-700 italic leading-relaxed mb-2">
+              &ldquo;{suggestions.quote}&rdquo;
+            </blockquote>
+            <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
+          </div>
         </div>
+      </motion.div>
 
-        {/* Journal Prompt */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+      {/* Journal Prompt */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
         >
           <div className="flex items-start space-x-3">
             <div className="p-2 rounded-lg bg-purple-100">
@@ -154,7 +140,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
           </div>
         </motion.div>
 
-        {/* Music Suggestion */}
+        {/* Music Soundscape (Spotify) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -165,58 +151,36 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
             <div className="p-2 rounded-lg bg-green-100">
               <Music className="w-5 h-5 text-green-600" />
             </div>
-            <div className="flex-1">
-              <h4 className="font-semibold text-gray-800 mb-2">Music Recommendation</h4>
-              <p className="text-gray-700 mb-3">{suggestions.music}</p>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white text-sm font-medium rounded-lg hover:shadow-md transition-all"
-              >
-                Listen on Spotify
-              </motion.button>
-            </div>
-      {/* Music Suggestion */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
-      >
-        <div className="flex items-start space-x-3">
-          <div className="p-2 rounded-lg bg-green-100">
-            <Music className="w-5 h-5 text-green-600" />
-          </div>
-          <div className="flex-1 space-y-3">
-            <h4 className="font-semibold text-gray-800">Soundscape</h4>
-            
-            <div className="relative w-full h-[152px] rounded-xl overflow-hidden bg-white/50 backdrop-blur-md shadow-inner border border-white/20">
-              {!isPlayerLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50 backdrop-blur animate-pulse">
-                  <div className="flex flex-col items-center space-y-2">
-                    <Music className="w-8 h-8 text-green-400/50 animate-bounce" />
-                    <span className="text-gray-500 text-sm font-medium">Loading Soundscape...</span>
+            <div className="flex-1 space-y-3">
+              <h4 className="font-semibold text-gray-800">Soundscape</h4>
+
+              <div className="relative w-full h-[152px] rounded-xl overflow-hidden bg-white/50 backdrop-blur-md shadow-inner border border-white/20">
+                {!isPlayerLoaded && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50 backdrop-blur animate-pulse">
+                    <div className="flex flex-col items-center space-y-2">
+                      <Music className="w-8 h-8 text-green-400/50 animate-bounce" />
+                      <span className="text-gray-500 text-sm font-medium">Loading Soundscape...</span>
+                    </div>
                   </div>
-                </div>
-              )}
-              <iframe
-                src={`https://open.spotify.com/embed/playlist/${mood.spotifyPlaylistId || '37i9dQZF1DX3Ogo9pFno96'}?utm_source=generator&theme=0`}
-                width="100%"
-                height="152"
-                frameBorder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-                className={`w-full h-full transition-opacity duration-500 ${isPlayerLoaded ? 'opacity-100' : 'opacity-0'}`}
-                onLoad={() => setIsPlayerLoaded(true)}
-              />
+                )}
+                <iframe
+                  src={`https://open.spotify.com/embed/playlist/${mood.spotifyPlaylistId || '37i9dQZF1DX3Ogo9pFno96'}?utm_source=generator&theme=0`}
+                  width="100%"
+                  height="152"
+                  frameBorder="0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  className={`w-full h-full transition-opacity duration-500 ${isPlayerLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onLoad={() => setIsPlayerLoaded(true)}
+                />
+              </div>
+
+              <p className="text-sm text-gray-600 italic">
+                <span className="font-medium text-green-600">Suggested:</span> {suggestions.music}
+              </p>
             </div>
-            
-            <p className="text-sm text-gray-600 italic">
-              <span className="font-medium text-green-600">Suggested:</span> {suggestions.music}
-            </p>
           </div>
         </motion.div>
       </div>
-    </TooltipProvider>
   );
 }

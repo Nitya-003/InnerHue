@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { BarChart3, PieChart, Activity } from 'lucide-react';
@@ -152,7 +153,7 @@ export function MoodChart() {
                   
                   acc.currentAngle = endAngle;
                   return acc;
-                }, { segments: [] as JSX.Element[], currentAngle: 0 }).segments}
+                }, { segments: [] as React.JSX.Element[], currentAngle: 0 }).segments}
             </svg>
             
             {/* Center circle */}

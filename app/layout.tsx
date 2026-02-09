@@ -1,5 +1,5 @@
 import './globals.css';
-import { ClientLayout } from '@/components/ClientLayout';
+import { Footer } from '@/components/Footer';
 import { BackToTop } from '@/components/BackToTop';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -9,19 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'InnerHue',
   description: 'Emotional Reflection Web App',
-    appleWebApp: {
-    capable: true,
-    title: 'InnerHue',
-    statusBarStyle: 'black-translucent',
-  },
-
-  
-  icons: {
-    apple: '/',
-  },
 };
-
-import { Toaster } from 'react-hot-toast';
 
 export default function RootLayout({
   children,
@@ -31,13 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ClientLayout>
-          {children}
-        </ClientLayout>
-
-
+        {children}
+        <Footer />
         <BackToTop />
-        <Toaster position="top-right" />
       </body>
     </html>
   );
