@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide
 import { MoodChart } from '@/components/MoodChart';
 import { MoodStats } from '@/components/MoodStats';
 import { useMoodStore } from '@/lib/useMoodStore';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function AnalyticsPage() {
   // Get data from Zustand store with selective subscriptions
@@ -42,7 +43,7 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[hsl(var(--page-light-from))] dark:via-[hsl(var(--page-light-via))] dark:to-[hsl(var(--page-light-to))]">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -54,21 +55,21 @@ export default function AnalyticsPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <ArrowLeft className="w-5 h-5 text-purple-600" />
-              <span className="text-purple-600 font-medium">Back</span>
+              <ArrowLeft className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <span className="text-purple-600 dark:text-purple-400 font-medium">Back</span>
             </motion.button>
           </Link>
 
           <div className="flex items-center space-x-2">
-            <Activity className="w-8 h-8 text-purple-600" />
+            <Activity className="w-8 h-8 text-purple-600 dark:text-purple-400" />
             <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Mood Analytics
             </h1>
           </div>
 
-          <div className="w-20" /> {/* Spacer */}
+          <ThemeToggle />
         </div>
       </motion.header>
 
@@ -82,8 +83,8 @@ export default function AnalyticsPage() {
               className="text-center py-20"
             >
               <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-600 mb-2">No reflections yet</h2>
-              <p className="text-gray-500 mb-8">Start your journey! Track your emotions to see insights here.</p>
+              <h2 className="text-2xl font-bold text-gray-600 dark:text-gray-300 mb-2">No reflections yet</h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-8">Start your journey! Track your emotions to see insights here.</p>
               <Link href="/">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -119,12 +120,12 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50"
+                className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
-                    <Calendar className="w-6 h-6 text-purple-600" />
-                    <h3 className="text-2xl font-bold text-gray-800">History</h3>
+                    <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200">History</h3>
                   </div>
 
                   <button
@@ -143,7 +144,7 @@ export default function AnalyticsPage() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.05 * index }}
-                      className="group flex items-center justify-between p-4 rounded-xl bg-white/60 backdrop-blur border border-white/40 shadow-sm hover:shadow-md transition-all hover:bg-white/80"
+                      className="group flex items-center justify-between p-4 rounded-xl bg-white/60 dark:bg-white/5 backdrop-blur border border-white/40 dark:border-white/10 shadow-sm hover:shadow-md transition-all hover:bg-white/80 dark:hover:bg-white/10"
                     >
                       <div className="flex items-center space-x-4">
                         {/* Status Dot */}
@@ -153,10 +154,10 @@ export default function AnalyticsPage() {
                         />
 
                         <div>
-                          <div className="font-semibold text-gray-800 capitalize flex items-center">
+                          <div className="font-semibold text-gray-800 dark:text-gray-200 capitalize flex items-center">
                             {entry.emotion || entry.mood}
                           </div>
-                          <div className="text-xs text-gray-500 font-medium">
+                          <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                             {getTimeAgo(entry.timestamp)}
                           </div>
                         </div>

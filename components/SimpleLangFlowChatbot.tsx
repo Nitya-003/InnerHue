@@ -57,7 +57,7 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
   const detectEmotionsLocally = (text: string): string[] => {
     const lowerText = text.toLowerCase();
     const emotions: string[] = [];
-    
+
     const keywords = {
       happy: ['happy', 'joy', 'joyful', 'great', 'amazing', 'wonderful', 'excited', 'love', 'glad', 'pleased', 'delighted', 'cheerful', 'thrilled'],
       sad: ['sad', 'depressed', 'down', 'unhappy', 'miserable', 'crying', 'hurt', 'heartbroken', 'disappointed', 'devastated'],
@@ -118,7 +118,7 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-96 bg-white rounded-3xl shadow-2xl border border-gray-200">
+        <div className="fixed bottom-6 right-6 z-50 w-96 bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-white/10">
           {/* Header */}
           <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 flex items-center justify-between rounded-t-3xl">
             <div className="flex items-center gap-3">
@@ -142,25 +142,25 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
           <div className="p-6 min-h-[280px]">
             {!botResponse ? (
               <div className="space-y-3">
-                <p className="text-gray-700">
+                <p className="text-gray-700 dark:text-gray-300">
                   Hey there! 👋 I'm your emotion companion.
                 </p>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
                   Tell me how you're feeling and I'll help you explore your emotions!
                 </p>
               </div>
             ) : (
-              <div className="bg-gray-100 rounded-2xl p-4">
+              <div className="bg-gray-100 dark:bg-white/5 rounded-2xl p-4">
                 <div className="flex items-start gap-2">
                   <Sparkles className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-gray-800 text-sm whitespace-pre-line">{botResponse}</p>
+                  <p className="text-gray-800 dark:text-gray-200 text-sm whitespace-pre-line">{botResponse}</p>
                 </div>
               </div>
             )}
           </div>
 
           {/* Input Area */}
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-gray-200 dark:border-white/10">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -168,7 +168,7 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="I'm feeling..."
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm dark:bg-gray-800 dark:text-white"
                 disabled={isLoading}
               />
               <button
@@ -182,7 +182,7 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
             {botResponse && (
               <button
                 onClick={handleReset}
-                className="mt-3 w-full text-sm text-gray-600 hover:text-purple-600 transition-colors"
+                className="mt-3 w-full text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 transition-colors"
               >
                 Start New Conversation
               </button>

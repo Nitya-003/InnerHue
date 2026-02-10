@@ -7,6 +7,7 @@ import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { Heart, BarChart3, Music, Plus } from 'lucide-react';
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176', category: 'positive' },
@@ -78,7 +79,7 @@ export default function Home() {
     }));
     setBackgroundOrbs(orbs);
   }, []);
-  
+
   const toggleMood = (moodId: string) => {
     setSelectedMoods(prev => {
       if (prev.includes(moodId)) {
@@ -91,7 +92,7 @@ export default function Home() {
       }
     });
   };
-  
+
   const handleEmotionDetected = (emotions: string[]) => {
     setSelectedMoods(emotions.slice(0, 3));
   };
@@ -104,13 +105,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] relative overflow-hidden">
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         {backgroundOrbs.map((orb) => (
           <motion.div
             key={orb.id}
-            className="absolute rounded-full opacity-20"
+            className="absolute rounded-full opacity-20 dark:opacity-10"
             style={{
               background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
               width: orb.width,
@@ -133,11 +134,11 @@ export default function Home() {
           />
         ))}
       </div>
-      
+
       <FloatingBackground />
-      
+
       {/* Header */}
-      <motion.header 
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 p-6"
@@ -149,10 +150,10 @@ export default function Home() {
               InnerHue
             </h1>
           </div>
-          
-          <nav className="flex space-x-4">
+
+          <nav className="flex items-center space-x-4">
             <Link href="/emotions">
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30 flex items-center gap-2 text-white"
                 title="Create Custom Moods"
@@ -162,7 +163,7 @@ export default function Home() {
               </motion.div>
             </Link>
             <Link href="/analytics">
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
               >
@@ -170,13 +171,14 @@ export default function Home() {
               </motion.div>
             </Link>
             <Link href="/music">
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
               >
                 <Music className="w-6 h-6 text-white" />
               </motion.div>
             </Link>
+            <ThemeToggle />
           </nav>
         </div>
       </motion.header>
@@ -184,9 +186,9 @@ export default function Home() {
       {/* Main Content */}
       <main className="relative z-10 px-6 pb-20">
         <div className="max-w-6xl mx-auto">
-          
+
           {/* Hero Section */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -198,7 +200,7 @@ export default function Home() {
             <p className="text-xl text-gray-200 max-w-2xl mx-auto drop-shadow mb-6">
               Choose your emotional state and discover personalized insights, prompts, and music to guide your reflection journey.
             </p>
-            
+
             {/* Custom Mood Creation CTA */}
             <Link href="/emotions">
               <motion.button
@@ -213,7 +215,7 @@ export default function Home() {
           </motion.div>
 
           {/* Mood Cards Grid */}
-          <motion.div 
+          <motion.div
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 max-w-7xl mx-auto"
             initial="hidden"
             animate="visible"

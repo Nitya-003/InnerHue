@@ -40,7 +40,7 @@ const CATEGORY_OPTIONS = [
 ];
 
 export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps) {
-  
+
   const [formData, setFormData] = useState({
     name: '',
     emoji: '😊',
@@ -69,7 +69,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       setError('Please enter a mood name');
       return;
@@ -85,7 +85,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
     try {
       const glowColor = CustomMoodStorage.generateGlowColor(formData.color);
-      
+
       const newMood = CustomMoodStorage.saveCustomMood({
         name: formData.name.trim(),
         emoji: formData.emoji,
@@ -122,19 +122,19 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e: MouseEvent) => e.stopPropagation()}
-              className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-800"
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
                   <Plus className="w-6 h-6 text-green-600" />
                   Create Custom Mood
                 </h2>
                 <button
                   onClick={handleClose}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
                 >
-                  <X className="w-5 h-5 text-gray-600" />
+                  <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                 </button>
               </div>
 
@@ -150,7 +150,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
                   {/* Mood Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       <Tag className="w-4 h-4 inline mr-1" />
                       Mood Name
                     </label>
@@ -161,26 +161,25 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                         setFormData(prev => ({ ...prev, name: e.target.value }))
                       }
                       placeholder="e.g., Motivated, Zen, Adventurous"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-800 dark:text-gray-100"
                       maxLength={20}
                     />
                   </div>
 
                   {/* Emoji Selection */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       <Smile className="w-4 h-4 inline mr-1" />
                       Choose Emoji
                     </label>
-                    <div className="grid grid-cols-8 gap-2 max-h-32 overflow-y-auto border border-gray-200 rounded-md p-3">
+                    <div className="grid grid-cols-8 gap-2 max-h-32 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-md p-3 dark:bg-gray-800/50">
                       {EMOJI_OPTIONS.map((emoji, index) => (
                         <button
                           key={`${emoji}-${index}`}
                           type="button"
                           onClick={() => setFormData(prev => ({ ...prev, emoji }))}
-                          className={`p-2 rounded-md text-lg hover:bg-gray-100 transition-colors ${
-                            formData.emoji === emoji ? 'bg-green-100 ring-2 ring-green-500' : ''
-                          }`}
+                          className={`p-2 rounded-md text-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${formData.emoji === emoji ? 'bg-green-100 dark:bg-green-900/30 ring-2 ring-green-500' : ''
+                            }`}
                         >
                           {emoji}
                         </button>
@@ -190,7 +189,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
                   {/* Color Selection */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       <Palette className="w-4 h-4 inline mr-1" />
                       Choose Color
                     </label>
@@ -200,9 +199,8 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                           key={`${color}-${index}`}
                           type="button"
                           onClick={() => setFormData(prev => ({ ...prev, color }))}
-                          className={`w-8 h-8 rounded-full transition-all ${
-                            formData.color === color ? 'ring-2 ring-gray-400 scale-110' : 'hover:scale-105'
-                          }`}
+                          className={`w-8 h-8 rounded-full transition-all ${formData.color === color ? 'ring-2 ring-gray-400 scale-110' : 'hover:scale-105'
+                            }`}
                           style={{ backgroundColor: color }}
                           title={color}
                         />
@@ -212,7 +210,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
                   {/* Category Selection */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Category
                     </label>
                     <select
@@ -220,7 +218,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                       onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                         setFormData(prev => ({ ...prev, category: e.target.value }))
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-800 dark:text-gray-100"
                     >
                       {CATEGORY_OPTIONS.map((category) => (
                         <option key={category} value={category}>
@@ -232,11 +230,11 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
                   {/* Preview */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Preview
                     </label>
                     <div
-                      className="p-4 rounded-lg border-2 border-gray-200 bg-gradient-to-r text-white text-center"
+                      className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-gradient-to-r text-white text-center"
                       style={{
                         background: `linear-gradient(135deg, ${formData.color} 0%, ${CustomMoodStorage.generateGlowColor(formData.color)} 100%)`
                       }}
@@ -249,11 +247,11 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                 </div>
 
                 {/* Footer */}
-                <div className="flex gap-3 p-6 border-t border-gray-200">
+                <div className="flex gap-3 p-6 border-t border-gray-200 dark:border-gray-800">
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                    className="flex-1 px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                   >
                     Cancel
                   </button>
