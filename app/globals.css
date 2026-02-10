@@ -2,81 +2,144 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
+/*
+ * ========================================
+ * InnerHue — Semantic Color Token System
+ * ========================================
+ */
 
 @layer base {
   :root {
+    /* --- Core surfaces --- */
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --foreground: 240 10% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 240 10% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
+    --popover-foreground: 240 10% 10%;
+
+    /* --- Brand / Accent --- */
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
+    --secondary-foreground: 240 10% 10%;
     --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --accent-foreground: 240 10% 10%;
+
+    /* --- Muted / UI --- */
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 262 83% 58%;
+
+    /* --- Chart palette --- */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+
+    /* --- Misc --- */
     --radius: 0.5rem;
+
+    /* --- InnerHue semantic extras --- */
+    --surface: 0 0% 100%;
+    --surface-elevated: 240 5% 98%;
+    --surface-overlay: 0 0% 100%;
+    --text-primary: 240 10% 10%;
+    --text-secondary: 240 4% 46%;
+    --text-muted: 240 4% 60%;
+    --glow-purple: rgba(139, 92, 246, 0.15);
+    --glow-pink: rgba(236, 72, 153, 0.12);
+
+    /* --- Page-level backgrounds (light) --- */
+    --page-gradient-from: 263 85% 18%;
+    --page-gradient-via: 217 80% 20%;
+    --page-gradient-to: 237 70% 22%;
+
+    /* --- Light page (analytics/mood detail) --- */
+    --page-light-from: 226 100% 96%;
+    --page-light-via: 0 0% 100%;
+    --page-light-to: 185 100% 96%;
   }
+
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
+    /* --- Core surfaces: warm charcoal, never pure black --- */
+    --background: 240 10% 6%;
+    --foreground: 220 15% 90%;
+    --card: 240 8% 10%;
+    --card-foreground: 220 15% 90%;
+    --popover: 240 8% 10%;
+    --popover-foreground: 220 15% 90%;
+
+    /* --- Brand / Accent --- */
+    --primary: 262 83% 68%;
+    --primary-foreground: 240 10% 6%;
+    --secondary: 240 6% 14%;
+    --secondary-foreground: 220 15% 90%;
+    --accent: 240 6% 14%;
+    --accent-foreground: 220 15% 90%;
+
+    /* --- Muted / UI --- */
+    --muted: 240 6% 14%;
+    --muted-foreground: 220 10% 60%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --border: 240 6% 18%;
+    --input: 240 6% 18%;
+    --ring: 262 83% 68%;
+
+    /* --- Chart palette (dark) --- */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-  }
-}
 
-@layer base {
+    /* --- InnerHue semantic extras (dark) --- */
+    --surface: 240 8% 10%;
+    --surface-elevated: 240 7% 13%;
+    --surface-overlay: 240 8% 12%;
+    --text-primary: 220 15% 90%;
+    --text-secondary: 220 10% 65%;
+    --text-muted: 220 8% 50%;
+    --glow-purple: rgba(139, 92, 246, 0.25);
+    --glow-pink: rgba(236, 72, 153, 0.2);
+
+    /* --- Page-level backgrounds (dark) --- */
+    --page-gradient-from: 260 50% 8%;
+    --page-gradient-via: 230 45% 10%;
+    --page-gradient-to: 245 40% 9%;
+
+    /* --- Dark page (analytics/mood detail) --- */
+    --page-light-from: 240 10% 7%;
+    --page-light-via: 240 10% 6%;
+    --page-light-to: 240 10% 7%;
+  }
+
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Smooth theme transition on everything */
+  *,
+  *::before,
+  *::after {
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: 400ms;
+    transition-timing-function: ease-in-out;
+  }
+
+  /* Opt out of the global transition for elements that animate via framer-motion */
+  [data-framer-motion],
+  [style*="transform"] {
+    transition-property: background-color, border-color, color, box-shadow;
   }
 }

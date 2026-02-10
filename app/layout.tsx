@@ -1,6 +1,7 @@
 import './globals.css';
 import { Footer } from '@/components/Footer';
 import { BackToTop } from '@/components/BackToTop';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
@@ -17,11 +18,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        {children}
-        <Footer />
-        <BackToTop />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          {children}
+          <Footer />
+          <BackToTop />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronLeft, Heart, Users, Sparkles, BrainCircuit } from 'lucide-react';
 import { FloatingBackground } from '@/components/FloatingBackground';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function AboutUs() {
     const containerVariants = {
@@ -27,7 +28,7 @@ export default function AboutUs() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden text-gray-100 font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] relative overflow-hidden text-gray-100 font-sans">
             <FloatingBackground />
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-20">
@@ -41,6 +42,9 @@ export default function AboutUs() {
                         <ChevronLeft className="w-5 h-5 mr-1 group-hover:-translate-x-1 transition-transform" />
                         Back to Home
                     </Link>
+                    <div className="absolute right-0 top-0">
+                        <ThemeToggle />
+                    </div>
                     <div className="text-center md:text-left">
                         <div className="flex items-center justify-center md:justify-start space-x-3 mb-4">
                             <Heart className="w-10 h-10 text-pink-500 fill-pink-500 animate-pulse" />
