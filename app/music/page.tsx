@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind, Volume2 } from 'lucide-react';
 import { FloatingBackground } from '@/components/FloatingBackground';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 // UPDATED: Google Developer Sounds (High Reliability, No CORS issues)
 const soundscapes = [
@@ -51,7 +52,7 @@ export default function MusicPage() {
   useEffect(() => {
     // We create the audio object on the client side only
     audioRef.current = new Audio();
-    
+
     // Cleanup on unmount
     return () => {
       if (audioRef.current) {
@@ -78,13 +79,13 @@ export default function MusicPage() {
       } else {
         // Switch to a new track
         // 1. Reset state
-        setIsPlaying(false); 
+        setIsPlaying(false);
         audioRef.current.pause();
-        
+
         // 2. Load new source
         audioRef.current.src = src;
         audioRef.current.load();
-        
+
         // 3. Play
         await audioRef.current.play();
         setCurrentTrack(trackId);
@@ -97,23 +98,26 @@ export default function MusicPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-x-hidden font-sans text-white">
-      
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] relative overflow-x-hidden font-sans text-white">
+
       {/* Background (Accessible) */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
         <FloatingBackground />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-8 md:py-12">
-        
+
         {/* Navigation */}
-        <Link href="/" className="inline-flex items-center text-purple-200 hover:text-white transition-colors mb-8 group">
-          <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-          <span>Back to Dashboard</span>
-        </Link>
+        <div className="flex items-center justify-between mb-8">
+          <Link href="/" className="inline-flex items-center text-purple-200 hover:text-white transition-colors group">
+            <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+            <span>Back to Dashboard</span>
+          </Link>
+          <ThemeToggle />
+        </div>
 
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
@@ -143,8 +147,8 @@ export default function MusicPage() {
                 className={`
                   relative overflow-hidden group p-6 rounded-3xl border text-left transition-all duration-300 h-full
                   flex flex-col justify-between
-                  ${isActive 
-                    ? "bg-white/10 border-purple-400/50 shadow-[0_0_30px_rgba(168,85,247,0.2)]" 
+                  ${isActive
+                    ? "bg-white/10 border-purple-400/50 shadow-[0_0_30px_rgba(168,85,247,0.2)]"
                     : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
                   }
                 `}
@@ -152,8 +156,8 @@ export default function MusicPage() {
                 aria-pressed={isActive}
               >
                 {/* Gradient Blob Background */}
-                <div 
-                  className={`absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br ${track.color} opacity-20 blur-3xl rounded-full group-hover:opacity-30 transition-opacity`} 
+                <div
+                  className={`absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br ${track.color} opacity-20 blur-3xl rounded-full group-hover:opacity-30 transition-opacity`}
                 />
 
                 {/* Content */}
@@ -164,7 +168,7 @@ export default function MusicPage() {
                   `}>
                     <Icon className="w-6 h-6" />
                   </div>
-                  
+
                   <h3 className="text-xl font-bold mb-2">{track.title}</h3>
                   <p className="text-sm text-gray-300 leading-relaxed mb-8">
                     {track.description}
@@ -182,7 +186,7 @@ export default function MusicPage() {
                       <span>Ready to play</span>
                     )}
                   </div>
-                  
+
                   <div className={`
                     w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
                     ${isActive && isPlaying ? "bg-white text-purple-900" : "bg-white/10 text-white group-hover:bg-white group-hover:text-purple-900"}
@@ -198,7 +202,7 @@ export default function MusicPage() {
                 {/* Active Visualizer (Simple Animation) */}
                 {isActive && isPlaying && (
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent opacity-50">
-                    <motion.div 
+                    <motion.div
                       className="h-full w-full bg-white/50"
                       animate={{ x: ["-100%", "100%"] }}
                       transition={{ duration: 2, repeat: Infinity, ease: "linear" }}

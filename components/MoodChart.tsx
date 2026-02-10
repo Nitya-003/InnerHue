@@ -41,23 +41,22 @@ export function MoodChart({ moodHistory, stats }: MoodChartProps) {
   const maxCount = Math.max(...Object.values(stats.moodCounts || {}).map(v => Number(v)));
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
+    <div className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-2">
           <Activity className="w-6 h-6 text-purple-600" />
-          <h3 className="text-2xl font-bold text-gray-800">Mood Distribution</h3>
+          <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200">Mood Distribution</h3>
         </div>
-        
+
         <div className="flex space-x-2">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setChartType('bar')}
-            className={`p-2 rounded-lg transition-all ${
-              chartType === 'bar' 
-                ? 'bg-purple-100 text-purple-600' 
-                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-            }`}
+            className={`p-2 rounded-lg transition-all ${chartType === 'bar'
+                ? 'bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300'
+                : 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
+              }`}
           >
             <BarChart3 className="w-5 h-5" />
           </motion.button>
@@ -65,11 +64,10 @@ export function MoodChart({ moodHistory, stats }: MoodChartProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setChartType('pie')}
-            className={`p-2 rounded-lg transition-all ${
-              chartType === 'pie' 
-                ? 'bg-purple-100 text-purple-600' 
-                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-            }`}
+            className={`p-2 rounded-lg transition-all ${chartType === 'pie'
+                ? 'bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300'
+                : 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
+              }`}
           >
             <PieChart className="w-5 h-5" />
           </motion.button>
@@ -79,7 +77,7 @@ export function MoodChart({ moodHistory, stats }: MoodChartProps) {
       {chartType === 'bar' ? (
         <div className="space-y-4">
           {Object.entries(stats.moodCounts || {})
-            .sort(([,a], [,b]) => (b as number) - (a as number))
+            .sort(([, a], [, b]) => (b as number) - (a as number))
             .slice(0, 10)
             .map(([mood, count], index) => (
               <motion.div
@@ -89,11 +87,11 @@ export function MoodChart({ moodHistory, stats }: MoodChartProps) {
                 transition={{ delay: index * 0.1 }}
                 className="flex items-center space-x-4"
               >
-                <div className="w-20 text-sm font-medium text-gray-700 capitalize">
+                <div className="w-20 text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
                   {mood}
                 </div>
                 <div className="flex-1 relative">
-                  <div className="h-8 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <motion.div
                       className="h-full rounded-full"
                       style={{ backgroundColor: moodColors[mood] || '#8B5CF6' }}
@@ -102,7 +100,7 @@ export function MoodChart({ moodHistory, stats }: MoodChartProps) {
                       transition={{ duration: 1, delay: index * 0.1 }}
                     />
                   </div>
-                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm font-medium text-gray-600">
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm font-medium text-gray-600 dark:text-gray-300">
                     {count as number}
                   </div>
                 </div>
@@ -114,30 +112,30 @@ export function MoodChart({ moodHistory, stats }: MoodChartProps) {
           <div className="relative w-80 h-80">
             <svg viewBox="0 0 200 200" className="w-full h-full transform -rotate-90">
               {Object.entries(stats.moodCounts || {})
-                .sort(([,a], [,b]) => (b as number) - (a as number))
+                .sort(([, a], [, b]) => (b as number) - (a as number))
                 .slice(0, 8)
                 .reduce((acc, [mood, count], index, array) => {
                   const total = array.reduce((sum, [, c]) => sum + (c as number), 0);
                   const percentage = ((count as number) / total) * 100;
                   const angle = (percentage / 100) * 360;
-                  
+
                   const startAngle = acc.currentAngle;
                   const endAngle = startAngle + angle;
-                  
+
                   const x1 = 100 + 80 * Math.cos((startAngle * Math.PI) / 180);
                   const y1 = 100 + 80 * Math.sin((startAngle * Math.PI) / 180);
                   const x2 = 100 + 80 * Math.cos((endAngle * Math.PI) / 180);
                   const y2 = 100 + 80 * Math.sin((endAngle * Math.PI) / 180);
-                  
+
                   const largeArcFlag = angle > 180 ? 1 : 0;
-                  
+
                   const pathData = [
                     `M 100 100`,
                     `L ${x1} ${y1}`,
                     `A 80 80 0 ${largeArcFlag} 1 ${x2} ${y2}`,
                     'Z'
                   ].join(' ');
-                  
+
                   acc.segments.push(
                     <motion.path
                       key={mood}
@@ -149,18 +147,18 @@ export function MoodChart({ moodHistory, stats }: MoodChartProps) {
                       className="hover:opacity-100 transition-opacity cursor-pointer"
                     />
                   );
-                  
+
                   acc.currentAngle = endAngle;
                   return acc;
                 }, { segments: [] as React.JSX.Element[], currentAngle: 0 }).segments}
             </svg>
-            
+
             {/* Center circle */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center">
+              <div className="w-20 h-20 bg-white dark:bg-gray-900 rounded-full shadow-lg flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-lg font-bold text-gray-800">{stats.totalEntries}</div>
-                  <div className="text-xs text-gray-500">Total</div>
+                  <div className="text-lg font-bold text-gray-800 dark:text-gray-200">{stats.totalEntries}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">Total</div>
                 </div>
               </div>
             </div>
