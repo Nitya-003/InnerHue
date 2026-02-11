@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy, Wind, Target, Play, Pause } from 'lucide-react';
+import { MessageCircle, Quote, Hash, Music, Wind, Target, Play } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface SuggestionPanelProps {
