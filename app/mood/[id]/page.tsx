@@ -7,6 +7,7 @@ import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodData } from '@/lib/moodData';
+import { useMoodStore } from '@/lib/useMoodStore';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface MoodPageProps {
@@ -23,7 +24,10 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-
+  
+  // Get addMood action from Zustand store
+  const addMood = useMoodStore(state => state.addMood);
+  
   // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
     // 🔥 Reset index when route/params change
@@ -38,21 +42,20 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       .filter(Boolean);
 
     setMoodData(moodsData);
-
-    // Note: We removed the manual setSuggestions here. 
-    // The new useEffect below handles the initial suggestion load automatically.
-
-    // Save to local storage for analytics
-    const savedMoods = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+    
+    // Save to Zustand store instead of localStorage
     moodIds.forEach(moodId => {
-      savedMoods.push({
-        mood: moodId,
-        timestamp: new Date().toISOString(),
-        date: new Date().toDateString()
-      });
+      const moodInfo = MoodData.getMoodById(moodId);
+      if (moodInfo) {
+        addMood({
+          mood: moodId,
+          emotion: moodInfo.name,
+          date: new Date().toDateString(),
+          color: moodInfo.color,
+        });
+      }
     });
-    localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
-  }, [params.id, searchParams?.moods]);
+  }, [params.id, searchParams?.moods, addMood]);
 
   // Fix 2: Sync suggestions automatically when Index or Data changes
   useEffect(() => {

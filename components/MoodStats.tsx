@@ -2,17 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { TrendingUp, Calendar, Heart, Target } from 'lucide-react';
+import { useMoodStore } from '@/lib/useMoodStore';
 
-interface MoodStatsProps {
-  stats: {
-    totalEntries: number;
-    todayEntries: number;
-    weekEntries: number;
-    mostCommonMood: string | null;
-  };
-}
-
-export function MoodStats({ stats }: MoodStatsProps) {
+export function MoodStats() {
+  // Get stats from Zustand store with selective subscription
+  const stats = useMoodStore(state => state.stats);
   const statCards = [
     {
       icon: Heart,
