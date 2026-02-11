@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
+import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy, Wind, Target, Play, Pause } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface SuggestionPanelProps {
@@ -12,6 +12,16 @@ interface SuggestionPanelProps {
     author: string;
     keywords: string[];
     music: string;
+    breathing?: {
+      technique: string;
+      steps: string[];
+      duration: string;
+    };
+    actionItem?: {
+      title: string;
+      description: string;
+      timeEstimate: string;
+    };
   };
   mood: any;
   onRefresh: () => void | Promise<void>;
@@ -20,15 +30,44 @@ interface SuggestionPanelProps {
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
+  const [breathingActive, setBreathingActive] = useState(false);
+  const [breathingStep, setBreathingStep] = useState(0);
+  const [actionCompleted, setActionCompleted] = useState(false);
 
   useEffect(() => {
     setIsPlayerLoaded(false);
+    setBreathingActive(false);
+    setBreathingStep(0);
+    setActionCompleted(false);
   }, [mood.id]);
 
   const handleCopy = () => {
     const textToCopy = `"${suggestions.quote}" — ${suggestions.author}`;
     navigator.clipboard.writeText(textToCopy);
     toast.success('Quote copied to clipboard!');
+  };
+
+  const startBreathing = () => {
+    if (!suggestions.breathing) return;
+    setBreathingActive(true);
+    setBreathingStep(0);
+    
+    const cycleSteps = () => {
+      setBreathingStep(prev => (prev + 1) % suggestions.breathing!.steps.length);
+    };
+    
+    const interval = setInterval(cycleSteps, 4000); // 4 second intervals
+    
+    setTimeout(() => {
+      clearInterval(interval);
+      setBreathingActive(false);
+      toast.success('Breathing exercise completed! 🌸');
+    }, 32000); // 8 cycles * 4 seconds
+  };
+
+  const handleActionComplete = () => {
+    setActionCompleted(!actionCompleted);
+    toast.success(actionCompleted ? 'Action unmarked!' : 'Great job completing this action! ✨');
   };
 
   return (
@@ -72,40 +111,97 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
           </div>
         </motion.div>
 
-        {/* Quote */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
-        >
-          <div className="flex items-start space-x-3 relative">
-            <div className="p-2 rounded-lg bg-pink-100">
-              <Quote className="w-5 h-5 text-pink-600" />
-            </div>
-            <div>
-              <div className="flex items-start justify-between">
-                <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
+        {/* Breathing Exercise */}
+        {suggestions.breathing && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+          >
+            <div className="flex items-start space-x-3">
+              <div className="p-2 rounded-lg bg-cyan-100">
+                <Wind className="w-5 h-5 text-cyan-600" />
               </div>
-              <blockquote className="text-gray-700 italic leading-relaxed mb-2">
-                "{suggestions.quote}"
-              </blockquote>
-              <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-800 mb-2">Breathing Exercise</h4>
+                <p className="text-gray-700 mb-3">{suggestions.breathing.technique}</p>
+                <p className="text-sm text-gray-500 mb-4">Duration: {suggestions.breathing.duration}</p>
+                
+                {breathingActive ? (
+                  <div className="space-y-4">
+                    <motion.div
+                      key={breathingStep}
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className="p-4 rounded-xl bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200"
+                    >
+                      <p className="text-lg font-medium text-cyan-800 text-center">
+                        {suggestions.breathing.steps[breathingStep]}
+                      </p>
+                    </motion.div>
+                    <div className="flex justify-center">
+                      <motion.div
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 4, repeat: Infinity }}
+                        className="w-16 h-16 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 opacity-30"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={startBreathing}
+                    className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-medium hover:shadow-md transition-all"
+                  >
+                    <Play className="w-4 h-4" />
+                    <span>Start Breathing</span>
+                  </motion.button>
+                )}
+              </div>
             </div>
+          </motion.div>
+        )}
 
-            <div className="absolute right-2">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleCopy}
-                className="p-[6px] rounded-full text-pink-400 hover:bg-pink-50 hover:text-pink-600 transition-colors opacity-70 hover:opacity-100"
-                aria-label="Copy quote"
-              >
-                <Copy className="w-4 h-4" />
-              </motion.button>
+        {/* Action Item */}
+        {suggestions.actionItem && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+          >
+            <div className="flex items-start space-x-3">
+              <div className="p-2 rounded-lg bg-orange-100">
+                <Target className="w-5 h-5 text-orange-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-800 mb-2">{suggestions.actionItem.title}</h4>
+                <p className="text-gray-700 mb-3">{suggestions.actionItem.description}</p>
+                <p className="text-sm text-gray-500 mb-4">⏱️ {suggestions.actionItem.timeEstimate}</p>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleActionComplete}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                    actionCompleted
+                      ? 'bg-green-500 text-white shadow-md'
+                      : 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:shadow-md'
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded-full border-2 ${
+                    actionCompleted ? 'bg-white border-white' : 'border-white'
+                  } flex items-center justify-center`}>
+                    {actionCompleted && <div className="w-2 h-2 bg-green-500 rounded-full" />}
+                  </div>
+                  <span>{actionCompleted ? 'Completed!' : 'Mark as Done'}</span>
+                </motion.button>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
 
         {/* Keywords Cloud */}
         <motion.div
