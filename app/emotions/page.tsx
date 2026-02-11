@@ -9,6 +9,7 @@ import { AddMoodModal } from '@/components/AddMoodModal';
 import { Heart, BarChart3, Music, ArrowLeft, Plus } from 'lucide-react';
 import { MoodData } from '@/lib/moodData';
 import { CustomMood, CustomMoodStorage } from '@/lib/customMoods';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 // Enhanced mood data with categories for better color coding - now loaded dynamically
 const defaultMoods = [
@@ -25,39 +26,39 @@ const defaultMoods = [
   { id: 'determined', name: 'Determined', emoji: '😤', color: '#3F51B5', glow: '#5C6BC0', category: 'energetic' },
   { id: 'energized', name: 'Energized', emoji: '⚡', color: '#FFEB3B', glow: '#FFF176', category: 'energetic' },
   { id: 'adventurous', name: 'Adventurous', emoji: '🗺️', color: '#FF6F00', glow: '#FF8F00', category: 'energetic' },
-  
+
   // Calm/Peaceful Category
   { id: 'calm', name: 'Calm', emoji: '😌', color: '#66BB6A', glow: '#81C784', category: 'calm' },
   { id: 'peaceful', name: 'Peaceful', emoji: '🕊️', color: '#4FC3F7', glow: '#81D4FA', category: 'calm' },
   { id: 'dreamy', name: 'Dreamy', emoji: '😴', color: '#9FA8DA', glow: '#C5CAE9', category: 'calm' },
-  
+
   // Negative/Sad Category
   { id: 'sad', name: 'Sad', emoji: '😢', color: '#42A5F5', glow: '#64B5F6', category: 'negative' },
   { id: 'lonely', name: 'Lonely', emoji: '😔', color: '#7E57C2', glow: '#9575CD', category: 'negative' },
   { id: 'melancholy', name: 'Melancholy', emoji: '🌧️', color: '#90A4AE', glow: '#B0BEC5', category: 'negative' },
   { id: 'vulnerable', name: 'Vulnerable', emoji: '🥺', color: '#F8BBD9', glow: '#FCE4EC', category: 'negative' },
   { id: 'embarrassed', name: 'Embarrassed', emoji: '😳', color: '#E91E63', glow: '#F06292', category: 'negative' },
-  
+
   // Anxious/Stress Category  
   { id: 'anxious', name: 'Anxious', emoji: '😰', color: '#FF7043', glow: '#FF8A65', category: 'stress' },
   { id: 'stressed', name: 'Stressed', emoji: '😤', color: '#FF5722', glow: '#FF6F00', category: 'stress' },
   { id: 'overwhelmed', name: 'Overwhelmed', emoji: '🤯', color: '#F06292', glow: '#F48FB1', category: 'stress' },
   { id: 'frustrated', name: 'Frustrated', emoji: '😠', color: '#FF8A65', glow: '#FFAB91', category: 'stress' },
   { id: 'confused', name: 'Confused', emoji: '😕', color: '#FFA726', glow: '#FFB74D', category: 'neutral' },
-  
+
   // Intense Emotions Category
   { id: 'angry', name: 'Angry', emoji: '😡', color: '#EF5350', glow: '#E57373', category: 'intense' },
   { id: 'surprised', name: 'Surprised', emoji: '😲', color: '#FF5722', glow: '#FF7043', category: 'intense' },
   { id: 'disgusted', name: 'Disgusted', emoji: '🤢', color: '#4CAF50', glow: '#66BB6A', category: 'intense' },
   { id: 'jealous', name: 'Jealous', emoji: '😒', color: '#8BC34A', glow: '#9CCC65', category: 'intense' },
   { id: 'rebellious', name: 'Rebellious', emoji: '😈', color: '#D32F2F', glow: '#F44336', category: 'intense' },
-  
+
   // Creative/Playful Category
   { id: 'playful', name: 'Playful', emoji: '😜', color: '#FF4081', glow: '#FF80AB', category: 'playful' },
   { id: 'creative', name: 'Creative', emoji: '🎨', color: '#FF7043', glow: '#FFAB91', category: 'playful' },
   { id: 'silly', name: 'Silly', emoji: '🤪', color: '#FFC107', glow: '#FFD54F', category: 'playful' },
   { id: 'romantic', name: 'Romantic', emoji: '💕', color: '#E1BEE7', glow: '#F3E5F5', category: 'playful' },
-  
+
   // Neutral/Contemplative Category
   { id: 'curious', name: 'Curious', emoji: '🤔', color: '#9C27B0', glow: '#BA68C8', category: 'neutral' },
   { id: 'bored', name: 'Bored', emoji: '😑', color: '#607D8B', glow: '#78909C', category: 'neutral' },
@@ -150,13 +151,13 @@ export default function EmotionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] relative overflow-hidden">
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         {backgroundOrbs.map((orb) => (
           <motion.div
             key={orb.id}
-            className="absolute rounded-full opacity-20"
+            className="absolute rounded-full opacity-20 dark:opacity-10"
             style={{
               background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
               width: orb.width,
@@ -179,11 +180,11 @@ export default function EmotionsPage() {
           />
         ))}
       </div>
-      
+
       <FloatingBackground />
-      
+
       {/* Header */}
-      <motion.header 
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 p-6"
@@ -191,14 +192,14 @@ export default function EmotionsPage() {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <Link href="/">
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
               >
                 <ArrowLeft className="w-6 h-6 text-white" />
               </motion.div>
             </Link>
-            
+
             <div className="flex items-center space-x-2">
               <Heart className="text-pink-400 w-8 h-8" />
               <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
@@ -206,8 +207,8 @@ export default function EmotionsPage() {
               </h1>
             </div>
           </div>
-          
-          <nav className="flex space-x-4">
+
+          <nav className="flex items-center space-x-4">
             <motion.button
               onClick={() => {
                 setIsAddModalOpen(true);
@@ -221,7 +222,7 @@ export default function EmotionsPage() {
               <span className="hidden sm:inline text-sm">Create Mood</span>
             </motion.button>
             <Link href="/analytics">
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
               >
@@ -229,13 +230,14 @@ export default function EmotionsPage() {
               </motion.div>
             </Link>
             <Link href="/music">
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
               >
                 <Music className="w-6 h-6 text-white" />
               </motion.div>
             </Link>
+            <ThemeToggle />
           </nav>
         </div>
       </motion.header>
@@ -244,7 +246,7 @@ export default function EmotionsPage() {
       <main className="relative z-10 px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -280,9 +282,9 @@ export default function EmotionsPage() {
                 { name: 'Neutral', color: '#9C27B0' }
               ].map(category => (
                 <div key={category.name} className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-white">
-                  <div 
-                    className="w-2 h-2 sm:w-3 sm:h-3 rounded-full flex-shrink-0" 
-                    style={{ backgroundColor: category.color }} 
+                  <div
+                    className="w-2 h-2 sm:w-3 sm:h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: category.color }}
                   />
                   <span className="hidden sm:inline">{category.name}</span>
                   <span className="sm:hidden">{category.name.slice(0, 3)}</span>
@@ -292,7 +294,7 @@ export default function EmotionsPage() {
           </motion.div>
 
           {/* Enhanced Mood Cards Grid - Improved Mobile Responsiveness */}
-          <motion.div 
+          <motion.div
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3 sm:gap-4 max-w-7xl mx-auto px-2 sm:px-0"
             initial="hidden"
             animate="visible"
@@ -365,13 +367,13 @@ export default function EmotionsPage() {
                     ) : null;
                   })}
                 </div>
-                
+
                 {/* Enhanced Continue Button - Mobile Optimized */}
                 <Link href={`/mood/${selectedMoods[0]}?moods=${selectedMoods.join(',')}`}>
                   <motion.button
-                    whileHover={{ 
-                      scale: 1.05, 
-                      boxShadow: '0 20px 40px rgba(147, 51, 234, 0.4)' 
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: '0 20px 40px rgba(147, 51, 234, 0.4)'
                     }}
                     whileTap={{ scale: 0.95 }}
                     className="w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-base sm:text-lg font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
