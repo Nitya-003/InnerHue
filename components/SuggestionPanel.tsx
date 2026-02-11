@@ -66,8 +66,11 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
   };
 
   const handleActionComplete = () => {
-    setActionCompleted(!actionCompleted);
-    toast.success(actionCompleted ? 'Action unmarked!' : 'Great job completing this action! ✨');
+    setActionCompleted((prev) => {
+      const next = !prev;
+      toast.success(prev ? 'Action unmarked!' : 'Great job completing this action! ✨');
+      return next;
+    });
   };
 
   return (
