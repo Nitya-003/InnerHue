@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, Quote, Hash, Music, Wind, Target, Play } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -15,7 +15,8 @@ interface SuggestionPanelProps {
     breathing?: {
       technique: string;
       steps: string[];
-      duration: string;
+      cycles: number;
+      intervalSeconds: number;
     };
     actionItem?: {
       title: string;
@@ -33,12 +34,25 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
   const [breathingActive, setBreathingActive] = useState(false);
   const [breathingStep, setBreathingStep] = useState(0);
   const [actionCompleted, setActionCompleted] = useState(false);
+  
+  const breathingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const breathingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setIsPlayerLoaded(false);
     setBreathingActive(false);
     setBreathingStep(0);
     setActionCompleted(false);
+    
+    // Cleanup timers when mood changes
+    return () => {
+      if (breathingIntervalRef.current) {
+        clearInterval(breathingIntervalRef.current);
+      }
+      if (breathingTimeoutRef.current) {
+        clearTimeout(breathingTimeoutRef.current);
+      }
+    };
   }, [mood.id]);
 
   const handleCopy = () => {
@@ -48,21 +62,37 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
   };
 
   const startBreathing = () => {
-    if (!suggestions.breathing) return;
+    if (!suggestions.breathing || breathingActive) return;
+    
+    // Clear any existing timers first
+    if (breathingIntervalRef.current) {
+      clearInterval(breathingIntervalRef.current);
+    }
+    if (breathingTimeoutRef.current) {
+      clearTimeout(breathingTimeoutRef.current);
+    }
+    
     setBreathingActive(true);
     setBreathingStep(0);
     
+    const { cycles, intervalSeconds, steps } = suggestions.breathing;
+    const intervalMs = intervalSeconds * 1000;
+    const totalDurationMs = cycles * intervalMs;
+    
     const cycleSteps = () => {
-      setBreathingStep(prev => (prev + 1) % suggestions.breathing!.steps.length);
+      setBreathingStep(prev => (prev + 1) % steps.length);
     };
     
-    const interval = setInterval(cycleSteps, 4000); // 4 second intervals
+    breathingIntervalRef.current = setInterval(cycleSteps, intervalMs);
     
-    setTimeout(() => {
-      clearInterval(interval);
+    breathingTimeoutRef.current = setTimeout(() => {
+      if (breathingIntervalRef.current) {
+        clearInterval(breathingIntervalRef.current);
+        breathingIntervalRef.current = null;
+      }
       setBreathingActive(false);
       toast.success('Breathing exercise completed! 🌸');
-    }, 32000); // 8 cycles * 4 seconds
+    }, totalDurationMs);
   };
 
   const handleActionComplete = () => {
@@ -129,7 +159,10 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
               <div className="flex-1">
                 <h4 className="font-semibold text-gray-800 mb-2">Breathing Exercise</h4>
                 <p className="text-gray-700 mb-3">{suggestions.breathing.technique}</p>
-                <p className="text-sm text-gray-500 mb-4">Duration: {suggestions.breathing.duration}</p>
+                <p className="text-sm text-gray-500 mb-4">
+                  Duration: {suggestions.breathing.cycles} cycles × {suggestions.breathing.intervalSeconds}s 
+                  ({Math.floor((suggestions.breathing.cycles * suggestions.breathing.intervalSeconds) / 60)}min {(suggestions.breathing.cycles * suggestions.breathing.intervalSeconds) % 60}s)
+                </p>
                 
                 {breathingActive ? (
                   <div className="space-y-4">
@@ -143,7 +176,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
                         {suggestions.breathing.steps[breathingStep]}
                       </p>
                     </motion.div>
-                    <div className="flex justify-center">
+                    <div className="flex justifysuggestions.breathing.intervalSecondscenter">
                       <motion.div
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ duration: 4, repeat: Infinity }}

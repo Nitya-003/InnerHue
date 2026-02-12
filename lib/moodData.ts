@@ -333,7 +333,8 @@ export const MoodData = {
         breathing: {
           technique: "Gentle Release Breathing - Honor your sadness with compassionate breaths",
           steps: ["Inhale slowly and deeply", "Pause and acknowledge your feelings", "Exhale gently with a soft sigh", "Let tears flow if they come"],
-          duration: "5 minutes"
+          cycles: 10,
+          intervalSeconds: 6
         },
         actionItem: {
           title: "Comfort Ritual",
@@ -350,7 +351,8 @@ export const MoodData = {
         breathing: {
           technique: "Color Breathing - Transform sadness through visualization",
           steps: ["Inhale blue (your sadness)", "Hold and accept this feeling", "Exhale while adding warm colors", "See beauty emerging from the mix"],
-          duration: "4 minutes"
+          cycles: 8,
+          intervalSeconds: 6
         },
         actionItem: {
           title: "Express Through Art",
@@ -369,7 +371,8 @@ export const MoodData = {
         breathing: {
           technique: "Box Breathing - Calm your nervous system with structured breathing",
           steps: ["Inhale slowly for 4 counts", "Hold gently for 4 counts", "Exhale slowly for 4 counts", "Hold empty for 4 counts"],
-          duration: "3 minutes"
+          cycles: 10,
+          intervalSeconds: 4
         },
         actionItem: {
           title: "Grounding Exercise",
@@ -386,7 +389,8 @@ export const MoodData = {
         breathing: {
           technique: "4-7-8 Breathing - Reduce anxiety naturally",
           steps: ["Inhale through nose for 4 counts", "Hold breath for 7 counts", "Exhale through mouth for 8 counts", "Feel tension melting away"],
-          duration: "4 cycles"
+          cycles: 4,
+          intervalSeconds: 19
         },
         actionItem: {
           title: "Worry Time Box",
@@ -405,7 +409,8 @@ export const MoodData = {
         breathing: {
           technique: "Excitement Breathing - Channel your creative energy",
           steps: ["Take a quick energizing breath in", "Hold while feeling the excitement", "Exhale with a whoosh of creativity", "Feel the energy ready to create"],
-          duration: "2 minutes"
+          cycles: 12,
+          intervalSeconds: 4
         },
         actionItem: {
           title: "Creative Sprint",
@@ -422,7 +427,8 @@ export const MoodData = {
         breathing: {
           technique: "Sharing Breath - Prepare to spread your excitement",
           steps: ["Inhale joy and enthusiasm", "Hold and feel it bubble up", "Exhale with a smile", "Ready to share this energy!"],
-          duration: "90 seconds"
+          cycles: 6,
+          intervalSeconds: 4
         },
         actionItem: {
           title: "Connection Spark",
@@ -439,7 +445,8 @@ export const MoodData = {
         breathing: {
           technique: "Courage Breathing - Fuel your adventurous spirit",
           steps: ["Breathe in courage and possibility", "Hold and feel your brave heart", "Exhale any limiting thoughts", "Step forward with confidence!"],
-          duration: "2 minutes"
+          cycles: 10,
+          intervalSeconds: 5
         },
         actionItem: {
           title: "First Adventure Step",
@@ -458,7 +465,8 @@ export const MoodData = {
         breathing: {
           technique: "Power Breathing - Channel your energy with focused breath control",
           steps: ["Inhale powerfully for 4 counts", "Hold with strength for 4 counts", "Exhale with force for 6 counts", "Feel the energy flow through you"],
-          duration: "2 minutes"
+          cycles: 8,
+          intervalSeconds: 4
         },
         actionItem: {
           title: "Energy Burst Challenge",
@@ -475,7 +483,8 @@ export const MoodData = {
         breathing: {
           technique: "Energizing Breath - Fuel your social connections",
           steps: ["Quick inhale through nose for 2 counts", "Sharp exhale through mouth for 2 counts", "Repeat rapidly but controlled", "Feel the buzz of social energy"],
-          duration: "90 seconds"
+          cycles: 15,
+          intervalSeconds: 2
         },
         actionItem: {
           title: "Spread the Energy",
@@ -494,7 +503,8 @@ export const MoodData = {
         breathing: {
           technique: "Natural Breathing - Simply observe and appreciate each breath",
           steps: ["Breathe naturally, no forcing", "Notice the gentle rise and fall", "Feel gratitude for this moment", "Let peace expand with each breath"],
-          duration: "5 minutes"
+          cycles: 15,
+          intervalSeconds: 5
         },
         actionItem: {
           title: "Mindful Moment",
@@ -511,7 +521,8 @@ export const MoodData = {
         breathing: {
           technique: "Body Scan Breathing - Connect breath with physical relaxation",
           steps: ["Inhale and notice your shoulders", "Exhale and let them drop", "Inhale and scan your body", "Exhale and release any tension"],
-          duration: "4 minutes"
+          cycles: 12,
+          intervalSeconds: 5
         },
         actionItem: {
           title: "Digital Detox Mini",
@@ -528,7 +539,8 @@ export const MoodData = {
         breathing: {
           technique: "Visualization Breathing - Breathe life into your peaceful place",
           steps: ["Inhale and see your peaceful place", "Hold and add more details", "Exhale and feel yourself there", "Rest in this sacred space"],
-          duration: "6 minutes"
+          cycles: 15,
+          intervalSeconds: 6
         },
         actionItem: {
           title: "Create a Calm Space",
@@ -547,7 +559,8 @@ export const MoodData = {
         breathing: {
           technique: "Anger Release Breathing - Transform fiery energy into clarity",
           steps: ["Inhale deeply through nose for 4 counts", "Hold and acknowledge your anger", "Exhale forcefully through mouth", "Feel the energy transform, not disappear"],
-          duration: "3 minutes"
+          cycles: 10,
+          intervalSeconds: 4
         },
         actionItem: {
           title: "Boundary Setting",
@@ -564,7 +577,8 @@ export const MoodData = {
         breathing: {
           technique: "Understanding Breath - Listen to your anger's message",
           steps: ["Breathe in self-compassion", "Hold and ask: what is anger protecting?", "Exhale with understanding", "Honor the message within the emotion"],
-          duration: "4 minutes"
+          cycles: 12,
+          intervalSeconds: 5
         },
         actionItem: {
           title: "Anger Letter",
@@ -581,7 +595,8 @@ export const MoodData = {
         breathing: {
           technique: "Power Release Breathing - Channel anger into strength",
           steps: ["Sharp inhale through nose", "Tense muscles while holding", "Explosive exhale while releasing tension", "Feel anger becoming power, not destruction"],
-          duration: "2 minutes"
+          cycles: 10,
+          intervalSeconds: 3
         },
         actionItem: {
           title: "Physical Release",
