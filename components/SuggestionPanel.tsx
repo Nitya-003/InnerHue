@@ -144,187 +144,173 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
         </div>
       </motion.div>
 
-      {/* Quote */}
+      {/* Breathing Exercise */}
+      {suggestions.breathing && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
+        >
+          <div className="flex items-start space-x-3">
+            <div className="p-2 rounded-lg bg-cyan-100">
+              <Wind className="w-5 h-5 text-cyan-600" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Breathing Exercise</h4>
+              <p className="text-gray-700 dark:text-gray-300 mb-3">{suggestions.breathing.technique}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                Duration: {suggestions.breathing.cycles} cycles × {suggestions.breathing.intervalSeconds}s
+                ({Math.floor((suggestions.breathing.cycles * suggestions.breathing.intervalSeconds) / 60)}min {(suggestions.breathing.cycles * suggestions.breathing.intervalSeconds) % 60}s)
+              </p>
+
+              {breathingActive ? (
+                <div className="space-y-4">
+                  <motion.div
+                    key={breathingStep}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="p-4 rounded-xl bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/30 dark:to-blue-900/30 border border-cyan-200 dark:border-cyan-700"
+                  >
+                    <p className="text-lg font-medium text-cyan-800 dark:text-cyan-200 text-center">
+                      {suggestions.breathing.steps[breathingStep]}
+                    </p>
+                  </motion.div>
+                  <div className="flex justify-center">
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 4, repeat: Infinity }}
+                      className="w-16 h-16 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 opacity-30"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={startBreathing}
+                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-medium hover:shadow-md transition-all"
+                >
+                  <Play className="w-4 h-4" />
+                  <span>Start Breathing</span>
+                </motion.button>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Action Item */}
+      {suggestions.actionItem && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
+        >
+          <div className="flex items-start space-x-3">
+            <div className="p-2 rounded-lg bg-orange-100">
+              <Target className="w-5 h-5 text-orange-600" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">{suggestions.actionItem.title}</h4>
+              <p className="text-gray-700 dark:text-gray-300 mb-3">{suggestions.actionItem.description}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">⏱️ {suggestions.actionItem.timeEstimate}</p>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleActionComplete}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all ${actionCompleted
+                  ? 'bg-green-500 text-white shadow-md'
+                  : 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:shadow-md'
+                  }`}
+              >
+                <div className={`w-4 h-4 rounded-full border-2 ${actionCompleted ? 'bg-white border-white' : 'border-white'
+                  } flex items-center justify-center`}>
+                  {actionCompleted && <div className="w-2 h-2 bg-green-500 rounded-full" />}
+                </div>
+                <span>{actionCompleted ? 'Completed!' : 'Mark as Done'}</span>
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Keywords Cloud */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: 0.3 }}
         className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
       >
-        <div className="flex items-start space-x-3 relative">
-          <div className="p-2 rounded-lg bg-pink-100">
-            <Quote className="w-5 h-5 text-pink-600" />
+        <div className="flex items-start space-x-3">
+          <div className="p-2 rounded-lg bg-blue-100">
+            <Hash className="w-5 h-5 text-blue-600" />
           </div>
-          <div>
-            <div className="flex items-start justify-between">
-              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Inspirational Quote</h4>
-              {/* Breathing Exercise */}
-              {suggestions.breathing && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+          <div className="flex-1">
+            <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">Emotion Keywords</h4>
+            <div className="flex flex-wrap gap-2">
+              {suggestions.keywords.map((keyword, index) => (
+                <motion.span
+                  key={keyword}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.4 + index * 0.1 }}
+                  className="px-3 py-1 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-sm font-medium hover:shadow-sm transition-all cursor-default"
+                  style={{
+                    background: `linear-gradient(135deg, ${mood.color}20, ${mood.glow}20)`
+                  }}
                 >
-                  <div className="flex items-start space-x-3">
-                    <div className="p-2 rounded-lg bg-cyan-100">
-                      <Wind className="w-5 h-5 text-cyan-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-800 mb-2">Breathing Exercise</h4>
-                      <p className="text-gray-700 mb-3">{suggestions.breathing.technique}</p>
-                      <p className="text-sm text-gray-500 mb-4">
-                        Duration: {suggestions.breathing.cycles} cycles × {suggestions.breathing.intervalSeconds}s
-                        ({Math.floor((suggestions.breathing.cycles * suggestions.breathing.intervalSeconds) / 60)}min {(suggestions.breathing.cycles * suggestions.breathing.intervalSeconds) % 60}s)
-                      </p>
-
-                      {breathingActive ? (
-                        <div className="space-y-4">
-                          <motion.div
-                            key={breathingStep}
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="p-4 rounded-xl bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200"
-                          >
-                            <p className="text-lg font-medium text-cyan-800 text-center">
-                              {suggestions.breathing.steps[breathingStep]}
-                            </p>
-                          </motion.div>
-                          <div className="flex justifysuggestions.breathing.intervalSecondscenter">
-                            <motion.div
-                              animate={{ scale: [1, 1.2, 1] }}
-                              transition={{ duration: 4, repeat: Infinity }}
-                              className="w-16 h-16 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 opacity-30"
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={startBreathing}
-                          className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-medium hover:shadow-md transition-all"
-                        >
-                          <Play className="w-4 h-4" />
-                          <span>Start Breathing</span>
-                        </motion.button>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Action Item */}
-              {suggestions.actionItem && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25 }}
-                  className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
-                >
-                  <div className="flex items-start space-x-3">
-                    <div className="p-2 rounded-lg bg-orange-100">
-                      <Target className="w-5 h-5 text-orange-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-800 mb-2">{suggestions.actionItem.title}</h4>
-                      <p className="text-gray-700 mb-3">{suggestions.actionItem.description}</p>
-                      <p className="text-sm text-gray-500 mb-4">⏱️ {suggestions.actionItem.timeEstimate}</p>
-
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={handleActionComplete}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all ${actionCompleted
-                            ? 'bg-green-500 text-white shadow-md'
-                            : 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:shadow-md'
-                          }`}
-                      >
-                        <div className={`w-4 h-4 rounded-full border-2 ${actionCompleted ? 'bg-white border-white' : 'border-white'
-                          } flex items-center justify-center`}>
-                          {actionCompleted && <div className="w-2 h-2 bg-green-500 rounded-full" />}
-                        </div>
-                        <span>{actionCompleted ? 'Completed!' : 'Mark as Done'}</span>
-                      </motion.button>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Keywords Cloud */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 dark:border-white/10"
-              >
-                <div className="flex items-start space-x-3">
-                  <div className="p-2 rounded-lg bg-blue-100">
-                    <Hash className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">Emotion Keywords</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {suggestions.keywords.map((keyword, index) => (
-                        <motion.span
-                          key={keyword}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.4 + index * 0.1 }}
-                          className="px-3 py-1 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-sm font-medium hover:shadow-sm transition-all cursor-default"
-                          style={{
-                            background: `linear-gradient(135deg, ${mood.color}20, ${mood.glow}20)`
-                          }}
-                        >
-                          {keyword}
-                        </motion.span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Music Soundscape (Spotify) */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 dark:border-white/10"
-              >
-                <div className="flex items-start space-x-3">
-                  <div className="p-2 rounded-lg bg-green-100">
-                    <Music className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    <h4 className="font-semibold text-gray-800 dark:text-gray-200">Soundscape</h4>
-
-                    <div className="relative w-full h-[152px] rounded-xl overflow-hidden bg-white/50 backdrop-blur-md shadow-inner border border-white/20">
-                      {!isPlayerLoaded && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50 backdrop-blur animate-pulse">
-                          <div className="flex flex-col items-center space-y-2">
-                            <Music className="w-8 h-8 text-green-400/50 animate-bounce" />
-                            <span className="text-gray-500 text-sm font-medium">Loading Soundscape...</span>
-                          </div>
-                        </div>
-                      )}
-                      <iframe
-                        src={`https://open.spotify.com/embed/playlist/${mood.spotifyPlaylistId || '37i9dQZF1DX3Ogo9pFno96'}?utm_source=generator&theme=0`}
-                        width="100%"
-                        height="152"
-                        frameBorder="0"
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                        loading="lazy"
-                        className={`w-full h-full transition-opacity duration-500 ${isPlayerLoaded ? 'opacity-100' : 'opacity-0'}`}
-                        onLoad={() => setIsPlayerLoaded(true)}
-                      />
-                    </div>
-
-                    <p className="text-sm text-gray-600 dark:text-gray-400 italic">
-                      <span className="font-medium text-green-600">Suggested:</span> {suggestions.music}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+                  {keyword}
+                </motion.span>
+              ))}
             </div>
-            );
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Music Soundscape (Spotify) */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
+      >
+        <div className="flex items-start space-x-3">
+          <div className="p-2 rounded-lg bg-green-100">
+            <Music className="w-5 h-5 text-green-600" />
+          </div>
+          <div className="flex-1 space-y-3">
+            <h4 className="font-semibold text-gray-800 dark:text-gray-200">Soundscape</h4>
+
+            <div className="relative w-full h-[152px] rounded-xl overflow-hidden bg-white/50 backdrop-blur-md shadow-inner border border-white/20">
+              {!isPlayerLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50 backdrop-blur animate-pulse">
+                  <div className="flex flex-col items-center space-y-2">
+                    <Music className="w-8 h-8 text-green-400/50 animate-bounce" />
+                    <span className="text-gray-500 text-sm font-medium">Loading Soundscape...</span>
+                  </div>
+                </div>
+              )}
+              <iframe
+                src={`https://open.spotify.com/embed/playlist/${mood.spotifyPlaylistId || '37i9dQZF1DX3Ogo9pFno96'}?utm_source=generator&theme=0`}
+                width="100%"
+                height="152"
+                frameBorder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+                className={`w-full h-full transition-opacity duration-500 ${isPlayerLoaded ? 'opacity-100' : 'opacity-0'}`}
+                onLoad={() => setIsPlayerLoaded(true)}
+              />
+            </div>
+
+            <p className="text-sm text-gray-600 dark:text-gray-400 italic">
+              <span className="font-medium text-green-600">Suggested:</span> {suggestions.music}
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
 }
