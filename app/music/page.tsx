@@ -1,219 +1,234 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind, Volume2 } from 'lucide-react';
-import { FloatingBackground } from '@/components/FloatingBackground';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { ArrowLeft, Music, Play, Heart, Clock } from 'lucide-react';
 
-// UPDATED: Google Developer Sounds (High Reliability, No CORS issues)
-const soundscapes = [
-  {
-    id: 'rain',
-    title: 'Heavy Rain',
-    description: 'Continuous heavy rain falling on pavement.',
-    icon: CloudRain,
-    color: 'from-blue-400 to-indigo-500',
-    src: 'https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg'
+const musicRecommendations = {
+  happy: {
+    playlist: "Feel Good Vibes",
+    description: "Uplifting songs to amplify your joy",
+    songs: [
+      { title: "Good as Hell", artist: "Lizzo", duration: "3:28" },
+      { title: "Walking on Sunshine", artist: "Katrina & The Waves", duration: "3:58" },
+      { title: "Happy", artist: "Pharrell Williams", duration: "3:52" },
+      { title: "Can't Stop the Feeling", artist: "Justin Timberlake", duration: "3:56" }
+    ],
+    color: "#FFD93D"
   },
-  {
-    id: 'forest',
-    title: 'Forest Morning',
-    description: 'Birds chirping and wind rustling in the trees.',
-    icon: Trees,
-    color: 'from-green-400 to-emerald-600',
-    src: 'https://actions.google.com/sounds/v1/ambiences/forest_morning.ogg'
+  sad: {
+    playlist: "Gentle Healing",
+    description: "Soothing melodies for emotional processing",
+    songs: [
+      { title: "Mad World", artist: "Tears for Fears", duration: "3:34" },
+      { title: "Hurt", artist: "Johnny Cash", duration: "3:38" },
+      { title: "Black", artist: "Pearl Jam", duration: "5:43" },
+      { title: "The Night We Met", artist: "Lord Huron", duration: "3:28" }
+    ],
+    color: "#42A5F5"
   },
-  {
-    id: 'ocean',
-    title: 'Ocean Waves',
-    description: 'Rhythmic waves crashing on the shore.',
-    icon: Waves,
-    color: 'from-cyan-400 to-blue-500',
-    src: 'https://actions.google.com/sounds/v1/water/waves_crashing.ogg'
+  anxious: {
+    playlist: "Calm & Center",
+    description: "Peaceful tracks to ease anxiety",
+    songs: [
+      { title: "Weightless", artist: "Marconi Union", duration: "8:08" },
+      { title: "Claire de Lune", artist: "Claude Debussy", duration: "5:23" },
+      { title: "Aqueous Transmission", artist: "Incubus", duration: "7:49" },
+      { title: "Mad World", artist: "Gary Jules", duration: "3:07" }
+    ],
+    color: "#FF7043"
   },
-  {
-    id: 'wind',
-    title: 'Strong Wind',
-    description: 'Howling wind to block out distractions.',
-    icon: Wind,
-    color: 'from-gray-300 to-slate-500',
-    src: 'https://actions.google.com/sounds/v1/weather/strong_wind.ogg'
+  excited: {
+    playlist: "High Energy",
+    description: "Electric beats matching your excitement",
+    songs: [
+      { title: "Electricity", artist: "Dua Lipa", duration: "3:35" },
+      { title: "Levitating", artist: "Dua Lipa", duration: "3:23" },
+      { title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars", duration: "4:30" },
+      { title: "I Gotta Feeling", artist: "Black Eyed Peas", duration: "4:05" }
+    ],
+    color: "#AB47BC"
+  },
+  calm: {
+    playlist: "Peaceful Mind",
+    description: "Serene sounds for mindful moments",
+    songs: [
+      { title: "River", artist: "Eminem ft. Ed Sheeran", duration: "3:40" },
+      { title: "Holocene", artist: "Bon Iver", duration: "5:36" },
+      { title: "To Build a Home", artist: "The Cinematic Orchestra", duration: "6:24" },
+      { title: "Mad About You", artist: "Gabrielle Aplin", duration: "3:37" }
+    ],
+    color: "#66BB6A"
   }
-];
+};
 
 export default function MusicPage() {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [currentTrack, setCurrentTrack] = useState<string | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [selectedMood, setSelectedMood] = useState<string>('happy');
+  const [isPlaying, setIsPlaying] = useState<string | null>(null);
 
-  // Initialize Audio Object
-  useEffect(() => {
-    // We create the audio object on the client side only
-    audioRef.current = new Audio();
-
-    // Cleanup on unmount
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []);
-
-  // Handle Play/Pause Logic
-  const togglePlay = async (trackId: string, src: string) => {
-    if (!audioRef.current) return;
-
-    try {
-      if (currentTrack === trackId) {
-        // Toggle play/pause for the same track
-        if (isPlaying) {
-          audioRef.current.pause();
-          setIsPlaying(false);
-        } else {
-          await audioRef.current.play();
-          setIsPlaying(true);
-        }
-      } else {
-        // Switch to a new track
-        // 1. Reset state
-        setIsPlaying(false);
-        audioRef.current.pause();
-
-        // 2. Load new source
-        audioRef.current.src = src;
-        audioRef.current.load();
-
-        // 3. Play
-        await audioRef.current.play();
-        setCurrentTrack(trackId);
-        setIsPlaying(true);
-      }
-    } catch (err) {
-      console.error("Audio Playback Error:", err);
-      // Removed the alert so it doesn't annoy users, just logs to console
-    }
-  };
+  const currentPlaylist = musicRecommendations[selectedMood as keyof typeof musicRecommendations];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] relative overflow-x-hidden font-sans text-white">
-
-      {/* Background (Accessible) */}
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
-        <FloatingBackground />
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto px-4 py-8 md:py-12">
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between mb-8">
-          <Link href="/" className="inline-flex items-center text-purple-200 hover:text-white transition-colors group">
-            <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-            <span>Back to Dashboard</span>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+      {/* Header */}
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="p-6"
+      >
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <Link href="/">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
+            >
+              <ArrowLeft className="w-5 h-5 text-purple-600" />
+              <span className="text-purple-600 font-medium">Back</span>
+            </motion.button>
           </Link>
-          <ThemeToggle />
+
+          <div className="flex items-center space-x-2">
+            <Music className="w-8 h-8 text-purple-600" />
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Mood Music
+            </h1>
+          </div>
+
+          <div className="w-20" /> {/* Spacer */}
         </div>
+      </motion.header>
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-12"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-300 to-purple-300 bg-clip-text text-transparent mb-4">
-            Sonic Sanctuary
-          </h1>
-          <p className="text-xl text-gray-300 max-w-2xl">
-            Immerse yourself in calming soundscapes designed to help you focus, relax, or sleep.
-          </p>
-        </motion.div>
+      {/* Main Content */}
+      <main className="px-6 pb-20">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-center mb-8"
+          >
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              Music for Every Emotion
+            </h2>
+            <p className="text-gray-600">
+              Discover playlists curated to match and enhance your current mood
+            </p>
+          </motion.div>
 
-        {/* Sound Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {soundscapes.map((track, index) => {
-            const isActive = currentTrack === track.id;
-            const Icon = track.icon;
-
-            return (
+          {/* Mood Selector */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-wrap justify-center gap-3 mb-8"
+          >
+            {Object.keys(musicRecommendations).map((mood) => (
               <motion.button
-                key={track.id}
-                onClick={() => togglePlay(track.id, track.src)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className={`
-                  relative overflow-hidden group p-6 rounded-3xl border text-left transition-all duration-300 h-full
-                  flex flex-col justify-between
-                  ${isActive
-                    ? "bg-white/10 border-purple-400/50 shadow-[0_0_30px_rgba(168,85,247,0.2)]"
-                    : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
-                  }
-                `}
-                aria-label={isActive && isPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
-                aria-pressed={isActive}
+                key={mood}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedMood(mood)}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  selectedMood === mood
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-white/70 text-gray-700 hover:bg-white/90'
+                }`}
               >
-                {/* Gradient Blob Background */}
-                <div
-                  className={`absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br ${track.color} opacity-20 blur-3xl rounded-full group-hover:opacity-30 transition-opacity`}
-                />
-
-                {/* Content */}
-                <div className="relative z-10">
-                  <div className={`
-                    w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-white shadow-lg
-                    bg-gradient-to-br ${track.color}
-                  `}>
-                    <Icon className="w-6 h-6" />
-                  </div>
-
-                  <h3 className="text-xl font-bold mb-2">{track.title}</h3>
-                  <p className="text-sm text-gray-300 leading-relaxed mb-8">
-                    {track.description}
-                  </p>
-                </div>
-
-                {/* Player Controls UI */}
-                <div className="relative z-10 flex items-center justify-between mt-auto">
-                  <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-gray-400">
-                    {isActive && isPlaying ? (
-                      <span className="text-purple-300 flex items-center gap-1">
-                        <Volume2 className="w-3 h-3" /> Playing
-                      </span>
-                    ) : (
-                      <span>Ready to play</span>
-                    )}
-                  </div>
-
-                  <div className={`
-                    w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
-                    ${isActive && isPlaying ? "bg-white text-purple-900" : "bg-white/10 text-white group-hover:bg-white group-hover:text-purple-900"}
-                  `}>
-                    {isActive && isPlaying ? (
-                      <Pause className="w-4 h-4 fill-current" />
-                    ) : (
-                      <Play className="w-4 h-4 fill-current ml-0.5" />
-                    )}
-                  </div>
-                </div>
-
-                {/* Active Visualizer (Simple Animation) */}
-                {isActive && isPlaying && (
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent opacity-50">
-                    <motion.div
-                      className="h-full w-full bg-white/50"
-                      animate={{ x: ["-100%", "100%"] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    />
-                  </div>
-                )}
+                {mood.charAt(0).toUpperCase() + mood.slice(1)}
               </motion.button>
-            );
-          })}
+            ))}
+          </motion.div>
+
+          {/* Playlist */}
+          <motion.div
+            key={selectedMood}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50"
+          >
+            {/* Playlist Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-1">
+                  {currentPlaylist.playlist}
+                </h3>
+                <p className="text-gray-600">{currentPlaylist.description}</p>
+              </div>
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
+                style={{ backgroundColor: currentPlaylist.color }}
+              >
+                <Music className="w-8 h-8 text-white" />
+              </div>
+            </div>
+
+            {/* Songs List */}
+            <div className="space-y-3">
+              {currentPlaylist.songs.map((song, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 + index * 0.1 }}
+                  className="flex items-center justify-between p-4 rounded-xl bg-white/50 backdrop-blur hover:bg-white/70 transition-all group cursor-pointer"
+                  onClick={() => setIsPlaying(isPlaying === `${selectedMood}-${index}` ? null : `${selectedMood}-${index}`)}
+                >
+                  <div className="flex items-center space-x-4">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                        isPlaying === `${selectedMood}-${index}`
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-gray-200 group-hover:bg-purple-100 text-gray-600'
+                      }`}
+                    >
+                      <Play className="w-4 h-4 ml-0.5" />
+                    </motion.div>
+                    <div>
+                      <div className="font-medium text-gray-800">{song.title}</div>
+                      <div className="text-sm text-gray-500">{song.artist}</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-2 rounded-full hover:bg-pink-100 transition-all group"
+                    >
+                      <Heart className="w-4 h-4 text-gray-400 group-hover:text-pink-500" />
+                    </motion.button>
+                    <div className="flex items-center text-sm text-gray-400">
+                      <Clock className="w-4 h-4 mr-1" />
+                      {song.duration}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Spotify Link */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="text-center mt-8"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all"
+              >
+                Open in Spotify
+              </motion.button>
+            </motion.div>
+          </motion.div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

@@ -7,8 +7,6 @@ import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodData } from '@/lib/moodData';
-import { useMoodStore } from '@/lib/useMoodStore';
-import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface MoodPageProps {
   params: {
@@ -23,16 +21,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [moodData, setMoodData] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   
-  // Get addMood action from Zustand store
-  const addMood = useMoodStore(state => state.addMood);
-  
-  // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
-    // 🔥 Reset index when route/params change
-    setCurrentMoodIndex(0);
-
     // Get all selected moods from query param, fallback to single mood from URL
     const moodIds = searchParams?.moods ? searchParams.moods.split(',') : [params.id];
 
@@ -43,34 +33,27 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
 
     setMoodData(moodsData);
     
-    // Save to Zustand store instead of localStorage
-    moodIds.forEach(moodId => {
-      const moodInfo = MoodData.getMoodById(moodId);
-      if (moodInfo) {
-        addMood({
-          mood: moodId,
-          emotion: moodInfo.name,
-          date: new Date().toDateString(),
-          color: moodInfo.color,
-        });
-      }
-    });
-  }, [params.id, searchParams?.moods, addMood]);
-
-  // Fix 2: Sync suggestions automatically when Index or Data changes
-  useEffect(() => {
-    if (!moodData.length) return;
-
-    const mood = moodData[currentMoodIndex];
-    if (mood) {
-      const newSuggestions = MoodData.getSuggestions(mood.id);
-      setSuggestions(newSuggestions);
+    if (moodsData.length > 0) {
+      // Get suggestions for the first mood initially
+      const moodSuggestions = MoodData.getSuggestions(moodsData[0].id);
+      setSuggestions(moodSuggestions);
     }
-  }, [currentMoodIndex, moodData]);
+
+    // Save to local storage for analytics
+    const savedMoods = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+    moodIds.forEach(moodId => {
+      savedMoods.push({
+        mood: moodId,
+        timestamp: new Date().toISOString(),
+        date: new Date().toDateString()
+      });
+    });
+    localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
+  }, [params.id, searchParams?.moods]);
 
   if (!moodData.length || !suggestions) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[hsl(var(--page-light-from))] dark:via-[hsl(var(--page-light-via))] dark:to-[hsl(var(--page-light-to))] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
@@ -83,7 +66,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const currentMood = moodData[currentMoodIndex] || moodData[0];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[hsl(var(--page-light-from))] dark:via-[hsl(var(--page-light-via))] dark:to-[hsl(var(--page-light-to))]">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -95,14 +78,14 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <ArrowLeft className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="text-purple-600 dark:text-purple-400 font-medium">Back</span>
+              <ArrowLeft className="w-5 h-5 text-purple-600" />
+              <span className="text-purple-600 font-medium">Back</span>
             </motion.button>
           </Link>
 
-          <div className="flex items-center  space-x-2">
+          <div className="flex items-center space-x-2">
             {moodData.length > 1 ? (
               <div className="flex items-center space-x-2">
                 <div className="flex space-x-1">
@@ -110,24 +93,26 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                     <motion.button
                       key={mood.id}
                       onClick={() => {
-                        // Logic simplified: The useEffect handles the suggestion sync
                         setCurrentMoodIndex(index);
+                        const newSuggestions = MoodData.getSuggestions(mood.id);
+                        setSuggestions(newSuggestions);
                       }}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
-                      className={`text-2xl p-1 rounded-full transition-all ${index === currentMoodIndex
+                      className={`text-2xl p-1 rounded-full transition-all ${
+                        index === currentMoodIndex
                           ? 'bg-white/30 ring-2 ring-purple-400'
                           : 'hover:bg-white/20'
-                        }`}
+                      }`}
                     >
                       {mood.emoji}
                     </motion.button>
                   ))}
                 </div>
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                <h1 className="text-2xl font-bold text-gray-800">
                   Feeling {currentMood.name}
                   {moodData.length > 1 && (
-                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                    <span className="text-sm text-gray-600 ml-2">
                       ({currentMoodIndex + 1} of {moodData.length})
                     </span>
                   )}
@@ -136,7 +121,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             ) : (
               <>
                 <span className="text-2xl">{currentMood.emoji}</span>
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                <h1 className="text-2xl font-bold text-gray-800">
                   Feeling {currentMood.name}
                 </h1>
               </>
@@ -147,18 +132,17 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <Bookmark className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <Bookmark className="w-5 h-5 text-purple-600" />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <Share2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <Share2 className="w-5 h-5 text-purple-600" />
             </motion.button>
-            <ThemeToggle />
           </div>
         </div>
       </motion.header>
@@ -173,8 +157,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              {/* Fix 3: Added key prop to force re-render on mood change */}
-              <OrbVisualizer key={currentMood.id} mood={currentMood} />
+              <OrbVisualizer mood={currentMood} />
             </motion.div>
 
             {/* Right Side - Suggestions */}
@@ -186,14 +169,9 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
               <SuggestionPanel
                 suggestions={suggestions}
                 mood={currentMood}
-                isRefreshing={isRefreshing}
-                onRefresh={async () => {
-                  setIsRefreshing(true);
-                  // Small delay to show visual feedback
-                  await new Promise(resolve => setTimeout(resolve, 300));
+                onRefresh={() => {
                   const newSuggestions = MoodData.getSuggestions(currentMood.id);
-                  setSuggestions({ ...newSuggestions });
-                  setIsRefreshing(false);
+                  setSuggestions(newSuggestions);
                 }}
               />
             </motion.div>

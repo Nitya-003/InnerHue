@@ -1,8 +1,6 @@
 'use client';
 
-import React, { memo } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Sparkles, X } from 'lucide-react';
 import './moodcard.css';
 
 interface Mood {
@@ -11,110 +9,68 @@ interface Mood {
   emoji: string;
   color: string;
   glow: string;
-  category: string;
-  isCustom?: boolean;
 }
 
-export interface MoodCardProps {
+interface MoodCardProps {
   mood: Mood;
   index: number;
   isSelected: boolean;
   onSelect: () => void;
-  onDelete?: (moodId: string) => void;
 }
 
-// 1. Define the component first
-const MoodCardBase = ({ mood, index, isSelected, onSelect, onDelete }: MoodCardProps) => {
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onDelete && mood.isCustom) {
-      onDelete(mood.id);
-    }
-  };
-
+export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
   return (
-    <motion.div
-      onClick={onSelect}
-      role="button"
-      tabIndex={0}
-      aria-label={`Select ${mood.name} mood`}
-      aria-pressed={isSelected}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      whileHover={{ scale: 1.05, y: -5 }}
-      whileTap={{ scale: 0.95 }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onSelect();
-        }
-      }}
+    <div
       className={`
-        relative group p-4 rounded-2xl border transition-all duration-300 w-full aspect-square flex flex-col items-center justify-center gap-3 cursor-pointer
-        focus:outline-none focus-visible:ring-4 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black
+        relative cursor-pointer p-4 rounded-2xl backdrop-blur-md border transition-all duration-300 transform-gpu
         ${isSelected 
-          ? "bg-white/20 border-white/50 shadow-[0_0_30px_rgba(255,255,255,0.3)]" 
-          : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
+          ? 'bg-white/90 shadow-2xl border-purple-300 transform scale-105'
+          : 'bg-white/30 shadow-lg border-white/40 hover:bg-white/50'
         }
       `}
+      onClick={onSelect}
+      style={{
+        boxShadow: isSelected
+          ? `0 25px 50px rgba(139, 92, 246, 0.4), 0 0 0 3px ${mood.color}60, 0 0 20px ${mood.glow}40`
+          : '0 10px 30px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(255, 255, 255, 0.1)'
+      }}
     >
-      {/* Background Glow */}
-      <div
-        aria-hidden="true"
-        className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl`}
-        style={{ background: `radial-gradient(circle at center, ${mood.glow}40, transparent 70%)` }}
-      />
+      {/* Selection indicator */}
+      {isSelected && (
+        <div className="absolute -top-2 -right-2 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center z-10">
+          <div className="w-3 h-3 bg-white rounded-full" />
+        </div>
+      )}
 
-      {/* Emoji */}
-      <div className="relative z-10 text-4xl drop-shadow-lg filter group-hover:brightness-110 transition-all">
-        {mood.emoji}
-        {isSelected && (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="absolute -top-2 -right-2 bg-white text-purple-900 rounded-full p-1 shadow-lg"
-          >
-            <Check className="w-3 h-3 stroke-[3]" />
-          </motion.div>
-        )}
+      {/* Emoji section */}
+      <div className="text-center mb-2">
+        <div className="text-3xl mb-1 filter drop-shadow-sm">
+          {mood.emoji}
+        </div>
+        <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
+          {mood.name}
+        </div>
       </div>
 
-      {/* Text */}
-      <span className="relative z-10 font-medium text-sm md:text-base text-white drop-shadow-md">
-        {mood.name}
-      </span>
-
-      {/* Delete Button for Custom Moods */}
-      {mood.isCustom && onDelete && (
-        <motion.button
-          onClick={handleDelete}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="absolute top-1 right-1 z-20 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200"
-          title="Delete custom mood"
-          aria-label={`Delete ${mood.name} mood`}
-        >
-          <X className="w-3 h-3" />
-        </motion.button>
-      )}
-
-      {/* Sparkles */}
+      {/* Glow effect */}
       {isSelected && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 pointer-events-none"
-        >
-          <Sparkles className="absolute top-2 left-2 w-4 h-4 text-yellow-200 opacity-50 animate-pulse" />
-          <Sparkles className="absolute bottom-3 right-3 w-3 h-3 text-white opacity-50 animate-bounce" />
-        </motion.div>
+        <div
+          className="absolute inset-0 rounded-2xl -z-10"
+          style={{
+            background: `radial-gradient(circle, ${mood.glow}30 0%, ${mood.color}20 40%, transparent 70%)`,
+            filter: 'blur(12px)'
+          }}
+        />
       )}
-    </motion.div>
-  );
-};
 
-// 2. Export the memoized version separately
-export const MoodCard = memo(MoodCardBase);
+      {/* 3D depth indicator */}
+      <div
+        className="absolute inset-0 rounded-2xl -z-20 transform translate-x-1 translate-y-1"
+        style={{
+          background: `linear-gradient(135deg, ${mood.color}20, ${mood.glow}10)`,
+          filter: 'blur(2px)'
+        }}
+      />
+    </div>
+  );
+}
