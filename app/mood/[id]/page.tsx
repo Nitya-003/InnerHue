@@ -24,10 +24,10 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  
+
   // Get addMood action from Zustand store
   const addMood = useMoodStore(state => state.addMood);
-  
+
   // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
     // 🔥 Reset index when route/params change
@@ -42,7 +42,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       .filter(Boolean);
 
     setMoodData(moodsData);
-    
+
     // Save to Zustand store instead of localStorage
     moodIds.forEach(moodId => {
       const moodInfo = MoodData.getMoodById(moodId);
@@ -88,7 +88,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 relative z-10"
+        className="p-4 md:p-6 relative z-10"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <Link href="/">
@@ -98,7 +98,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
               className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
               <ArrowLeft className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="text-purple-600 dark:text-purple-400 font-medium">Back</span>
+              <span className="hidden md:inline text-purple-600 dark:text-purple-400 font-medium">Back</span>
             </motion.button>
           </Link>
 
@@ -116,8 +116,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       className={`text-2xl p-1 rounded-full transition-all ${index === currentMoodIndex
-                          ? 'bg-white/30 ring-2 ring-purple-400'
-                          : 'hover:bg-white/20'
+                        ? 'bg-white/30 ring-2 ring-purple-400'
+                        : 'hover:bg-white/20'
                         }`}
                     >
                       {mood.emoji}
@@ -135,8 +135,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
               </div>
             ) : (
               <>
-                <span className="text-2xl">{currentMood.emoji}</span>
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                <span className="text-xl md:text-2xl">{currentMood.emoji}</span>
+                <h1 className="text-lg md:text-2xl font-bold text-gray-800 dark:text-gray-200">
                   Feeling {currentMood.name}
                 </h1>
               </>
@@ -164,9 +164,10 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       </motion.header>
 
       {/* Main Content */}
-      <main className="px-6 pb-20">
+      {/* Main Content */}
+      <main className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 items-start">
+          <div className="grid lg:grid-cols-2 gap-4 md:gap-8 items-start">
             {/* Left Side - Orb Visualizer */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}

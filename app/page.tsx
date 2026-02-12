@@ -141,41 +141,41 @@ export default function Home() {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 p-6"
+        className="relative z-10 p-4 md:p-6"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Heart className="text-pink-400 w-8 h-8" />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+            <Heart className="text-pink-400 w-6 h-6 md:w-8 md:h-8" />
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
               InnerHue
             </h1>
           </div>
 
-          <nav className="flex items-center space-x-4">
+          <nav className="flex items-center space-x-2 md:space-x-4">
             <Link href="/emotions">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30 flex items-center gap-2 text-white"
+                className="p-1.5 md:p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30 flex items-center gap-2 text-white"
                 title="Create Custom Moods"
               >
-                <Plus className="w-6 h-6" />
+                <Plus className="w-5 h-5 md:w-6 md:h-6" />
                 <span className="text-sm font-medium hidden sm:block">Custom Moods</span>
               </motion.div>
             </Link>
             <Link href="/analytics">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                className="p-1.5 md:p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
               >
-                <BarChart3 className="w-6 h-6 text-white" />
+                <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
             </Link>
             <Link href="/music">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                className="p-1.5 md:p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
               >
-                <Music className="w-6 h-6 text-white" />
+                <Music className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
             </Link>
             <ThemeToggle />
@@ -192,12 +192,12 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-center mb-12"
+            className="text-center mb-12 md:mb-12 mt-12 md:mt-0"
           >
-            <h2 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg tracking-tight">
               How are you feeling today?
             </h2>
-            <p className="text-xl text-gray-200 max-w-2xl mx-auto drop-shadow mb-6">
+            <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto drop-shadow mb-6 leading-relaxed">
               Choose your emotional state and discover personalized insights, prompts, and music to guide your reflection journey.
             </p>
 
@@ -206,9 +206,9 @@ export default function Home() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto mb-8"
+                className="px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm md:text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto mb-8"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-4 h-4 md:w-5 md:h-5" />
                 Create Your Own Custom Mood
               </motion.button>
             </Link>

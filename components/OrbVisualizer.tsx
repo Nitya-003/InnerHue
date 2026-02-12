@@ -76,9 +76,9 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
 
   return (
     <div className="relative">
-      <div className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+      <div className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl border border-white/50 dark:border-white/10">
+        <div className="text-center mb-6 md:mb-8">
+          <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
             Your Emotional State
           </h3>
           <p className="text-gray-600 dark:text-gray-400">
@@ -86,11 +86,11 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
           </p>
         </div>
 
-        <div className="relative h-80 flex items-center justify-center">
+        <div className="relative h-64 md:h-80 flex items-center justify-center">
 
 
           <motion.div
-            className="relative flex items-center justify-center w-48 h-48 cursor-grab active:cursor-grabbing z-10"
+            className="relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 cursor-grab active:cursor-grabbing z-10"
             variants={orbVariants}
             initial="idle"
             animate={isPlaying ? "active" : "idle"}
@@ -108,8 +108,8 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               className="absolute inset-0 rounded-full"
               style={{
                 background: `radial-gradient(circle, ${mood.glow}40 0%, ${mood.glow}20 40%, transparent 70%)`,
-                width: 200,
-                height: 200,
+                width: '100%',
+                height: '100%',
                 filter: 'blur(20px)',
                 x: '-50%',
                 y: '-50%',
@@ -128,7 +128,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
             />
 
             <motion.div
-              className="w-32 h-32 rounded-full relative overflow-hidden shadow-2xl"
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full relative overflow-hidden shadow-2xl"
               style={{
                 background: `linear-gradient(135deg, ${mood.color} 0%, ${mood.glow} 100%)`,
                 boxShadow: `0 0 40px ${mood.glow}60, inset 0 0 20px rgba(255,255,255,0.3)`,

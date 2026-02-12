@@ -32,13 +32,13 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Quote */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 dark:border-white/10"
+        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
       >
         <div className="flex items-start space-x-3">
           <div className="p-2 rounded-lg bg-pink-100">
@@ -59,7 +59,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 dark:border-white/10"
+        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
       >
         <div className="flex items-start space-x-3">
           <div className="p-2 rounded-lg bg-purple-100">
@@ -77,7 +77,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 dark:border-white/10"
+        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
       >
         <div className="flex items-start space-x-3 relative">
           <div className="p-2 rounded-lg bg-pink-100">
@@ -112,7 +112,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 dark:border-white/10"
+        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
       >
         <div className="flex items-start space-x-3">
           <div className="p-2 rounded-lg bg-blue-100">
@@ -145,7 +145,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 dark:border-white/10"
+        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
       >
         <div className="flex items-start space-x-3">
           <div className="p-2 rounded-lg bg-green-100">
