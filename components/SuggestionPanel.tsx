@@ -1,6 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { QuoteCard } from '@/components/QuoteCard';
+import { QuoteSkeleton } from '@/components/QuoteSkeleton';
+import { Quote } from '@/data/fallbackQuotes';
 import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, Quote, Hash, Music, Wind, Target, Play } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -25,18 +35,42 @@ interface SuggestionPanelProps {
     };
   };
   mood: any;
-  onRefresh: () => void | Promise<void>;
-  isRefreshing?: boolean;
+  onRefresh: () => void;
+  // New props for dynamic quotes
+  quoteData?: Quote | null;
+  isQuoteLoading?: boolean;
+  onQuoteRefresh?: () => void;
 }
 
-export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
-  const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
-  const [breathingActive, setBreathingActive] = useState(false);
-  const [breathingStep, setBreathingStep] = useState(0);
-  const [actionCompleted, setActionCompleted] = useState(false);
-  
-  const breathingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const breathingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+export function SuggestionPanel({
+  suggestions,
+  mood,
+  onRefresh,
+  quoteData,
+  isQuoteLoading,
+  onQuoteRefresh
+}: SuggestionPanelProps) {
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-2xl font-bold text-gray-800">
+          Personalized Insights
+        </h3>
+        <TooltipProvider delayDuration={500}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="px-2 pt-2 pb-[1px] rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all">
+                <motion.button
+                  whileHover={{ scale: 1.05, rotate: 180 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={onRefresh}
+                  className="transition-all"
+                >
+                  <RefreshCw className="w-5 text-purple-600" />
+                </motion.button>
+              </div>
+            </TooltipTrigger>
 
   useEffect(() => {
     setIsPlayerLoaded(false);
@@ -126,6 +160,39 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
         </div>
       </motion.div>
 
+      {/* Quote Section - Dynamic or Static */}
+      {onQuoteRefresh ? (
+        // Dynamic Quote Mode
+        isQuoteLoading ? (
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50">
+            <QuoteSkeleton />
+          </div>
+        ) : quoteData ? (
+          <QuoteCard
+            quote={quoteData}
+            loading={!!isQuoteLoading}
+            onRefresh={onQuoteRefresh}
+          />
+        ) : null
+      ) : (
+        // Legacy Static Fallback (if props not provided)
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+        >
+          <div className="flex items-start space-x-3">
+            <div className="p-2 rounded-lg bg-pink-100">
+              <QuoteIcon className="w-5 h-5 text-pink-600" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
+              <blockquote className="text-gray-700 italic leading-relaxed mb-2">
+                "{suggestions.quote}"
+              </blockquote>
+              <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
+            </div>
       {/* Journal Prompt */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -141,8 +208,8 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
             <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Journal Prompt</h4>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{suggestions.prompt}</p>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      )}
 
         {/* Breathing Exercise */}
         {suggestions.breathing && (
