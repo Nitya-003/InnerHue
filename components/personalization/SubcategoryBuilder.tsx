@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, Tag, Lightbulb } from 'lucide-react';
+import { Plus, X, Lightbulb } from 'lucide-react';
 import { MoodSubcategory, subcategorySuggestions } from '@/lib/personalizationTypes';
 
 interface SubcategoryBuilderProps {
