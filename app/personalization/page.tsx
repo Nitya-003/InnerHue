@@ -5,15 +5,13 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, 
-  Heart, 
   Palette, 
   Sliders, 
   Tags, 
   Link2, 
   BookOpen,
   RotateCcw,
-  Settings,
-  ChevronDown
+  Settings
 } from 'lucide-react';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { usePersonalization } from '@/hooks/usePersonalization';
