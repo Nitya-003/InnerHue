@@ -37,7 +37,6 @@ export function IntensitySlider({
   disabled = false,
 }: IntensitySliderProps) {
   const [localValue, setLocalValue] = useState(value);
-  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     setLocalValue(value);
