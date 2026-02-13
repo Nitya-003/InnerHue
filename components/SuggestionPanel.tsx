@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
+import { MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
   Tooltip,
@@ -31,26 +31,18 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
     setIsPlayerLoaded(false);
   }, [mood.id]);
 
-      {/* Quote */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
-      >
-        <div className="flex items-start space-x-3">
-          <div className="p-2 rounded-lg bg-pink-100">
-            <Quote className="w-5 h-5 text-pink-600" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
-            <blockquote className="text-gray-700 italic leading-relaxed mb-2">
-              &ldquo;{suggestions.quote}&rdquo;
-            </blockquote>
-            <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
-          </div>
-        </div>
+  const handleCopy = () => {
+    const textToCopy = `"${suggestions.quote}" — ${suggestions.author}`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      toast.success('Quote copied to clipboard!');
+    }).catch(() => {
+      toast.error('Failed to copy quote');
+    });
+  };
 
+  return (
+    <TooltipProvider>
+      <div className="space-y-6">
         {/* Journal Prompt */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -85,21 +77,28 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
                 <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
               </div>
               <blockquote className="text-gray-700 italic leading-relaxed mb-2">
-                "{suggestions.quote}"
+                &ldquo;{suggestions.quote}&rdquo;
               </blockquote>
               <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
             </div>
 
-            <div className="absolute right-2">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleCopy}
-                className="p-[6px] rounded-full text-pink-400 hover:bg-pink-50 hover:text-pink-600 transition-colors opacity-70 hover:opacity-100"
-                aria-label="Copy quote"
-              >
-                <Copy className="w-4 h-4" />
-              </motion.button>
+            <div className="absolute right-2 top-0">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleCopy}
+                    className="p-[6px] rounded-full text-pink-400 hover:bg-pink-50 hover:text-pink-600 transition-colors opacity-70 hover:opacity-100"
+                    aria-label="Copy quote"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </motion.button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Copy quote</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </motion.div>

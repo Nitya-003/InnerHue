@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
-import { Heart, BarChart3, Music, ArrowLeft } from 'lucide-react';
+import { Heart, BarChart3, Music, ArrowLeft, Settings } from 'lucide-react';
 
 // Enhanced mood data with categories for better color coding
 const moods = [
@@ -125,6 +125,15 @@ export default function EmotionsPage() {
           </div>
           
           <nav className="flex space-x-4">
+            <Link href="/personalization">
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                title="Personalization"
+              >
+                <Settings className="w-6 h-6 text-white" />
+              </motion.div>
+            </Link>
             <Link href="/analytics">
               <motion.div 
                 whileHover={{ scale: 1.05 }}
