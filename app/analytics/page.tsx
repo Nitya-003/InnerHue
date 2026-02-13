@@ -48,23 +48,23 @@ export default function AnalyticsPage() {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6"
+        className="p-4 md:p-6"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <Link href="/">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="flex items-center space-x-2 p-1.5 md:p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
               <ArrowLeft className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="text-purple-600 dark:text-purple-400 font-medium">Back</span>
+              <span className="hidden md:inline text-purple-600 dark:text-purple-400 font-medium">Back</span>
             </motion.button>
           </Link>
 
           <div className="flex items-center space-x-2">
-            <Activity className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <Activity className="w-6 h-6 md:w-8 md:h-8 text-purple-600 dark:text-purple-400" />
+            <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Mood Analytics
             </h1>
           </div>
@@ -74,7 +74,7 @@ export default function AnalyticsPage() {
       </motion.header>
 
       {/* Main Content */}
-      <main className="px-6 pb-20">
+      <main className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {moodHistory.length === 0 ? (
             <motion.div
@@ -120,12 +120,12 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10"
+                className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-4 md:p-8 shadow-xl border border-white/50 dark:border-white/10"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
-                    <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200">History</h3>
+                    <Calendar className="w-5 h-5 md:w-6 md:h-6 text-purple-600 dark:text-purple-400" />
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200">History</h3>
                   </div>
 
                   <button
