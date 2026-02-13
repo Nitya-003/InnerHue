@@ -17,13 +17,18 @@ import {
 } from 'recharts';
 import { MoodData } from '@/lib/moodData';
 import { motion } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { BarChart3, PieChart, Activity } from 'lucide-react';
+import { useMoodStore } from '@/lib/useMoodStore';
 
-interface MoodChartProps {
-  moodHistory: any[];
-  stats: any;
-}
-
-export function MoodChart({ moodHistory, stats }: MoodChartProps) {
+export function MoodChart() {
+  // Get data from Zustand store with selective subscriptions
+  const moodHistory = useMoodStore(state => state.moodHistory);
+  const stats = useMoodStore(state => state.stats);
+  
+  // Keep chartType as local UI state
   const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
 
   // Prepare data for Recharts
@@ -40,23 +45,22 @@ export function MoodChart({ moodHistory, stats }: MoodChartProps) {
     });
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
+    <div className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-2">
           <Activity className="w-6 h-6 text-purple-600" />
-          <h3 className="text-2xl font-bold text-gray-800">Mood Distribution</h3>
+          <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200">Mood Distribution</h3>
         </div>
-        
+
         <div className="flex space-x-2">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setChartType('bar')}
-            className={`p-2 rounded-lg transition-all ${
-              chartType === 'bar' 
-                ? 'bg-purple-100 text-purple-600' 
-                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-            }`}
+            className={`p-2 rounded-lg transition-all ${chartType === 'bar'
+                ? 'bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300'
+                : 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
+              }`}
           >
             <BarChart3 className="w-5 h-5" />
           </motion.button>
@@ -64,11 +68,10 @@ export function MoodChart({ moodHistory, stats }: MoodChartProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setChartType('pie')}
-            className={`p-2 rounded-lg transition-all ${
-              chartType === 'pie' 
-                ? 'bg-purple-100 text-purple-600' 
-                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-            }`}
+            className={`p-2 rounded-lg transition-all ${chartType === 'pie'
+                ? 'bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300'
+                : 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
+              }`}
           >
             <PieChartIcon className="w-5 h-5" />
           </motion.button>
