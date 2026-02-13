@@ -48,7 +48,7 @@ export function TransitionProvider({ children }: TransitionProviderProps) {
     }, 500);
   }, [isTransitioning, router]);
 
-  // Smooth easing curves
+  // Smooth easing curves - typed as const for framer-motion compatibility
   const smoothEase = [0.4, 0, 0.2, 1] as const;
   const bounceEase = [0.68, -0.6, 0.32, 1.6] as const;
 

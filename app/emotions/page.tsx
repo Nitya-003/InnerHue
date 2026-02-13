@@ -5,11 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
-import { AddMoodModal } from '@/components/AddMoodModal';
-import { Heart, BarChart3, Music, ArrowLeft, Plus } from 'lucide-react';
-import { MoodData } from '@/lib/moodData';
-import { CustomMood, CustomMoodStorage } from '@/lib/customMoods';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { Heart, BarChart3, Music, ArrowLeft, Settings } from 'lucide-react';
 
 // Enhanced mood data with categories for better color coding - now loaded dynamically
 const defaultMoods = [
@@ -207,20 +203,17 @@ export default function EmotionsPage() {
               </h1>
             </div>
           </div>
-
-          <nav className="flex items-center scale-[0.7] md:scale-[1] space-x-3 md:space-x-4">
-            <motion.button
-              onClick={() => {
-                setIsAddModalOpen(true);
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30 flex items-center gap-2 text-white font-medium"
-              title="Create Custom Mood"
-            >
-              <Plus className="w-5 h-5" />
-              <span className="hidden sm:inline text-sm">Create Mood</span>
-            </motion.button>
+          
+          <nav className="flex space-x-4">
+            <Link href="/personalization">
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                title="Personalization"
+              >
+                <Settings className="w-6 h-6 text-white" />
+              </motion.div>
+            </Link>
             <Link href="/analytics">
               <motion.div
                 whileHover={{ scale: 1.05 }}

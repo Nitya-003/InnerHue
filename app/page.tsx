@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
-import { Heart, BarChart3, Music, Plus } from 'lucide-react';
+import { QuoteCard } from '@/components/QuoteCard';
+import { Heart, BarChart3, Music } from 'lucide-react';
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 import { ThemeToggle } from '@/components/ThemeToggle';
 

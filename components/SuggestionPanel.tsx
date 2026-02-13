@@ -1,16 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import {
-  RefreshCw,
-  MessageCircle,
-  Quote as QuoteIcon,
-  Hash,
-  Music,
-  Wind,
-  Target,
-  Play
-} from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
+import toast from 'react-hot-toast';
 import {
   Tooltip,
   TooltipContent,
@@ -87,60 +80,31 @@ export function SuggestionPanel({
 
   const handleCopy = () => {
     const textToCopy = `"${suggestions.quote}" — ${suggestions.author}`;
-    navigator.clipboard.writeText(textToCopy);
-    toast.success('Quote copied to clipboard!');
-  };
-
-  const startBreathing = () => {
-    if (!suggestions.breathing || breathingActive) return;
-
-    // Clear any existing timers first
-    if (breathingIntervalRef.current) {
-      clearInterval(breathingIntervalRef.current);
-    }
-    if (breathingTimeoutRef.current) {
-      clearTimeout(breathingTimeoutRef.current);
-    }
-
-    setBreathingActive(true);
-    setBreathingStep(0);
-
-    const { cycles, intervalSeconds, steps } = suggestions.breathing;
-    const intervalMs = intervalSeconds * 1000;
-    const totalDurationMs = cycles * intervalMs;
-
-    const cycleSteps = () => {
-      setBreathingStep(prev => (prev + 1) % steps.length);
-    };
-
-    breathingIntervalRef.current = setInterval(cycleSteps, intervalMs);
-
-    breathingTimeoutRef.current = setTimeout(() => {
-      if (breathingIntervalRef.current) {
-        clearInterval(breathingIntervalRef.current);
-        breathingIntervalRef.current = null;
-      }
-      setBreathingActive(false);
-      toast.success('Breathing exercise completed! 🌸');
-    }, totalDurationMs);
-  };
-
-  const handleActionComplete = () => {
-    setActionCompleted((prev) => {
-      const next = !prev;
-      toast.success(prev ? 'Action unmarked!' : 'Great job completing this action! ✨');
-      return next;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      toast.success('Quote copied to clipboard!');
+    }).catch(() => {
+      toast.error('Failed to copy quote');
     });
   };
 
   return (
-    <div className="space-y-4 md:space-y-6">
-      {/* Quote Section - Dynamic or Static */}
-      {onQuoteRefresh ? (
-        // Dynamic Quote Mode
-        isQuoteLoading ? (
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50">
-            <QuoteSkeleton />
+    <TooltipProvider>
+      <div className="space-y-6">
+        {/* Journal Prompt */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+        >
+          <div className="flex items-start space-x-3">
+            <div className="p-2 rounded-lg bg-purple-100">
+              <MessageCircle className="w-5 h-5 text-purple-600" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-2">Journal Prompt</h4>
+              <p className="text-gray-700 leading-relaxed">{suggestions.prompt}</p>
+            </div>
           </div>
         ) : quoteData ? (
           <QuoteCard
@@ -162,30 +126,31 @@ export function SuggestionPanel({
               <QuoteIcon className="w-5 h-5 text-pink-600" />
             </div>
             <div>
-              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Inspirational Quote</h4>
-              <blockquote className="text-gray-700 dark:text-gray-300 italic leading-relaxed mb-2">
+              <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
+              <blockquote className="text-gray-700 italic leading-relaxed mb-2">
                 &ldquo;{suggestions.quote}&rdquo;
               </blockquote>
               <cite className="text-sm text-gray-500 dark:text-gray-400">— {suggestions.author}</cite>
             </div>
-          </div>
-        </motion.div>
-      )}
 
-      {/* Journal Prompt */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
-      >
-        <div className="flex items-start space-x-3">
-          <div className="p-2 rounded-lg bg-purple-100">
-            <MessageCircle className="w-5 h-5 text-purple-600" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Journal Prompt</h4>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{suggestions.prompt}</p>
+            <div className="absolute right-2 top-0">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleCopy}
+                    className="p-[6px] rounded-full text-pink-400 hover:bg-pink-50 hover:text-pink-600 transition-colors opacity-70 hover:opacity-100"
+                    aria-label="Copy quote"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </motion.button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Copy quote</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </div>
         </div>
       </motion.div>
