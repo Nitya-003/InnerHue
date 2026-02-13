@@ -76,12 +76,12 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
 
   return (
     <div className="relative">
-      <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
+      <div className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10">
         <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-gray-800 mb-2">
+          <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
             Your Emotional State
           </h3>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             Visualizing the energy of feeling {mood.name.toLowerCase()}
           </p>
         </div>

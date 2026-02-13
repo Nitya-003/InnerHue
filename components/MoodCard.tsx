@@ -11,6 +11,7 @@ interface Mood {
   color: string;
   glow: string;
   category: string;
+  isCustom?: boolean;
 }
 
 export interface MoodCardProps {
@@ -18,6 +19,7 @@ export interface MoodCardProps {
   index: number;
   isSelected: boolean;
   onSelect: () => void;
+  onDelete?: (moodId: string) => void;
 }
 
 export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {

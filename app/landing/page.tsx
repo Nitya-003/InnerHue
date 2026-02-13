@@ -4,10 +4,11 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Heart, Brain, Music, BarChart3, Sparkles, ArrowRight } from 'lucide-react';
 import { FloatingBackground } from '@/components/FloatingBackground';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] relative overflow-hidden">
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(6)].map((_, i) => (
@@ -36,11 +37,11 @@ export default function LandingPage() {
           />
         ))}
       </div>
-      
+
       <FloatingBackground />
-      
+
       {/* Header */}
-      <motion.header 
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 p-6"
@@ -52,18 +53,21 @@ export default function LandingPage() {
               InnerHue
             </h1>
           </div>
-          
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link 
-              href="/emotions" 
-              className="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium"
+
+          <div className="flex items-center gap-4">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Skip to App
-            </Link>
-          </motion.div>
+              <Link
+                href="/emotions"
+                className="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium"
+              >
+                Skip to App
+              </Link>
+            </motion.div>
+            <ThemeToggle />
+          </div>
         </div>
       </motion.header>
 
@@ -71,7 +75,7 @@ export default function LandingPage() {
       <main className="relative z-10 px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
-          <motion.section 
+          <motion.section
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -89,9 +93,9 @@ export default function LandingPage() {
                   one feeling at a time
                 </span>
               </h2>
-              
+
               <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed">
-                Discover the depth of your emotional landscape with personalized insights, 
+                Discover the depth of your emotional landscape with personalized insights,
                 therapeutic music, and guided reflection journeys tailored to your feelings.
               </p>
             </motion.div>
@@ -112,7 +116,7 @@ export default function LandingPage() {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </Link>
-              
+
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="px-6 py-4 bg-white/10 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300 cursor-pointer"
@@ -123,7 +127,7 @@ export default function LandingPage() {
           </motion.section>
 
           {/* Features Section */}
-          <motion.section 
+          <motion.section
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
@@ -176,11 +180,11 @@ export default function LandingPage() {
                   <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4`}>
                     <feature.icon className="w-8 h-8 text-white" />
                   </div>
-                  
+
                   <h4 className="text-xl font-bold text-white mb-3">
                     {feature.title}
                   </h4>
-                  
+
                   <p className="text-gray-300 leading-relaxed">
                     {feature.description}
                   </p>
@@ -200,17 +204,17 @@ export default function LandingPage() {
               <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 Ready to explore your inner world?
               </h3>
-              
+
               <p className="text-xl text-gray-300 mb-8">
-                Join thousands who have discovered deeper self-awareness through InnerHue's 
+                Join thousands who have discovered deeper self-awareness through InnerHue's
                 guided emotional reflection experience.
               </p>
-              
+
               <Link href="/emotions">
                 <motion.button
-                  whileHover={{ 
-                    scale: 1.05, 
-                    boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)' 
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)'
                   }}
                   whileTap={{ scale: 0.95 }}
                   className="px-12 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-3 mx-auto group"
@@ -224,7 +228,7 @@ export default function LandingPage() {
           </motion.section>
         </div>
       </main>
-      
+
       {/* Footer */}
       <motion.footer
         initial={{ opacity: 0 }}

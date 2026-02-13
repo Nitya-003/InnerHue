@@ -52,6 +52,9 @@
     "css": "^3.0.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
+    "eslint": "8.49.0",
+    "eslint-config-next": "13.5.1",
+    "framer-motion": "^10.16.16",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.6",
     "framer-motion": "^12.23.12",
@@ -74,7 +77,8 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2",
     "vaul": "^0.9.9",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@types/minimatch": "^6.0.0",
