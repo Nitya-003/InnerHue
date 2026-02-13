@@ -1,13 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { RefreshCw, MessageCircle, Quote, Hash, Music } from 'lucide-react';
+import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { QuoteCard } from '@/components/QuoteCard';
+import { QuoteSkeleton } from '@/components/QuoteSkeleton';
+import { Quote } from '@/data/fallbackQuotes';
 
 interface SuggestionPanelProps {
   suggestions: {
@@ -19,9 +22,20 @@ interface SuggestionPanelProps {
   };
   mood: any;
   onRefresh: () => void;
+  // New props for dynamic quotes
+  quoteData?: Quote | null;
+  isQuoteLoading?: boolean;
+  onQuoteRefresh?: () => void;
 }
 
-export function SuggestionPanel({ suggestions, mood, onRefresh }: SuggestionPanelProps) {
+export function SuggestionPanel({
+  suggestions,
+  mood,
+  onRefresh,
+  quoteData,
+  isQuoteLoading,
+  onQuoteRefresh
+}: SuggestionPanelProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -71,26 +85,42 @@ export function SuggestionPanel({ suggestions, mood, onRefresh }: SuggestionPane
         </div>
       </motion.div>
 
-      {/* Quote */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
-      >
-        <div className="flex items-start space-x-3">
-          <div className="p-2 rounded-lg bg-pink-100">
-            <Quote className="w-5 h-5 text-pink-600" />
+      {/* Quote Section - Dynamic or Static */}
+      {onQuoteRefresh ? (
+        // Dynamic Quote Mode
+        isQuoteLoading ? (
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50">
+            <QuoteSkeleton />
           </div>
-          <div>
-            <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
-            <blockquote className="text-gray-700 italic leading-relaxed mb-2">
-              "{suggestions.quote}"
-            </blockquote>
-            <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
+        ) : quoteData ? (
+          <QuoteCard
+            quote={quoteData}
+            loading={!!isQuoteLoading}
+            onRefresh={onQuoteRefresh}
+          />
+        ) : null
+      ) : (
+        // Legacy Static Fallback (if props not provided)
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+        >
+          <div className="flex items-start space-x-3">
+            <div className="p-2 rounded-lg bg-pink-100">
+              <QuoteIcon className="w-5 h-5 text-pink-600" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-2">Inspirational Quote</h4>
+              <blockquote className="text-gray-700 italic leading-relaxed mb-2">
+                "{suggestions.quote}"
+              </blockquote>
+              <cite className="text-sm text-gray-500">— {suggestions.author}</cite>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      )}
 
       {/* Keywords Cloud */}
       <motion.div
