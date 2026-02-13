@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, BookOpen, Search, Edit2, Check } from 'lucide-react';
+import { Plus, X, BookOpen, Search, Check } from 'lucide-react';
 import { CustomVocabulary } from '@/lib/personalizationTypes';
 
 interface Mood {
