@@ -118,7 +118,7 @@ export function MoodCombinationBuilder({
                           return (
                             <React.Fragment key={moodId}>
                               {idx > 0 && <span className="mx-1">+</span>}
-                              <span>{mood?.name || moodId}</span>
+                              <span>{mood?.name || 'Unknown mood'}</span>
                             </React.Fragment>
                           );
                         })}
