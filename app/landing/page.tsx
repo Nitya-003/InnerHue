@@ -226,7 +226,7 @@ export default function LandingPage() {
               </h3>
 
               <p className="text-xl text-gray-300 mb-8">
-                Join thousands who have discovered deeper self-awareness through InnerHue's
+                Join thousands who have discovered deeper self-awareness through InnerHue&apos;s
                 guided emotional reflection experience.
               </p>
 
@@ -249,17 +249,7 @@ export default function LandingPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
-        className="relative z-10 p-6 border-t border-white/20"
-      >
-        <div className="max-w-6xl mx-auto text-center text-gray-400">
-          <p>&copy; 2026 InnerHue. Crafted with care for emotional well-being.</p>
-        </div>
-      </motion.footer>
+      {/* Footer removed to use global Footer component */}
     </div>
   );
 }
