@@ -79,7 +79,10 @@ export function MoodCombinationBuilder({
   };
 
   const unusedSuggestions = combinationSuggestions.filter(
-    (s) => !existingCombinations.some((e) => e.name === s.name)
+    (s) =>
+      !existingCombinations.some(
+        (e) => e.name.toLowerCase() === s.name.toLowerCase()
+      )
   );
 
   return (
