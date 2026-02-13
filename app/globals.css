@@ -127,19 +127,41 @@
   body {
     @apply bg-background text-foreground;
   }
+}
 
-  /* Smooth theme transition on everything */
-  *,
-  *::before,
-  *::after {
-    transition-property: background-color, border-color, color, box-shadow;
-    transition-duration: 400ms;
-    transition-timing-function: ease-in-out;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
   }
 
-  /* Opt out of the global transition for elements that animate via framer-motion */
-  [data-framer-motion],
-  [style*="transform"] {
-    transition-property: background-color, border-color, color, box-shadow;
+  100% {
+    background-position: 400px 0;
   }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Smooth theme transition on everything */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 400ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* Opt out of the global transition for elements that animate via framer-motion */
+[data-framer-motion],
+[style*="transform"] {
+  transition-property: background-color, border-color, color, box-shadow;
 }

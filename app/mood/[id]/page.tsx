@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodData } from '@/lib/moodData';
+import { getQuoteByMood } from '@/lib/getQuote';
+import { moodTags } from '@/lib/quoteTags';
+import { Quote } from '@/data/fallbackQuotes';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
@@ -23,7 +26,31 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [moodData, setMoodData] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
+  const [quote, setQuote] = useState<Quote | null>(null);
+  const [quoteLoading, setQuoteLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  // Computed values must be safe even if data is empty
+  const currentMood = moodData[currentMoodIndex] || moodData[0];
+
+  const loadQuote = useCallback(async () => {
+    if (!currentMood) return;
+    setQuoteLoading(true);
+    try {
+      const tag = moodTags[currentMood.id] || 'inspirational';
+      const data = await getQuoteByMood(tag);
+      setQuote(data);
+    } catch (error) {
+      console.error("Failed to load quote", error);
+    } finally {
+      setQuoteLoading(false);
+    }
+  }, [currentMood]);
+
+  useEffect(() => {
+    if (currentMood?.id) {
+      loadQuote();
+    }
+  }, [currentMood?.id, loadQuote]);
 
   // Get addMood action from Zustand store
   const addMood = useMoodStore(state => state.addMood);
@@ -80,7 +107,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     );
   }
 
-  const currentMood = moodData[currentMoodIndex] || moodData[0];
+  // At this point currentMood is guaranteed to be defined because moodData.length > 0
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[hsl(var(--page-light-from))] dark:via-[hsl(var(--page-light-via))] dark:to-[hsl(var(--page-light-to))]">
@@ -196,6 +223,9 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                   setSuggestions({ ...newSuggestions });
                   setIsRefreshing(false);
                 }}
+                quoteData={quote}
+                isQuoteLoading={quoteLoading}
+                onQuoteRefresh={loadQuote}
               />
             </motion.div>
           </div>

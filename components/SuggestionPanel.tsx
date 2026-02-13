@@ -1,8 +1,26 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import {
+  RefreshCw,
+  MessageCircle,
+  Quote as QuoteIcon,
+  Hash,
+  Music,
+  Wind,
+  Target,
+  Play
+} from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { QuoteCard } from '@/components/QuoteCard';
+import { QuoteSkeleton } from '@/components/QuoteSkeleton';
+import { Quote } from '@/data/fallbackQuotes';
 import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, Quote, Hash, Music, Wind, Target, Play } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface SuggestionPanelProps {
@@ -25,11 +43,23 @@ interface SuggestionPanelProps {
     };
   };
   mood: any;
-  onRefresh: () => void | Promise<void>;
+  onRefresh: () => void;
+  // New props for dynamic quotes
+  quoteData?: Quote | null;
+  isQuoteLoading?: boolean;
+  onQuoteRefresh?: () => void;
   isRefreshing?: boolean;
 }
 
-export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
+export function SuggestionPanel({
+  suggestions,
+  mood,
+  onRefresh,
+  isRefreshing = false,
+  quoteData,
+  onQuoteRefresh,
+  isQuoteLoading
+}: SuggestionPanelProps) {
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
   const [breathingActive, setBreathingActive] = useState(false);
   const [breathingStep, setBreathingStep] = useState(0);
@@ -105,26 +135,42 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
 
   return (
     <div className="space-y-4 md:space-y-6">
-      {/* Quote */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
-      >
-        <div className="flex items-start space-x-3">
-          <div className="p-2 rounded-lg bg-pink-100">
-            <Quote className="w-5 h-5 text-pink-600" />
+      {/* Quote Section - Dynamic or Static */}
+      {onQuoteRefresh ? (
+        // Dynamic Quote Mode
+        isQuoteLoading ? (
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50">
+            <QuoteSkeleton />
           </div>
-          <div>
-            <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Inspirational Quote</h4>
-            <blockquote className="text-gray-700 dark:text-gray-300 italic leading-relaxed mb-2">
-              &ldquo;{suggestions.quote}&rdquo;
-            </blockquote>
-            <cite className="text-sm text-gray-500 dark:text-gray-400">— {suggestions.author}</cite>
+        ) : quoteData ? (
+          <QuoteCard
+            quote={quoteData}
+            loading={!!isQuoteLoading}
+            onRefresh={onQuoteRefresh}
+          />
+        ) : null
+      ) : (
+        // Legacy Static Fallback (if props not provided - for backward compatibility)
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 shadow-lg border border-white/50 dark:border-white/10"
+        >
+          <div className="flex items-start space-x-3">
+            <div className="p-2 rounded-lg bg-pink-100">
+              <QuoteIcon className="w-5 h-5 text-pink-600" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Inspirational Quote</h4>
+              <blockquote className="text-gray-700 dark:text-gray-300 italic leading-relaxed mb-2">
+                &ldquo;{suggestions.quote}&rdquo;
+              </blockquote>
+              <cite className="text-sm text-gray-500 dark:text-gray-400">— {suggestions.author}</cite>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      )}
 
       {/* Journal Prompt */}
       <motion.div
