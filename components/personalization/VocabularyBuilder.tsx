@@ -43,7 +43,6 @@ export function VocabularyBuilder({
 }: VocabularyBuilderProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [editingId, setEditingId] = useState<string | null>(null);
   
   // New word form state
   const [newWord, setNewWord] = useState('');
