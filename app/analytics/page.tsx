@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide-react';
@@ -11,21 +11,7 @@ export default function AnalyticsPage() {
   const [moodHistory, setMoodHistory] = useState<any[]>([]);
   const [stats, setStats] = useState<any>({});
 
-  useEffect(() => {
-    loadData();
-
-    // Listen for updates from other tabs/components
-    window.addEventListener('storage', loadData);
-    return () => window.removeEventListener('storage', loadData);
-  }, []);
-
-  const loadData = () => {
-    const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    setMoodHistory(history);
-    calculateStats(history);
-  };
-
-  const calculateStats = (history: any[]) => {
+  const calculateStats = useCallback((history: any[]) => {
     const moodCounts: { [key: string]: number } = {};
     const today = new Date().toDateString();
     const thisWeek: any[] = [];
@@ -54,7 +40,21 @@ export default function AnalyticsPage() {
       moodCounts,
       weeklyData: thisWeek
     });
-  };
+  }, []);
+
+  const loadData = useCallback(() => {
+    const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+    setMoodHistory(history);
+    calculateStats(history);
+  }, [calculateStats]);
+
+  useEffect(() => {
+    loadData();
+
+    // Listen for updates from other tabs/components
+    window.addEventListener('storage', loadData);
+    return () => window.removeEventListener('storage', loadData);
+  }, [loadData]);
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {

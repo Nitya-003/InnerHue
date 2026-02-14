@@ -64,6 +64,14 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         }
       `}
       onClick={onSelect}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
       style={{
         boxShadow: isSelected 
           ? `0 25px 50px rgba(139, 92, 246, 0.4), 0 0 0 3px ${mood.color}60, 0 0 20px ${mood.glow}40` 
@@ -105,11 +113,11 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
           transition={{ type: "spring", stiffness: 400 }}
         >
           {mood.emoji}
-        </div>
+        </motion.div>
         <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
           {mood.name}
         </div>
-      </div>
+      </motion.div>
 
       {/* Glow effect */}
       {isSelected && (
