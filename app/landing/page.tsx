@@ -1,10 +1,17 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { Heart, Brain, Music, BarChart3, Sparkles, ArrowRight } from 'lucide-react';
-import { FloatingBackground } from '@/components/FloatingBackground';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { motion } from "framer-motion";
+import Link from "next/link";
+import {
+  Heart,
+  Brain,
+  Music,
+  BarChart3,
+  Sparkles,
+  ArrowRight,
+} from "lucide-react";
+import { FloatingBackground } from "@/components/FloatingBackground";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function LandingPage() {
   return (
@@ -16,7 +23,7 @@ export default function LandingPage() {
             key={i}
             className="absolute rounded-full opacity-20"
             style={{
-              background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'][i]} 0%, transparent 70%)`,
+              background: `radial-gradient(circle, ${["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"][i]} 0%, transparent 70%)`,
               width: Math.random() * 200 + 150,
               height: Math.random() * 200 + 150,
               left: `${Math.random() * 100}%`,
@@ -26,13 +33,13 @@ export default function LandingPage() {
               x: [0, Math.random() * 50 - 25],
               y: [0, Math.random() * 50 - 25],
               scale: [1, 1.1, 1],
-              opacity: [0.1, 0.25, 0.1]
+              opacity: [0.1, 0.25, 0.1],
             }}
             transition={{
               duration: 6 + Math.random() * 4,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.8
+              delay: i * 0.8,
             }}
           />
         ))}
@@ -44,9 +51,9 @@ export default function LandingPage() {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 p-6"
+        className="relative z-10 px-4 py-6 sm:px-6"
       >
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
+        <div className="max-w-6xl mx-auto flex justify-between items-center gap-4">
           <div className="flex items-center space-x-3">
             <Heart className="text-pink-400 w-10 h-10" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
@@ -54,16 +61,14 @@ export default function LandingPage() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-4">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 href="/emotions"
-                className="px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium"
+                className="px-4 sm:px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium"
               >
-                Skip to App
+                <span className="hidden sm:inline">Skip to App</span>
+                <span className="sm:hidden">App</span>
               </Link>
             </motion.div>
             <ThemeToggle />
@@ -88,15 +93,16 @@ export default function LandingPage() {
               className="mb-8"
             >
               <h2 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 drop-shadow-lg leading-tight">
-                Understand your emotions,{' '}
+                Understand your emotions,{" "}
                 <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                   one feeling at a time
                 </span>
               </h2>
 
               <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed">
-                Discover the depth of your emotional landscape with personalized insights,
-                therapeutic music, and guided reflection journeys tailored to your feelings.
+                Discover the depth of your emotional landscape with personalized
+                insights, therapeutic music, and guided reflection journeys
+                tailored to your feelings.
               </p>
             </motion.div>
 
@@ -108,7 +114,10 @@ export default function LandingPage() {
             >
               <Link href="/emotions">
                 <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(147, 51, 234, 0.4)' }}
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 20px 40px rgba(147, 51, 234, 0.4)",
+                  }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-lg font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-2 group"
                 >
@@ -138,7 +147,8 @@ export default function LandingPage() {
                 How InnerHue Works
               </h3>
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                A comprehensive approach to emotional wellness and self-discovery
+                A comprehensive approach to emotional wellness and
+                self-discovery
               </p>
             </div>
 
@@ -146,54 +156,59 @@ export default function LandingPage() {
               {[
                 {
                   icon: Brain,
-                  title: 'Emotion Reflection',
-                  description: 'Select from 38 distinct emotional states and dive deep into your feelings with guided introspection.',
-                  color: 'from-purple-500 to-indigo-500',
-                  shadowColor: 'rgba(168, 85, 247, 0.5)'
+                  title: "Emotion Reflection",
+                  description:
+                    "Select from 38 distinct emotional states and dive deep into your feelings with guided introspection.",
+                  color: "from-purple-500 to-indigo-500",
+                  shadowColor: "rgba(168, 85, 247, 0.5)",
                 },
                 {
                   icon: Sparkles,
-                  title: 'Personalized Insights',
-                  description: 'Get tailored prompts, affirmations, and thoughtful questions based on your current emotional state.',
-                  color: 'from-pink-500 to-rose-500',
-                  shadowColor: 'rgba(236, 72, 153, 0.5)'
+                  title: "Personalized Insights",
+                  description:
+                    "Get tailored prompts, affirmations, and thoughtful questions based on your current emotional state.",
+                  color: "from-pink-500 to-rose-500",
+                  shadowColor: "rgba(236, 72, 153, 0.5)",
                 },
                 {
                   icon: Music,
-                  title: 'Therapeutic Music',
-                  description: 'Discover curated playlists and ambient sounds designed to complement and enhance your emotional journey.',
-                  color: 'from-blue-500 to-cyan-500',
-                  shadowColor: 'rgba(59, 130, 246, 0.5)'
+                  title: "Therapeutic Music",
+                  description:
+                    "Discover curated playlists and ambient sounds designed to complement and enhance your emotional journey.",
+                  color: "from-blue-500 to-cyan-500",
+                  shadowColor: "rgba(59, 130, 246, 0.5)",
                 },
                 {
                   icon: BarChart3,
-                  title: 'Mood Analytics',
-                  description: 'Track emotional patterns over time with beautiful visualizations and gain insights into your well-being.',
-                  color: 'from-green-500 to-emerald-500',
-                  shadowColor: 'rgba(34, 197, 94, 0.5)'
-                }
+                  title: "Mood Analytics",
+                  description:
+                    "Track emotional patterns over time with beautiful visualizations and gain insights into your well-being.",
+                  color: "from-green-500 to-emerald-500",
+                  shadowColor: "rgba(34, 197, 94, 0.5)",
+                },
               ].map((feature, index) => (
                 <motion.div
                   key={feature.title}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.9 + index * 0.1, duration: 0.3 }}
-                  whileHover={{ 
-                    scale: 1.08, 
+                  whileHover={{
+                    scale: 1.08,
                     y: -8,
-                    boxShadow: `0 30px 60px ${feature.shadowColor}, 0 0 40px ${feature.shadowColor}`
+                    boxShadow: `0 30px 60px ${feature.shadowColor}, 0 0 40px ${feature.shadowColor}`,
                   }}
                   className="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 hover:bg-white/30 hover:border-white/50 transition-all duration-300 group relative overflow-hidden"
                 >
                   {/* Colorful gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-2xl pointer-events-none"
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-2xl pointer-events-none"
                     style={{
-                      backgroundImage: `linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #3b82f6 100%)`
+                      backgroundImage: `linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #3b82f6 100%)`,
                     }}
                   />
-                  
+
                   <div className="relative z-10">
-                    <motion.div 
+                    <motion.div
                       className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-lg`}
                       whileHover={{ rotate: 12, scale: 1.15 }}
                     >
@@ -226,15 +241,15 @@ export default function LandingPage() {
               </h3>
 
               <p className="text-xl text-gray-300 mb-8">
-                Join thousands who have discovered deeper self-awareness through InnerHue&apos;s
-                guided emotional reflection experience.
+                Join thousands who have discovered deeper self-awareness through
+                InnerHue&apos;s guided emotional reflection experience.
               </p>
 
               <Link href="/emotions">
                 <motion.button
                   whileHover={{
                     scale: 1.05,
-                    boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)'
+                    boxShadow: "0 25px 50px rgba(147, 51, 234, 0.5)",
                   }}
                   whileTap={{ scale: 0.95 }}
                   className="px-12 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-3 mx-auto group"
