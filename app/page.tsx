@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { QuoteCard } from '@/components/QuoteCard';
-import { Heart, BarChart3, Music } from 'lucide-react';
+import { Heart, BarChart3, Music, CirclePlus } from 'lucide-react';
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
@@ -159,7 +159,7 @@ export default function Home() {
                 className="p-1.5 md:p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30 flex items-center gap-2 text-white"
                 title="Create Custom Moods"
               >
-                <Plus className="w-5 h-5 md:w-6 md:h-6" />
+                <CirclePlus className="w-5 h-5 md:w-6 md:h-6" />
                 <span className="text-sm font-medium hidden sm:block">Custom Moods</span>
               </motion.div>
             </Link>
@@ -209,7 +209,7 @@ export default function Home() {
                 whileTap={{ scale: 0.95 }}
                 className="px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm md:text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto mb-8"
               >
-                <Plus className="w-4 h-4 md:w-5 md:h-5" />
+                <CirclePlus className="w-4 h-4 md:w-5 md:h-5" />
                 Create Your Own Custom Mood
               </motion.button>
             </Link>
