@@ -6,6 +6,9 @@ import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { Heart, BarChart3, Music, ArrowLeft, Settings } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { AddMoodModal } from '@/components/AddMoodModal';
+import { MoodData } from '@/lib/moodData';
 
 // Enhanced mood data with categories for better color coding - now loaded dynamically
 const defaultMoods = [

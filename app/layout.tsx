@@ -4,6 +4,7 @@ import { BackToTop } from '@/components/BackToTop';
 import { Toaster } from 'react-hot-toast';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { TransitionProvider } from '@/components/TransitionProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        {children}
+        <TransitionProvider>
+          {children}
+        </TransitionProvider>
         <Footer />
         <BackToTop />
         <Toaster 

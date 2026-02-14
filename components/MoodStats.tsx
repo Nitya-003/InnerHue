@@ -48,7 +48,7 @@ export function MoodStats() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: index * 0.1 }}
           whileHover={{ scale: 1.02, y: -2 }}
-          className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 dark:border-white/10 hover:shadow-xl transition-all duration-300"
+          className="bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/10 dark:border-white/10 hover:shadow-xl transition-all duration-300 hover:bg-gray-100 dark:hover:bg-[#232345]"
         >
           <div className="flex items-center justify-between mb-4">
             <div className={`p-3 rounded-xl ${card.bgColor} dark:bg-opacity-20`}>
