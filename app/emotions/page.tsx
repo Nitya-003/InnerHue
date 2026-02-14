@@ -5,11 +5,10 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
-import { AddMoodModal } from '@/components/AddMoodModal';
-import { Heart, BarChart3, Music, ArrowLeft, Plus } from 'lucide-react';
-import { MoodData } from '@/lib/moodData';
-import { CustomMood, CustomMoodStorage } from '@/lib/customMoods';
+import { Heart, BarChart3, Music, ArrowLeft, Settings } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { AddMoodModal } from '@/components/AddMoodModal';
+import { MoodData } from '@/lib/moodData';
 
 // Enhanced mood data with categories for better color coding - now loaded dynamically
 const defaultMoods = [
@@ -187,40 +186,37 @@ export default function EmotionsPage() {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 p-6"
+        className="relative z-10 p-4 md:p-6"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <Link href="/">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                className="p-1.5 md:p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
               >
-                <ArrowLeft className="w-6 h-6 text-white" />
+                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
             </Link>
 
             <div className="flex items-center space-x-2">
-              <Heart className="text-pink-400 w-8 h-8" />
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+              <Heart className="text-pink-400 w-6 h-6 md:w-8 md:h-8" />
+              <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                 InnerHue
               </h1>
             </div>
           </div>
-
-          <nav className="flex items-center space-x-4">
-            <motion.button
-              onClick={() => {
-                setIsAddModalOpen(true);
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30 flex items-center gap-2 text-white font-medium"
-              title="Create Custom Mood"
-            >
-              <Plus className="w-5 h-5" />
-              <span className="hidden sm:inline text-sm">Create Mood</span>
-            </motion.button>
+          
+          <nav className="flex space-x-4">
+            <Link href="/personalization">
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                title="Personalization"
+              >
+                <Settings className="w-6 h-6 text-white" />
+              </motion.div>
+            </Link>
             <Link href="/analytics">
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -237,25 +233,27 @@ export default function EmotionsPage() {
                 <Music className="w-6 h-6 text-white" />
               </motion.div>
             </Link>
-            <ThemeToggle />
+            <div className="scale-[1.4]">
+              <ThemeToggle />
+            </div>
           </nav>
         </div>
       </motion.header>
 
       {/* Main Content */}
-      <main className="relative z-10 px-6 pb-20">
+      <main className="relative z-10 px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-center mb-12 sm:mb-16 px-2"
+            className="text-center mb-8 sm:mb-16 px-2 mt-4 md:mt-0"
           >
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 sm:mb-6 drop-shadow-lg">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-4 sm:mb-6 drop-shadow-lg tracking-tight">
               How are you feeling today?
             </h2>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed px-4">
+            <p className="text-base sm:text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed px-4">
               Choose your emotional state and discover personalized insights, prompts, and music to guide your reflection journey.
             </p>
             <div className="mt-3 sm:mt-4 text-gray-300 text-xs sm:text-sm">

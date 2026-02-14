@@ -148,46 +148,66 @@ export default function LandingPage() {
                   icon: Brain,
                   title: 'Emotion Reflection',
                   description: 'Select from 38 distinct emotional states and dive deep into your feelings with guided introspection.',
-                  color: 'from-purple-500 to-indigo-500'
+                  color: 'from-purple-500 to-indigo-500',
+                  shadowColor: 'rgba(168, 85, 247, 0.5)'
                 },
                 {
                   icon: Sparkles,
                   title: 'Personalized Insights',
                   description: 'Get tailored prompts, affirmations, and thoughtful questions based on your current emotional state.',
-                  color: 'from-pink-500 to-rose-500'
+                  color: 'from-pink-500 to-rose-500',
+                  shadowColor: 'rgba(236, 72, 153, 0.5)'
                 },
                 {
                   icon: Music,
                   title: 'Therapeutic Music',
                   description: 'Discover curated playlists and ambient sounds designed to complement and enhance your emotional journey.',
-                  color: 'from-blue-500 to-cyan-500'
+                  color: 'from-blue-500 to-cyan-500',
+                  shadowColor: 'rgba(59, 130, 246, 0.5)'
                 },
                 {
                   icon: BarChart3,
                   title: 'Mood Analytics',
                   description: 'Track emotional patterns over time with beautiful visualizations and gain insights into your well-being.',
-                  color: 'from-green-500 to-emerald-500'
+                  color: 'from-green-500 to-emerald-500',
+                  shadowColor: 'rgba(34, 197, 94, 0.5)'
                 }
               ].map((feature, index) => (
                 <motion.div
                   key={feature.title}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.9 + index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 hover:bg-white/15 transition-all duration-300"
+                  transition={{ delay: 0.9 + index * 0.1, duration: 0.3 }}
+                  whileHover={{ 
+                    scale: 1.08, 
+                    y: -8,
+                    boxShadow: `0 30px 60px ${feature.shadowColor}, 0 0 40px ${feature.shadowColor}`
+                  }}
+                  className="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 hover:bg-white/30 hover:border-white/50 transition-all duration-300 group relative overflow-hidden"
                 >
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4`}>
-                    <feature.icon className="w-8 h-8 text-white" />
+                  {/* Colorful gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-2xl pointer-events-none"
+                    style={{
+                      backgroundImage: `linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #3b82f6 100%)`
+                    }}
+                  />
+                  
+                  <div className="relative z-10">
+                    <motion.div 
+                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-lg`}
+                      whileHover={{ rotate: 12, scale: 1.15 }}
+                    >
+                      <feature.icon className="w-8 h-8 text-white" />
+                    </motion.div>
+
+                    <h4 className="text-xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-pink-300 group-hover:via-purple-300 group-hover:to-cyan-300 group-hover:bg-clip-text transition-all duration-300">
+                      {feature.title}
+                    </h4>
+
+                    <p className="text-gray-300 leading-relaxed group-hover:text-white transition-all duration-300">
+                      {feature.description}
+                    </p>
                   </div>
-
-                  <h4 className="text-xl font-bold text-white mb-3">
-                    {feature.title}
-                  </h4>
-
-                  <p className="text-gray-300 leading-relaxed">
-                    {feature.description}
-                  </p>
                 </motion.div>
               ))}
             </div>

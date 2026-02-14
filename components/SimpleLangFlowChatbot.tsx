@@ -107,7 +107,7 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all hover:scale-110"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all hover:scale-110 w-12 h-12 sm:w-auto sm:h-auto"
         >
           <div className="relative w-6 h-6">
             <Heart className="w-6 h-6" />
@@ -118,9 +118,9 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-96 bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-white/10">
+        <div className="fixed bottom-6 right-6 z-50 w-[90vw] max-w-md sm:w-96 max-h-[85vh] bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-white/10">
           {/* Header */}
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 flex items-center justify-between rounded-t-3xl">
+          <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-3 sm:p-4 flex items-center justify-between rounded-t-3xl">
             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-2 rounded-full">
                 <Bot className="w-5 h-5 text-white" />
@@ -139,7 +139,7 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
           </div>
 
           {/* Chat Area */}
-          <div className="p-6 min-h-[280px]">
+          <div className="p-4 sm:p-6 h-[40vh] sm:min-h-[280px] sm:h-auto max-h-[50vh] overflow-y-auto">
             {!botResponse ? (
               <div className="space-y-3">
                 <p className="text-gray-700 dark:text-gray-300">
