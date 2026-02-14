@@ -24,7 +24,7 @@ export function QuoteCard({ quote, loading, onRefresh }: QuoteCardProps) {
       <div className="relative pl-6 border-l-4 border-purple-300/50">
         <QuoteIcon className="absolute -top-2 -left-2 w-8 h-8 text-purple-200/50 transform -scale-x-100" />
         <blockquote className="font-playfair text-xl md:text-2xl italic text-gray-800 leading-relaxed mb-4 relative z-10">
-          "{quote.content}"
+          &quot;{quote.content}&quot;
         </blockquote>
         <div className="flex justify-between items-end pt-2 mt-2">
           <cite className="text-sm font-semibold text-gray-600 uppercase tracking-wider not-italic">
