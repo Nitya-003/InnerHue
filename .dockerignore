@@ -1,0 +1,68 @@
+# Node.js dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env*.local
+
+# Git files
+.git
+.gitignore
+
+# Development and build artifacts
+.next
+.next/*
+out
+build
+coverage
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# Logs and cache
+logs
+*.log
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn-integrity
+
+# Docker files (to avoid recursive copies)
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Documentation
+README.md
+docs
+*.md
+
+# GitHub and other CI/CD
+.github
+.circleci
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Vercel
+.vercel
+
+# Cache directories
+.next/cache
+.turbo
