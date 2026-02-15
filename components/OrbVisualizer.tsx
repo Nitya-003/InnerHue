@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Mood {
   id: string;
@@ -15,8 +15,25 @@ interface OrbVisualizerProps {
   mood: Mood;
 }
 
+interface Particle {
+  id: number;
+  angle: number;
+  distance: number;
+  duration: number;
+}
+
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [particles, setParticles] = useState<Particle[]>([]);
+
+  useEffect(() => {
+    setParticles(Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      angle: (i * 30) * (Math.PI / 180),
+      distance: 150 + Math.random() * 50,
+      duration: 3 + Math.random() * 2,
+    })));
+  }, []);
 
   const orbVariants: Variants = {
     idle: {
@@ -52,12 +69,6 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
-  const particles = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    angle: (i * 30) * (Math.PI / 180),
-    distance: 150 + Math.random() * 50,
-  }));
-
   return (
     <div className="relative">
       <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
@@ -85,7 +96,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               animate="animate"
               transition={{
                 delay: particle.id * 0.2,
-                duration: 3 + Math.random() * 2,
+                duration: particle.duration,
               }}
             />
           ))}
