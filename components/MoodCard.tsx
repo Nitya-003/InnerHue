@@ -76,6 +76,14 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
         }
       `}
       onClick={onSelect}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
       aria-label={`Select ${mood.name} mood`}
       aria-pressed={isSelected}
       style={{
@@ -254,8 +262,11 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
             textShadow: isSelected ? `0 0 20px ${mood.glow}60` : '0 2px 10px rgba(0,0,0,0.4)',
           }}
         >
-          {mood.name}
+          {mood.emoji}
         </motion.div>
+        <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
+          {mood.name}
+        </div>
       </motion.div>
 
       {/* Enhanced glow effects when selected */}

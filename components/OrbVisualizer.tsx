@@ -15,6 +15,12 @@ interface OrbVisualizerProps {
   mood: Mood;
 }
 
+interface Particle {
+  id: number;
+  angle: number;
+  distance: number;
+}
+
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPulse, setShowPulse] = useState(false);
@@ -73,6 +79,15 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   };
 
 
+  const [particles, setParticles] = useState<Particle[]>([]);
+
+  useEffect(() => {
+    setParticles(Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      angle: (i * 30) * (Math.PI / 180),
+      distance: 150 + Math.random() * 50,
+    })));
+  }, []);
 
   return (
     <div className="relative">
