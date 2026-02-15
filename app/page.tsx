@@ -7,9 +7,10 @@ import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight } from 'lucide-rea
 import { MoodCard } from '@/components/MoodCard';
 import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
-import { ErrorState } from '@/components/ErrorState';
-import { Hero } from '@/components/landing/Hero';
-import { usePageTransition } from '@/components/TransitionProvider';
+import { QuoteCard } from '@/components/QuoteCard';
+import { Heart, BarChart3, Music } from 'lucide-react';
+import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
@@ -138,15 +139,18 @@ export default function Home() {
             </h1>
           </div>
 
-          <nav className="flex space-x-3">
-            <motion.button
-              onClick={() => startTransition('/explore')}
-              whileHover={{ scale: 1.05 }}
-              className="px-4 py-2 rounded-full bg-white/5 backdrop-blur-xl text-white/70 text-sm font-medium hover:bg-white/10 hover:text-white transition-all duration-300 border border-white/10"
-            >
-              Explore
-            </motion.button>
-            <Link href="/analytics" aria-label="View Analytics">
+          <nav className="flex items-center space-x-2 md:space-x-4">
+            <Link href="/emotions">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 md:p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30 flex items-center gap-2 text-white"
+                title="Create Custom Moods"
+              >
+                <Plus className="w-5 h-5 md:w-6 md:h-6" />
+                <span className="text-sm font-medium hidden sm:block">Custom Moods</span>
+              </motion.div>
+            </Link>
+            <Link href="/analytics">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
@@ -232,10 +236,22 @@ export default function Home() {
           >
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
               How are you feeling today?
-            </h3>
-            <p className="text-gray-300">
-              Select up to {maxSelections} emotions that resonate with you
+            </h2>
+            <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto drop-shadow mb-6 leading-relaxed">
+              Choose your emotional state and discover personalized insights, prompts, and music to guide your reflection journey.
             </p>
+
+            {/* Custom Mood Creation CTA */}
+            <Link href="/emotions">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm md:text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto mb-8"
+              >
+                <Plus className="w-4 h-4 md:w-5 md:h-5" />
+                Create Your Own Custom Mood
+              </motion.button>
+            </Link>
           </motion.div>
 
           {/* Grid Area: Error, Loading, or Success */}
