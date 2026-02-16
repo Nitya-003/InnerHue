@@ -69,6 +69,20 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
+<<<<<<< HEAD
+=======
+  const [particles, setParticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    setParticles(Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      angle: (i * 30) * (Math.PI / 180),
+      distance: 150 + Math.random() * 50,
+      duration: 3 + Math.random() * 2
+    })));
+  }, []);
+
+>>>>>>> 1a0faa3
   return (
     <div className="relative">
       <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
