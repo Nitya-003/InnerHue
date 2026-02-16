@@ -3,14 +3,16 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight } from 'lucide-react';
+import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight, Plus } from 'lucide-react';
 import { MoodCard } from '@/components/MoodCard';
 import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { QuoteCard } from '@/components/QuoteCard';
-import { Heart, BarChart3, Music } from 'lucide-react';
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Hero } from '@/components/landing';
+import { ErrorState } from '@/components/ErrorState';
+import { StreakNavIcon } from '@/components/StreakCard';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
@@ -54,7 +56,6 @@ const moods = [
 ];
 
 export default function Home() {
-  const { startTransition } = usePageTransition();
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
@@ -86,7 +87,7 @@ export default function Home() {
   }, []);
 
   return (
-    <motion.div 
+    <motion.div
       variants={pageVariants}
       initial="initial"
       animate="animate"
@@ -131,7 +132,7 @@ export default function Home() {
         transition={{ delay: 0.2, duration: 0.6 }}
         className="relative z-10 p-6"
       >
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <Heart className="text-pink-400 w-10 h-10" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
@@ -139,7 +140,7 @@ export default function Home() {
             </h1>
           </div>
 
-          <nav className="flex items-center space-x-2 md:space-x-4">
+          <nav className="flex items-center space-x-2 md:space-x-3">
             <Link href="/emotions">
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -154,6 +155,7 @@ export default function Home() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
+                title="Analytics"
               >
                 <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
@@ -162,10 +164,15 @@ export default function Home() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
+                title="Music"
               >
                 <Music className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
             </Link>
+            <StreakNavIcon />
+            <div className="p-1 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10">
+              <ThemeToggle />
+            </div>
           </nav>
         </div>
       </motion.header>
@@ -175,8 +182,8 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="relative z-10 px-4 md:px-6 pb-20">
-        <div className="max-w-6xl mx-auto">
-          <motion.section 
+        <div className="max-w-7xl mx-auto">
+          <motion.section
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -194,9 +201,9 @@ export default function Home() {
                   one feeling at a time
                 </span>
               </h2>
-              
+
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed px-4">
-                Discover the depth of your emotional landscape with personalized insights, 
+                Discover the depth of your emotional landscape with personalized insights,
                 therapeutic music, and guided reflection journeys tailored to your feelings.
               </p>
             </motion.div>
@@ -217,7 +224,7 @@ export default function Home() {
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </Link>
-              
+
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="w-full sm:w-auto px-4 sm:px-6 py-3 sm:py-4 bg-white/10 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300 cursor-pointer text-center text-sm sm:text-base"
@@ -236,7 +243,7 @@ export default function Home() {
           >
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
               How are you feeling today?
-            </h2>
+            </h3>
             <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto drop-shadow mb-6 leading-relaxed">
               Choose your emotional state and discover personalized insights, prompts, and music to guide your reflection journey.
             </p>
@@ -300,7 +307,7 @@ export default function Home() {
           </div>
 
           {/* Features Section */}
-          <motion.section 
+          <motion.section
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
@@ -353,11 +360,11 @@ export default function Home() {
                   <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 sm:mb-4 mx-auto sm:mx-0`}>
                     <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  
+
                   <h4 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">
                     {feature.title}
                   </h4>
-                  
+
                   <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                     {feature.description}
                   </p>
@@ -377,12 +384,12 @@ export default function Home() {
               <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
                 Ready to explore your inner world?
               </h3>
-              
+
               <p className="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8">
-                Join thousands who have discovered deeper self-awareness through InnerHue's 
+                Join thousands who have discovered deeper self-awareness through InnerHue's
                 guided emotional reflection experience.
               </p>
-              
+
               <Link href="/emotions">
                 <motion.button
                   whileHover={{ scale: 1.05, boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5)' }}
@@ -398,7 +405,7 @@ export default function Home() {
           </motion.section>
         </div>
       </main>
-      
+
       {/* Footer */}
       <motion.footer
         initial={{ opacity: 0 }}
