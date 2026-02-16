@@ -4,10 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight, Plus } from 'lucide-react';
+
 import { MoodCard } from '@/components/MoodCard';
 import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { QuoteCard } from '@/components/QuoteCard';
+import { usePageTransition } from '@/components/TransitionProvider';
+import { Hero } from '@/components/landing/Hero';
+import { ErrorState } from '@/components/ErrorState';
+
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Hero } from '@/components/landing';
@@ -65,7 +70,7 @@ export default function Home() {
     initial: { opacity: 0 },
     animate: {
       opacity: 1,
-      transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
+      transition: { duration: 0.8, ease: 'easeInOut' }
     },
     exit: {
       opacity: 0,
