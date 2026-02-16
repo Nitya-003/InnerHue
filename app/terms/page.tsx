@@ -41,7 +41,7 @@ export default function TermsOfService() {
                         <section>
                             <h2 className="text-2xl font-semibold text-white mb-4">1. Acceptance of Terms</h2>
                             <p>
-                                By accessing and using InnerHue ("the Service"), you accept and agree to be bound by the terms and provision of this agreement.
+                                By accessing and using InnerHue (&quot;the Service&quot;), you accept and agree to be bound by the terms and provision of this agreement.
                                 In addition, when using the Service, you shall be subject to any posted guidelines or rules applicable to such services.
                             </p>
                         </section>
@@ -70,7 +70,7 @@ export default function TermsOfService() {
                             <h2 className="text-2xl font-semibold text-white mb-4">4. Disclaimer of Warranties</h2>
                             <p>
                                 The Site and its original content, features, and functionality are owned by InnerHue and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
-                                The Service is provided on an "as is" and "as available" basis.
+                                The Service is provided on an &quot;as is&quot; and &quot;as available&quot; basis.
                             </p>
                         </section>
 

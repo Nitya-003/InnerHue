@@ -386,7 +386,7 @@ export default function Home() {
               </h3>
 
               <p className="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8">
-                Join thousands who have discovered deeper self-awareness through InnerHue's
+                Join thousands who have discovered deeper self-awareness through InnerHue&apos;s
                 guided emotional reflection experience.
               </p>
 
