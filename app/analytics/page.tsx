@@ -11,19 +11,7 @@ export default function AnalyticsPage() {
   const [moodHistory, setMoodHistory] = useState<any[]>([]);
   const [stats, setStats] = useState<any>({});
 
-  useEffect(() => {
-    loadData();
 
-    // Listen for updates from other tabs/components
-    window.addEventListener('storage', loadData);
-    return () => window.removeEventListener('storage', loadData);
-  }, []);
-
-  const loadData = () => {
-    const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    setMoodHistory(history);
-    calculateStats(history);
-  };
 
   const calculateStats = (history: any[]) => {
     const moodCounts: { [key: string]: number } = {};
@@ -55,6 +43,21 @@ export default function AnalyticsPage() {
       weeklyData: thisWeek
     });
   };
+
+  const loadData = () => {
+    const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+    setMoodHistory(history);
+    calculateStats(history);
+  };
+
+  useEffect(() => {
+    loadData();
+
+    // Listen for updates from other tabs/components
+    window.addEventListener('storage', loadData);
+    return () => window.removeEventListener('storage', loadData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
