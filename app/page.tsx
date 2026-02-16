@@ -3,12 +3,16 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight } from 'lucide-react';
+import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight, Plus } from 'lucide-react';
+
 import { MoodCard } from '@/components/MoodCard';
 import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { QuoteCard } from '@/components/QuoteCard';
-import { Heart, BarChart3, Music } from 'lucide-react';
+import { usePageTransition } from '@/components/TransitionProvider';
+import { Hero } from '@/components/landing/Hero';
+import { ErrorState } from '@/components/ErrorState';
+
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
@@ -64,7 +68,7 @@ export default function Home() {
     initial: { opacity: 0 },
     animate: {
       opacity: 1,
-      transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
+      transition: { duration: 0.8, ease: 'easeInOut' }
     },
     exit: {
       opacity: 0,
@@ -236,7 +240,7 @@ export default function Home() {
           >
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
               How are you feeling today?
-            </h2>
+            </h3>
             <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto drop-shadow mb-6 leading-relaxed">
               Choose your emotional state and discover personalized insights, prompts, and music to guide your reflection journey.
             </p>
