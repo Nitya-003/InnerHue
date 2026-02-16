@@ -19,6 +19,7 @@ interface Particle {
   id: number;
   angle: number;
   distance: number;
+  duration: number; // Added
 }
 
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
@@ -61,10 +62,12 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setParticles(Array.from({ length: 12 }, (_, i) => ({
       id: i,
       angle: (i * 30) * (Math.PI / 180),
       distance: 150 + Math.random() * 50,
+      duration: 3 + Math.random() * 2 // Moved here
     })));
   }, []);
 
@@ -95,7 +98,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               animate="animate"
               transition={{
                 delay: particle.id * 0.2,
-                duration: 3 + Math.random() * 2,
+                duration: particle.duration, // Use state value
               }}
             />
           ))}
