@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
@@ -48,36 +48,64 @@ const moods = [
   { id: 'silly', name: 'Silly', emoji: '🤪', color: '#FFC107', glow: '#FFD54F' }
 ];
 
+interface Orb {
+  id: number;
+  color: string;
+  width: number;
+  height: number;
+  left: number;
+  top: number;
+  x: number;
+  y: number;
+  duration: number;
+}
+
 export default function Home() {
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+  const [orbs, setOrbs] = useState<Orb[]>([]);
   const maxSelections = 3;
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setOrbs(Array.from({ length: 8 }, (_, i) => ({
+      id: i,
+      color: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'][i],
+      width: Math.random() * 300 + 100,
+      height: Math.random() * 300 + 100,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      x: Math.random() * 100 - 50,
+      y: Math.random() * 100 - 50,
+      duration: 8 + Math.random() * 4
+    })));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(8)].map((_, i) => (
+        {orbs.map((orb) => (
           <motion.div
-            key={i}
+            key={orb.id}
             className="absolute rounded-full opacity-20"
             style={{
-              background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'][i]} 0%, transparent 70%)`,
-              width: Math.random() * 300 + 100,
-              height: Math.random() * 300 + 100,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
+              width: orb.width,
+              height: orb.height,
+              left: `${orb.left}%`,
+              top: `${orb.top}%`,
             }}
             animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
+              x: [0, orb.x],
+              y: [0, orb.y],
               scale: [1, 1.2, 1],
               opacity: [0.1, 0.3, 0.1]
             }}
             transition={{
-              duration: 8 + Math.random() * 4,
+              duration: orb.duration,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.5
+              delay: orb.id * 0.5
             }}
           />
         ))}

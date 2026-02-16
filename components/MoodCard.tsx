@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import './moodcard.css';
 
 interface Mood {
@@ -19,6 +20,13 @@ interface MoodCardProps {
 }
 
 export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
+  const [emojiDuration, setEmojiDuration] = useState(4);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setEmojiDuration(4 + Math.random() * 2);
+  }, []);
+
   return (
     <motion.div
       variants={{
@@ -100,7 +108,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
           scale: [1, 1.05, 1]
         }}
         transition={{
-          duration: 4 + Math.random() * 2,
+          duration: emojiDuration,
           repeat: Infinity,
           ease: "easeInOut",
           delay: index * 0.2

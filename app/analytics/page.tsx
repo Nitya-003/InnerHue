@@ -49,6 +49,7 @@ export default function AnalyticsPage() {
   }, [calculateStats]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
 
     // Listen for updates from other tabs/components
