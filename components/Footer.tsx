@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Github, Twitter, Instagram, Heart } from "lucide-react";
+import { Github, Twitter, Instagram } from "lucide-react";
 
 export function Footer() {
   return (
@@ -104,13 +104,10 @@ export function Footer() {
           </div>
         </div>
         
-        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} InnerHue. All rights reserved.</p>
-          <div className="flex items-center gap-1">
-            <span>Made with</span>
-            <Heart className="h-3 w-3 text-red-500 fill-red-500" />
-            <span>for better mental health.</span>
-          </div>
+        <div className="mt-12 pt-8 border-t flex flex-col justify-center items-center gap-2 text-sm text-foreground/80 md:flex-row md:justify-center">
+          <p className="flex items-center gap-1 text-center">
+            <span>© {new Date().getFullYear()} InnerHue. Crafted with care for emotional well-being. All rights reserved.</span>
+          </p>
         </div>
       </div>
     </footer>
