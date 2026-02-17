@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Mood {
   id: string;
@@ -79,13 +79,14 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   };
 
 
-  const [particles, setParticles] = useState<Particle[]>([]);
+  const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
   useEffect(() => {
     setParticles(Array.from({ length: 12 }, (_, i) => ({
       id: i,
       angle: (i * 30) * (Math.PI / 180),
       distance: 150 + Math.random() * 50,
+      duration: 3 + Math.random() * 2,
     })));
   }, []);
 
@@ -101,8 +102,25 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
           </p>
         </div>
 
-        <div className="relative h-64 md:h-80 flex items-center justify-center">
-
+        <div className="relative h-80 flex items-center justify-center">
+          {particles.map((particle) => (
+            <motion.div
+              key={particle.id}
+              className="absolute w-2 h-2 rounded-full"
+              style={{
+                background: mood.glow,
+                left: `calc(50% + ${Math.cos(particle.angle) * particle.distance}px)`,
+                top: `calc(50% + ${Math.sin(particle.angle) * particle.distance}px)`,
+              }}
+              variants={particleVariants}
+              initial="animate"
+              animate="animate"
+              transition={{
+                delay: particle.id * 0.2,
+                duration: particle.duration,
+              }}
+            />
+          ))}
 
           <motion.div
             className="relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 cursor-grab active:cursor-grabbing z-10"
