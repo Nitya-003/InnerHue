@@ -43,9 +43,9 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
             type: "spring",
             stiffness: 100,
             damping: 12,
-            delay: index * 0.04
-          }
-        }
+            delay: index * 0.04,
+          },
+        },
       }}
       whileHover={{
         scale: 1.15,
@@ -56,13 +56,13 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
         transition: {
           type: "spring",
           stiffness: 400,
-          damping: 20
-        }
+          damping: 20,
+        },
       }}
       whileTap={{
         scale: 0.9,
         rotateX: -10,
-        transition: { duration: 0.1 }
+        transition: { duration: 0.1 },
       }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
@@ -70,16 +70,17 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
         relative cursor-pointer p-3 sm:p-4 rounded-3xl backdrop-blur-xl border-2 outline-none
         transform-gpu will-change-transform flex flex-col items-center justify-center gap-2 aspect-square w-full
         group perspective-1000
-        ${isSelected
-          ? 'bg-gradient-to-br from-white/95 to-white/80 border-transparent'
-          : 'bg-white/20 border-white/25 hover:bg-white/40 hover:border-white/50'
+        ${
+          isSelected
+            ? "bg-gradient-to-br from-white/95 to-white/80 border-transparent"
+            : "bg-white/20 border-white/25 hover:bg-white/40 hover:border-white/50"
         }
       `}
       onClick={onSelect}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           onSelect();
         }
@@ -91,8 +92,8 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
           ? `0 30px 60px ${mood.color}50, 0 0 0 3px ${mood.color}80, 0 0 40px ${mood.glow}50, inset 0 2px 0 rgba(255,255,255,0.9)`
           : isHovered
             ? `0 25px 50px ${mood.color}40, 0 0 30px ${mood.glow}35, 0 0 0 2px ${mood.color}50`
-            : '0 10px 30px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255,255,255,0.3)',
-        transition: 'box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            : "0 10px 30px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255,255,255,0.3)",
+        transition: "box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
       }}
     >
       {/* Animated gradient background on hover */}
@@ -101,15 +102,19 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
         style={{
           background: `linear-gradient(135deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
         }}
-        animate={isHovered ? {
-          background: [
-            `linear-gradient(135deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
-            `linear-gradient(225deg, ${mood.glow}25, ${mood.color}20, ${mood.glow}15)`,
-            `linear-gradient(315deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
-            `linear-gradient(45deg, ${mood.glow}25, ${mood.color}20, ${mood.glow}15)`,
-            `linear-gradient(135deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
-          ]
-        } : {}}
+        animate={
+          isHovered
+            ? {
+                background: [
+                  `linear-gradient(135deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
+                  `linear-gradient(225deg, ${mood.glow}25, ${mood.color}20, ${mood.glow}15)`,
+                  `linear-gradient(315deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
+                  `linear-gradient(45deg, ${mood.glow}25, ${mood.color}20, ${mood.glow}15)`,
+                  `linear-gradient(135deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
+                ],
+              }
+            : {}
+        }
         transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
       />
 
@@ -120,13 +125,17 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
           initial={{ opacity: 0, rotate: 0 }}
           animate={{ opacity: 1, rotate: 360 }}
           exit={{ opacity: 0 }}
-          transition={{ rotate: { duration: 4, repeat: Infinity, ease: "linear" }, opacity: { duration: 0.3 } }}
+          transition={{
+            rotate: { duration: 4, repeat: Infinity, ease: "linear" },
+            opacity: { duration: 0.3 },
+          }}
           style={{
             background: `conic-gradient(from 0deg, ${mood.color}, ${mood.glow}, ${mood.color}, ${mood.glow}, ${mood.color})`,
-            padding: '2px',
-            WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-            WebkitMaskComposite: 'xor',
-            maskComposite: 'exclude',
+            padding: "2px",
+            WebkitMask:
+              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            WebkitMaskComposite: "xor",
+            maskComposite: "exclude",
           }}
         />
       )}
@@ -135,12 +144,18 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
       <motion.div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
         <motion.div
           className="absolute inset-0"
-          animate={isHovered ? { x: ['150%', '-150%'] } : { x: '150%' }}
-          transition={{ duration: 1, repeat: isHovered ? Infinity : 0, repeatDelay: 0.5, ease: "easeInOut" }}
+          animate={isHovered ? { x: ["150%", "-150%"] } : { x: "150%" }}
+          transition={{
+            duration: 1,
+            repeat: isHovered ? Infinity : 0,
+            repeatDelay: 0.5,
+            ease: "easeInOut",
+          }}
           style={{
-            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
-            width: '40%',
-            skewX: '-20deg',
+            background:
+              "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
+            width: "40%",
+            skewX: "-20deg",
           }}
         />
       </motion.div>
@@ -150,17 +165,32 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
         <>
           <motion.div
             className="absolute w-16 h-16 rounded-full pointer-events-none"
-            style={{ background: mood.color, filter: 'blur(25px)', top: '-10%', right: '-10%' }}
+            style={{
+              background: mood.color,
+              filter: "blur(25px)",
+              top: "-10%",
+              right: "-10%",
+            }}
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 0.6, scale: 1, y: [0, -10, 0] }}
-            transition={{ type: 'keyframes', duration: 2, repeat: Infinity }}
+            transition={{ type: "keyframes", duration: 2, repeat: Infinity }}
           />
           <motion.div
             className="absolute w-12 h-12 rounded-full pointer-events-none"
-            style={{ background: mood.glow, filter: 'blur(20px)', bottom: '-5%', left: '-5%' }}
+            style={{
+              background: mood.glow,
+              filter: "blur(20px)",
+              bottom: "-5%",
+              left: "-5%",
+            }}
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 0.5, scale: 1, y: [0, 10, 0] }}
-            transition={{ type: 'keyframes', duration: 2.5, repeat: Infinity, delay: 0.3 }}
+            transition={{
+              type: "keyframes",
+              duration: 2.5,
+              repeat: Infinity,
+              delay: 0.3,
+            }}
           />
         </>
       )}
@@ -203,7 +233,7 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
               }}
               animate={{
                 y: [0, -30, 0],
-                x: [0, (i % 2 === 0 ? 15 : -15), 0],
+                x: [0, i % 2 === 0 ? 15 : -15, 0],
                 opacity: [0.3, 1, 0.3],
                 scale: [1, 1.8, 1],
               }}
@@ -224,42 +254,46 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
         animate={{
           y: [0, -10, 0],
           rotate: [0, 4, -4, 0],
-          scale: [1, 1.03, 1]
+          scale: [1, 1.03, 1],
         }}
         transition={{
           duration: 4 + (index % 3),
           repeat: Infinity,
           ease: "easeInOut",
-          delay: index * 0.08
+          delay: index * 0.08,
         }}
       >
         <motion.div
           className="text-4xl sm:text-5xl mb-2 select-none filter drop-shadow-xl relative"
           whileHover={{
             scale: 1.35,
-            rotate: [0, -20, 20, -10, 10, 0],
-            transition: { duration: 0.5, type: "spring" }
+            rotate: [0, 10],
+            transition: { duration: 0.5, type: "spring" },
           }}
         >
           {/* Emoji glow effect */}
           <motion.div
             className="absolute inset-0 blur-2xl rounded-full"
             style={{ background: mood.color }}
-            animate={isHovered ? { opacity: [0.3, 0.7, 0.3], scale: [1, 1.5, 1] } : { opacity: 0 }}
+            animate={
+              isHovered
+                ? { opacity: [0.3, 0.7, 0.3], scale: [1, 1.5, 1] }
+                : { opacity: 0 }
+            }
             transition={{ duration: 1.5, repeat: Infinity }}
           />
           <span className="relative z-10">{mood.emoji}</span>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className={`text-sm font-bold transition-all duration-300 ${
-            isSelected 
-              ? '' 
-              : 'text-white group-hover:text-gray-100'
+            isSelected ? "" : "text-white group-hover:text-gray-100"
           } drop-shadow-lg`}
           style={{
             color: isSelected ? mood.color : undefined,
-            textShadow: isSelected ? `0 0 20px ${mood.glow}60` : '0 2px 10px rgba(0,0,0,0.4)',
+            textShadow: isSelected
+              ? `0 0 20px ${mood.glow}60`
+              : "0 2px 10px rgba(0,0,0,0.4)",
           }}
         >
           {mood.emoji}
@@ -279,14 +313,25 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
           {/* Corner stars */}
           <motion.div
             className="absolute top-2 left-2"
-            animate={{ rotate: 360, scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
+            animate={{
+              rotate: 360,
+              scale: [1, 1.4, 1],
+              opacity: [0.6, 1, 0.6],
+            }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <Star className="w-4 h-4 fill-current" style={{ color: mood.glow }} />
+            <Star
+              className="w-4 h-4 fill-current"
+              style={{ color: mood.glow }}
+            />
           </motion.div>
           <motion.div
             className="absolute bottom-2 right-2"
-            animate={{ rotate: -360, scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
+            animate={{
+              rotate: -360,
+              scale: [1, 1.4, 1],
+              opacity: [0.6, 1, 0.6],
+            }}
             transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
           >
             <Sparkles className="w-4 h-4" style={{ color: mood.color }} />
@@ -315,12 +360,12 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
       )}
 
       {/* 3D depth shadow layer */}
-      <motion.div 
+      <motion.div
         className="absolute inset-0 rounded-3xl -z-20"
         style={{
           background: `linear-gradient(145deg, ${mood.color}20, ${mood.glow}15)`,
-          filter: 'blur(6px)',
-          transform: 'translate(4px, 4px)',
+          filter: "blur(6px)",
+          transform: "translate(4px, 4px)",
         }}
         animate={{
           opacity: isSelected ? 0.7 : isHovered ? 0.5 : 0.2,
@@ -335,7 +380,7 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
           background: `linear-gradient(90deg, transparent, ${mood.color}, ${mood.glow}, ${mood.color}, transparent)`,
         }}
         animate={{
-          width: isSelected ? '80%' : isHovered ? '60%' : '0%',
+          width: isSelected ? "80%" : isHovered ? "60%" : "0%",
           opacity: isSelected ? 1 : isHovered ? 0.8 : 0,
         }}
         transition={{ duration: 0.3 }}
