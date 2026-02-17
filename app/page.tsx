@@ -57,6 +57,18 @@ const moods = [
   { id: 'silly', name: 'Silly', emoji: '🤪', color: '#FFC107', glow: '#FFD54F' }
 ];
 
+interface Orb {
+  id: number;
+  color: string;
+  width: number;
+  height: number;
+  left: number;
+  top: number;
+  x: number;
+  y: number;
+  duration: number;
+}
+
 export default function Home() {
   const { startTransition } = usePageTransition();
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
