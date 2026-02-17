@@ -68,12 +68,12 @@ export default function Home() {
     initial: { opacity: 0 },
     animate: {
       opacity: 1,
-      transition: { duration: 0.8, ease: 'easeInOut' }
+      transition: { duration: 0.8, ease: 'easeInOut' as const}
     },
     exit: {
       opacity: 0,
       scale: 0.98,
-      transition: { duration: 0.4, ease: 'easeInOut' }
+      transition: { duration: 0.4, ease: 'easeInOut' as const}
     }
   };
 
@@ -170,6 +170,7 @@ export default function Home() {
                 <Music className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
             </Link>
+            <ThemeToggle />
           </nav>
         </div>
       </motion.header>
@@ -404,16 +405,7 @@ export default function Home() {
       </main>
       
       {/* Footer */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
-        className="relative z-10 p-6 border-t border-white/20"
-      >
-        <div className="max-w-6xl mx-auto text-center text-gray-400">
-          <p>&copy; 2026 InnerHue. Crafted with care for emotional well-being.</p>
-        </div>
-      </motion.footer>
+      
     </motion.div>
   );
 }
