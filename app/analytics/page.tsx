@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Heart, Activity, Trash2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, FileJson, FileText } from 'lucide-react';
 import { MoodChart } from '@/components/MoodChart';
 import { MoodStats } from '@/components/MoodStats';
 import { useMoodStore } from '@/lib/useMoodStore';
@@ -22,6 +22,45 @@ export default function AnalyticsPage() {
 
   const handleDeleteEntry = (id: string) => {
     if (id) deleteMood(id);
+  };
+
+  const handleExport = (format: 'csv' | 'json') => {
+    if (moodHistory.length === 0) return;
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    const filename = `innerhue_mood_history_${timestamp}.${format}`;
+    let content = '';
+    let type = '';
+
+    if (format === 'json') {
+      content = JSON.stringify(moodHistory, null, 2);
+      type = 'application/json';
+    } else {
+      // CSV Header
+      const headers = ['Date', 'Time', 'Mood', 'Emotion', 'Color', 'ID'];
+      const rows = moodHistory.map(entry => [
+        new Date(entry.timestamp).toLocaleDateString(),
+        new Date(entry.timestamp).toLocaleTimeString(),
+        entry.mood,
+        entry.emotion || '',
+        entry.color || '',
+        entry.id
+      ].map(field => `"${field}"`).join(','));
+
+      content = [headers.join(','), ...rows].join('\n');
+      type = 'text/csv';
+    }
+
+    // Trigger Download
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const getTimeAgo = (dateString: string) => {
@@ -146,18 +185,38 @@ export default function AnalyticsPage() {
                     </h3>
                   </div>
 
-                  <button
-                    onClick={handleClearHistory}
-                    className="text-sm font-semibold 
-                    px-4 py-1.5 rounded-full 
-                    bg-red-50 dark:bg-red-900/20 
-                    text-red-500 
-                    hover:bg-red-500 hover:text-white 
-                    hover:shadow-lg hover:shadow-red-500/30 
-                    transition-all duration-300"
-                  >
-                    Clear History
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center bg-gray-100 dark:bg-white/5 rounded-full p-1 border border-gray-200 dark:border-white/10">
+                      <button
+                        onClick={() => handleExport('csv')}
+                        className="p-2 rounded-full hover:bg-white dark:hover:bg-white/10 text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-all"
+                        title="Export as CSV"
+                      >
+                        <FileText className="w-4 h-4" />
+                      </button>
+                      <div className="w-px h-4 bg-gray-300 dark:bg-white/10" />
+                      <button
+                        onClick={() => handleExport('json')}
+                        className="p-2 rounded-full hover:bg-white dark:hover:bg-white/10 text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-all"
+                        title="Export as JSON"
+                      >
+                        <FileJson className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={handleClearHistory}
+                      className="text-sm font-semibold 
+                      px-4 py-1.5 rounded-full 
+                      bg-red-50 dark:bg-red-900/20 
+                      text-red-500 
+                      hover:bg-red-500 hover:text-white 
+                      hover:shadow-lg hover:shadow-red-500/30 
+                      transition-all duration-300"
+                    >
+                      Clear History
+                    </button>
+                  </div>
                 </div>
 
                 <div className="space-y-4">
