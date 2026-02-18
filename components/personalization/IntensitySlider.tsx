@@ -149,10 +149,6 @@ export function IntensitySlider({
           max={10}
           value={localValue}
           onChange={(e) => handleChange(parseInt(e.target.value))}
-          onMouseDown={() => setIsDragging(true)}
-          onMouseUp={() => setIsDragging(false)}
-          onTouchStart={() => setIsDragging(true)}
-          onTouchEnd={() => setIsDragging(false)}
           disabled={disabled}
           className="w-full h-3 rounded-full appearance-none cursor-pointer"
           style={{

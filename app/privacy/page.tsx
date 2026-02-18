@@ -135,11 +135,6 @@ export default function PrivacyPolicy() {
 
                 </div>
 
-                {/* FOOTER */}
-                <div className="mt-16 text-center text-gray-500 text-sm">
-                    © {new Date().getFullYear()} InnerHue. All rights reserved.
-                </div>
-
             </div>
         </div>
     );

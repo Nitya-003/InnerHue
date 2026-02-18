@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { memo, useState } from 'react';
-import { Sparkles, Check, Star } from 'lucide-react';
+import { Sparkles, Check, Star, Trash2 } from 'lucide-react';
 import './moodcard.css';
 
 interface Mood {
@@ -11,6 +11,8 @@ interface Mood {
   emoji: string;
   color: string;
   glow: string;
+  category?: string;
+  isCustom?: boolean;
 }
 
 interface MoodCardProps {
@@ -18,9 +20,10 @@ interface MoodCardProps {
   index: number;
   isSelected: boolean;
   onSelect: () => void;
+  onDelete?: (moodId: string) => void;
 }
 
-export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
+export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSelect, onDelete }: MoodCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -96,6 +99,22 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
         transition: "box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
       }}
     >
+      {/* Delete button for custom moods */}
+      {onDelete && mood.isCustom && (
+        <motion.button
+          type="button"
+          className="absolute top-1 right-1 z-10 p-1.5 rounded-full bg-red-500/90 hover:bg-red-600 text-white shadow-lg"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(mood.id);
+          }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          aria-label={`Delete ${mood.name}`}
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+        </motion.button>
+      )}
       {/* Animated gradient background on hover */}
       <motion.div
         className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500"
