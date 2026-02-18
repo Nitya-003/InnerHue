@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Bookmark, Share2, Check } from 'lucide-react';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodData } from '@/lib/moodData';
@@ -29,6 +29,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [quote, setQuote] = useState<Quote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isShared, setIsShared] = useState(false);
   // Computed values must be safe even if data is empty
   const currentMood = moodData[currentMoodIndex] || moodData[0];
 
@@ -181,9 +182,34 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={async () => {
+                const url = window.location.href;
+                const title = `Feeling ${currentMood.name} on InnerHue`;
+                const text = `I'm exploring my emotions with InnerHue. Check it out!`;
+
+                if (navigator.share) {
+                  try {
+                    await navigator.share({ title, text, url });
+                  } catch (err) {
+                    console.error('Error sharing:', err);
+                  }
+                } else {
+                  try {
+                    await navigator.clipboard.writeText(url);
+                    setIsShared(true);
+                    setTimeout(() => setIsShared(false), 2000);
+                  } catch (err) {
+                    console.error('Failed to copy:', err);
+                  }
+                }
+              }}
               className="p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <Share2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              {isShared ? (
+                <Check className="w-5 h-5 text-green-500" />
+              ) : (
+                <Share2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              )}
             </motion.button>
             <ThemeToggle />
           </div>

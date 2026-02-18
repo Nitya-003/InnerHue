@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Mood {
   id: string;
@@ -21,6 +21,13 @@ interface Particle {
   distance: number;
   duration: number; // Added
 }
+
+const particleVariants: Variants = {
+  animate: {
+    opacity: [0, 1, 0],
+    scale: [0, 1, 0],
+  },
+};
 
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
