@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
+import { MoodReflectionCard } from '@/components/MoodReflectionCard';
 import { MoodData } from '@/lib/moodData';
 
 interface MoodPageProps {
@@ -22,6 +23,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showReflectionCard, setShowReflectionCard] = useState(true);
   
   // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
@@ -61,6 +63,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     if (mood) {
         const newSuggestions = MoodData.getSuggestions(mood.id);
         setSuggestions(newSuggestions);
+        setShowReflectionCard(true); // Show reflection card when mood changes
     }
   }, [currentMoodIndex, moodData]);
 
@@ -162,6 +165,15 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       {/* Main Content */}
       <main className="px-6 pb-20">
         <div className="max-w-6xl mx-auto">
+          {/* Mood Reflection Card */}
+          {showReflectionCard && suggestions && (
+            <MoodReflectionCard 
+              mood={currentMood}
+              suggestion={suggestions}
+              onClose={() => setShowReflectionCard(false)}
+            />
+          )}
+
           <div className="grid lg:grid-cols-2 gap-8 items-start">
             {/* Left Side - Orb Visualizer */}
             <motion.div
