@@ -26,7 +26,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/mood" className="hover:text-primary transition-colors">
+                <Link href="/#mood-selection" className="hover:text-primary transition-colors">
                   Mood Selection
                 </Link>
               </li>

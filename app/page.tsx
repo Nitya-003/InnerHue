@@ -233,10 +233,11 @@ export default function Home() {
 
           {/* Mood Selection Grid */}
           <motion.div
+            id="mood-selection"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-center mb-8"
+            className="text-center mb-8 scroll-mt-24"
           >
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
               How are you feeling today?
