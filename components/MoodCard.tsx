@@ -384,7 +384,7 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
 
         {/* ====== BACK FACE (Reflection Card) ====== */}
         <div
-          className="mood-card-back flex flex-col items-center justify-between p-3 sm:p-4 cursor-pointer"
+          className="mood-card-back flex flex-col items-center justify-center gap-3 p-3 sm:p-4 cursor-pointer"
           onClick={onSelect}
           role="button"
           tabIndex={-1}
@@ -393,50 +393,29 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
             boxShadow: `0 20px 50px ${mood.color}40, 0 0 30px ${mood.glow}25, inset 0 1px 0 rgba(255,255,255,0.2)`,
           }}
         >
-          {/* Top: Mood emoji + Insight */}
-          <div className="flex flex-col items-center text-center gap-1 w-full">
-            <div className="flex items-center gap-1">
-              <span className="text-lg">{mood.emoji}</span>
-              <Sparkles className="w-3 h-3 sparkle-icon" style={{ color: mood.glow }} />
-            </div>
-            <p className="text-[0.6rem] sm:text-[0.65rem] leading-tight text-white/90 font-medium line-clamp-3">
-              {reflection.insight}
-            </p>
-          </div>
+          {/* Quote */}
+          <p className="text-[0.65rem] sm:text-xs leading-snug text-white/85 italic text-center px-1">
+            &ldquo;{reflection.question}&rdquo;
+          </p>
 
-          {/* Middle: Reflective Question */}
-          <div
-            className="w-full rounded-lg px-2 py-1.5 my-1"
-            style={{
-              background: `linear-gradient(135deg, ${mood.color}20, ${mood.glow}15)`,
-              border: `1px solid ${mood.color}30`,
-            }}
-          >
-            <p className="text-[0.55rem] sm:text-[0.6rem] leading-tight text-white/80 italic text-center">
-              &ldquo;{reflection.question}&rdquo;
-            </p>
-          </div>
-
-          {/* Bottom: Suggested Actions */}
-          <div className="flex flex-wrap gap-1 justify-center w-full">
-            {reflection.actions.map((action) => {
-              const IconComp = actionIcons[action.icon];
-              return (
-                <span
-                  key={action.label}
-                  className="reflection-action"
-                  title={action.description}
-                  style={{
-                    borderColor: `${mood.color}40`,
-                    background: `${mood.color}25`,
-                  }}
-                >
-                  <IconComp className="w-2.5 h-2.5" />
-                  {action.label}
-                </span>
-              );
-            })}
-          </div>
+          {/* Single quick recommendation */}
+          {reflection.actions[0] && (() => {
+            const action = reflection.actions[0];
+            const IconComp = actionIcons[action.icon];
+            return (
+              <span
+                className="reflection-action"
+                title={action.description}
+                style={{
+                  borderColor: `${mood.color}40`,
+                  background: `${mood.color}25`,
+                }}
+              >
+                <IconComp className="w-2.5 h-2.5" />
+                {action.label}
+              </span>
+            );
+          })()}
         </div>
       </div>
     </motion.div>
