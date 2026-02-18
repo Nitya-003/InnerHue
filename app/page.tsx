@@ -4,17 +4,14 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight, Plus } from 'lucide-react';
-
 import { MoodCard } from '@/components/MoodCard';
 import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { QuoteCard } from '@/components/QuoteCard';
-import { usePageTransition } from '@/components/TransitionProvider';
-import { Hero } from '@/components/landing/Hero';
-import { ErrorState } from '@/components/ErrorState';
-
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Hero } from '@/components/landing/Hero';
+import { ErrorState } from '@/components/ErrorState';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
@@ -70,7 +67,7 @@ interface Orb {
 }
 
 export default function Home() {
-  const { startTransition } = usePageTransition();
+  // Removed usePageTransition, as it is not defined
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
@@ -80,12 +77,12 @@ export default function Home() {
     initial: { opacity: 0 },
     animate: {
       opacity: 1,
-      transition: { duration: 0.8, ease: 'easeInOut' as const}
+      transition: { duration: 0.8 }
     },
     exit: {
       opacity: 0,
       scale: 0.98,
-      transition: { duration: 0.4, ease: 'easeInOut' as const}
+      transition: { duration: 0.4 }
     }
   };
 
