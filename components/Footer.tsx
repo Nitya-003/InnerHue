@@ -26,7 +26,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/mood" className="hover:text-primary transition-colors">
+                <Link href="/#mood-selection" className="hover:text-primary transition-colors">
                   Mood Selection
                 </Link>
               </li>
@@ -43,6 +43,11 @@ export function Footer() {
               <li>
                 <Link href="/about" className="hover:text-primary transition-colors">
                   About
+                </Link>
+              </li>
+              <li>
+                <Link href="/faqs" className="hover:text-primary transition-colors">
+                  FAQs
                 </Link>
               </li>
             </ul>

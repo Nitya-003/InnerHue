@@ -4,20 +4,14 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight, Plus } from 'lucide-react';
-
 import { MoodCard } from '@/components/MoodCard';
 import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { QuoteCard } from '@/components/QuoteCard';
-import { usePageTransition } from '@/components/TransitionProvider';
-import { Hero } from '@/components/landing/Hero';
-import { ErrorState } from '@/components/ErrorState';
-
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { Hero } from '@/components/landing';
+import { Hero } from '@/components/landing/Hero';
 import { ErrorState } from '@/components/ErrorState';
-import { StreakNavIcon } from '@/components/StreakCard';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
@@ -60,7 +54,20 @@ const moods = [
   { id: 'silly', name: 'Silly', emoji: '🤪', color: '#FFC107', glow: '#FFD54F' }
 ];
 
+interface Orb {
+  id: number;
+  color: string;
+  width: number;
+  height: number;
+  left: number;
+  top: number;
+  x: number;
+  y: number;
+  duration: number;
+}
+
 export default function Home() {
+  // Removed usePageTransition, as it is not defined
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
@@ -70,12 +77,12 @@ export default function Home() {
     initial: { opacity: 0 },
     animate: {
       opacity: 1,
-      transition: { duration: 0.8, ease: 'easeInOut' }
+      transition: { duration: 0.8 }
     },
     exit: {
       opacity: 0,
       scale: 0.98,
-      transition: { duration: 0.4, ease: 'easeInOut' }
+      transition: { duration: 0.4 }
     }
   };
 
@@ -174,10 +181,7 @@ export default function Home() {
                 <Music className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
             </Link>
-            <StreakNavIcon />
-            <div className="p-1 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10">
-              <ThemeToggle />
-            </div>
+            <ThemeToggle />
           </nav>
         </div>
       </motion.header>
@@ -241,10 +245,11 @@ export default function Home() {
 
           {/* Mood Selection Grid */}
           <motion.div
+            id="mood-selection"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-center mb-8"
+            className="text-center mb-8 scroll-mt-24"
           >
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
               How are you feeling today?
@@ -412,16 +417,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
-        className="relative z-10 p-6 border-t border-white/20"
-      >
-        <div className="max-w-6xl mx-auto text-center text-gray-400">
-          <p>&copy; 2026 InnerHue. Crafted with care for emotional well-being.</p>
-        </div>
-      </motion.footer>
+      
     </motion.div>
   );
 }
