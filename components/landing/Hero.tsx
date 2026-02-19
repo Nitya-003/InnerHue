@@ -3,10 +3,10 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { LandingOrb } from './LandingOrb';
-import { usePageTransition } from '@/components/TransitionProvider';
+import { useRouter } from 'next/navigation';
 
 export function Hero() {
-  const { startTransition, isTransitioning } = usePageTransition();
+  const router = useRouter();
 
   // Animation variants for staggered fade-in
   const containerVariants = {
@@ -93,9 +93,8 @@ export function Hero() {
         {/* Primary CTA Button - Glassmorphic Style with Custom Transition */}
         <motion.div variants={itemVariants}>
           <motion.button
-            onClick={() => startTransition('/explore')}
-            disabled={isTransitioning}
-            whileHover={{ 
+            onClick={() => router.push('/explore')}
+            whileHover={{
               scale: 1.08,
               boxShadow: '0 0 60px rgba(139, 92, 246, 0.6)',
             }}
@@ -112,20 +111,20 @@ export function Hero() {
                        disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {/* Animated gradient background on hover */}
-            <motion.span 
+            <motion.span
               className="absolute inset-0 rounded-full"
               style={{
                 background: 'linear-gradient(90deg, rgba(139,92,246,0.3) 0%, rgba(236,72,153,0.3) 50%, rgba(59,130,246,0.3) 100%)',
                 backgroundSize: '200% 100%',
               }}
               initial={{ opacity: 0, backgroundPosition: '0% 50%' }}
-              whileHover={{ 
-                opacity: 1, 
+              whileHover={{
+                opacity: 1,
                 backgroundPosition: '100% 50%',
                 transition: { duration: 0.8 }
               }}
             />
-            
+
             {/* Shimmer effect */}
             <motion.span
               className="absolute inset-0 rounded-full"
@@ -142,7 +141,7 @@ export function Hero() {
                 ease: 'linear',
               }}
             />
-            
+
             <span className="relative z-10">Start Reflecting</span>
             <motion.span
               className="relative z-10"
