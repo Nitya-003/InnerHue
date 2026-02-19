@@ -477,7 +477,7 @@ export const MoodData = {
       {
         prompt: "This vibrant energy is perfect for connecting with others. Who could you inspire or energize today?",
         quote: "The way to get started is to quit talking and begin doing.",
-        author: "Walt Disney", 
+        author: "Walt Disney",
         keywords: ["sharing", "connection", "fun", "celebration", "enthusiasm", "joy", "social", "laughter", "playful", "outgoing", "bubbly", "animated", "spirited", "friendly", "warm"],
         music: "Upbeat dance music - Artists like Calvin Harris, David Guetta",
         breathing: {
@@ -759,36 +759,36 @@ export const MoodData = {
     // First check default moods
     const defaultMood = this.moods[id as keyof typeof this.moods];
     if (defaultMood) return defaultMood;
-    
+
     // Then check custom moods
     if (typeof window !== 'undefined') {
       const { CustomMoodStorage } = require('./customMoods');
       const customMoods = CustomMoodStorage.getCustomMoods();
       return customMoods.find((mood: any) => mood.id === id) || null;
     }
-    
+
     return null;
   },
 
   getAllMoods() {
     // Get default moods
     const defaultMoods = Object.values(this.moods);
-    
+
     // Get custom moods if in browser environment
     if (typeof window !== 'undefined') {
       const { CustomMoodStorage } = require('./customMoods');
       const customMoods = CustomMoodStorage.getCustomMoods();
       const allMoods = [...defaultMoods, ...customMoods];
-      
+
       // Add isCustom flag to distinguish between default and custom moods
-      return allMoods.map(mood => ({
+      return allMoods.map((mood: any) => ({
         ...mood,
         isCustom: mood.hasOwnProperty('isCustom') ? mood.isCustom : false
       }));
     }
-    
+
     // Add isCustom: false to all default moods when on server
-    return defaultMoods.map(mood => ({
+    return defaultMoods.map((mood: any) => ({
       ...mood,
       isCustom: false
     }));

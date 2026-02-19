@@ -2,6 +2,12 @@
 
 import { motion, Variants } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
+
+const ShaderOrb = dynamic(
+  () => import('@/components/ShaderOrb').then(m => m.ShaderOrb),
+  { ssr: false, loading: () => <div className="w-full h-full" /> }
+);
 
 interface Mood {
   id: string;
@@ -58,6 +64,18 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     setTimeout(() => setConfetti([]), 2000);
   };
 
+  const particleVariants: Variants = {
+    animate: {
+      scale: [1, 1.5, 1],
+      opacity: [0.6, 1, 0.6],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
+  };
+
   const orbVariants: Variants = {
     idle: {
       scale: [1, 1.05, 1],
@@ -79,17 +97,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
-  const particleVariants: Variants = {
-    animate: {
-      opacity: [0.4, 1, 0.4],
-      scale: [1, 1.2, 1],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-  };
+
 
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
@@ -173,50 +181,21 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               }}
             />
 
-            <motion.div
-              className="w-24 h-24 md:w-32 md:h-32 rounded-full relative overflow-hidden shadow-2xl"
-              style={{
-                background: `linear-gradient(135deg, ${mood.color} 0%, ${mood.glow} 100%)`,
-                boxShadow: `0 0 40px ${mood.glow}60, inset 0 0 20px rgba(255,255,255,0.3)`,
-              }}
+            {/* 3D Shader Orb */}
+            <div
+              className="w-40 h-40 md:w-48 md:h-48 relative cursor-pointer"
+              onClick={handleEmojiClick}
             >
-              <motion.div
-                className="absolute inset-2 rounded-full"
-                style={{
-                  background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8) 0%, transparent 50%)`,
-                }}
-                animate={{
-                  opacity: [0.3, 0.8, 0.3],
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-
-              <div
-                className="absolute inset-0 flex items-center justify-center cursor-pointer z-20"
-                onClick={handleEmojiClick}
+              <ShaderOrb mood={mood} />
+              {/* Emoji overlay */}
+              <motion.span
+                className="absolute bottom-2 right-2 text-2xl select-none pointer-events-none z-20"
+                animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <motion.span
-                  className="text-4xl select-none"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0],
-                  }}
-                  whileTap={{ scale: 0.8 }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  {mood.emoji}
-                </motion.span>
-              </div>
-            </motion.div>
+                {mood.emoji}
+              </motion.span>
+            </div>
           </motion.div>
 
           {[...Array(3)].map((_, i) => (
