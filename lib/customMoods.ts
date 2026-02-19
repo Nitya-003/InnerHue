@@ -32,7 +32,7 @@ export const CustomMoodStorage = {
    */
   getCustomMoods(): CustomMood[] {
     if (typeof window === 'undefined') return [];
-    
+
     try {
       const stored = localStorage.getItem(CUSTOM_MOODS_STORAGE_KEY);
       return stored ? JSON.parse(stored) : [];
@@ -47,7 +47,7 @@ export const CustomMoodStorage = {
    */
   saveCustomMood(mood: Omit<CustomMood, 'id' | 'isCustom' | 'createdAt'>): CustomMood {
     const customMoods = this.getCustomMoods();
-    
+
     const newMood: CustomMood = {
       ...mood,
       id: `custom_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
@@ -56,7 +56,7 @@ export const CustomMoodStorage = {
     };
 
     customMoods.push(newMood);
-    
+
     try {
       localStorage.setItem(CUSTOM_MOODS_STORAGE_KEY, JSON.stringify(customMoods));
       // Dispatch a custom event to notify components of the change
@@ -75,7 +75,7 @@ export const CustomMoodStorage = {
   deleteCustomMood(moodId: string): boolean {
     const customMoods = this.getCustomMoods();
     const filteredMoods = customMoods.filter(mood => mood.id !== moodId);
-    
+
     if (filteredMoods.length === customMoods.length) {
       return false; // Mood not found
     }
@@ -95,7 +95,7 @@ export const CustomMoodStorage = {
    */
   moodNameExists(name: string): boolean {
     const customMoods = this.getCustomMoods();
-    return customMoods.some(mood => 
+    return customMoods.some(mood =>
       mood.name.toLowerCase() === name.toLowerCase()
     );
   },
@@ -143,19 +143,12 @@ export function getCombinedMoods(defaultMoods: Mood[]): Mood[] {
  * Hook for listening to custom mood changes
  */
 export function useCustomMoods(defaultMoods: Mood[] = []) {
-  if (typeof window === 'undefined') {
-    return {
-      allMoods: defaultMoods,
-      customMoods: [],
-      addCustomMood: () => Promise.reject(new Error('Not available on server')),
-      deleteCustomMood: () => false,
-      refreshMoods: () => {}
-    };
-  }
-
   const [customMoods, setCustomMoods] = useState<CustomMood[]>([]);
+  const isClient = typeof window !== 'undefined';
 
   useEffect(() => {
+    if (!isClient) return;
+
     // Load initial custom moods
     const loadCustomMoods = () => {
       const moods = CustomMoodStorage.getCustomMoods();
@@ -174,7 +167,17 @@ export function useCustomMoods(defaultMoods: Mood[] = []) {
     return () => {
       window.removeEventListener('customMoodsUpdated', handleCustomMoodsUpdate as EventListener);
     };
-  }, []);
+  }, [isClient]);
+
+  if (!isClient) {
+    return {
+      allMoods: defaultMoods,
+      customMoods: [],
+      addCustomMood: () => Promise.reject(new Error('Not available on server')),
+      deleteCustomMood: () => false,
+      refreshMoods: () => { }
+    };
+  }
 
   const addCustomMood = async (moodData: Omit<CustomMood, 'id' | 'isCustom' | 'createdAt'>): Promise<CustomMood> => {
     return CustomMoodStorage.saveCustomMood(moodData);

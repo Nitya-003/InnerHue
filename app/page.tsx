@@ -120,7 +120,7 @@ export default function Home() {
         transition={{ delay: 0.2, duration: 0.6 }}
         className="relative z-10 p-6"
       >
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <Heart className="text-pink-400 w-10 h-10" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
@@ -128,7 +128,7 @@ export default function Home() {
             </h1>
           </div>
 
-          <nav className="flex items-center space-x-2 md:space-x-4">
+          <nav className="flex items-center space-x-2 md:space-x-3">
             <Link href="/emotions">
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -143,6 +143,7 @@ export default function Home() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
+                title="Analytics"
               >
                 <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
@@ -151,6 +152,7 @@ export default function Home() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
+                title="Music"
               >
                 <Music className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </motion.div>
@@ -165,7 +167,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="relative z-10 px-4 md:px-6 pb-20">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <motion.section
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -370,9 +372,9 @@ export default function Home() {
               </h3>
 
               <p className="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8">
-                Join thousands who have discovered deeper self-awareness through InnerHue's
+                Join thousands who have discovered deeper self-awareness through InnerHue&apos;s
                 guided emotional reflection experience.
-              </p>
+              </p >
 
               <Link href="/emotions">
                 <motion.button
@@ -385,21 +387,22 @@ export default function Home() {
                   <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </Link>
-            </div>
-          </motion.section>
-        </div>
-      </main>
+            </div >
+          </motion.section >
+        </div >
+      </main >
 
       {/* AI Therapist Chatbot */}
-      <AITherapist
+      < AITherapist
         activeEmotion={activeMood?.id}
         onEmotionDetected={(emotions) => {
           const found = moods.find(m => emotions.includes(m.id));
           if (found && !selectedMoods.includes(found.id) && selectedMoods.length < maxSelections) {
             setSelectedMoods(prev => [...prev, found.id]);
           }
-        }}
+        }
+        }
       />
-    </motion.div>
+    </motion.div >
   );
 }
