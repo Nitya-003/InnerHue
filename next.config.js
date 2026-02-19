@@ -12,6 +12,11 @@ const nextConfig = {
   },
   images: { unoptimized: true },
   output: 'standalone',
+  transpilePackages: [
+    '@react-three/fiber',
+    '@react-three/drei',
+    'three',
+  ],
   experimental: {
     outputFileTracingRoot: undefined,
   },

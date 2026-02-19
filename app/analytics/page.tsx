@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, FileJson, FileText } from 'lucide-react';
 import { MoodChart } from '@/components/MoodChart';
-import { MoodStats } from '@/components/MoodStats';
+import { BentoDashboard } from '@/components/BentoDashboard';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
@@ -154,18 +154,9 @@ export default function AnalyticsPage() {
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", stiffness: 100 }}
+                transition={{ type: 'spring' as const, stiffness: 100 }}
               >
-                <MoodStats />
-              </motion.div>
-
-              {/* Chart */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, type: "spring", stiffness: 100 }}
-              >
-                <MoodChart />
+                <BentoDashboard />
               </motion.div>
 
               {/* History */}

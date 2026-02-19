@@ -6,9 +6,9 @@ import { motion } from 'framer-motion';
 import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight, Plus } from 'lucide-react';
 import { MoodCard } from '@/components/MoodCard';
 import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
-import { FloatingBackground } from '@/components/FloatingBackground';
+import { AuroraBackground } from '@/components/AuroraBackground';
 import { QuoteCard } from '@/components/QuoteCard';
-import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
+import AITherapist from '@/components/AITherapist';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Hero } from '@/components/landing/Hero';
 import { ErrorState } from '@/components/ErrorState';
@@ -67,11 +67,15 @@ interface Orb {
 }
 
 export default function Home() {
-  // Removed usePageTransition, as it is not defined
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
   const maxSelections = 3;
+
+  // Derive active emotion color for aurora
+  const activeMood = moods.find(m => selectedMoods[0] === m.id);
+  const auroraColor = activeMood?.color;
+  const auroraGlow = activeMood?.glow;
 
   const pageVariants = {
     initial: { opacity: 0 },
@@ -104,38 +108,10 @@ export default function Home() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden"
+      className="min-h-screen relative overflow-hidden bg-[#0f0720]"
     >
-      {/* Soft Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'][i]} 0%, transparent 70%)`,
-              width: Math.random() * 200 + 150,
-              height: Math.random() * 200 + 150,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, Math.random() * 50 - 25],
-              y: [0, Math.random() * 50 - 25],
-              scale: [1, 1.1, 1],
-              opacity: [0.1, 0.25, 0.1]
-            }}
-            transition={{
-              duration: 6 + Math.random() * 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.8
-            }}
-          />
-        ))}
-      </div>
-
-      <FloatingBackground />
+      {/* Dynamic Aurora Background */}
+      <AuroraBackground emotionColor={auroraColor} emotionGlow={auroraGlow} />
 
       {/* Header */}
       <motion.header
@@ -416,8 +392,16 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Footer */}
-      
+      {/* AI Therapist Chatbot */}
+      <AITherapist
+        activeEmotion={activeMood?.id}
+        onEmotionDetected={(emotions) => {
+          const found = moods.find(m => emotions.includes(m.id));
+          if (found && !selectedMoods.includes(found.id) && selectedMoods.length < maxSelections) {
+            setSelectedMoods(prev => [...prev, found.id]);
+          }
+        }}
+      />
     </motion.div>
   );
 }

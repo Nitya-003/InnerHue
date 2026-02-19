@@ -90,7 +90,6 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   // Fix 2: Sync suggestions automatically when Index or Data changes
   useEffect(() => {
     if (!moodData.length) return;
-
     const mood = moodData[currentMoodIndex];
     if (mood) {
       const newSuggestions = MoodData.getSuggestions(mood.id);
@@ -98,6 +97,25 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       setShowReflectionCard(true); // Show reflection card when mood changes
     }
   }, [currentMoodIndex, moodData]);
+
+  // Load quote for the current mood
+  const loadQuote = useCallback(async () => {
+    if (!currentMood) return;
+    setQuoteLoading(true);
+    try {
+      const tag = moodTags[currentMood.id] ?? 'inspirational';
+      const q = await getQuoteByMood(tag);
+      setQuote(q);
+    } catch {
+      setQuote(null);
+    } finally {
+      setQuoteLoading(false);
+    }
+  }, [currentMood]);
+
+  useEffect(() => {
+    loadQuote();
+  }, [loadQuote]);
 
   if (!moodData.length || !suggestions) {
     return (
@@ -255,15 +273,11 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                 isRefreshing={isRefreshing}
                 onRefresh={async () => {
                   setIsRefreshing(true);
-                  // Small delay to show visual feedback
                   await new Promise(resolve => setTimeout(resolve, 300));
                   const newSuggestions = MoodData.getSuggestions(currentMood.id);
                   setSuggestions({ ...newSuggestions });
                   setIsRefreshing(false);
                 }}
-                quoteData={quote}
-                isQuoteLoading={quoteLoading}
-                onQuoteRefresh={loadQuote}
               />
             </motion.div>
           </div>
