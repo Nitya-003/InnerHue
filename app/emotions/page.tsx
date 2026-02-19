@@ -9,6 +9,7 @@ import { Heart, BarChart3, Music, ArrowLeft, Settings } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { AddMoodModal } from '@/components/AddMoodModal';
 import { MoodData } from '@/lib/moodData';
+import { CustomMoodStorage, CustomMood } from '@/lib/customMoods';
 
 // Enhanced mood data with categories for better color coding - now loaded dynamically
 const defaultMoods = [

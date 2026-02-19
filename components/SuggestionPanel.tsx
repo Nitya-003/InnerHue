@@ -22,6 +22,10 @@ interface SuggestionPanelProps {
   mood: any;
   onRefresh: () => void | Promise<void>;
   isRefreshing?: boolean;
+  /** Optional quote data from API (mood detail page) */
+  quoteData?: { content: string; author: string } | null;
+  isQuoteLoading?: boolean;
+  onQuoteRefresh?: () => void | Promise<void>;
 }
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
@@ -43,12 +47,12 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 }
+      transition: { type: "spring" as const, stiffness: 100, damping: 15 }
     },
     hover: {
       scale: 1.03,
       y: -8,
-      transition: { type: "spring", stiffness: 400, damping: 25 }
+      transition: { type: "spring" as const, stiffness: 400, damping: 25 }
     }
   };
 

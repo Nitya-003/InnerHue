@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Mood {
   id: string;
@@ -79,6 +79,17 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
+  const particleVariants: Variants = {
+    animate: {
+      opacity: [0.4, 1, 0.4],
+      scale: [1, 1.2, 1],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+    },
+  };
 
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
