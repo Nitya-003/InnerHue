@@ -19,7 +19,7 @@ const item = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' }
+    transition: { duration: 0.6, ease: 'easeOut' as const }
   }
 };
 
@@ -97,16 +97,6 @@ export default function TermsOfService() {
               </div>
             </motion.div>
           ))}
-        </motion.div>
-
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="mt-20 text-center text-gray-500 text-sm"
-        >
-          © {new Date().getFullYear()} InnerHue. All rights reserved.
         </motion.div>
 
       </div>

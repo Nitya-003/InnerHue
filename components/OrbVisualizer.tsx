@@ -98,6 +98,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   };
 
 
+
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
   useEffect(() => {

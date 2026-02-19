@@ -12,6 +12,8 @@ interface Mood {
   emoji: string;
   color: string;
   glow: string;
+  category?: string;
+  isCustom?: boolean;
 }
 
 interface MoodCardProps {
