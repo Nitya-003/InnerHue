@@ -96,8 +96,15 @@ export default function Insights() {
 }
 
 /* 💎 Premium Section Component */
-function PremiumSection({ icon, title, items, accent }) {
-  const ref = useRef(null);
+interface PremiumSectionProps {
+  icon: React.ReactNode;
+  title: string;
+  items: string[];
+  accent: string;
+}
+
+function PremiumSection({ icon, title, items, accent }: PremiumSectionProps) {
+  const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -105,7 +112,8 @@ function PremiumSection({ icon, title, items, accent }) {
   const rotateX = useTransform(y, [-50, 50], [8, -8]);
   const rotateY = useTransform(x, [-50, 50], [-8, 8]);
 
-  function handleMouseMove(e) {
+  function handleMouseMove(e: React.MouseEvent) {
+    if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     x.set(e.clientX - rect.left - rect.width / 2);
     y.set(e.clientY - rect.top - rect.height / 2);

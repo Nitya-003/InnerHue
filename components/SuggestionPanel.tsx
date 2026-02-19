@@ -22,9 +22,10 @@ interface SuggestionPanelProps {
   mood: any;
   onRefresh: () => void | Promise<void>;
   isRefreshing?: boolean;
-  quoteData?: any; // To match Quote type but loose for now to avoid import issues
+  /** Optional quote data from API (mood detail page) */
+  quoteData?: { content: string; author: string } | null;
   isQuoteLoading?: boolean;
-  onQuoteRefresh?: () => void;
+  onQuoteRefresh?: () => void | Promise<void>;
 }
 
 export function SuggestionPanel({
@@ -191,7 +192,7 @@ export function SuggestionPanel({
             boxShadow: hoveredCard === 'quote' ? `0 25px 50px ${mood.glow}30, 0 0 0 1px ${mood.color}40` : '0 10px 30px rgba(0,0,0,0.1)',
           }}
         >
-          <motion.div className="absolute right-6 top-4 text-8xl font-serif opacity-5 group-hover:opacity-15 transition-opacity duration-500" style={{ color: mood.color }} animate={{ rotate: [0, 5, 0], scale: [1, 1.05, 1] }} transition={{ duration: 4, repeat: Infinity }}>"</motion.div>
+          <motion.div className="absolute right-6 top-4 text-8xl font-serif opacity-5 group-hover:opacity-15 transition-opacity duration-500" style={{ color: mood.color }} animate={{ rotate: [0, 5, 0], scale: [1, 1.05, 1] }} transition={{ duration: 4, repeat: Infinity }}>&quot;</motion.div>
           <div className="flex items-start space-x-4 relative z-10">
             <motion.div className="p-3 rounded-xl shadow-md" style={{ background: `linear-gradient(135deg, ${mood.glow}30, ${mood.color}20)` }} whileHover={{ rotate: [0, -10, 10, 0], scale: 1.15 }} transition={{ duration: 0.5 }}>
               <Quote className="w-6 h-6" style={{ color: mood.glow }} />
@@ -216,7 +217,7 @@ export function SuggestionPanel({
                 </div>
               </div>
               <blockquote className="text-gray-700 italic leading-relaxed mb-3 text-lg group-hover:text-gray-800 transition-colors">
-                "{quoteData?.text || suggestions.quote}"
+                "{quoteData?.content || suggestions.quote}"
               </blockquote>
               <motion.cite className="text-sm font-medium flex items-center gap-2" style={{ color: mood.color }}>
                 <span className="w-8 h-0.5 rounded-full" style={{ background: mood.color }} />

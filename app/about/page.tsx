@@ -74,7 +74,7 @@ export default function AboutUs() {
                             Our Mission
                         </h2>
                         <p className="text-lg text-gray-200 leading-relaxed">
-                            In a world that never stops moving, it's easy to lose touch with how we really feel.
+                            In a world that never stops moving, it&apos;s easy to lose touch with how we really feel.
                             <strong>InnerHue</strong> was born from a simple belief: acknowledging your emotions is the first step towards well-being.
                             We aim to provide a safe, beautiful, and intuitive space where you can pause, reflect, and find clarity amidst the chaos.
                         </p>
@@ -92,7 +92,7 @@ export default function AboutUs() {
                         <p className="text-gray-300 leading-relaxed">
                             InnerHue uses color psychology and mood tracking to help you visualize your emotional state.
                             By selecting your current mood, you unlock personalized journal prompts, inspirational quotes, and
-                            curated resources designed to support exactly how you're feeling right now.
+                            curated resources designed to support exactly how you&apos;re feeling right now.
                         </p>
                     </motion.div>
 
@@ -106,8 +106,8 @@ export default function AboutUs() {
                         </div>
                         <h3 className="text-2xl font-bold text-white mb-4">For Everyone</h3>
                         <p className="text-gray-300 leading-relaxed">
-                            Whether you're feeling overwhelmed, ecstatic, or somewhere in between, InnerHue is here for you.
-                            We believe that every emotion is valid and deserves to be heard. There is no "right" or "wrong" way to feel—only
+                            Whether you&apos;re feeling overwhelmed, ecstatic, or somewhere in between, InnerHue is here for you.
+                            We believe that every emotion is valid and deserves to be heard. There is no &quot;right&quot; or &quot;wrong&quot; way to feel—only
                             your unique human experience.
                         </p>
                     </motion.div>
@@ -118,7 +118,7 @@ export default function AboutUs() {
                         className="md:col-span-2 text-center py-12"
                     >
                         <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-purple-300 mb-6">
-                            "To feel is to be human."
+                            &quot;To feel is to be human.&quot;
                         </h3>
                         <p className="text-gray-400">
                             Thank you for being part of our journey.
