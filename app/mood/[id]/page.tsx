@@ -99,11 +99,11 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
 
   if (!moodData.length || !suggestions) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[hsl(var(--page-light-from))] dark:via-[hsl(var(--page-light-via))] dark:to-[hsl(var(--page-light-to))] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0f0720] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full"
+          className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full"
         />
       </div>
     );
@@ -112,7 +112,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   // At this point currentMood is guaranteed to be defined because moodData.length > 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[hsl(var(--page-light-from))] dark:via-[hsl(var(--page-light-via))] dark:to-[hsl(var(--page-light-to))]">
+    <div className="min-h-screen bg-[#0f0720]">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -124,10 +124,10 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="flex items-center space-x-2 p-2 rounded-lg bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <ArrowLeft className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="hidden md:inline text-purple-600 dark:text-purple-400 font-medium">Back</span>
+              <ArrowLeft className="w-5 h-5 text-white/70" />
+              <span className="hidden md:inline text-white font-medium">Back</span>
             </motion.button>
           </Link>
 
@@ -153,10 +153,10 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                     </motion.button>
                   ))}
                 </div>
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                <h1 className="text-2xl font-bold text-white">
                   Feeling {currentMood.name}
                   {moodData.length > 1 && (
-                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                    <span className="text-sm text-white/60 ml-2">
                       ({currentMoodIndex + 1} of {moodData.length})
                     </span>
                   )}
@@ -165,7 +165,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             ) : (
               <>
                 <span className="text-xl md:text-2xl">{currentMood.emoji}</span>
-                <h1 className="text-lg md:text-2xl font-bold text-gray-800 dark:text-gray-200">
+                <h1 className="text-lg md:text-2xl font-bold text-white">
                   Feeling {currentMood.name}
                 </h1>
               </>
@@ -176,16 +176,16 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="p-2 rounded-lg bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <Bookmark className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <Bookmark className="w-5 h-5 text-white/70" />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="p-2 rounded-lg bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <Share2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <Share2 className="w-5 h-5 text-white/70" />
             </motion.button>
             <ThemeToggle />
           </div>

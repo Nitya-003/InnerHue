@@ -275,35 +275,7 @@ export default function PersonalizationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full opacity-20"
-            style={{
-              background: `radial-gradient(circle, ${['#FF6B6B', '#4ECDC4', '#45B7D1', '#DDA0DD', '#F7DC6F', '#98D8C8'][i]} 0%, transparent 70%)`,
-              width: Math.random() * 300 + 150,
-              height: Math.random() * 300 + 150,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, Math.random() * 80 - 40],
-              y: [0, Math.random() * 80 - 40],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 10 + Math.random() * 5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
-
-      <FloatingBackground />
+    <div className="min-h-screen bg-[#0f0720] relative overflow-hidden">
 
       {/* Header */}
       <motion.header
@@ -316,15 +288,15 @@ export default function PersonalizationPage() {
             <Link href="/emotions">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                className="p-2 rounded-lg bg-white/10 backdrop-blur hover:bg-white/20 shadow-sm hover:shadow-md transition-all border border-white/10"
               >
-                <ArrowLeft className="w-6 h-6 text-white" />
+                <ArrowLeft className="w-6 h-6 text-white/70" />
               </motion.div>
             </Link>
 
             <div className="flex items-center space-x-2">
-              <Settings className="text-purple-400 w-8 h-8" />
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+              <Settings className="text-white w-8 h-8" />
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">
                 Personalization
               </h1>
             </div>
@@ -365,10 +337,10 @@ export default function PersonalizationPage() {
             transition={{ delay: 0.1 }}
             className="text-center mb-8"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3 drop-shadow-lg">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
               Make It Yours
             </h2>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">
               Customize how you express and track your emotions with personalized colors, 
               intensity levels, subcategories, and your own emotional vocabulary.
             </p>
@@ -390,10 +362,10 @@ export default function PersonalizationPage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex-shrink-0 px-4 py-3 rounded-xl flex items-center gap-2 transition-all ${
+                    className={`flex-shrink-0 px-4 py-3 rounded-xl flex items-center gap-2 transition-all backdrop-blur-lg ${
                       activeTab === tab.id
-                        ? 'bg-gradient-to-r from-purple-500/50 to-pink-500/50 border border-white/30'
-                        : 'bg-white/10 border border-white/10 hover:bg-white/15'
+                        ? 'bg-white/20 border border-white/30'
+                        : 'bg-white/5 border border-white/10 hover:bg-white/10'
                     }`}
                   >
                     <Icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-white' : 'text-white/70'}`} />

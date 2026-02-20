@@ -147,8 +147,8 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
           transition={{ delay: 0.1 }}
           className="backdrop-blur-md rounded-2xl p-6 shadow-lg border cursor-pointer transition-all duration-300 relative overflow-hidden group"
           style={{
-            background: `linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))`,
-            borderColor: hoveredCard === 'prompt' ? mood.color : 'rgba(255,255,255,0.5)',
+            background: `linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))`,
+            borderColor: hoveredCard === 'prompt' ? mood.color : 'rgba(255,255,255,0.1)',
             boxShadow: hoveredCard === 'prompt' ? `0 25px 50px ${mood.color}30, 0 0 0 1px ${mood.glow}40` : '0 10px 30px rgba(0,0,0,0.1)',
           }}
         >
@@ -159,11 +159,11 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
               <MessageCircle className="w-6 h-6" style={{ color: mood.color }} />
             </motion.div>
             <div className="flex-1">
-              <h4 className="font-bold text-gray-800 mb-2 text-lg group-hover:text-gray-900 transition-colors flex items-center gap-2">
+              <h4 className="font-bold text-white mb-2 text-lg group-hover:text-white/90 transition-colors flex items-center gap-2">
                 Journal Prompt
                 <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }} className="text-xs px-2 py-0.5 rounded-full" style={{ background: `${mood.color}20`, color: mood.color }}>Today</motion.span>
               </h4>
-              <p className="text-gray-700 leading-relaxed group-hover:text-gray-800 transition-colors">{suggestions.prompt}</p>
+              <p className="text-white/70 leading-relaxed group-hover:text-white/80 transition-colors">{suggestions.prompt}</p>
             </div>
           </div>
         </motion.div>
@@ -179,8 +179,8 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
           transition={{ delay: 0.2 }}
           className="backdrop-blur-md rounded-2xl p-6 shadow-lg border cursor-pointer transition-all duration-300 relative overflow-hidden group"
           style={{
-            background: `linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))`,
-            borderColor: hoveredCard === 'quote' ? mood.glow : 'rgba(255,255,255,0.5)',
+            background: `linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))`,
+            borderColor: hoveredCard === 'quote' ? mood.glow : 'rgba(255,255,255,0.1)',
             boxShadow: hoveredCard === 'quote' ? `0 25px 50px ${mood.glow}30, 0 0 0 1px ${mood.color}40` : '0 10px 30px rgba(0,0,0,0.1)',
           }}
         >
@@ -191,12 +191,12 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
             </motion.div>
             <div className="flex-1">
               <div className="flex items-start justify-between mb-2">
-                <h4 className="font-bold text-gray-800 text-lg group-hover:text-gray-900 transition-colors">Inspirational Quote</h4>
+                <h4 className="font-bold text-white text-lg group-hover:text-white/90 transition-colors">Inspirational Quote</h4>
                 <motion.button whileHover={{ scale: 1.2, rotate: 10 }} whileTap={{ scale: 0.9 }} onClick={handleCopy} className="p-2 rounded-full transition-all opacity-60 hover:opacity-100" style={{ background: `${mood.glow}20` }}>
                   <Copy className="w-4 h-4" style={{ color: mood.glow }} />
                 </motion.button>
               </div>
-              <blockquote className="text-gray-700 italic leading-relaxed mb-3 text-lg group-hover:text-gray-800 transition-colors">&quot;{suggestions.quote}&quot;</blockquote>
+              <blockquote className="text-white/70 italic leading-relaxed mb-3 text-lg group-hover:text-white/80 transition-colors">&quot;{suggestions.quote}&quot;</blockquote>
               <motion.cite className="text-sm font-medium flex items-center gap-2" style={{ color: mood.color }}>
                 <span className="w-8 h-0.5 rounded-full" style={{ background: mood.color }} />
                 {suggestions.author}
@@ -216,8 +216,8 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
           transition={{ delay: 0.3 }}
           className="backdrop-blur-md rounded-2xl p-6 shadow-lg border cursor-pointer transition-all duration-300 relative overflow-hidden group"
           style={{
-            background: `linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))`,
-            borderColor: hoveredCard === 'keywords' ? mood.color : 'rgba(255,255,255,0.5)',
+            background: `linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))`,
+            borderColor: hoveredCard === 'keywords' ? mood.color : 'rgba(255,255,255,0.1)',
             boxShadow: hoveredCard === 'keywords' ? `0 25px 50px ${mood.color}25, 0 0 0 1px ${mood.glow}35` : '0 10px 30px rgba(0,0,0,0.1)',
           }}
         >
@@ -231,7 +231,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
               <Hash className="w-6 h-6" style={{ color: mood.color }} />
             </motion.div>
             <div className="flex-1">
-              <h4 className="font-bold text-gray-800 mb-4 text-lg group-hover:text-gray-900">Emotion Keywords</h4>
+              <h4 className="font-bold text-white mb-4 text-lg group-hover:text-white/90">Emotion Keywords</h4>
               <div className="flex flex-wrap gap-3">
                 {suggestions.keywords.map((keyword, index) => (
                   <motion.span key={keyword} initial={{ opacity: 0, scale: 0.5, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 0.4 + index * 0.1, type: "spring", stiffness: 200 }} whileHover={{ scale: 1.2, y: -5, boxShadow: `0 10px 25px ${mood.color}50` }} className="px-4 py-2 rounded-full text-sm font-semibold cursor-pointer transition-all duration-200" style={{ background: `linear-gradient(135deg, ${mood.color}35, ${mood.glow}30)`, color: mood.color, border: `2px solid ${mood.color}40` }}>
@@ -254,8 +254,8 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
           transition={{ delay: 0.4 }}
           className="backdrop-blur-md rounded-2xl p-6 shadow-lg border cursor-pointer transition-all duration-300 relative overflow-hidden group"
           style={{
-            background: `linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))`,
-            borderColor: hoveredCard === 'music' ? mood.color : 'rgba(255,255,255,0.5)',
+            background: `linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))`,
+            borderColor: hoveredCard === 'music' ? mood.color : 'rgba(255,255,255,0.1)',
             boxShadow: hoveredCard === 'music' ? `0 25px 50px ${mood.color}25, 0 0 0 1px ${mood.glow}35` : '0 10px 30px rgba(0,0,0,0.1)',
           }}
         >
@@ -269,7 +269,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
               <Music className="w-6 h-6" style={{ color: mood.color }} />
             </motion.div>
             <div className="flex-1 space-y-4">
-              <h4 className="font-bold text-gray-800 text-lg group-hover:text-gray-900">Soundscape</h4>
+              <h4 className="font-bold text-white text-lg group-hover:text-white/90">Soundscape</h4>
               <div className="relative w-full h-[152px] rounded-xl overflow-hidden shadow-inner" style={{ background: `linear-gradient(135deg, ${mood.color}10, ${mood.glow}08)`, border: `1px solid ${mood.color}20` }}>
                 {!isPlayerLoaded && (
                   <div className="absolute inset-0 flex items-center justify-center backdrop-blur animate-pulse">
@@ -286,7 +286,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
               <motion.p className="text-sm italic flex items-center gap-2" style={{ color: mood.color }}>
                 <Sparkles className="w-4 h-4" />
                 <span className="font-semibold">Suggested:</span>
-                <span className="text-gray-600">{suggestions.music}</span>
+                <span className="text-white/60">{suggestions.music}</span>
               </motion.p>
             </div>
           </div>

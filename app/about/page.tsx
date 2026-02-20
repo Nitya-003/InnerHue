@@ -28,7 +28,7 @@ export default function AboutUs() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] relative overflow-hidden text-gray-100 font-sans">
+        <div className="min-h-screen bg-[#0f0720] relative overflow-hidden text-white font-sans">
             <FloatingBackground />
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-20">
@@ -38,7 +38,7 @@ export default function AboutUs() {
                     transition={{ duration: 0.5 }}
                     className="mb-16"
                 >
-                    <Link href="/" className="inline-flex items-center text-purple-300 hover:text-white mb-6 transition-colors group">
+                    <Link href="/" className="inline-flex items-center text-white/70 hover:text-white mb-6 transition-colors group">
                         <ChevronLeft className="w-5 h-5 mr-1 group-hover:-translate-x-1 transition-transform" />
                         Back to Home
                     </Link>
