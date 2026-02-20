@@ -2,11 +2,11 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "@/lib/validation"; 
+import { LoginSchema } from "@/lib/validation";
 import { z } from "zod";
 import { useState } from "react";
 import Link from "next/link";
-import { toast } from "sonner"; 
+import { toast } from "sonner";
 
 type LoginFormData = z.infer<typeof LoginSchema>;
 
@@ -26,15 +26,15 @@ export default function LoginForm() {
     try {
       const toastId = toast.loading("Logging in...");
       console.log("Logging in with:", data);
-      
+
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      
+
       toast.dismiss(toastId);
       toast.success("Welcome back!", {
         description: "You have successfully logged in.",
       });
-      
+
     } catch (error) {
       toast.error("Login failed", {
         description: "Please check your email and password.",
@@ -43,8 +43,8 @@ export default function LoginForm() {
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit(onSubmit)} 
+    <form
+      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-5 w-full max-w-md bg-white/5 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl ring-1 ring-white/5"
     >
       <div className="text-center mb-2">
@@ -96,9 +96,9 @@ export default function LoginForm() {
       {/* Footer Link */}
       <div className="text-center mt-2">
         <p className="text-sm text-gray-400">
-          Don't have an account?{" "}
-          <Link 
-            href="/signup" 
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/signup"
             className="text-purple-400 hover:text-purple-300 font-semibold hover:underline transition-all"
           >
             Create one now

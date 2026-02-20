@@ -143,10 +143,10 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
             {!botResponse ? (
               <div className="space-y-3">
                 <p className="text-gray-700 dark:text-gray-300">
-                  Hey there! 👋 I'm your emotion companion.
+                  Hey there! 👋 I&apos;m your emotion companion.
                 </p>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  Tell me how you're feeling and I'll help you explore your emotions!
+                  Tell me how you&apos;re feeling and I&apos;ll help you explore your emotions!
                 </p>
               </div>
             ) : (
