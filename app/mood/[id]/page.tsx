@@ -13,6 +13,8 @@ import { moodTags } from '@/lib/quoteTags';
 import { Quote } from '@/data/fallbackQuotes';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import reflectiveMoods from '@/lib/reflectiveMoods';
+import { getTraditionalMoodId } from '@/lib/moodMapping';
 
 interface MoodPageProps {
   params: {
@@ -48,14 +50,34 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
 
     // Get mood data for all selected moods
     const moodsData = moodIds
-      .map(id => MoodData.getMoodById(id))
+      .map(id => {
+        // Try reflective moods first, then fall back to traditional moods
+        const reflectiveMood = reflectiveMoods.find(m => m.id === id);
+        if (reflectiveMood) {
+          // Map reflective mood to traditional mood for getting suggestions
+          const traditionalId = getTraditionalMoodId(id);
+          const traditionalMood = MoodData.getMoodById(traditionalId);
+          // Create adapter object that combines both systems
+          return {
+            id: reflectiveMood.id,
+            name: reflectiveMood.label,
+            emoji: '✨', // Generic emoji for reflective moods
+            color: reflectiveMood.color,
+            glow: reflectiveMood.glow,
+            traditionalId: traditionalId, // Store for getting suggestions
+            spotifyPlaylistId: traditionalMood?.spotifyPlaylistId,
+          };
+        }
+        // Fall back to traditional mood system
+        return MoodData.getMoodById(id);
+      })
       .filter(Boolean);
 
     setMoodData(moodsData);
 
     // Save to Zustand store instead of localStorage
     moodIds.forEach(moodId => {
-      const moodInfo = MoodData.getMoodById(moodId);
+      const moodInfo = moodsData.find(m => m.id === moodId);
       if (moodInfo) {
         addMood({
           mood: moodId,
@@ -72,7 +94,9 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     if (!moodData.length) return;
     const mood = moodData[currentMoodIndex];
     if (mood) {
-      const newSuggestions = MoodData.getSuggestions(mood.id);
+      // Use traditionalId if available (for reflective moods), otherwise use the mood id
+      const suggestionId = (mood as any).traditionalId || mood.id;
+      const newSuggestions = MoodData.getSuggestions(suggestionId);
       setSuggestions(newSuggestions);
       setShowReflectionCard(true);
     }
@@ -83,7 +107,9 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     if (!currentMood) return;
     setQuoteLoading(true);
     try {
-      const tag = moodTags[currentMood.id] ?? 'inspirational';
+      // Use traditionalId for quote tags if available
+      const moodIdForTag = (currentMood as any).traditionalId || currentMood.id;
+      const tag = moodTags[moodIdForTag] ?? 'inspirational';
       const q = await getQuoteByMood(tag);
       setQuote(q);
     } catch {
@@ -229,7 +255,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                 onRefresh={async () => {
                   setIsRefreshing(true);
                   await new Promise(resolve => setTimeout(resolve, 300));
-                  const newSuggestions = MoodData.getSuggestions(currentMood.id);
+                  const suggestionId = (currentMood as any).traditionalId || currentMood.id;
+                  const newSuggestions = MoodData.getSuggestions(suggestionId);
                   setSuggestions({ ...newSuggestions });
                   setIsRefreshing(false);
                 }}
