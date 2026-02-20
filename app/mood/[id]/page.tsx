@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
+import { MoodReflectionCard } from '@/components/MoodReflectionCard';
 import { MoodData } from '@/lib/moodData';
 import { getQuoteByMood } from '@/lib/getQuote';
 import { moodTags } from '@/lib/quoteTags';
@@ -29,32 +30,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [quote, setQuote] = useState<Quote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  // Computed values must be safe even if data is empty
-  const currentMood = moodData[currentMoodIndex] || moodData[0];
-
-  const loadQuote = useCallback(async () => {
-    if (!currentMood) return;
-    setQuoteLoading(true);
-    try {
-      const tag = moodTags[currentMood.id] || 'inspirational';
-      const data = await getQuoteByMood(tag);
-      setQuote(data);
-    } catch (error) {
-      console.error("Failed to load quote", error);
-    } finally {
-      setQuoteLoading(false);
-    }
-  }, [currentMood]);
-
-  useEffect(() => {
-    if (currentMood?.id) {
-      loadQuote();
-    }
-  }, [currentMood?.id, loadQuote]);
-
-  // Get addMood action from Zustand store
-  const addMood = useMoodStore(state => state.addMood);
-
+  const [showReflectionCard, setShowReflectionCard] = useState(true);
+  
   // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
     // 🔥 Reset index when route/params change
@@ -90,8 +67,9 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
 
     const mood = moodData[currentMoodIndex];
     if (mood) {
-      const newSuggestions = MoodData.getSuggestions(mood.id);
-      setSuggestions(newSuggestions);
+        const newSuggestions = MoodData.getSuggestions(mood.id);
+        setSuggestions(newSuggestions);
+        setShowReflectionCard(true); // Show reflection card when mood changes
     }
   }, [currentMoodIndex, moodData]);
 
@@ -194,7 +172,16 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       {/* Main Content */}
       <main className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-4 md:gap-8 items-start">
+          {/* Mood Reflection Card */}
+          {showReflectionCard && suggestions && (
+            <MoodReflectionCard 
+              mood={currentMood}
+              suggestion={suggestions}
+              onClose={() => setShowReflectionCard(false)}
+            />
+          )}
+
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
             {/* Left Side - Orb Visualizer */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
