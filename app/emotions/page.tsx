@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Settings, BarChart3, Music } from 'lucide-react';
@@ -56,9 +56,9 @@ export default function EmotionsPage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-        className="sticky top-0 z-50 bg-[#0f0720]/80 backdrop-blur-sm border-b border-white/10"
+        className="sticky top-0 z-50 bg-[#0f0720]/80 backdrop-blur-sm border-b border-white/10 p-4 md:p-6"
       >
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-4">
+        <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <Link href="/">

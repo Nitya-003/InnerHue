@@ -61,7 +61,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
           return {
             id: reflectiveMood.id,
             name: reflectiveMood.label,
-            emoji: '✨', // Generic emoji for reflective moods
+            emoji: reflectiveMood.label?.charAt(0).toUpperCase() || '✨', // Use first letter for uniqueness
             color: reflectiveMood.color,
             glow: reflectiveMood.glow,
             traditionalId: traditionalId, // Store for getting suggestions

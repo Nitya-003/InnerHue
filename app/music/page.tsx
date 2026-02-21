@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind, Volume2 } from 'lucide-react';
@@ -52,6 +52,8 @@ export default function MusicPage() {
   useEffect(() => {
     // We create the audio object on the client side only
     audioRef.current = new Audio();
+    // Enable looping for continuous soundscapes
+    audioRef.current.loop = true;
 
     // Cleanup on unmount
     return () => {
@@ -60,6 +62,18 @@ export default function MusicPage() {
         audioRef.current = null;
       }
     };
+  }, []);
+
+  // Precompute random values for stable visualizer animation
+  const visualizerBars = useMemo(() => {
+    return Array.from({ length: 16 }, (_, i) => ({
+      heights: [
+        `${20 + Math.random() * 60}%`,
+        `${40 + Math.random() * 60}%`,
+        `${20 + Math.random() * 60}%`
+      ],
+      duration: 0.5 + Math.random() * 0.3
+    }));
   }, []);
 
   // Handle Play/Pause Logic
@@ -190,15 +204,15 @@ export default function MusicPage() {
                     {/* Animated Bars */}
                     {isPlaying && (
                       <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center gap-1 p-4 h-24">
-                        {[...Array(16)].map((_, i) => (
+                        {visualizerBars.map((bar, i) => (
                           <motion.div
                             key={i}
                             className="w-1 bg-white/40 rounded-full"
                             animate={{
-                              height: [`${20 + Math.random() * 60}%`, `${40 + Math.random() * 60}%`, `${20 + Math.random() * 60}%`],
+                              height: bar.heights,
                             }}
                             transition={{
-                              duration: 0.5 + Math.random() * 0.3,
+                              duration: bar.duration,
                               repeat: Infinity,
                               ease: "easeInOut",
                             }}
@@ -311,6 +325,12 @@ export default function MusicPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05, duration: 0.3 }}
                 whileHover={{ x: 4 }}
+                aria-pressed={isActive}
+                aria-label={
+                  isActive && isPlaying
+                    ? `Pause ${track.title} soundscape`
+                    : `Play ${track.title} soundscape`
+                }
                 className={`
                   w-full group relative overflow-hidden rounded-xl transition-all duration-300
                   ${isActive ? 'bg-white/10' : 'bg-white/5 hover:bg-white/8'}

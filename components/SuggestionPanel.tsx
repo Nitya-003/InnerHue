@@ -99,16 +99,13 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
           </div>
 
           <motion.h3
-            className="text-2xl font-bold relative z-10 flex items-center gap-2"
-            style={{
-              background: `linear-gradient(135deg, ${mood.color}, ${mood.glow})`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
+            className="text-2xl font-bold relative z-10 flex items-center gap-2 text-white"
             whileHover={{ scale: 1.02 }}
           >
-            <motion.span animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+            <motion.span 
+              animate={{ rotate: [0, 15, -15, 0] }} 
+              transition={{ duration: 2, repeat: Infinity }}
+            >
               ✨
             </motion.span>
             Personalized Insights
