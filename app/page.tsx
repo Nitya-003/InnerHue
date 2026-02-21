@@ -12,6 +12,7 @@ import AITherapist from '@/components/AITherapist';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Hero } from '@/components/landing/Hero';
 import { ErrorState } from '@/components/ErrorState';
+import FeatureRow from '@/components/landing/FeatureRow';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
@@ -132,8 +133,8 @@ export default function Home() {
             <Link href="/emotions">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-1.5 md:p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30 flex items-center gap-2 text-white"
-                title="Create Custom Moods"
+                className="p-1.5 md:p-2 rounded-lg bg-white/10 backdrop-blur-xl hover:bg-white/20 transition-all duration-300 border border-white/20 flex items-center gap-2 text-white"
+                title="Custom Moods"
               >
                 <Plus className="w-5 h-5 md:w-6 md:h-6" />
                 <span className="text-sm font-medium hidden sm:block">Custom Moods</span>
@@ -237,12 +238,13 @@ export default function Home() {
             {/* Custom Mood Creation CTA */}
             <Link href="/emotions">
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm md:text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto mb-8"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                className="px-4 py-2 md:px-6 md:py-3 bg-journal-surface dark:bg-surface text-journal-textPrimary dark:text-foreground text-sm md:text-base font-medium rounded-full border border-black/10 dark:border-white/10 hover:bg-journal-card dark:hover:bg-card transition-all duration-300 shadow-[0px_2px_6px_rgba(0,0,0,0.04)] hover:shadow-[0px_4px_10px_rgba(0,0,0,0.06)] flex items-center gap-2 mx-auto mb-8"
               >
                 <Plus className="w-4 h-4 md:w-5 md:h-5" />
-                Create Your Own Custom Mood
+                Create Your Own Mood
               </motion.button>
             </Link>
           </motion.div>
@@ -293,71 +295,50 @@ export default function Home() {
           </div>
 
           {/* Features Section */}
-          <motion.section
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="py-12 sm:py-16 px-4"
-          >
-            <div className="text-center mb-12 sm:mb-16">
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
+          <section className="py-20 sm:py-24 px-4">
+            <div className="text-center mb-16 sm:mb-20">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white mb-3 sm:mb-4">
                 How InnerHue Works
               </h3>
-              <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
                 A comprehensive approach to emotional wellness and self-discovery
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              {[
-                {
-                  icon: Brain,
-                  title: 'Emotion Reflection',
-                  description: 'Select from 38 distinct emotional states and dive deep into your feelings with guided introspection.',
-                  color: 'from-purple-500 to-indigo-500'
-                },
-                {
-                  icon: Sparkles,
-                  title: 'Personalized Insights',
-                  description: 'Get tailored prompts, affirmations, and thoughtful questions based on your current emotional state.',
-                  color: 'from-pink-500 to-rose-500'
-                },
-                {
-                  icon: Music,
-                  title: 'Therapeutic Music',
-                  description: 'Discover curated playlists and ambient sounds designed to complement and enhance your emotional journey.',
-                  color: 'from-blue-500 to-cyan-500'
-                },
-                {
-                  icon: BarChart3,
-                  title: 'Mood Analytics',
-                  description: 'Track emotional patterns over time with beautiful visualizations and gain insights into your well-being.',
-                  color: 'from-green-500 to-emerald-500'
-                }
-              ].map((feature, index) => (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.9 + index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="p-4 sm:p-6 bg-white/10 backdrop-blur rounded-xl sm:rounded-2xl border border-white/20 hover:bg-white/15 transition-all duration-300 text-center sm:text-left"
-                >
-                  <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 sm:mb-4 mx-auto sm:mx-0`}>
-                    <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-                  </div>
+            <div className="space-y-20 sm:space-y-24 max-w-6xl mx-auto">
+              <FeatureRow
+                icon={Brain}
+                title="Emotion Reflection"
+                description="Select from 38 distinct emotional states and dive deep into your feelings with guided introspection. Each emotion opens a pathway to understanding your inner landscape."
+                align="left"
+                index={0}
+              />
 
-                  <h4 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">
-                    {feature.title}
-                  </h4>
+              <FeatureRow
+                icon={Sparkles}
+                title="Personalized Insights"
+                description="Get tailored prompts, affirmations, and thoughtful questions based on your current emotional state. Our reflection system adapts to your unique journey."
+                align="right"
+                index={1}
+              />
 
-                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                    {feature.description}
-                  </p>
-                </motion.div>
-              ))}
+              <FeatureRow
+                icon={Music}
+                title="Therapeutic Music"
+                description="Discover curated playlists and ambient sounds designed to complement and enhance your emotional journey. Let sound guide your reflection."
+                align="left"
+                index={2}
+              />
+
+              <FeatureRow
+                icon={BarChart3}
+                title="Mood Analytics"
+                description="Track emotional patterns over time with beautiful visualizations and gain insights into your well-being. Witness your growth unfold."
+                align="right"
+                index={3}
+              />
             </div>
-          </motion.section>
+          </section>
 
           {/* Call to Action */}
           <motion.section
