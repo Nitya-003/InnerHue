@@ -137,7 +137,7 @@ export default function AnalyticsPage() {
 
                   <button
                     onClick={handleClearHistory}
-                    className="text-sm font-medium 
+                    className="text-sm font-semibold 
                     px-4 py-1.5 rounded-full 
                     bg-red-500/20 
                     text-red-300 
