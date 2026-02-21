@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Heart, Activity, Trash2 } from 'lucide-react';
@@ -8,16 +8,30 @@ import { MoodChart } from '@/components/MoodChart';
 import { BentoDashboard } from '@/components/BentoDashboard';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 export default function AnalyticsPage() {
   const moodHistory = useMoodStore(state => state.moodHistory);
   const clearHistory = useMoodStore(state => state.clearHistory);
   const deleteMood = useMoodStore(state => state.deleteMood);
+  const [clearDialogOpen, setClearDialogOpen] = useState(false);
 
-  const handleClearHistory = () => {
-    if (confirm('Are you sure you want to clear your entire mood history?')) {
-      clearHistory();
-    }
+  const handleClearHistoryClick = () => {
+    setClearDialogOpen(true);
+  };
+
+  const handleConfirmClearHistory = () => {
+    clearHistory();
+    setClearDialogOpen(false);
   };
 
   const handleDeleteEntry = (id: string) => {
@@ -136,7 +150,7 @@ export default function AnalyticsPage() {
                   </div>
 
                   <button
-                    onClick={handleClearHistory}
+                    onClick={handleClearHistoryClick}
                     className="text-sm font-semibold 
                     px-4 py-1.5 rounded-full 
                     bg-red-500/20 
@@ -221,6 +235,31 @@ export default function AnalyticsPage() {
           )}
         </div>
       </main>
+
+      {/* Clear History confirmation modal */}
+      <AlertDialog open={clearDialogOpen} onOpenChange={setClearDialogOpen}>
+        <AlertDialogContent className="max-w-md rounded-2xl border-white/20 dark:border-white/10 bg-white/95 dark:bg-[#1a1a35]/95 backdrop-blur-xl shadow-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-bold text-gray-800 dark:text-gray-100">
+              Clear mood history?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-600 dark:text-gray-300">
+              Are you sure you want to clear your entire mood history? This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-row gap-3 sm:gap-3 mt-6">
+            <AlertDialogCancel className="mt-0 rounded-xl border-gray-200 dark:border-white/20 bg-white dark:bg-white/10 hover:bg-gray-100 dark:hover:bg-white/20">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmClearHistory}
+              className="rounded-xl bg-red-500 hover:bg-red-600 text-white focus:ring-red-500/50"
+            >
+              Clear History
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </motion.div>
   );
 }
