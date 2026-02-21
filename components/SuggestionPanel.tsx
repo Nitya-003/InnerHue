@@ -28,7 +28,15 @@ interface SuggestionPanelProps {
   onQuoteRefresh?: () => void | Promise<void>;
 }
 
-export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
+export function SuggestionPanel({
+  suggestions,
+  mood,
+  onRefresh,
+  isRefreshing = false,
+  quoteData,
+  isQuoteLoading,
+  onQuoteRefresh
+}: SuggestionPanelProps) {
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
@@ -196,7 +204,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
               <blockquote className="text-white/70 italic leading-relaxed mb-3 text-lg group-hover:text-white/80 transition-colors">&quot;{suggestions.quote}&quot;</blockquote>
               <motion.cite className="text-sm font-medium flex items-center gap-2" style={{ color: mood.color }}>
                 <span className="w-8 h-0.5 rounded-full" style={{ background: mood.color }} />
-                {suggestions.author}
+                {quoteData?.author || suggestions.author}
               </motion.cite>
             </div>
           </div>
