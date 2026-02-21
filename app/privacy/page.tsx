@@ -1,4 +1,6 @@
+
 'use client';
+import React from 'react';
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -13,6 +15,22 @@ import {
 import { FloatingBackground } from '@/components/FloatingBackground';
 
 export default function PrivacyPolicy() {
+    const [activeSection, setActiveSection] = React.useState("section-0");
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            const sectionsEls = document.querySelectorAll("section[id^='section-']");
+            sectionsEls.forEach((section) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 120 && rect.bottom >= 120) {
+                    setActiveSection(section.id);
+                }
+            });
+        };
+        window.addEventListener("scroll", handleScroll);
+        handleScroll();
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const sections = [
         {
@@ -43,98 +61,91 @@ export default function PrivacyPolicy() {
             title: "Contact Us",
             icon: Mail,
             content:
-                "If you have questions about this policy, contact us at support@innerhue.app",
+                <span>If you have questions about this policy, contact us at <a href="mailto:support@innerhue.app" className="text-cyan-400 underline hover:text-cyan-300">support@innerhue.app</a></span>,
         },
     ];
 
     return (
-        <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-gray-100">
-
-            {/* Background Glow */}
-            <div className="absolute top-10 left-10 w-96 h-96 bg-purple-600/30 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-10 right-10 w-96 h-96 bg-pink-600/30 rounded-full blur-3xl animate-pulse"></div>
-
-            <FloatingBackground />
-
-            <div className="relative z-10 max-w-6xl mx-auto px-6 py-16 md:py-24">
-
-                {/* HEADER */}
-                <motion.div
-                    initial={{ opacity: 0, y: -30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="mb-16"
-                >
+        <div className="bg-[#0b0f19] text-gray-200 min-h-screen relative">
+            {/* Soft Premium Background Glow */}
+            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.15),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.12),transparent_40%)]" />
+            <div className="max-w-7xl mx-auto px-6 py-20 flex gap-16">
+                {/* Sidebar Navigation */}
+                <aside className="hidden lg:block w-64 sticky top-24 h-fit">
+                    <div className="text-xs uppercase tracking-widest text-gray-500 mb-8">
+                        On this page
+                    </div>
+                    <nav className="space-y-4 text-sm relative">
+                        {sections.map((section, index) => {
+                            const sectionId = `section-${index}`;
+                            const isActive = activeSection === sectionId;
+                            return (
+                                <a
+                                    key={index}
+                                    href={`#${sectionId}`}
+                                    className={`group flex items-center gap-3 transition-all duration-300 font-medium ${
+                                        isActive ? "text-cyan-400" : "text-gray-400 hover:text-cyan-400"
+                                    }`}
+                                >
+                                    <span className={`h-6 w-[3px] rounded-full transition-all duration-300 ${
+                                        isActive ? "bg-cyan-400" : "bg-transparent group-hover:bg-cyan-400/40"
+                                    }`} />
+                                    <span className={`transition-all duration-300 group-hover:translate-x-1 ${
+                                        isActive ? "text-cyan-400" : "group-hover:text-cyan-400"
+                                    }`}>
+                                        {section.title}
+                                    </span>
+                                </a>
+                            );
+                        })}
+                    </nav>
+                </aside>
+                {/* Main Content */}
+                <div className="flex-1 max-w-3xl">
                     <Link
                         href="/"
-                        className="inline-flex items-center text-purple-300 hover:text-white mb-6 transition-all group"
+                        className="inline-flex items-center text-sm text-gray-400 hover:text-cyan-400 transition-all duration-300 mb-10 group"
                     >
-                        <ChevronLeft className="w-5 h-5 mr-2 group-hover:-translate-x-2 transition-transform" />
+                        <ChevronLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
                         Back to Home
                     </Link>
-
-                    <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+                    <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent mb-4">
                         Privacy Policy
                     </h1>
-
-                    <p className="mt-4 text-gray-400">
-                        Last updated:{" "}
-                        {new Date().toLocaleDateString("en-US", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                        })}
+                    <p className="text-gray-400 mb-8">
+                        Last updated: {new Date().toLocaleDateString("en-GB")}
                     </p>
-                </motion.div>
-
-                {/* CARD GRID */}
-                <div className="grid md:grid-cols-2 gap-8">
-
-                    {sections.map((section, index) => {
-                        const Icon = section.icon;
-
-                        return (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 40 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.15, duration: 0.5 }}
-                                whileHover={{
-                                    scale: 1.04,
-                                    rotateX: 3,
-                                    rotateY: -3,
-                                }}
-                                className="relative group"
-                            >
-                                {/* Gradient Border Glow */}
-                                <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
-
-                                {/* Card */}
-                                <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl transition-all duration-300 group-hover:border-purple-400/40">
-
-                                    {/* Icon */}
-                                    <motion.div
-                                        whileHover={{ rotate: 10, scale: 1.1 }}
-                                        transition={{ type: "spring", stiffness: 200 }}
-                                        className="mb-4 inline-flex p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg shadow-purple-700/40"
-                                    >
-                                        <Icon className="w-6 h-6 text-white" />
-                                    </motion.div>
-
-                                    <h2 className="text-2xl font-semibold mb-4 text-white">
-                                        {index + 1}. {section.title}
-                                    </h2>
-
-                                    <p className="text-gray-300 leading-relaxed">
-                                        {section.content}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        );
-                    })}
-
+                    <div className="space-y-12">
+                        {sections.map((section, index) => {
+                            const Icon = section.icon;
+                            return (
+                                <motion.section
+                                    id={`section-${index}`}
+                                    key={index}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.6 }}
+                                    viewport={{ once: true }}
+                                    className="scroll-mt-32 relative group rounded-xl border border-white/10 bg-gradient-to-br from-[#181c2a] via-[#232a3d] to-[#1a2236] p-8 shadow-md"
+                                >
+                                    {/* Glow Hover Effect */}
+                                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/0 via-indigo-500/0 to-purple-500/0 group-hover:from-cyan-500/10 group-hover:via-indigo-500/10 group-hover:to-purple-500/10 transition-all duration-500 pointer-events-none" />
+                                    {/* Animated Left Border */}
+                                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-transparent group-hover:bg-gradient-to-b from-cyan-400 to-indigo-500 transition-all duration-500 rounded-full" />
+                                    <div className="pl-6">
+                                        <h2 className="text-2xl font-semibold text-white mb-6 transition-colors duration-300 group-hover:text-cyan-400 flex items-center gap-2">
+                                            <span className="inline-block w-6 h-6 bg-gradient-to-br from-cyan-400 via-indigo-400 to-purple-500 rounded-full mr-2" />
+                                            {section.title}
+                                        </h2>
+                                        <div className="text-gray-400 leading-relaxed space-y-4 text-[15.5px] group-hover:text-gray-300 transition-colors duration-300">
+                                            {section.content}
+                                        </div>
+                                    </div>
+                                </motion.section>
+                            );
+                        })}
+                    </div>
                 </div>
-
             </div>
         </div>
     );

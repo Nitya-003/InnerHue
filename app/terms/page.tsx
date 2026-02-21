@@ -81,14 +81,12 @@ export default function TermsOfService() {
             <ChevronLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
             Back to Home
           </Link>
-          <div className="rounded-2xl shadow-lg bg-gradient-to-br from-[#1a2236] via-[#232a3d] to-[#181c2a] p-8 mb-8 border border-white/5">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent mb-4">
-              Terms of Service
-            </h1>
-            <p className="text-gray-400 mb-4">
-              Last updated: {new Date().toLocaleDateString()}
-            </p>
-          </div>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent mb-4">
+            Terms of Service
+          </h1>
+          <p className="text-gray-400 mb-8">
+            Last updated: {new Date().toLocaleDateString("en-GB")}
+          </p>
           <div className="space-y-12">
             {sections.map((section, index) => (
               <motion.section
