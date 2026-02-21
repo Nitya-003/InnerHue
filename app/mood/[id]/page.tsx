@@ -16,6 +16,17 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import reflectiveMoods from '@/lib/reflectiveMoods';
 import { getTraditionalMoodId } from '@/lib/moodMapping';
 
+// Type for mood objects that can have traditionalId (for reflective moods)
+interface MoodWithTraditionalId {
+  id: string;
+  name: string;
+  emoji: string;
+  color: string;
+  glow: string;
+  traditionalId?: string; // Optional: only present for reflective moods
+  spotifyPlaylistId?: string;
+}
+
 interface MoodPageProps {
   params: {
     id: string;
@@ -26,7 +37,7 @@ interface MoodPageProps {
 }
 
 export default function MoodPage({ params, searchParams }: MoodPageProps) {
-  const [moodData, setMoodData] = useState<any[]>([]);
+  const [moodData, setMoodData] = useState<MoodWithTraditionalId[]>([]);
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [quote, setQuote] = useState<Quote | null>(null);
@@ -95,7 +106,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     const mood = moodData[currentMoodIndex];
     if (mood) {
       // Use traditionalId if available (for reflective moods), otherwise use the mood id
-      const suggestionId = (mood as any).traditionalId || mood.id;
+      const suggestionId = mood.traditionalId || mood.id;
       const newSuggestions = MoodData.getSuggestions(suggestionId);
       setSuggestions(newSuggestions);
       setShowReflectionCard(true);

@@ -23,17 +23,17 @@ export const reflectiveToTraditionalMapping: Record<string, string> = {
   
   // Anxiety -> Anxious/Stressed
   'lingering-restlessness': 'anxious',
-  'social-fatigue': 'tired',
+  'social-fatigue': 'stressed',
   'quiet-overwhelm': 'stressed',
   'building-tension': 'anxious',
   'scattered-thoughts': 'confused',
   'emotional-fog': 'confused',
   
   // Contemplative -> Reflective moods
-  'thoughtful-distance': 'contemplative',
+  'thoughtful-distance': 'peaceful',
   'observant-stillness': 'calm',
-  'curious-awareness': 'contemplative',
-  'reflective-pause': 'contemplative',
+  'curious-awareness': 'curious',
+  'reflective-pause': 'peaceful',
   
   // Sensitivity -> Vulnerable
   'tender-vulnerability': 'vulnerable',
@@ -54,7 +54,7 @@ export const reflectiveToTraditionalMapping: Record<string, string> = {
   'bittersweet-nostalgia': 'nostalgic',
   'cautious-hope': 'hopeful',
   'restrained-frustration': 'frustrated',
-  'peaceful-resignation': 'accepting',
+  'peaceful-resignation': 'peaceful',
 };
 
 /**
