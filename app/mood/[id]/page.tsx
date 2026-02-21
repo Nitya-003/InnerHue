@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Bookmark, Share2, Check } from 'lucide-react';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodReflectionCard } from '@/components/MoodReflectionCard';
@@ -30,14 +30,34 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [quote, setQuote] = useState<Quote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isShared, setIsShared] = useState(false);
   const [showReflectionCard, setShowReflectionCard] = useState(true);
 
-  // Pull addMood from Zustand store
+  // Computed values must be safe even if data is empty
+  const currentMood = moodData[currentMoodIndex] || moodData[0];
+
+  const loadQuote = useCallback(async () => {
+    if (!currentMood) return;
+    setQuoteLoading(true);
+    try {
+      const tag = moodTags[currentMood.id] || 'inspirational';
+      const data = await getQuoteByMood(tag);
+      setQuote(data);
+    } catch (error) {
+      console.error("Failed to load quote", error);
+    } finally {
+      setQuoteLoading(false);
+    }
+  }, [currentMood]);
+
+  useEffect(() => {
+    if (currentMood?.id) {
+      loadQuote();
+    }
+  }, [currentMood?.id, loadQuote]);
+
+  // Get addMood action from Zustand store
   const addMood = useMoodStore(state => state.addMood);
-
-  // Derived: current mood object
-  const currentMood = moodData[currentMoodIndex];
-
   // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
     // 🔥 Reset index when route/params change
@@ -74,7 +94,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     if (mood) {
       const newSuggestions = MoodData.getSuggestions(mood.id);
       setSuggestions(newSuggestions);
-      setShowReflectionCard(true);
+      setShowReflectionCard(true); // Show reflection card when mood changes
     }
   }, [currentMoodIndex, moodData]);
 
@@ -183,9 +203,34 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={async () => {
+                const url = window.location.href;
+                const title = `Feeling ${currentMood.name} on InnerHue`;
+                const text = `I'm exploring my emotions with InnerHue. Check it out!`;
+
+                if (navigator.share) {
+                  try {
+                    await navigator.share({ title, text, url });
+                  } catch (err) {
+                    console.error('Error sharing:', err);
+                  }
+                } else {
+                  try {
+                    await navigator.clipboard.writeText(url);
+                    setIsShared(true);
+                    setTimeout(() => setIsShared(false), 2000);
+                  } catch (err) {
+                    console.error('Failed to copy:', err);
+                  }
+                }
+              }}
               className="p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <Share2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              {isShared ? (
+                <Check className="w-5 h-5 text-green-500" />
+              ) : (
+                <Share2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              )}
             </motion.button>
             <ThemeToggle />
           </div>

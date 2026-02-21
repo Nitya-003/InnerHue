@@ -28,7 +28,15 @@ interface SuggestionPanelProps {
   onQuoteRefresh?: () => void | Promise<void>;
 }
 
-export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
+export function SuggestionPanel({
+  suggestions,
+  mood,
+  onRefresh,
+  isRefreshing = false,
+  quoteData,
+  isQuoteLoading,
+  onQuoteRefresh
+}: SuggestionPanelProps) {
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
@@ -192,14 +200,28 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
             <div className="flex-1">
               <div className="flex items-start justify-between mb-2">
                 <h4 className="font-bold text-gray-800 text-lg group-hover:text-gray-900 transition-colors">Inspirational Quote</h4>
-                <motion.button whileHover={{ scale: 1.2, rotate: 10 }} whileTap={{ scale: 0.9 }} onClick={handleCopy} className="p-2 rounded-full transition-all opacity-60 hover:opacity-100" style={{ background: `${mood.glow}20` }}>
-                  <Copy className="w-4 h-4" style={{ color: mood.glow }} />
-                </motion.button>
+                <div className="flex gap-2">
+                  {onQuoteRefresh && (
+                    <motion.button
+                      whileHover={{ rotate: 180 }}
+                      onClick={(e) => { e.stopPropagation(); onQuoteRefresh(); }}
+                      disabled={isQuoteLoading}
+                      className="p-1 rounded-full opacity-60 hover:opacity-100"
+                    >
+                      <RefreshCw className={`w-4 h-4 ${isQuoteLoading ? 'animate-spin' : ''}`} style={{ color: mood.glow }} />
+                    </motion.button>
+                  )}
+                  <motion.button whileHover={{ scale: 1.2, rotate: 10 }} whileTap={{ scale: 0.9 }} onClick={(e) => { e.stopPropagation(); handleCopy(); }} className="p-2 rounded-full transition-all opacity-60 hover:opacity-100" style={{ background: `${mood.glow}20` }}>
+                    <Copy className="w-4 h-4" style={{ color: mood.glow }} />
+                  </motion.button>
+                </div>
               </div>
-              <blockquote className="text-gray-700 italic leading-relaxed mb-3 text-lg group-hover:text-gray-800 transition-colors">&quot;{suggestions.quote}&quot;</blockquote>
+              <blockquote className="text-gray-700 italic leading-relaxed mb-3 text-lg group-hover:text-gray-800 transition-colors">
+                "{quoteData?.content || suggestions.quote}"
+              </blockquote>
               <motion.cite className="text-sm font-medium flex items-center gap-2" style={{ color: mood.color }}>
                 <span className="w-8 h-0.5 rounded-full" style={{ background: mood.color }} />
-                {suggestions.author}
+                {quoteData?.author || suggestions.author}
               </motion.cite>
             </div>
           </div>

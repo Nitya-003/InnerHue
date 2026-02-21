@@ -28,6 +28,13 @@ interface Particle {
   duration: number; // Added
 }
 
+const particleVariants: Variants = {
+  animate: {
+    opacity: [0, 1, 0],
+    scale: [0, 1, 0],
+  },
+};
+
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPulse, setShowPulse] = useState(false);
