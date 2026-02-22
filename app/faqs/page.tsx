@@ -32,21 +32,21 @@ export default function FAQsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 text-white py-16 px-6">
+    <div className="min-h-screen bg-[#0f0720] text-white py-16 px-6">
       <div className="max-w-3xl mx-auto">
 
         {/* Back Button */}
         <div className="mb-10">
           <a
             href="/"
-            className="inline-block px-6 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-medium shadow-md hover:bg-white hover:text-purple-800 transition-all duration-300"
+            className="inline-block px-6 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white font-medium shadow-md hover:bg-white/20 transition-all duration-300"
           >
             ← Back to Home
           </a>
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-pink-400 to-blue-400 bg-clip-text text-transparent">
+        <h1 className="text-4xl md:text-5xl font-bold text-center mb-12 text-white">
           Frequently Asked Questions
         </h1>
 

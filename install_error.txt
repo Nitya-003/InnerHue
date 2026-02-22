@@ -1,0 +1,35 @@
+npm error code ERESOLVE
+npm error ERESOLVE unable to resolve dependency tree
+npm error
+npm error While resolving: nextjs@0.1.0
+npm error Found: react@18.3.1
+npm error node_modules/react
+npm error   react@"^18.2.0" from the root project
+npm error   peer react@"*" from expo@54.0.33
+npm error   node_modules/expo
+npm error     peerOptional expo@">=43.0" from @react-three/fiber@9.5.0
+npm error     node_modules/@react-three/fiber
+npm error       @react-three/fiber@"^9.5.0" from the root project
+npm error       1 more (@react-three/drei)
+npm error     peer expo@"*" from @expo/dom-webview@0.2.8
+npm error     node_modules/@expo/dom-webview
+npm error       peerOptional @expo/dom-webview@"*" from expo@54.0.33
+npm error     4 more (@expo/metro-runtime, expo-asset, expo-file-system, expo-gl)
+npm error   9 more (@expo/dom-webview, @expo/metro-runtime, react-dom, ...)
+npm error
+npm error Could not resolve dependency:
+npm error peer react@">=19 <19.3" from @react-three/fiber@9.5.0
+npm error node_modules/@react-three/fiber
+npm error   @react-three/fiber@"^9.5.0" from the root project
+npm error   peer @react-three/fiber@"^9.0.0" from @react-three/drei@10.7.7
+npm error   node_modules/@react-three/drei
+npm error     @react-three/drei@"^10.7.7" from the root project
+npm error
+npm error Fix the upstream dependency conflict, or retry
+npm error this command with --force or --legacy-peer-deps
+npm error to accept an incorrect (and potentially broken) dependency resolution.
+npm error
+npm error
+npm error For a full report see:
+npm error C:\Users\shriy\AppData\Local\npm-cache\_logs\2026-02-19T04_28_41_217Z-eresolve-report.txt
+npm error A complete log of this run can be found in: C:\Users\shriy\AppData\Local\npm-cache\_logs\2026-02-19T04_28_41_217Z-debug-0.log

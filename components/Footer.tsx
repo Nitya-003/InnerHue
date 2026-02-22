@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Github, Twitter, Instagram } from "lucide-react";
+import { Github, Linkedin, Instagram } from "lucide-react";
 
 export function Footer() {
   return (
@@ -19,63 +19,252 @@ export function Footer() {
           
           <div className="space-y-4">
             <h3 className="font-medium text-sm">Navigation</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
+            <ul className="space-y-2 text-sm">
+              <li className="relative group cursor-pointer transition-all">
                 <Link href="/" className="hover:text-primary transition-colors">
-                  Home
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    Home
+                  </span>
                 </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
               </li>
-              <li>
+              <li className="relative group cursor-pointer transition-all">
                 <Link href="/#mood-selection" className="hover:text-primary transition-colors">
-                  Mood Selection
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    Mood Selection
+                  </span>
                 </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
               </li>
-              <li>
+              <li className="relative group cursor-pointer transition-all">
                 <Link href="/insights" className="hover:text-primary transition-colors">
-                  Insights
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    Insights
+                  </span>
                 </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
               </li>
-              <li>
+              <li className="relative group cursor-pointer transition-all">
                 <Link href="/music" className="hover:text-primary transition-colors">
-                  Music
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    Music
+                  </span>
                 </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
               </li>
-              <li>
+              <li className="relative group cursor-pointer transition-all">
                 <Link href="/about" className="hover:text-primary transition-colors">
-                  About
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    About
+                  </span>
                 </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
               </li>
-              <li>
-                <Link href="/faqs" className="hover:text-primary transition-colors">
-                  FAQs
+              <li className="relative group cursor-pointer transition-all">
+                <Link href="/contributors" className="hover:text-primary transition-colors">
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    Contributors
+                  </span>
                 </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
+              </li>
+              <li className="relative group cursor-pointer transition-all">
+                <Link href="/faqs" className="hover:text-primary transition-colors">
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    FAQs
+                  </span>
+                </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
               </li>
             </ul>
           </div>
           
           <div className="space-y-4">
             <h3 className="font-medium text-sm">Community</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <ul className="space-y-2 text-sm">
               <li>
                 <a 
                   href="https://github.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-2 hover:text-primary transition-colors"
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors group"
                 >
                   <Github className="h-4 w-4" />
-                  <span>GitHub</span>
+                  <span className="
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">GitHub</span>
                 </a>
               </li>
               <li>
                 <a 
-                  href="https://twitter.com" 
+                  href="https://linkedin.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-2 hover:text-primary transition-colors"
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors group"
                 >
-                  <Twitter className="h-4 w-4" />
-                  <span>Twitter</span>
+                  <Linkedin className="h-4 w-4" />
+                  <span className="
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">LinkedIn</span>
                 </a>
               </li>
               <li>
@@ -83,10 +272,18 @@ export function Footer() {
                   href="https://instagram.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-2 hover:text-primary transition-colors"
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors group"
                 >
                   <Instagram className="h-4 w-4" />
-                  <span>Instagram</span>
+                  <span className="
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">Instagram</span>
                 </a>
               </li>
             </ul>
@@ -94,16 +291,64 @@ export function Footer() {
           
           <div className="space-y-4">
             <h3 className="font-medium text-sm">Legal</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
+            <ul className="space-y-2 text-sm">
+              <li className="relative group cursor-pointer transition-all">
                 <Link href="/privacy" className="hover:text-primary transition-colors">
-                  Privacy Policy
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    Privacy Policy
+                  </span>
                 </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
               </li>
-              <li>
+              <li className="relative group cursor-pointer transition-all">
                 <Link href="/terms" className="hover:text-primary transition-colors">
-                  Terms of Service
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    Terms of Service
+                  </span>
                 </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
               </li>
             </ul>
           </div>

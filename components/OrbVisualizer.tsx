@@ -22,6 +22,13 @@ interface Particle {
   duration: number; // Added
 }
 
+const particleVariants: Variants = {
+  animate: {
+    opacity: [0, 1, 0],
+    scale: [0, 1, 0],
+  },
+};
+
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPulse, setShowPulse] = useState(false);
@@ -58,6 +65,18 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     setTimeout(() => setConfetti([]), 2000);
   };
 
+  const particleVariants: Variants = {
+    animate: {
+      scale: [1, 1.5, 1],
+      opacity: [0.6, 1, 0.6],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
+  };
+
   const orbVariants: Variants = {
     idle: {
       scale: [1, 1.05, 1],
@@ -90,6 +109,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
+
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
   useEffect(() => {
@@ -104,12 +124,12 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
 
   return (
     <div className="relative">
-      <div className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl border border-white/50 dark:border-white/10">
+      <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl border border-white/10">
         <div className="text-center mb-6 md:mb-8">
-          <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+          <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
             Your Emotional State
           </h3>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-white/70">
             Visualizing the energy of feeling {mood.name.toLowerCase()}
           </p>
         </div>
@@ -172,50 +192,21 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               }}
             />
 
-            <motion.div
-              className="w-24 h-24 md:w-32 md:h-32 rounded-full relative overflow-hidden shadow-2xl"
-              style={{
-                background: `linear-gradient(135deg, ${mood.color} 0%, ${mood.glow} 100%)`,
-                boxShadow: `0 0 40px ${mood.glow}60, inset 0 0 20px rgba(255,255,255,0.3)`,
-              }}
+            {/* 3D Shader Orb */}
+            <div
+              className="w-40 h-40 md:w-48 md:h-48 relative cursor-pointer"
+              onClick={handleEmojiClick}
             >
-              <motion.div
-                className="absolute inset-2 rounded-full"
-                style={{
-                  background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8) 0%, transparent 50%)`,
-                }}
-                animate={{
-                  opacity: [0.3, 0.8, 0.3],
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-
-              <div
-                className="absolute inset-0 flex items-center justify-center cursor-pointer z-20"
-                onClick={handleEmojiClick}
+              <ShaderOrb mood={mood} />
+              {/* Emoji overlay */}
+              <motion.span
+                className="absolute bottom-2 right-2 text-2xl select-none pointer-events-none z-20"
+                animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <motion.span
-                  className="text-4xl select-none"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0],
-                  }}
-                  whileTap={{ scale: 0.8 }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  {mood.emoji}
-                </motion.span>
-              </div>
-            </motion.div>
+                {mood.emoji}
+              </motion.span>
+            </div>
           </motion.div>
 
           {[...Array(3)].map((_, i) => (

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Sparkles, BarChart3, Shield, Rocket } from 'lucide-react';
 
@@ -28,7 +28,7 @@ export default function Insights() {
         {/* Description */}
         <p className="text-xl text-gray-300 text-center max-w-3xl mx-auto mb-20 leading-relaxed">
           Insight is a sudden, clear, and deep understanding of a complex situation —
-          a <span className="text-yellow-300 font-semibold">lightbulb moment</span> 
+          a <span className="text-yellow-300 font-semibold">lightbulb moment</span>
           where clarity replaces confusion and deeper truth reveals itself.
         </p>
 
@@ -96,8 +96,15 @@ export default function Insights() {
 }
 
 /* 💎 Premium Section Component */
-function PremiumSection({ icon, title, items, accent }) {
-  const ref = useRef(null);
+interface PremiumSectionProps {
+  icon: React.ReactNode;
+  title: string;
+  items: string[];
+  accent: string;
+}
+
+function PremiumSection({ icon, title, items, accent }: PremiumSectionProps) {
+  const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -105,7 +112,8 @@ function PremiumSection({ icon, title, items, accent }) {
   const rotateX = useTransform(y, [-50, 50], [8, -8]);
   const rotateY = useTransform(x, [-50, 50], [-8, 8]);
 
-  function handleMouseMove(e) {
+  function handleMouseMove(e: React.MouseEvent) {
+    if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     x.set(e.clientX - rect.left - rect.width / 2);
     y.set(e.clientY - rect.top - rect.height / 2);
@@ -167,16 +175,26 @@ function PremiumSection({ icon, title, items, accent }) {
 
 /* ✨ Floating Particle Component */
 function Particles() {
+  const [particles, setParticles] = useState<Array<{ top: string; left: string; duration: string }>>([]);
+
+  useEffect(() => {
+    setParticles([...Array(20)].map(() => ({
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      duration: `${2 + Math.random() * 3}s`
+    })));
+  }, []);
+
   return (
     <div className="absolute inset-0 pointer-events-none">
-      {[...Array(20)].map((_, i) => (
+      {particles.map((p, i) => (
         <div
           key={i}
           className="absolute w-1.5 h-1.5 bg-white/40 rounded-full animate-pulse"
           style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            animationDuration: `${2 + Math.random() * 3}s`
+            top: p.top,
+            left: p.left,
+            animationDuration: p.duration
           }}
         />
       ))}
