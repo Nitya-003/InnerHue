@@ -22,10 +22,6 @@ interface SuggestionPanelProps {
   mood: any;
   onRefresh: () => void | Promise<void>;
   isRefreshing?: boolean;
-  /** Optional quote data from API (mood detail page) */
-  quoteData?: { content: string; author: string } | null;
-  isQuoteLoading?: boolean;
-  onQuoteRefresh?: () => void | Promise<void>;
 }
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {

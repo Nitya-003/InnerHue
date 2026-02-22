@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Bookmark, Share2, Check } from 'lucide-react';
@@ -8,9 +8,6 @@ import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodReflectionCard } from '@/components/MoodReflectionCard';
 import { MoodData } from '@/lib/moodData';
-import { getQuoteByMood } from '@/lib/getQuote';
-import { moodTags } from '@/lib/quoteTags';
-import { Quote } from '@/data/fallbackQuotes';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import reflectiveMoods from '@/lib/reflectiveMoods';
@@ -40,8 +37,6 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [moodData, setMoodData] = useState<MoodWithTraditionalId[]>([]);
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
-  const [quote, setQuote] = useState<Quote | null>(null);
-  const [quoteLoading, setQuoteLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [showReflectionCard, setShowReflectionCard] = useState(true);
@@ -112,27 +107,6 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       setShowReflectionCard(true); // Show reflection card when mood changes
     }
   }, [currentMoodIndex, moodData]);
-
-  // Load quote for the current mood
-  const loadQuote = useCallback(async () => {
-    if (!currentMood) return;
-    setQuoteLoading(true);
-    try {
-      // Use traditionalId for quote tags if available
-      const moodIdForTag = (currentMood as any).traditionalId || currentMood.id;
-      const tag = moodTags[moodIdForTag] ?? 'inspirational';
-      const q = await getQuoteByMood(tag);
-      setQuote(q);
-    } catch {
-      setQuote(null);
-    } finally {
-      setQuoteLoading(false);
-    }
-  }, [currentMood]);
-
-  useEffect(() => {
-    loadQuote();
-  }, [loadQuote]);
 
   if (!moodData.length || !suggestions) {
     return (
