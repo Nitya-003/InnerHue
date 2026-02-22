@@ -166,6 +166,35 @@ export function Footer() {
                 </span>
               </li>
               <li className="relative group cursor-pointer transition-all">
+                <Link href="/contributors" className="hover:text-primary transition-colors">
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-transparent
+                    group-hover:bg-gradient-to-r
+                    group-hover:from-purple-700
+                    group-hover:to-pink-400
+                    group-hover:bg-clip-text
+                    transition-all
+                    duration-300
+                  ">
+                    Contributors
+                  </span>
+                </Link>
+                <span className="
+                  absolute
+                  -left-4
+                  top-1/2
+                  -translate-y-1/2
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  text-purple-700
+                ">
+                  •
+                </span>
+              </li>
+              <li className="relative group cursor-pointer transition-all">
                 <Link href="/faqs" className="hover:text-primary transition-colors">
                   <span className="
                     text-muted-foreground
