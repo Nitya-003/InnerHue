@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Bookmark, Share2, Check } from 'lucide-react';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodReflectionCard } from '@/components/MoodReflectionCard';
@@ -43,14 +43,14 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [quote, setQuote] = useState<Quote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isShared, setIsShared] = useState(false);
   const [showReflectionCard, setShowReflectionCard] = useState(true);
 
-  // Pull addMood from Zustand store
+  // Computed values must be safe even if data is empty
+  const currentMood = moodData[currentMoodIndex] || moodData[0];
+
+  // Get addMood action from Zustand store
   const addMood = useMoodStore(state => state.addMood);
-
-  // Derived: current mood object
-  const currentMood = moodData[currentMoodIndex];
-
   // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
     // 🔥 Reset index when route/params change
@@ -109,7 +109,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       const suggestionId = mood.traditionalId || mood.id;
       const newSuggestions = MoodData.getSuggestions(suggestionId);
       setSuggestions(newSuggestions);
-      setShowReflectionCard(true);
+      setShowReflectionCard(true); // Show reflection card when mood changes
     }
   }, [currentMoodIndex, moodData]);
 
