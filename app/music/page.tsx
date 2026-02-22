@@ -7,7 +7,7 @@ import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind, Volume2 } from '
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-// UPDATED: Google Developer Sounds (High Reliability, No CORS issues)
+// Soundscapes using Google Sound Library (CORS-enabled, reliable OGG files)
 const soundscapes = [
   {
     id: 'rain',
@@ -23,7 +23,7 @@ const soundscapes = [
     description: 'Birds chirping and wind rustling in the trees.',
     icon: Trees,
     color: 'from-green-400 to-emerald-600',
-    src: 'https://actions.google.com/sounds/v1/ambiences/forest_morning.ogg'
+    src: 'https://actions.google.com/sounds/v1/animals/june_songbirds.ogg'
   },
   {
     id: 'ocean',
@@ -31,7 +31,7 @@ const soundscapes = [
     description: 'Rhythmic waves crashing on the shore.',
     icon: Waves,
     color: 'from-cyan-400 to-blue-500',
-    src: 'https://actions.google.com/sounds/v1/water/waves_crashing.ogg'
+    src: 'https://actions.google.com/sounds/v1/water/waves_crashing_on_rock_beach.ogg'
   },
   {
     id: 'wind',
@@ -51,16 +51,16 @@ export default function MusicPage() {
   // Initialize Audio Object
   useEffect(() => {
     // We create the audio object on the client side only
-    audioRef.current = new Audio();
-    // Enable looping for continuous soundscapes
-    audioRef.current.loop = true;
+    const audio = new Audio();
+    audio.loop = true;
+    audio.crossOrigin = 'anonymous';
+    audioRef.current = audio;
 
     // Cleanup on unmount
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+      audio.pause();
+      audio.src = '';
+      audioRef.current = null;
     };
   }, []);
 
@@ -100,7 +100,21 @@ export default function MusicPage() {
         audioRef.current.src = src;
         audioRef.current.load();
 
-        // 3. Play
+        // 3. Wait for audio to be ready, then play
+        await new Promise<void>((resolve, reject) => {
+          const onCanPlay = () => {
+            audioRef.current?.removeEventListener('canplay', onCanPlay);
+            audioRef.current?.removeEventListener('error', onError);
+            resolve();
+          };
+          const onError = (e: Event) => {
+            audioRef.current?.removeEventListener('canplay', onCanPlay);
+            audioRef.current?.removeEventListener('error', onError);
+            reject(new Error('Audio failed to load: ' + src));
+          };
+          audioRef.current!.addEventListener('canplay', onCanPlay);
+          audioRef.current!.addEventListener('error', onError);
+        });
         await audioRef.current.play();
         setCurrentTrack(trackId);
         setIsPlaying(true);
