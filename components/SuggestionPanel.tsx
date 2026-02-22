@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
@@ -29,12 +29,7 @@ interface SuggestionPanelProps {
 }
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
-  const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-
-  useEffect(() => {
-    setIsPlayerLoaded(false);
-  }, [mood.id]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(`"${suggestions.quote}" - ${suggestions.author}`);
@@ -267,19 +262,34 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
             </motion.div>
             <div className="flex-1 space-y-4">
               <h4 className="font-bold text-white text-lg group-hover:text-white/90">Soundscape</h4>
-              <div className="relative w-full h-[152px] rounded-xl overflow-hidden shadow-inner" style={{ background: `linear-gradient(135deg, ${mood.color}10, ${mood.glow}08)`, border: `1px solid ${mood.color}20` }}>
-                {!isPlayerLoaded && (
-                  <div className="absolute inset-0 flex items-center justify-center backdrop-blur animate-pulse">
-                    <div className="flex flex-col items-center space-y-2">
-                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
-                        <Music className="w-10 h-10" style={{ color: `${mood.color}60` }} />
-                      </motion.div>
-                      <span className="text-sm font-medium" style={{ color: mood.color }}>Loading Soundscape...</span>
+              <a href="/music" className="block">
+                <div className="relative w-full h-[152px] rounded-xl overflow-hidden shadow-inner hover:shadow-lg transition-all" style={{ background: `linear-gradient(135deg, ${mood.color}15, ${mood.glow}10)`, border: `1px solid ${mood.color}30` }}>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center backdrop-blur-sm">
+                    <motion.div 
+                      animate={{ scale: [1, 1.1, 1] }} 
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      className="mb-4"
+                    >
+                      <Music className="w-12 h-12" style={{ color: mood.color }} />
+                    </motion.div>
+                    <span className="text-lg font-semibold text-white mb-1">Calming Ambient Music</span>
+                    <span className="text-sm" style={{ color: mood.color }}>Tap to explore soundscapes →</span>
+                    
+                    {/* Animated visualizer bars */}
+                    <div className="absolute bottom-0 left-0 right-0 h-16 flex items-end justify-center gap-1 px-4">
+                      {[...Array(20)].map((_, i) => (
+                        <motion.div 
+                          key={i} 
+                          className="w-1 rounded-t-full" 
+                          style={{ background: `linear-gradient(to top, ${mood.color}, ${mood.glow})` }}
+                          animate={{ height: [8, 20 + Math.random() * 30, 8] }}
+                          transition={{ duration: 0.5 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.03 }}
+                        />
+                      ))}
                     </div>
                   </div>
-                )}
-                <iframe src={`https://open.spotify.com/embed/playlist/${mood.spotifyPlaylistId || '37i9dQZF1DX3Ogo9pFno96'}?utm_source=generator&theme=0`} width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" className={`w-full h-full transition-opacity duration-500 ${isPlayerLoaded ? 'opacity-100' : 'opacity-0'}`} onLoad={() => setIsPlayerLoaded(true)} />
-              </div>
+                </div>
+              </a>
               <motion.p className="text-sm italic flex items-center gap-2" style={{ color: mood.color }}>
                 <Sparkles className="w-4 h-4" />
                 <span className="font-semibold">Suggested:</span>
