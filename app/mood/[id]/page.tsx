@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Bookmark, Share2, Check } from 'lucide-react';
-import { OrbVisualizer } from '@/components/OrbVisualizer';
+import dynamic from 'next/dynamic';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodReflectionCard } from '@/components/MoodReflectionCard';
+
+const OrbVisualizer = dynamic(() => import('@/components/OrbVisualizer').then(m => m.OrbVisualizer), { ssr: false });
 import { MoodData } from '@/lib/moodData';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { ThemeToggle } from '@/components/ThemeToggle';
