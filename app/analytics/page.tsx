@@ -145,7 +145,7 @@ export default function AnalyticsPage() {
               <p className="text-white/70 mb-8">
                 Start your journey! Track your emotions to unlock insights.
               </p>
-              <Link href="/">
+              <Link href="/#mood-selection">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
