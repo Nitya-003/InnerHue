@@ -1,15 +1,15 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { TrendingUp, Calendar, Heart, Target, Sparkles } from 'lucide-react';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { MoodChart } from '@/components/MoodChart';
 
-const cardVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.97 },
+const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
     visible: (i: number) => ({
-        opacity: 1, y: 0, scale: 1,
-        transition: { delay: i * 0.08, type: 'spring' as const, stiffness: 120, damping: 16 },
+        opacity: 1, y: 0,
+        transition: { delay: i * 0.06, duration: 0.4, ease: [0.4, 0, 0.2, 1] },
     }),
 };
 
@@ -21,24 +21,24 @@ export function BentoDashboard() {
             icon: Heart,
             label: 'Total Reflections',
             value: stats.totalEntries,
-            gradient: 'from-violet-500 to-purple-600',
-            glow: 'shadow-violet-500/30',
+            color: 'bg-purple-500/20',
+            textColor: 'text-purple-300',
             size: 'col-span-1',
         },
         {
             icon: Calendar,
             label: 'Today',
             value: stats.todayEntries,
-            gradient: 'from-blue-500 to-cyan-500',
-            glow: 'shadow-blue-500/30',
+            color: 'bg-blue-500/20',
+            textColor: 'text-blue-300',
             size: 'col-span-1',
         },
         {
             icon: TrendingUp,
             label: 'This Week',
             value: stats.weekEntries,
-            gradient: 'from-emerald-500 to-teal-500',
-            glow: 'shadow-emerald-500/30',
+            color: 'bg-green-500/20',
+            textColor: 'text-green-300',
             size: 'col-span-1',
         },
         {
@@ -47,8 +47,8 @@ export function BentoDashboard() {
             value: stats.mostCommonMood
                 ? stats.mostCommonMood.charAt(0).toUpperCase() + stats.mostCommonMood.slice(1)
                 : 'None',
-            gradient: 'from-orange-500 to-pink-500',
-            glow: 'shadow-orange-500/30',
+            color: 'bg-pink-500/20',
+            textColor: 'text-pink-300',
             size: 'col-span-1',
             isText: true,
         },
@@ -65,37 +65,28 @@ export function BentoDashboard() {
                         variants={cardVariants}
                         initial="hidden"
                         animate="visible"
-                        whileHover={{ scale: 1.03, y: -3 }}
-                        className={`relative overflow-hidden rounded-2xl p-5 shadow-xl ${card.glow} ${card.size}`}
-                        style={{
-                            background: 'rgba(255,255,255,0.06)',
-                            backdropFilter: 'blur(24px)',
-                            border: '1px solid rgba(255,255,255,0.12)',
-                        }}
+                        whileHover={{ y: -2 }}
+                        className={`relative overflow-hidden rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 ${card.size}
+                        bg-white/5 backdrop-blur-lg border border-white/10`}
                     >
-                        {/* Gradient accent blob */}
-                        <div
-                            className={`absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-br ${card.gradient} opacity-20 blur-2xl`}
-                        />
-
-                        <div className={`inline-flex p-2.5 rounded-xl bg-gradient-to-br ${card.gradient} mb-3 shadow-lg`}>
-                            <card.icon className="w-5 h-5 text-white" />
+                        <div className={`inline-flex p-2.5 rounded-xl ${card.color} mb-3 shadow-sm`}>
+                            <card.icon className={`w-5 h-5 ${card.textColor}`} />
                         </div>
 
-                        <div className={`text-2xl font-bold bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent mb-1`}>
+                        <div className={`text-2xl font-semibold ${card.textColor} mb-1`}>
                             {card.value}
                         </div>
-                        <div className="text-xs text-white/50 font-medium">{card.label}</div>
+                        <div className="text-xs text-white/60 font-medium">{card.label}</div>
 
-                        {/* Animated progress bar */}
+                        {/* Subtle progress indicator */}
                         <div className="mt-3 h-0.5 bg-white/10 rounded-full overflow-hidden">
                             <motion.div
-                                className={`h-full bg-gradient-to-r ${card.gradient} rounded-full`}
+                                className={`h-full ${card.color} rounded-full`}
                                 initial={{ width: 0 }}
                                 animate={{
                                     width: card.isText ? '100%' : `${Math.min((card.value as number) * 10, 100)}%`,
                                 }}
-                                transition={{ duration: 1.2, delay: i * 0.1, ease: 'easeOut' }}
+                                transition={{ duration: 0.8, delay: i * 0.1, ease: [0.4, 0, 0.2, 1] }}
                             />
                         </div>
                     </motion.div>
@@ -108,18 +99,13 @@ export function BentoDashboard() {
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
-                className="rounded-3xl p-6 shadow-2xl"
-                style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    backdropFilter: 'blur(32px)',
-                    border: '1px solid rgba(255,255,255,0.10)',
-                }}
+                className="rounded-3xl p-6 shadow-sm bg-white/5 backdrop-blur-lg border border-white/10"
             >
                 <div className="flex items-center gap-2 mb-5">
-                    <div className="p-2 rounded-xl bg-gradient-to-br from-violet-500 to-pink-500">
-                        <Sparkles className="w-4 h-4 text-white" />
+                    <div className="p-2 rounded-xl bg-purple-500/20">
+                        <Sparkles className="w-4 h-4 text-purple-300" />
                     </div>
-                    <h3 className="font-bold text-white/90">Mood Frequency</h3>
+                    <h3 className="font-semibold text-white">Mood Frequency</h3>
                 </div>
                 <MoodChart />
             </motion.div>

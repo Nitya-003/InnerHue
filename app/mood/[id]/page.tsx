@@ -1,18 +1,30 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
-import { OrbVisualizer } from '@/components/OrbVisualizer';
+import { ArrowLeft, RefreshCw, Bookmark, Share2, Check } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodReflectionCard } from '@/components/MoodReflectionCard';
+
+const OrbVisualizer = dynamic(() => import('@/components/OrbVisualizer').then(m => m.OrbVisualizer), { ssr: false });
 import { MoodData } from '@/lib/moodData';
-import { getQuoteByMood } from '@/lib/getQuote';
-import { moodTags } from '@/lib/quoteTags';
-import { Quote } from '@/data/fallbackQuotes';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import reflectiveMoods from '@/lib/reflectiveMoods';
+import { getTraditionalMoodId } from '@/lib/moodMapping';
+
+// Type for mood objects that can have traditionalId (for reflective moods)
+interface MoodWithTraditionalId {
+  id: string;
+  name: string;
+  emoji: string;
+  color: string;
+  glow: string;
+  traditionalId?: string; // Optional: only present for reflective moods
+  spotifyPlaylistId?: string;
+}
 
 interface MoodPageProps {
   params: {
@@ -24,20 +36,18 @@ interface MoodPageProps {
 }
 
 export default function MoodPage({ params, searchParams }: MoodPageProps) {
-  const [moodData, setMoodData] = useState<any[]>([]);
+  const [moodData, setMoodData] = useState<MoodWithTraditionalId[]>([]);
   const [suggestions, setSuggestions] = useState<any>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
-  const [quote, setQuote] = useState<Quote | null>(null);
-  const [quoteLoading, setQuoteLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isShared, setIsShared] = useState(false);
   const [showReflectionCard, setShowReflectionCard] = useState(true);
 
-  // Pull addMood from Zustand store
+  // Computed values must be safe even if data is empty
+  const currentMood = moodData[currentMoodIndex] || moodData[0];
+
+  // Get addMood action from Zustand store
   const addMood = useMoodStore(state => state.addMood);
-
-  // Derived: current mood object
-  const currentMood = moodData[currentMoodIndex];
-
   // Fix 1: Main Data Fetching & Index Reset
   useEffect(() => {
     // 🔥 Reset index when route/params change
@@ -48,14 +58,34 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
 
     // Get mood data for all selected moods
     const moodsData = moodIds
-      .map(id => MoodData.getMoodById(id))
+      .map(id => {
+        // Try reflective moods first, then fall back to traditional moods
+        const reflectiveMood = reflectiveMoods.find(m => m.id === id);
+        if (reflectiveMood) {
+          // Map reflective mood to traditional mood for getting suggestions
+          const traditionalId = getTraditionalMoodId(id);
+          const traditionalMood = MoodData.getMoodById(traditionalId);
+          // Create adapter object that combines both systems
+          return {
+            id: reflectiveMood.id,
+            name: reflectiveMood.label,
+            emoji: reflectiveMood.label?.charAt(0).toUpperCase() || '✨', // Use first letter for uniqueness
+            color: reflectiveMood.color,
+            glow: reflectiveMood.glow,
+            traditionalId: traditionalId, // Store for getting suggestions
+            spotifyPlaylistId: traditionalMood?.spotifyPlaylistId,
+          };
+        }
+        // Fall back to traditional mood system
+        return MoodData.getMoodById(id);
+      })
       .filter(Boolean);
 
     setMoodData(moodsData);
 
     // Save to Zustand store instead of localStorage
     moodIds.forEach(moodId => {
-      const moodInfo = MoodData.getMoodById(moodId);
+      const moodInfo = moodsData.find(m => m.id === moodId);
       if (moodInfo) {
         addMood({
           mood: moodId,
@@ -72,38 +102,21 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     if (!moodData.length) return;
     const mood = moodData[currentMoodIndex];
     if (mood) {
-      const newSuggestions = MoodData.getSuggestions(mood.id);
+      // Use traditionalId if available (for reflective moods), otherwise use the mood id
+      const suggestionId = mood.traditionalId || mood.id;
+      const newSuggestions = MoodData.getSuggestions(suggestionId);
       setSuggestions(newSuggestions);
-      setShowReflectionCard(true);
+      setShowReflectionCard(true); // Show reflection card when mood changes
     }
   }, [currentMoodIndex, moodData]);
 
-  // Load quote for the current mood
-  const loadQuote = useCallback(async () => {
-    if (!currentMood) return;
-    setQuoteLoading(true);
-    try {
-      const tag = moodTags[currentMood.id] ?? 'inspirational';
-      const q = await getQuoteByMood(tag);
-      setQuote(q);
-    } catch {
-      setQuote(null);
-    } finally {
-      setQuoteLoading(false);
-    }
-  }, [currentMood]);
-
-  useEffect(() => {
-    loadQuote();
-  }, [loadQuote]);
-
   if (!moodData.length || !suggestions) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[hsl(var(--page-light-from))] dark:via-[hsl(var(--page-light-via))] dark:to-[hsl(var(--page-light-to))] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0f0720] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full"
+          className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full"
         />
       </div>
     );
@@ -112,7 +125,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   // At this point currentMood is guaranteed to be defined because moodData.length > 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[hsl(var(--page-light-from))] dark:via-[hsl(var(--page-light-via))] dark:to-[hsl(var(--page-light-to))]">
+    <div className="min-h-screen bg-[#0f0720]">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -124,10 +137,10 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="flex items-center space-x-2 p-2 rounded-lg bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <ArrowLeft className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="hidden md:inline text-purple-600 dark:text-purple-400 font-medium">Back</span>
+              <ArrowLeft className="w-5 h-5 text-white/70" />
+              <span className="hidden md:inline text-white font-medium">Back</span>
             </motion.button>
           </Link>
 
@@ -153,10 +166,10 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                     </motion.button>
                   ))}
                 </div>
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                <h1 className="text-2xl font-bold text-white">
                   Feeling {currentMood.name}
                   {moodData.length > 1 && (
-                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                    <span className="text-sm text-white/60 ml-2">
                       ({currentMoodIndex + 1} of {moodData.length})
                     </span>
                   )}
@@ -165,7 +178,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             ) : (
               <>
                 <span className="text-xl md:text-2xl">{currentMood.emoji}</span>
-                <h1 className="text-lg md:text-2xl font-bold text-gray-800 dark:text-gray-200">
+                <h1 className="text-lg md:text-2xl font-bold text-white">
                   Feeling {currentMood.name}
                 </h1>
               </>
@@ -176,16 +189,16 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="p-2 rounded-lg bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <Bookmark className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <Bookmark className="w-5 h-5 text-white/70" />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="p-2 rounded-lg bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
-              <Share2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <Share2 className="w-5 h-5 text-white/70" />
             </motion.button>
             <ThemeToggle />
           </div>
@@ -229,7 +242,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                 onRefresh={async () => {
                   setIsRefreshing(true);
                   await new Promise(resolve => setTimeout(resolve, 300));
-                  const newSuggestions = MoodData.getSuggestions(currentMood.id);
+                  const suggestionId = (currentMood as any).traditionalId || currentMood.id;
+                  const newSuggestions = MoodData.getSuggestions(suggestionId);
                   setSuggestions({ ...newSuggestions });
                   setIsRefreshing(false);
                 }}

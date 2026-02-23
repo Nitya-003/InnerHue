@@ -77,36 +77,8 @@ export default function ExplorePage() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden"
+      className="min-h-screen bg-[#0f0720] relative overflow-hidden"
     >
-      {/* Animated Background Orbs - Optimized */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full will-change-transform"
-            style={{
-              background: `radial-gradient(circle, ${['rgba(255,107,107,0.15)', 'rgba(78,205,196,0.12)', 'rgba(69,183,209,0.15)', 'rgba(150,206,180,0.12)', 'rgba(255,234,167,0.10)'][i]} 0%, transparent 70%)`,
-              width: 200 + i * 60,
-              height: 200 + i * 60,
-              left: `${[15, 75, 25, 85, 50][i]}%`,
-              top: `${[20, 60, 75, 15, 45][i]}%`,
-              transform: 'translate(-50%, -50%)',
-            }}
-            animate={{
-              x: [0, 40, -40, 0],
-              y: [0, -30, 30, 0],
-              scale: [1, 1.1, 0.95, 1],
-            }}
-            transition={{
-              duration: 18 + i * 3,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          />
-        ))}
-      </div>
-
       <FloatingBackground />
 
       {/* Header with enhanced entrance */}

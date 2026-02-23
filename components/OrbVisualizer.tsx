@@ -2,12 +2,6 @@
 
 import { motion, Variants } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
-
-const ShaderOrb = dynamic(
-  () => import('@/components/ShaderOrb').then(m => m.ShaderOrb),
-  { ssr: false, loading: () => <div className="w-full h-full" /> }
-);
 
 interface Mood {
   id: string;
@@ -27,6 +21,13 @@ interface Particle {
   distance: number;
   duration: number; // Added
 }
+
+const particleVariants: Variants = {
+  animate: {
+    opacity: [0, 1, 0],
+    scale: [0, 1, 0],
+  },
+};
 
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -97,6 +98,16 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
+  const particleVariants: Variants = {
+    animate: {
+      scale: [0.8, 1.5, 0.8],
+      opacity: [0.2, 0.8, 0.2],
+      transition: {
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+    },
+  };
 
 
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
@@ -113,12 +124,12 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
 
   return (
     <div className="relative">
-      <div className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl border border-white/50 dark:border-white/10">
+      <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl border border-white/10">
         <div className="text-center mb-6 md:mb-8">
-          <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+          <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
             Your Emotional State
           </h3>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-white/70">
             Visualizing the energy of feeling {mood.name.toLowerCase()}
           </p>
         </div>

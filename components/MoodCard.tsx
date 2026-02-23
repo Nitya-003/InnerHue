@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { memo, useState } from 'react';
-import { Sparkles, Check, Star, BookOpen, Wind, Music } from 'lucide-react';
+import { Check, BookOpen, Wind, Music } from 'lucide-react';
 import { getReflection } from '@/lib/reflectionData';
 import './moodcard.css';
 
@@ -250,9 +250,7 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
           <motion.div
             className="relative z-10 text-center flex flex-col items-center"
             animate={{
-              y: [0, -10, 0],
-              rotate: [0, 4, -4, 0],
-              scale: [1, 1.03, 1],
+              y: [0, -8, 0],
             }}
             transition={{
               duration: 4 + (index % 3),
@@ -264,9 +262,8 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
             <motion.div
               className="text-4xl sm:text-5xl mb-2 select-none filter drop-shadow-xl relative"
               whileHover={{
-                scale: 1.35,
-                rotate: [0, 10],
-                transition: { duration: 0.5, type: "spring" },
+                scale: 1.2,
+                transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
               }}
             >
               {/* Emoji glow effect */}
@@ -275,7 +272,7 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
                 style={{ background: mood.color }}
                 animate={
                   isHovered
-                    ? { opacity: [0.3, 0.7, 0.3], scale: [1, 1.5, 1] }
+                    ? { opacity: [0.3, 0.6, 0.3], scale: [1, 1.3, 1] }
                     : { opacity: 0 }
                 }
                 transition={{ duration: 1.5, repeat: Infinity }}
@@ -283,18 +280,6 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
               <span className="relative z-10">{mood.emoji}</span>
             </motion.div>
 
-            <motion.div
-              className={`text-sm font-bold transition-all duration-300 ${isSelected ? "" : "text-white group-hover:text-gray-100"
-                } drop-shadow-lg`}
-              style={{
-                color: isSelected ? mood.color : undefined,
-                textShadow: isSelected
-                  ? `0 0 20px ${mood.glow}60`
-                  : "0 2px 10px rgba(0,0,0,0.4)",
-              }}
-            >
-              {mood.emoji}
-            </motion.div>
             <div className="text-sm font-medium text-gray-800 drop-shadow-sm">
               {mood.name}
             </div>
@@ -307,50 +292,15 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
               animate={{ opacity: 1, scale: 1 }}
               className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl"
             >
-              {/* Corner stars */}
-              <motion.div
-                className="absolute top-2 left-2"
-                animate={{
-                  rotate: 360,
-                  scale: [1, 1.4, 1],
-                  opacity: [0.6, 1, 0.6],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <Star
-                  className="w-4 h-4 fill-current"
-                  style={{ color: mood.glow }}
-                />
-              </motion.div>
-              <motion.div
-                className="absolute bottom-2 right-2"
-                animate={{
-                  rotate: -360,
-                  scale: [1, 1.4, 1],
-                  opacity: [0.6, 1, 0.6],
-                }}
-                transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-              >
-                <Sparkles className="w-4 h-4" style={{ color: mood.color }} />
-              </motion.div>
-              <motion.div
-                className="absolute top-2 right-8"
-                animate={{ y: [0, -5, 0], opacity: [0.4, 1, 0.4] }}
-                transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
-              >
-                <Sparkles className="w-3 h-3" style={{ color: mood.glow }} />
-              </motion.div>
-
               {/* Pulsing radial glow */}
               <motion.div
                 className="absolute inset-0 -z-10 rounded-3xl"
                 animate={{
-                  opacity: [0.4, 0.8, 0.4],
-                  scale: [1, 1.05, 1],
+                  opacity: [0.4, 0.7, 0.4],
                 }}
-                transition={{ duration: 2, repeat: Infinity }}
+                transition={{ duration: 2, repeat: Infinity, ease: [0.4, 0, 0.2, 1] }}
                 style={{
-                  background: `radial-gradient(circle at center, ${mood.glow}50 0%, ${mood.color}30 40%, transparent 70%)`,
+                  background: `radial-gradient(circle at center, ${mood.glow}40 0%, ${mood.color}25 40%, transparent 70%)`,
                 }}
               />
             </motion.div>

@@ -178,7 +178,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                           key={`${emoji}-${index}`}
                           type="button"
                           onClick={() => setFormData(prev => ({ ...prev, emoji }))}
-                          className={`p-2 rounded-md text-lg hover:bg-white/20 transition-colors ${formData.emoji === emoji ? 'bg-green-500/30 ring-2 ring-green-400' : ''
+                          className={`p-2 rounded-md text-lg hover:bg-white/20 transition-colors ${formData.emoji === emoji ? 'bg-white/30 ring-2 ring-white/60' : ''
                             }`}
                         >
                           {emoji}
@@ -218,7 +218,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                       onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                         setFormData(prev => ({ ...prev, category: e.target.value }))
                       }
-                      className="w-full px-3 py-2 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 bg-white/10 text-white [&>option]:text-gray-900"
+                      className="w-full px-3 py-2 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-white/40 bg-white/10 text-white [&>option]:text-gray-900"
                     >
                       {CATEGORY_OPTIONS.map((category) => (
                         <option key={category} value={category}>
@@ -258,7 +258,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                   <button
                     type="submit"
                     disabled={isSubmitting || !formData.name.trim()}
-                    className="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-md hover:from-green-600 hover:to-emerald-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-md hover:from-purple-700 hover:to-pink-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? 'Creating...' : 'Create Mood'}
                   </button>
