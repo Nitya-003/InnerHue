@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide-react';
-import { MoodChart } from '@/components/MoodChart';
+import MoodPieChart from '@/components/MoodPieChart';
+import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
 
 export default function AnalyticsPage() {
@@ -100,6 +101,17 @@ export default function AnalyticsPage() {
     return date.toLocaleDateString();
   };
 
+  // Prepare mood data for charts
+  const moodData = useMemo(() => {
+    return Object.entries(stats.moodCounts || {})
+      .sort(([, a], [, b]) => (b as number) - (a as number))
+      .slice(0, 10)
+      .map(([mood, count]) => ({
+        mood,
+        count: count as number,
+      }));
+  }, [stats.moodCounts]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       {/* Header */}
@@ -169,8 +181,10 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
+                className="grid md:grid-cols-2 gap-6"
               >
-                <MoodChart moodHistory={moodHistory} stats={stats} />
+                <MoodPieChart data={moodData} />
+                <MoodBarChart data={moodData} />
               </motion.div>
 
               {/* History Dashboard */}
