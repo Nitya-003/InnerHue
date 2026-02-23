@@ -1,89 +1,51 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  Calendar,
+  Heart,
+  Activity,
+  Trash2,
+} from 'lucide-react';
+
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
-import { MoodStats } from '@/components/MoodStats';
+
+import { BentoDashboard } from '@/components/BentoDashboard';
+import { useMoodStore } from '@/lib/useMoodStore';
+import { ThemeToggle } from '@/components/ThemeToggle';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>({});
+  const moodHistory = useMoodStore(state => state.moodHistory);
+  const clearHistory = useMoodStore(state => state.clearHistory);
+  const deleteMood = useMoodStore(state => state.deleteMood);
+  const [clearDialogOpen, setClearDialogOpen] = useState(false);
 
-  const calculateStats = useCallback((history: any[]) => {
-    const moodCounts: { [key: string]: number } = {};
-    const today = new Date().toDateString();
-    const thisWeek: any[] = [];
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 7);
-
-    history.forEach((entry: any) => {
-      // Support both new (emotion) and old (mood) formats
-      const moodKey = entry.emotion || entry.mood;
-      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
-
-      const entryDate = new Date(entry.timestamp);
-      if (entryDate >= weekStart) {
-        thisWeek.push(entry);
-      }
-    });
-
-    const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => (b as number) - (a as number))[0];
-
-    setStats({
-      totalEntries: history.length,
-      todayEntries: history.filter((entry: any) => new Date(entry.timestamp).toDateString() === today).length,
-      weekEntries: thisWeek.length,
-      mostCommonMood: mostCommon ? mostCommon[0] : null,
-      moodCounts,
-      weeklyData: thisWeek
-    });
-  }, []);
-
-  const loadData = useCallback(() => {
-    const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    setMoodHistory(history);
-    calculateStats(history);
-  }, [calculateStats]);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadData();
-
-    // Listen for updates from other tabs/components
-    window.addEventListener('storage', loadData);
-    return () => window.removeEventListener('storage', loadData);
-  }, [loadData]);
-
-  const handleClearHistory = () => {
-    if (confirm('Are you sure you want to clear your entire mood history?')) {
-      localStorage.setItem('moodHistory', '[]');
-      setMoodHistory([]);
-      calculateStats([]);
-      window.dispatchEvent(new Event('storage'));
-    }
+  const handleClearHistoryClick = () => {
+    setClearDialogOpen(true);
   };
 
-  const handleDeleteEntry = (id: string, index: number) => {
-    const newHistory = [...moodHistory];
-    let updatedHistory;
+  const handleConfirmClearHistory = () => {
+    clearHistory();
+    setClearDialogOpen(false);
+  };
 
-    if (id) {
-      updatedHistory = newHistory.filter(item => item.id !== id);
-    } else {
-      // Fallback: remove by index for legacy data
-      // Note: passed index is from the visual reversed list
-      // We'll rely on ID for best results
-      return;
-    }
-
-    localStorage.setItem('moodHistory', JSON.stringify(updatedHistory));
-    setMoodHistory(updatedHistory);
-    calculateStats(updatedHistory);
-    window.dispatchEvent(new Event('storage'));
+  const handleDeleteEntry = (id: string) => {
+    if (id) deleteMood(id);
   };
 
   const getTimeAgo = (dateString: string) => {
@@ -103,82 +65,102 @@ export default function AnalyticsPage() {
 
   // Prepare mood data for charts
   const moodData = useMemo(() => {
-    return Object.entries(stats.moodCounts || {})
-      .sort(([, a], [, b]) => (b as number) - (a as number))
-      .slice(0, 10)
+    const moodCounts: Record<string, number> = {};
+
+    moodHistory.forEach((entry) => {
+      moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
+    });
+
+    return Object.entries(moodCounts)
       .map(([mood, count]) => ({
         mood,
-        count: count as number,
-      }));
-  }, [stats.moodCounts]);
+        count,
+      }))
+      .sort((a, b) => b.count - a.count);
+  }, [moodHistory]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+      className="min-h-screen bg-[#0f0720] transition-colors duration-500"
+    >
       {/* Header */}
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="p-6"
-      >
+      <header className="p-4 md:p-6 sticky top-0 z-50 bg-[#0f0720]/80 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
+
           <Link href="/">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+              className="flex items-center space-x-2 px-4 py-2 
+              rounded-xl bg-white/10 
+              border border-white/10 shadow-sm 
+              hover:shadow-md 
+              transition-all duration-300"
             >
-              <ArrowLeft className="w-5 h-5 text-purple-600" />
-              <span className="text-purple-600 font-medium">Back</span>
+              <ArrowLeft className="w-5 h-5 text-white/70" />
+              <span className="hidden md:inline text-white font-medium">
+                Back
+              </span>
             </motion.button>
           </Link>
 
-          <div className="flex items-center space-x-2">
-            <Activity className="w-8 h-8 text-purple-600" />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <div className="flex items-center space-x-3">
+            <Activity className="w-7 h-7 text-white" />
+            <h1 className="text-xl md:text-3xl font-semibold text-white">
               Mood Analytics
             </h1>
           </div>
 
-          <div className="w-20" /> {/* Spacer */}
+          <ThemeToggle />
         </div>
-      </motion.header>
+      </header>
 
-      {/* Main Content */}
-      <main className="px-6 pb-20">
+      {/* Main */}
+      <main className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
+
           {moodHistory.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-20"
-            >
-              <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-600 mb-2">No reflections yet</h2>
-              <p className="text-gray-500 mb-8">Start your journey! Track your emotions to see insights here.</p>
-              <Link href="/">
+            <div className="text-center py-24">
+              <Heart className="w-16 h-16 text-white/30 mx-auto mb-4" />
+              <h2 className="text-2xl font-semibold text-white mb-2">
+                No reflections yet
+              </h2>
+              <p className="text-white/70 mb-8">
+                Start your journey! Track your emotions to unlock insights.
+              </p>
+              <Link href="/#mood-selection">
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+                  className="px-8 py-3 bg-white 
+                  text-[#0f0720] font-medium rounded-full shadow-sm 
+                  hover:shadow-md 
+                  transition-all duration-300"
                 >
                   Track Your First Mood
                 </motion.button>
               </Link>
-            </motion.div>
+            </div>
           ) : (
-            <div className="space-y-8">
-              {/* Stats Cards */}
+            <div className="space-y-10">
+
+              {/* Stats */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
+                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
-                <MoodStats stats={stats} />
+                <BentoDashboard />
               </motion.div>
 
               {/* Charts */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 className="grid md:grid-cols-2 gap-6"
@@ -187,62 +169,96 @@ export default function AnalyticsPage() {
                 <MoodBarChart data={moodData} />
               </motion.div>
 
-              {/* History Dashboard */}
+              {/* History */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50"
+                transition={{ delay: 0.2, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                className="bg-white/10 backdrop-blur-lg 
+                rounded-3xl p-6 md:p-10 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] 
+                border border-white/10"
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-6 h-6 text-purple-600" />
-                    <h3 className="text-2xl font-bold text-gray-800">History</h3>
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center space-x-3">
+                    <Calendar className="w-6 h-6 text-white" />
+                    <h3 className="text-2xl font-semibold text-white">
+                      History
+                    </h3>
                   </div>
 
                   <button
-                    onClick={handleClearHistory}
-                    className="text-sm text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded-full transition-colors font-medium border border-transparent hover:border-red-200"
+                    onClick={handleClearHistoryClick}
+                    className="text-sm font-semibold 
+                    px-4 py-1.5 rounded-full 
+                    bg-red-500/20 
+                    text-red-300 
+                    hover:bg-red-500/30 
+                    hover:shadow-sm 
+                    transition-all duration-300"
                   >
                     Clear History
                   </button>
                 </div>
 
-                {/* history cards */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {moodHistory.slice().reverse().slice(0, 15).map((entry, index) => (
                     <motion.div
                       key={entry.id || index}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 * index }}
-                      className="group flex items-center justify-between p-4 rounded-xl bg-white/60 backdrop-blur border border-white/40 shadow-sm hover:shadow-md transition-all hover:bg-white/80"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        delay: 0.05 * index,
+                        duration: 0.3,
+                        ease: [0.4, 0, 0.2, 1]
+                      }}
+                      whileHover={{ y: -2 }}
+                      className="group relative flex items-center justify-between 
+                      p-5 rounded-2xl 
+                      bg-white/5 
+                      border border-white/10 shadow-sm 
+                      hover:shadow-md
+                      transition-all duration-300"
                     >
-                      <div className="flex items-center space-x-4">
+
+                      <div className="flex items-center space-x-4 relative z-10">
+
                         {/* Status Dot */}
                         <div
-                          className="w-3 h-3 rounded-full shadow-sm"
-                          style={{ backgroundColor: entry.color || '#ddd', boxShadow: `0 0 8px ${entry.color || '#ddd'}` }}
+                          className="w-3 h-3 rounded-full 
+                          ring-2 ring-[#0f0720] 
+                          transition-all duration-300"
+                          style={{
+                            backgroundColor: entry.color || '#A3B18A',
+                          }}
                         />
 
                         <div>
-                          <div className="font-semibold text-gray-800 capitalize flex items-center">
+                          <div className="font-medium text-white capitalize">
                             {entry.emotion || entry.mood}
                           </div>
-                          <div className="text-xs text-gray-500 font-medium">
+                          <div className="text-xs text-white/60 font-normal">
                             {getTimeAgo(entry.timestamp)}
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-4">
-                        <div className="text-sm text-gray-400 hidden sm:block">
-                          {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      <div className="flex items-center space-x-4 relative z-10">
+                        <div className="text-sm text-white/60 hidden sm:block">
+                          {new Date(entry.timestamp).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
                         </div>
 
                         <button
-                          onClick={() => handleDeleteEntry(entry.id, index)}
-                          className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                          onClick={() => handleDeleteEntry(entry.id)}
+                          className="opacity-0 group-hover:opacity-100 
+                          p-2 rounded-full 
+                          bg-red-500/20 
+                          text-red-300 
+                          hover:bg-red-500/30 
+                          hover:shadow-sm
+                          transition-all duration-300"
                           title="Delete entry"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -256,6 +272,31 @@ export default function AnalyticsPage() {
           )}
         </div>
       </main>
-    </div>
+
+      {/* Clear History confirmation modal */}
+      <AlertDialog open={clearDialogOpen} onOpenChange={setClearDialogOpen}>
+        <AlertDialogContent className="max-w-md rounded-2xl border-white/20 dark:border-white/10 bg-white/95 dark:bg-[#1a1a35]/95 backdrop-blur-xl shadow-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-bold text-gray-800 dark:text-gray-100">
+              Clear mood history?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-600 dark:text-gray-300">
+              Are you sure you want to clear your entire mood history? This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-row gap-3 sm:gap-3 mt-6">
+            <AlertDialogCancel className="mt-0 rounded-xl border-gray-200 dark:border-white/20 bg-white dark:bg-white/10 hover:bg-gray-100 dark:hover:bg-white/20">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmClearHistory}
+              className="rounded-xl bg-red-500 hover:bg-red-600 text-white focus:ring-red-500/50"
+            >
+              Clear History
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </motion.div>
   );
 }
