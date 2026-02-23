@@ -231,7 +231,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <a 
-                  href="https://github.com" 
+                  href="https://github.com/Nitya-003/InnerHue" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors group"
