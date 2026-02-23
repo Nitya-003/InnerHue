@@ -163,10 +163,10 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
               {mood.emoji}
             </span>
             <div>
-              <h3 className="text-2xl font-semibold text-white">
+              <h3 className="text-2xl font-semibold light:text-black ">
                 Feeling {mood.name}
               </h3>
-              <p className="text-sm text-white/60 mt-1">Reflection time</p>
+              <p className="text-sm mt-1">Reflection time</p>
             </div>
           </div>
 
@@ -177,10 +177,10 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
             transition={{ delay: 0.2 }}
             className="space-y-2"
           >
-            <h4 className="text-sm uppercase tracking-wider text-white/50 font-medium">
+            <h4 className="text-sm uppercase tracking-wider font-medium">
               Insight
             </h4>
-            <p className="text-lg text-white/90 leading-relaxed font-light">
+            <p className="text-lg leading-relaxed font-light">
               {insight}
             </p>
           </motion.div>
@@ -192,10 +192,10 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
             transition={{ delay: 0.3 }}
             className="space-y-2"
           >
-            <h4 className="text-sm uppercase tracking-wider text-white/50 font-medium">
+            <h4 className="text-sm uppercase tracking-wider font-medium">
               Reflection Prompt
             </h4>
-            <p className="text-base text-white/80 leading-relaxed italic">
+            <p className="text-base leading-relaxed italic">
               "{suggestion.prompt}"
             </p>
           </motion.div>
@@ -208,11 +208,11 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
               transition={{ delay: 0.4 }}
               className="pl-4 border-l-2 border-white/20"
             >
-              <p className="text-sm text-white/70 italic">
+              <p className="text-sm italic">
                 "{suggestion.quote}"
               </p>
               {suggestion.author && (
-                <p className="text-xs text-white/50 mt-1">
+                <p className="text-xs mt-1">
                   — {suggestion.author}
                 </p>
               )}
@@ -226,7 +226,7 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
             transition={{ delay: 0.5 }}
             className="space-y-3"
           >
-            <h4 className="text-sm uppercase tracking-wider text-white/50 font-medium">
+            <h4 className="text-sm uppercase tracking-wide font-medium">
               Suggested Actions
             </h4>
             <div className="flex flex-wrap gap-3">
@@ -235,12 +235,12 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
                   key={index}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="group flex items-center space-x-2 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all"
+                  className="group flex items-center space-x-2 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-black/40 hover:border-white/30 transition-all"
                   aria-label={action.action}
                   title={action.action}
                 >
-                  <action.icon className="w-4 h-4 text-white/70 group-hover:text-white/90 transition-colors" />
-                  <span className="text-sm text-white/80 group-hover:text-white/100 transition-colors">
+                  <action.icon className="w-4 h-4 group-hover:text-white/90 transition-colors" />
+                  <span className="text-sm group-hover:text-white/100 transition-colors">
                     {action.label}
                   </span>
                 </motion.button>
@@ -259,7 +259,7 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
               {suggestion.keywords.slice(0, 6).map((keyword, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 text-xs rounded-full bg-white/5 text-white/60 border border-white/10"
+                  className="px-3 py-1 text-xs rounded-full bg-white/5 border border-black/40"
                 >
                   {keyword}
                 </span>
