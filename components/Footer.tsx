@@ -113,7 +113,7 @@ export function Footer() {
               </h3>
               <ul className="space-y-5">
                 {[
-                  { name: "GitHub", icon: Github, href: "https://github.com" },
+                  { name: "GitHub", icon: Github, href: "https://github.com/Nitya-003/InnerHue" },
                   { name: "LinkedIn", icon: Linkedin, href: "https://linkedin.com" },
                   { name: "Instagram", icon: Instagram, href: "https://instagram.com" },
                 ].map((item) => (
