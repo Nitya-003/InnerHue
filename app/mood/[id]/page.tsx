@@ -10,6 +10,7 @@ import { MoodData } from '@/lib/moodData';
 import { getQuoteByMood } from '@/lib/getQuote';
 import { moodTags } from '@/lib/quoteTags';
 import { Quote } from '@/data/fallbackQuotes';
+import { Mood, MoodSuggestion } from '@/types/mood';
 
 interface MoodPageProps {
   params: {
@@ -21,8 +22,8 @@ interface MoodPageProps {
 }
 
 export default function MoodPage({ params, searchParams }: MoodPageProps) {
-  const [moodData, setMoodData] = useState<any[]>([]);
-  const [suggestions, setSuggestions] = useState<any>(null);
+  const [moodData, setMoodData] = useState<Mood[]>([]);
+  const [suggestions, setSuggestions] = useState<MoodSuggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);

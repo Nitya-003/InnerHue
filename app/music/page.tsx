@@ -169,7 +169,7 @@ export default function MusicPage() {
             <div className="space-y-3">
               {currentPlaylist.songs.map((song, index) => (
                 <motion.div
-                  key={index}
+                  key={`${song.title}-${song.artist}`}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
