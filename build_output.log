@@ -1,0 +1,40 @@
+
+> nextjs@0.1.0 build
+> next build
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/14) ...
+   Generating static pages (3/14) 
+   Generating static pages (6/14) 
+   Generating static pages (10/14) 
+ ✓ Generating static pages (14/14) 
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    9.75 kB         138 kB
+├ ○ /_not-found                          882 B          81.4 kB
+├ ○ /about                               3.58 kB         132 kB
+├ ○ /analytics                           4.85 kB         133 kB
+├ ○ /explore                             4.85 kB         133 kB
+├ ○ /login                               10.6 kB         121 kB
+├ λ /mood/[id]                           42 kB           170 kB
+├ ○ /music                               3.22 kB         132 kB
+├ ○ /privacy                             3.07 kB         131 kB
+├ ○ /signup                              1.31 kB         105 kB
+├ ○ /terms                               3.15 kB         132 kB
+└ ○ /test                                4.26 kB        84.7 kB
++ First Load JS shared by all            80.5 kB
+  ├ chunks/472-6c8f983ac377a18d.js       27.5 kB
+  ├ chunks/fd9d1056-4c7f7e367381582b.js  50.9 kB
+  ├ chunks/main-app-cc065dcdfa9e12e7.js  230 B
+  └ chunks/webpack-b69ea1ed38b6c8e4.js   1.83 kB
+
+
+λ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+○  (Static)  automatically rendered as static HTML (uses no initial props)
+
