@@ -2,8 +2,21 @@
   "name": "nextjs",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=18.0.0"
+  "description": "A beautifully animated emotional wellness platform that helps users explore, visualize, and understand their feelings through interactive mood tracking, 3D visualizations, and personalized insights.",
+  "homepage": "https://github.com/NithinRegidi/InnerHue-OSS#readme",
+  "bugs": {
+    "url": "https://github.com/NithinRegidi/InnerHue-OSS/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NithinRegidi/InnerHue-OSS.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "next.config.js",
+  "directories": {
+    "lib": "lib"
   },
   "scripts": {
     "dev": "next dev",
@@ -90,5 +103,8 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
