@@ -211,6 +211,8 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
 
           {[...Array(3)].map((_, i) => (
             <motion.div
+              key={`orbital-ring-${i}`}
+              className="absolute rounded-full border-2 opacity-30"
               key={i}
               className="absolute rounded-full border-2 opacity-30 pointer-events-none"
               style={{
