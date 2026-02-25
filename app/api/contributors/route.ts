@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
+import { withRateLimit } from '@/lib/rateLimitMiddleware';
 
 export interface GitHubContributor {
   login: string;
@@ -45,63 +46,69 @@ async function fetchWithAuth(url: string) {
   return res.json();
 }
 
-export async function GET() {
-  try {
-    // Fetch all contributors (up to 100 per page)
-    const contributors: GitHubContributor[] = await fetchWithAuth(
-      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contributors?per_page=100&anon=0`
-    );
+export const GET = withRateLimit(
+  async (req: NextRequest) => {
+    try {
+      // Fetch all contributors (up to 100 per page)
+      const contributors: GitHubContributor[] = await fetchWithAuth(
+        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contributors?per_page=100&anon=0`
+      );
 
-    // Filter out bots
-    const humans = contributors.filter((c) => c.type !== 'Bot');
+      // Filter out bots
+      const humans = contributors.filter((c) => c.type !== 'Bot');
 
-    // Fetch detailed profiles in parallel (batch to avoid rate limits)
-    const detailed: ContributorWithDetails[] = await Promise.all(
-      humans.map(async (contributor) => {
-        try {
-          const user = await fetchWithAuth(
-            `https://api.github.com/users/${contributor.login}`
-          );
-          return {
-            ...contributor,
-            name: user.name ?? null,
-            bio: user.bio ?? null,
-            blog: user.blog ?? null,
-            twitter_username: user.twitter_username ?? null,
-            location: user.location ?? null,
-            public_repos: user.public_repos ?? 0,
-            followers: user.followers ?? 0,
-          };
-        } catch {
-          // Fallback if user profile fetch fails
-          return {
-            ...contributor,
-            name: null,
-            bio: null,
-            blog: null,
-            twitter_username: null,
-            location: null,
-            public_repos: 0,
-            followers: 0,
-          };
+      // Fetch detailed profiles in parallel (batch to avoid rate limits)
+      const detailed: ContributorWithDetails[] = await Promise.all(
+        humans.map(async (contributor) => {
+          try {
+            const user = await fetchWithAuth(
+              `https://api.github.com/users/${contributor.login}`
+            );
+            return {
+              ...contributor,
+              name: user.name ?? null,
+              bio: user.bio ?? null,
+              blog: user.blog ?? null,
+              twitter_username: user.twitter_username ?? null,
+              location: user.location ?? null,
+              public_repos: user.public_repos ?? 0,
+              followers: user.followers ?? 0,
+            };
+          } catch {
+            // Fallback if user profile fetch fails
+            return {
+              ...contributor,
+              name: null,
+              bio: null,
+              blog: null,
+              twitter_username: null,
+              location: null,
+              public_repos: 0,
+              followers: 0,
+            };
+          }
+        })
+      );
+
+      return NextResponse.json(
+        { contributors: detailed, total: detailed.length },
+        {
+          status: 200,
+          headers: {
+            'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+          },
         }
-      })
-    );
-
-    return NextResponse.json(
-      { contributors: detailed, total: detailed.length },
-      {
-        status: 200,
-        headers: {
-          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
-        },
-      }
-    );
-  } catch (error) {
-    console.error('Failed to fetch contributors:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch contributors', contributors: [], total: 0 },
-      { status: 500 }
-    );
+      );
+    } catch (error) {
+      console.error('Failed to fetch contributors:', error);
+      return NextResponse.json(
+        { error: 'Failed to fetch contributors', contributors: [], total: 0 },
+        { status: 500 }
+      );
+    }
+  },
+  {
+    maxRequests: 100, // 100 requests
+    windowMs: 15 * 60 * 1000, // per 15 minutes
   }
-}
+);
