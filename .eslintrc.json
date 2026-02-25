@@ -1,11 +1,5 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:react-hooks/recommended"
-  ],
-  "plugins": [
-    "react-hooks"
-  ],
+  "extends": ["next/core-web-vitals"],
   "rules": {
     "react-hooks/set-state-in-effect": "off",
     "react/no-unescaped-entities": "off",
