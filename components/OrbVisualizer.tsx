@@ -2,6 +2,7 @@
 
 import { motion, Variants } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import { ShaderOrb } from './ShaderOrb';
 
 interface Mood {
   id: string;

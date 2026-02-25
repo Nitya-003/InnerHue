@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Bookmark, Share2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodReflectionCard } from '@/components/MoodReflectionCard';
@@ -25,7 +25,6 @@ interface MoodWithMeta extends Mood {
   spotifyPlaylistId?: string;
 }
 
-// ✅ NEXT 15 REQUIRED PROPS TYPE
 export default function MoodPage({
   params,
   searchParams,
@@ -46,6 +45,7 @@ export default function MoodPage({
 
     (async () => {
       const resolvedParams = await params;
+
       const moodIds = searchParams?.moods
         ? searchParams.moods.split(',')
         : [resolvedParams.id];
