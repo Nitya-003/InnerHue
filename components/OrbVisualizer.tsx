@@ -97,7 +97,6 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setParticles(Array.from({ length: 12 }, (_, i) => ({
       id: i,
       angle: (i * 30) * (Math.PI / 180),
