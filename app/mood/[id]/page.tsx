@@ -139,7 +139,6 @@ export default function MoodPage({
           <SuggestionPanel
             suggestions={suggestions}
             mood={currentMood}
-            isRefreshing={isRefreshing}
             onRefresh={async () => {
               setIsRefreshing(true);
               await new Promise(r => setTimeout(r, 300));

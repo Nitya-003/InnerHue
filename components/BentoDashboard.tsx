@@ -3,7 +3,7 @@
 import { motion, Variants } from 'framer-motion';
 import { TrendingUp, Calendar, Heart, Target, Sparkles } from 'lucide-react';
 import { useMoodStore } from '@/lib/useMoodStore';
-import { MoodChart } from '@/components/MoodChart';
+
 
 const cardVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -107,7 +107,6 @@ export function BentoDashboard() {
                     </div>
                     <h3 className="font-semibold text-white">Mood Frequency</h3>
                 </div>
-                <MoodChart />
             </motion.div>
         </div>
     );
