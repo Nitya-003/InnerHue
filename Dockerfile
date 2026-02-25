@@ -1,5 +1,5 @@
 # Stage 1: Dependencies
-FROM node:18-slim AS deps
+FROM node:18-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN \
   fi
 
 # Stage 2: Builder
-FROM node:18-slim AS builder
+FROM node:18-alpine AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -36,17 +36,17 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
 # Stage 3: Runner (Production)
-FROM node:18-slim AS runner
+FROM node:18-alpine AS runner
 RUN apk add --no-cache dumb-init && \
     addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 
 # Copy built application
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
