@@ -1,14 +1,15 @@
 'use client';
 export const dynamic = "force-dynamic";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
-import dynamic from 'next/dynamic';
+import nextDynamic from 'next/dynamic';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodReflectionCard } from '@/components/MoodReflectionCard';
 
-const OrbVisualizer = dynamic(
+const OrbVisualizer = nextDynamic(
   () => import('@/components/OrbVisualizer').then(m => m.OrbVisualizer),
   { ssr: false }
 );
@@ -29,7 +30,7 @@ export default function MoodPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
   searchParams?: { moods?: string };
 }) {
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
@@ -40,54 +41,51 @@ export default function MoodPage({
 
   const addMood = useMoodStore(state => state.addMood);
 
+  // 🔥 FIXED: NO async wrapper, NO await params
   useEffect(() => {
     setCurrentMoodIndex(0);
 
-    (async () => {
-      const resolvedParams = await params;
+    const moodIds = searchParams?.moods
+      ? searchParams.moods.split(',')
+      : [params.id];
 
-      const moodIds = searchParams?.moods
-        ? searchParams.moods.split(',')
-        : [resolvedParams.id];
+    const moodsData = moodIds
+      .map(id => {
+        const reflectiveMood = reflectiveMoods.find(m => m.id === id);
 
-      const moodsData = moodIds
-        .map(id => {
-          const reflectiveMood = reflectiveMoods.find(m => m.id === id);
+        if (reflectiveMood) {
+          const traditionalId = getTraditionalMoodId(id);
+          const traditionalMood = MoodData.getMoodById(traditionalId);
 
-          if (reflectiveMood) {
-            const traditionalId = getTraditionalMoodId(id);
-            const traditionalMood = MoodData.getMoodById(traditionalId);
-
-            return {
-              id: reflectiveMood.id,
-              name: reflectiveMood.label,
-              emoji: reflectiveMood.label?.charAt(0).toUpperCase() || '✨',
-              color: reflectiveMood.color,
-              glow: reflectiveMood.glow,
-              traditionalId,
-              spotifyPlaylistId: traditionalMood?.spotifyPlaylistId,
-            } as MoodWithMeta;
-          }
-
-          return MoodData.getMoodById(id);
-        })
-        .filter((m): m is MoodWithMeta => Boolean(m));
-
-      setMoodData(moodsData);
-
-      moodIds.forEach(moodId => {
-        const moodInfo = moodsData.find(m => m.id === moodId);
-        if (moodInfo) {
-          addMood({
-            mood: moodId,
-            emotion: moodInfo.name,
-            date: new Date().toDateString(),
-            color: moodInfo.color,
-          });
+          return {
+            id: reflectiveMood.id,
+            name: reflectiveMood.label,
+            emoji: reflectiveMood.label?.charAt(0).toUpperCase() || '✨',
+            color: reflectiveMood.color,
+            glow: reflectiveMood.glow,
+            traditionalId,
+            spotifyPlaylistId: traditionalMood?.spotifyPlaylistId,
+          } as MoodWithMeta;
         }
-      });
-    })();
-  }, [params, searchParams?.moods, addMood]);
+
+        return MoodData.getMoodById(id);
+      })
+      .filter((m): m is MoodWithMeta => Boolean(m));
+
+    setMoodData(moodsData);
+
+    moodIds.forEach(moodId => {
+      const moodInfo = moodsData.find(m => m.id === moodId);
+      if (moodInfo) {
+        addMood({
+          mood: moodId,
+          emotion: moodInfo.name,
+          date: new Date().toDateString(),
+          color: moodInfo.color,
+        });
+      }
+    });
+  }, [params.id, searchParams?.moods, addMood]);
 
   useEffect(() => {
     if (!moodData.length) return;
