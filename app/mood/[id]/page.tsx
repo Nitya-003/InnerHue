@@ -1,62 +1,50 @@
-'use client'
+'use client';
 
-export const dynamic = 'force-dynamic'
-export const dynamicParams = true
-export const fetchCache = 'force-no-store'
-export const revalidate = 0
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { SuggestionPanel } from '@/components/SuggestionPanel';
+import { MoodData } from '@/lib/moodData';
+import { Mood, MoodSuggestion } from '@/types/mood';
+import { useMoodStore } from '@/lib/useMoodStore';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import reflectiveMoods from '@/lib/reflectiveMoods';
+import { getTraditionalMoodId } from '@/lib/moodMapping';
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
-import nextDynamic from 'next/dynamic'
-import { SuggestionPanel } from '@/components/SuggestionPanel'
-import { MoodData } from '@/lib/moodData'
-import { Mood, MoodSuggestion } from '@/types/mood'
-import { useMoodStore } from '@/lib/useMoodStore'
-import { ThemeToggle } from '@/components/ThemeToggle'
-import reflectiveMoods from '@/lib/reflectiveMoods'
-import { getTraditionalMoodId } from '@/lib/moodMapping'
-
-const OrbVisualizer = nextDynamic(
+const OrbVisualizer = dynamic(
   () => import('@/components/OrbVisualizer').then(m => m.OrbVisualizer),
   { ssr: false }
-)
+);
 
 interface MoodWithMeta extends Mood {
-  traditionalId?: string
-  spotifyPlaylistId?: string
+  traditionalId?: string;
+  spotifyPlaylistId?: string;
 }
 
-export default function MoodPage({
-  params,
-  searchParams
+export default function MoodClient({
+  id,
+  moods
 }: {
-  params: { id: string }
-  searchParams?: { moods?: string }
+  id: string;
+  moods?: string;
 }) {
-
-  const [moodData, setMoodData] = useState<MoodWithMeta[]>([])
-  const [suggestions, setSuggestions] = useState<MoodSuggestion | null>(null)
-  const [currentMoodIndex, setCurrentMoodIndex] = useState(0)
-
-  const addMood = useMoodStore(state => state.addMood)
+  const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
+  const [suggestions, setSuggestions] = useState<MoodSuggestion | null>(null);
+  const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
+  const addMood = useMoodStore(state => state.addMood);
 
   useEffect(() => {
-
-    const moodIds =
-      searchParams?.moods
-        ? searchParams.moods.split(',')
-        : [params.id]
+    const moodIds = moods ? moods.split(',') : [id];
 
     const moodsData = moodIds
-      .map(id => {
-
-        const reflectiveMood = reflectiveMoods.find(m => m.id === id)
+      .map(mid => {
+        const reflectiveMood = reflectiveMoods.find(m => m.id === mid);
 
         if (reflectiveMood) {
-          const traditionalId = getTraditionalMoodId(id)
-          const traditionalMood = MoodData.getMoodById(traditionalId)
+          const traditionalId = getTraditionalMoodId(mid);
+          const traditionalMood = MoodData.getMoodById(traditionalId);
 
           return {
             id: reflectiveMood.id,
@@ -66,80 +54,73 @@ export default function MoodPage({
             glow: reflectiveMood.glow,
             traditionalId,
             spotifyPlaylistId: traditionalMood?.spotifyPlaylistId,
-          } as MoodWithMeta
+          } as MoodWithMeta;
         }
 
-        return MoodData.getMoodById(id)
+        return MoodData.getMoodById(mid);
       })
-      .filter((m): m is MoodWithMeta => Boolean(m))
+      .filter(Boolean) as MoodWithMeta[];
 
-    setMoodData(moodsData)
+    setMoodData(moodsData);
 
-    moodIds.forEach(moodId => {
-      const moodInfo = moodsData.find(m => m.id === moodId)
+    moodIds.forEach(mid => {
+      const moodInfo = moodsData.find(m => m.id === mid);
       if (moodInfo) {
         addMood({
-          mood: moodId,
+          mood: mid,
           emotion: moodInfo.name,
           date: new Date().toDateString(),
           color: moodInfo.color,
-        })
+        });
       }
-    })
-
-  }, [params.id, searchParams?.moods, addMood])
-
+    });
+  }, [id, moods, addMood]);
 
   useEffect(() => {
-    if (!moodData.length) return
-
-    const mood = moodData[currentMoodIndex]
-    const suggestionId = mood.traditionalId || mood.id
-    setSuggestions(MoodData.getSuggestions(suggestionId))
-
-  }, [currentMoodIndex, moodData])
-
+    if (!moodData.length) return;
+    const mood = moodData[currentMoodIndex];
+    if (mood) {
+      const suggestionId = mood.traditionalId || mood.id;
+      setSuggestions(MoodData.getSuggestions(suggestionId));
+    }
+  }, [currentMoodIndex, moodData]);
 
   if (!moodData.length || !suggestions) {
-    return (
-      <div className="min-h-screen bg-[#0f0720] flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full"
-        />
-      </div>
-    )
+    return <div className="min-h-screen bg-[#0f0720]" />;
   }
 
-  const currentMood = moodData[currentMoodIndex]
+  const currentMood = moodData[currentMoodIndex];
 
   return (
     <div className="min-h-screen bg-[#0f0720]">
-      <motion.header className="p-6 flex justify-between">
-        <Link href="/">
-          <ArrowLeft className="text-white" />
-        </Link>
-        <ThemeToggle />
+      <motion.header className="p-4 md:p-6">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <Link href="/">
+            <motion.button className="flex items-center space-x-2 p-2 rounded-lg bg-white/10 backdrop-blur">
+              <ArrowLeft className="w-5 h-5 text-white/70" />
+            </motion.button>
+          </Link>
+          <ThemeToggle />
+        </div>
       </motion.header>
 
-      <main className="px-6 pb-20">
+      <main className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
-
-          <OrbVisualizer mood={currentMood} />
-
+          <OrbVisualizer key={currentMood.id} mood={currentMood} />
           <SuggestionPanel
             suggestions={suggestions}
             mood={currentMood}
             onRefresh={async () => {
-              await new Promise(r => setTimeout(r, 300))
-              const id = currentMood.traditionalId || currentMood.id
-              setSuggestions(MoodData.getSuggestions(id))
-            }}
-          />
+              const suggestionId =
+              currentMood.traditionalId || currentMood.id;
 
+            setSuggestions(
+            MoodData.getSuggestions(suggestionId)
+            );
+          }}
+          />
         </div>
       </main>
     </div>
-  )
+  );
 }
