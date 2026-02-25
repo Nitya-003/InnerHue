@@ -1,61 +1,61 @@
-'use client';
-export const dynamic = "force-dynamic";
+'use client'
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
-import nextDynamic from 'next/dynamic';
-import { SuggestionPanel } from '@/components/SuggestionPanel';
-import { MoodReflectionCard } from '@/components/MoodReflectionCard';
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+export const revalidate = 0
+
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { ArrowLeft } from 'lucide-react'
+import nextDynamic from 'next/dynamic'
+import { SuggestionPanel } from '@/components/SuggestionPanel'
+import { MoodData } from '@/lib/moodData'
+import { Mood, MoodSuggestion } from '@/types/mood'
+import { useMoodStore } from '@/lib/useMoodStore'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import reflectiveMoods from '@/lib/reflectiveMoods'
+import { getTraditionalMoodId } from '@/lib/moodMapping'
 
 const OrbVisualizer = nextDynamic(
   () => import('@/components/OrbVisualizer').then(m => m.OrbVisualizer),
   { ssr: false }
-);
-
-import { MoodData } from '@/lib/moodData';
-import { Mood, MoodSuggestion } from '@/types/mood';
-import { useMoodStore } from '@/lib/useMoodStore';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import reflectiveMoods from '@/lib/reflectiveMoods';
-import { getTraditionalMoodId } from '@/lib/moodMapping';
+)
 
 interface MoodWithMeta extends Mood {
-  traditionalId?: string;
-  spotifyPlaylistId?: string;
+  traditionalId?: string
+  spotifyPlaylistId?: string
 }
 
 export default function MoodPage({
   params,
-  searchParams,
+  searchParams
 }: {
-  params: { id: string };
-  searchParams?: { moods?: string };
+  params: { id: string }
+  searchParams?: { moods?: string }
 }) {
-  const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
-  const [suggestions, setSuggestions] = useState<MoodSuggestion | null>(null);
-  const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [showReflectionCard, setShowReflectionCard] = useState(true);
 
-  const addMood = useMoodStore(state => state.addMood);
+  const [moodData, setMoodData] = useState<MoodWithMeta[]>([])
+  const [suggestions, setSuggestions] = useState<MoodSuggestion | null>(null)
+  const [currentMoodIndex, setCurrentMoodIndex] = useState(0)
 
-  // 🔥 FIXED: NO async wrapper, NO await params
+  const addMood = useMoodStore(state => state.addMood)
+
   useEffect(() => {
-    setCurrentMoodIndex(0);
 
-    const moodIds = searchParams?.moods
-      ? searchParams.moods.split(',')
-      : [params.id];
+    const moodIds =
+      searchParams?.moods
+        ? searchParams.moods.split(',')
+        : [params.id]
 
     const moodsData = moodIds
       .map(id => {
-        const reflectiveMood = reflectiveMoods.find(m => m.id === id);
+
+        const reflectiveMood = reflectiveMoods.find(m => m.id === id)
 
         if (reflectiveMood) {
-          const traditionalId = getTraditionalMoodId(id);
-          const traditionalMood = MoodData.getMoodById(traditionalId);
+          const traditionalId = getTraditionalMoodId(id)
+          const traditionalMood = MoodData.getMoodById(traditionalId)
 
           return {
             id: reflectiveMood.id,
@@ -65,39 +65,39 @@ export default function MoodPage({
             glow: reflectiveMood.glow,
             traditionalId,
             spotifyPlaylistId: traditionalMood?.spotifyPlaylistId,
-          } as MoodWithMeta;
+          } as MoodWithMeta
         }
 
-        return MoodData.getMoodById(id);
+        return MoodData.getMoodById(id)
       })
-      .filter((m): m is MoodWithMeta => Boolean(m));
+      .filter((m): m is MoodWithMeta => Boolean(m))
 
-    setMoodData(moodsData);
+    setMoodData(moodsData)
 
     moodIds.forEach(moodId => {
-      const moodInfo = moodsData.find(m => m.id === moodId);
+      const moodInfo = moodsData.find(m => m.id === moodId)
       if (moodInfo) {
         addMood({
           mood: moodId,
           emotion: moodInfo.name,
           date: new Date().toDateString(),
           color: moodInfo.color,
-        });
+        })
       }
-    });
-  }, [params.id, searchParams?.moods, addMood]);
+    })
+
+  }, [params.id, searchParams?.moods, addMood])
+
 
   useEffect(() => {
-    if (!moodData.length) return;
+    if (!moodData.length) return
 
-    const mood = moodData[currentMoodIndex];
-    if (mood) {
-      const suggestionId = mood.traditionalId || mood.id;
-      const newSuggestions = MoodData.getSuggestions(suggestionId);
-      setSuggestions(newSuggestions);
-      setShowReflectionCard(true);
-    }
-  }, [currentMoodIndex, moodData]);
+    const mood = moodData[currentMoodIndex]
+    const suggestionId = mood.traditionalId || mood.id
+    setSuggestions(MoodData.getSuggestions(suggestionId))
+
+  }, [currentMoodIndex, moodData])
+
 
   if (!moodData.length || !suggestions) {
     return (
@@ -108,46 +108,37 @@ export default function MoodPage({
           className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full"
         />
       </div>
-    );
+    )
   }
 
-  const currentMood = moodData[currentMoodIndex];
+  const currentMood = moodData[currentMoodIndex]
 
   return (
     <div className="min-h-screen bg-[#0f0720]">
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="p-4 md:p-6 relative z-10"
-      >
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <Link href="/">
-            <motion.button className="flex items-center space-x-2 p-2 rounded-lg bg-white/10 backdrop-blur">
-              <ArrowLeft className="w-5 h-5 text-white/70" />
-            </motion.button>
-          </Link>
-          <ThemeToggle />
-        </div>
+      <motion.header className="p-6 flex justify-between">
+        <Link href="/">
+          <ArrowLeft className="text-white" />
+        </Link>
+        <ThemeToggle />
       </motion.header>
 
-      <main className="px-4 md:px-6 pb-20">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-start">
-          <OrbVisualizer key={currentMood.id} mood={currentMood} />
+      <main className="px-6 pb-20">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
+
+          <OrbVisualizer mood={currentMood} />
 
           <SuggestionPanel
             suggestions={suggestions}
             mood={currentMood}
             onRefresh={async () => {
-              setIsRefreshing(true);
-              await new Promise(r => setTimeout(r, 300));
-              const suggestionId =
-                currentMood.traditionalId || currentMood.id;
-              setSuggestions(MoodData.getSuggestions(suggestionId));
-              setIsRefreshing(false);
+              await new Promise(r => setTimeout(r, 300))
+              const id = currentMood.traditionalId || currentMood.id
+              setSuggestions(MoodData.getSuggestions(id))
             }}
           />
+
         </div>
       </main>
     </div>
-  );
+  )
 }
