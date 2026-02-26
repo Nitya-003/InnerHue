@@ -133,7 +133,7 @@ export default function AnalyticsPage() {
       </header>
 
       {/* Main */}
-      <main className="px-4 md:px-6 pb-20">
+      <main id="main" className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
 
           {moodHistory.length === 0 ? (

@@ -119,13 +119,13 @@ export default function MusicPage() {
           <motion.div
             className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
             style={{
-              background: currentTrack === 'rain' 
+              background: currentTrack === 'rain'
                 ? 'radial-gradient(circle, #3b82f6, transparent)'
                 : currentTrack === 'forest'
-                ? 'radial-gradient(circle, #10b981, transparent)'
-                : currentTrack === 'ocean'
-                ? 'radial-gradient(circle, #06b6d4, transparent)'
-                : 'radial-gradient(circle, #6b7280, transparent)',
+                  ? 'radial-gradient(circle, #10b981, transparent)'
+                  : currentTrack === 'ocean'
+                    ? 'radial-gradient(circle, #06b6d4, transparent)'
+                    : 'radial-gradient(circle, #6b7280, transparent)',
             }}
             animate={{
               scale: [1, 1.2, 1],
@@ -140,7 +140,7 @@ export default function MusicPage() {
         </div>
       )}
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <main id="main" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <Link href="/" className="inline-flex items-center text-white/60 hover:text-white transition-colors group">
@@ -166,32 +166,32 @@ export default function MusicPage() {
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div 
+                  <div
                     className="w-64 h-64 lg:w-80 lg:h-80 rounded-2xl relative overflow-hidden shadow-2xl"
                     style={{
-                      background: currentTrack === 'rain' 
+                      background: currentTrack === 'rain'
                         ? 'linear-gradient(135deg, #3b82f6, #1e40af)'
                         : currentTrack === 'forest'
-                        ? 'linear-gradient(135deg, #10b981, #047857)'
-                        : currentTrack === 'ocean'
-                        ? 'linear-gradient(135deg, #06b6d4, #0369a1)'
-                        : 'linear-gradient(135deg, #6b7280, #374151)',
+                          ? 'linear-gradient(135deg, #10b981, #047857)'
+                          : currentTrack === 'ocean'
+                            ? 'linear-gradient(135deg, #06b6d4, #0369a1)'
+                            : 'linear-gradient(135deg, #6b7280, #374151)',
                     }}
                   >
                     {/* Glow Effect */}
-                    <div 
+                    <div
                       className="absolute inset-0 opacity-60"
                       style={{
                         boxShadow: currentTrack === 'rain'
                           ? '0 0 80px rgba(59, 130, 246, 0.6), inset 0 0 80px rgba(59, 130, 246, 0.3)'
                           : currentTrack === 'forest'
-                          ? '0 0 80px rgba(16, 185, 129, 0.6), inset 0 0 80px rgba(16, 185, 129, 0.3)'
-                          : currentTrack === 'ocean'
-                          ? '0 0 80px rgba(6, 182, 212, 0.6), inset 0 0 80px rgba(6, 182, 212, 0.3)'
-                          : '0 0 80px rgba(107, 114, 128, 0.6), inset 0 0 80px rgba(107, 114, 128, 0.3)',
+                            ? '0 0 80px rgba(16, 185, 129, 0.6), inset 0 0 80px rgba(16, 185, 129, 0.3)'
+                            : currentTrack === 'ocean'
+                              ? '0 0 80px rgba(6, 182, 212, 0.6), inset 0 0 80px rgba(6, 182, 212, 0.3)'
+                              : '0 0 80px rgba(107, 114, 128, 0.6), inset 0 0 80px rgba(107, 114, 128, 0.3)',
                       }}
                     />
-                    
+
                     {/* Icon */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       {(() => {
@@ -246,10 +246,10 @@ export default function MusicPage() {
                         boxShadow: currentTrack === 'rain'
                           ? '0 8px 32px rgba(59, 130, 246, 0.4)'
                           : currentTrack === 'forest'
-                          ? '0 8px 32px rgba(16, 185, 129, 0.4)'
-                          : currentTrack === 'ocean'
-                          ? '0 8px 32px rgba(6, 182, 212, 0.4)'
-                          : '0 8px 32px rgba(107, 114, 128, 0.4)',
+                            ? '0 8px 32px rgba(16, 185, 129, 0.4)'
+                            : currentTrack === 'ocean'
+                              ? '0 8px 32px rgba(6, 182, 212, 0.4)'
+                              : '0 8px 32px rgba(107, 114, 128, 0.4)',
                       }}
                     >
                       {isPlaying ? (
@@ -312,11 +312,11 @@ export default function MusicPage() {
           <h2 className="text-2xl font-bold text-white mb-6 px-2">
             {currentTrack ? 'Switch Soundscape' : 'Available Soundscapes'}
           </h2>
-          
+
           {soundscapes.map((track, index) => {
             const isActive = currentTrack === track.id;
             const Icon = track.icon;
-            
+
             return (
               <motion.button
                 key={track.id}
@@ -336,37 +336,37 @@ export default function MusicPage() {
                   ${isActive ? 'bg-white/10' : 'bg-white/5 hover:bg-white/8'}
                 `}
                 style={{
-                  boxShadow: isActive 
+                  boxShadow: isActive
                     ? track.id === 'rain'
                       ? '0 0 0 2px rgba(59, 130, 246, 0.5), 0 4px 24px rgba(59, 130, 246, 0.2)'
                       : track.id === 'forest'
-                      ? '0 0 0 2px rgba(16, 185, 129, 0.5), 0 4px 24px rgba(16, 185, 129, 0.2)'
-                      : track.id === 'ocean'
-                      ? '0 0 0 2px rgba(6, 182, 212, 0.5), 0 4px 24px rgba(6, 182, 212, 0.2)'
-                      : '0 0 0 2px rgba(107, 114, 128, 0.5), 0 4px 24px rgba(107, 114, 128, 0.2)'
+                        ? '0 0 0 2px rgba(16, 185, 129, 0.5), 0 4px 24px rgba(16, 185, 129, 0.2)'
+                        : track.id === 'ocean'
+                          ? '0 0 0 2px rgba(6, 182, 212, 0.5), 0 4px 24px rgba(6, 182, 212, 0.2)'
+                          : '0 0 0 2px rgba(107, 114, 128, 0.5), 0 4px 24px rgba(107, 114, 128, 0.2)'
                     : 'none'
                 }}
               >
                 <div className="flex items-center gap-4 p-4">
                   {/* Icon with Glow */}
-                  <div 
+                  <div
                     className="relative flex-shrink-0 w-14 h-14 rounded-lg flex items-center justify-center"
                     style={{
                       background: track.id === 'rain'
                         ? 'linear-gradient(135deg, #3b82f6, #1e40af)'
                         : track.id === 'forest'
-                        ? 'linear-gradient(135deg, #10b981, #047857)'
-                        : track.id === 'ocean'
-                        ? 'linear-gradient(135deg, #06b6d4, #0369a1)'
-                        : 'linear-gradient(135deg, #6b7280, #374151)',
+                          ? 'linear-gradient(135deg, #10b981, #047857)'
+                          : track.id === 'ocean'
+                            ? 'linear-gradient(135deg, #06b6d4, #0369a1)'
+                            : 'linear-gradient(135deg, #6b7280, #374151)',
                       boxShadow: isActive
                         ? track.id === 'rain'
                           ? '0 4px 16px rgba(59, 130, 246, 0.4)'
                           : track.id === 'forest'
-                          ? '0 4px 16px rgba(16, 185, 129, 0.4)'
-                          : track.id === 'ocean'
-                          ? '0 4px 16px rgba(6, 182, 212, 0.4)'
-                          : '0 4px 16px rgba(107, 114, 128, 0.4)'
+                            ? '0 4px 16px rgba(16, 185, 129, 0.4)'
+                            : track.id === 'ocean'
+                              ? '0 4px 16px rgba(6, 182, 212, 0.4)'
+                              : '0 4px 16px rgba(107, 114, 128, 0.4)'
                         : 'none',
                     }}
                   >
@@ -394,10 +394,10 @@ export default function MusicPage() {
                             background: track.id === 'rain'
                               ? '#3b82f6'
                               : track.id === 'forest'
-                              ? '#10b981'
-                              : track.id === 'ocean'
-                              ? '#06b6d4'
-                              : '#6b7280',
+                                ? '#10b981'
+                                : track.id === 'ocean'
+                                  ? '#06b6d4'
+                                  : '#6b7280',
                           }}
                           animate={{
                             height: ['16px', '8px', '20px', '12px'],
@@ -421,7 +421,7 @@ export default function MusicPage() {
             );
           })}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

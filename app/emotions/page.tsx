@@ -76,10 +76,10 @@ export default function EmotionsPage() {
                 InnerHue
               </h1>
             </div>
-            
+
             <nav className="flex items-center space-x-3">
               <Link href="/personalization">
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
@@ -116,7 +116,7 @@ export default function EmotionsPage() {
       </motion.header>
 
       {/* Main Content */}
-      <main className="px-4 md:px-6 pb-20 pt-8">
+      <main id="main" className="px-4 md:px-6 pb-20 pt-8">
         <div className="max-w-5xl mx-auto">
           {/* Prompt Section */}
           <motion.div
@@ -143,8 +143,8 @@ export default function EmotionsPage() {
                 key={category}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.4, 
+                transition={{
+                  duration: 0.4,
                   delay: 0.2 + (categoryIndex * 0.08),
                   ease: [0.4, 0, 0.2, 1]
                 }}
@@ -220,7 +220,7 @@ export default function EmotionsPage() {
             className="mt-16 text-center"
           >
             <p className="text-sm text-white/60 max-w-md mx-auto leading-relaxed">
-              There's no right or wrong here. Whatever you're feeling is welcome. 
+              There's no right or wrong here. Whatever you're feeling is welcome.
               These labels are suggestions — you know your experience best.
             </p>
           </motion.div>

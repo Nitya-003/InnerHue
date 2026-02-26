@@ -11,7 +11,7 @@ export default function Insights() {
       {/* ✨ Floating Particles */}
       <Particles />
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <main id="main" className="max-w-6xl mx-auto relative z-10">
 
         {/* Title */}
         <motion.h1
@@ -90,7 +90,7 @@ export default function Insights() {
           />
 
         </div>
-      </div>
+      </main>
     </div>
   );
 }

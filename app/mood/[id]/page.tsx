@@ -207,7 +207,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
 
       {/* Main Content */}
       {/* Main Content */}
-      <main className="px-4 md:px-6 pb-20">
+      <main id="main" className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Mood Reflection Card */}
           {showReflectionCard && suggestions && (

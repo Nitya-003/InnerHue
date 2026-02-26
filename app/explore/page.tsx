@@ -132,7 +132,7 @@ export default function ExplorePage() {
       </motion.header>
 
       {/* Main Content */}
-      <main className="relative z-10 px-6 pb-20">
+      <main id="main" className="relative z-10 px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section with staggered entrance */}
           <motion.div

@@ -83,16 +83,13 @@ export default function PrivacyPolicy() {
                                 <a
                                     key={index}
                                     href={`#${sectionId}`}
-                                    className={`group flex items-center gap-3 transition-all duration-300 font-medium ${
-                                        isActive ? "text-cyan-400" : "text-gray-400 hover:text-cyan-400"
-                                    }`}
+                                    className={`group flex items-center gap-3 transition-all duration-300 font-medium ${isActive ? "text-cyan-400" : "text-gray-400 hover:text-cyan-400"
+                                        }`}
                                 >
-                                    <span className={`h-6 w-[3px] rounded-full transition-all duration-300 ${
-                                        isActive ? "bg-cyan-400" : "bg-transparent group-hover:bg-cyan-400/40"
-                                    }`} />
-                                    <span className={`transition-all duration-300 group-hover:translate-x-1 ${
-                                        isActive ? "text-cyan-400" : "group-hover:text-cyan-400"
-                                    }`}>
+                                    <span className={`h-6 w-[3px] rounded-full transition-all duration-300 ${isActive ? "bg-cyan-400" : "bg-transparent group-hover:bg-cyan-400/40"
+                                        }`} />
+                                    <span className={`transition-all duration-300 group-hover:translate-x-1 ${isActive ? "text-cyan-400" : "group-hover:text-cyan-400"
+                                        }`}>
                                         {section.title}
                                     </span>
                                 </a>
@@ -101,7 +98,7 @@ export default function PrivacyPolicy() {
                     </nav>
                 </aside>
                 {/* Main Content */}
-                <div className="flex-1 max-w-3xl">
+                <main id="main" className="flex-1 max-w-3xl">
                     <Link
                         href="/"
                         className="inline-flex items-center text-sm text-gray-400 hover:text-cyan-400 transition-all duration-300 mb-10 group"
@@ -145,7 +142,7 @@ export default function PrivacyPolicy() {
                             );
                         })}
                     </div>
-                </div>
+                </main>
             </div>
         </div>
     );
