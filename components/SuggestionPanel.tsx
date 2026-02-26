@@ -10,6 +10,19 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { QuoteCard } from '@/components/QuoteCard';
+import { QuoteSkeleton } from '@/components/QuoteSkeleton';
+import { Quote } from '@/data/fallbackQuotes';
+import { Mood, MoodSuggestion } from '@/types/mood';
+
+interface SuggestionPanelProps {
+  suggestions: MoodSuggestion;
+  mood: Mood;
+  onRefresh: () => void;
+  // New props for dynamic quotes
+  quoteData?: Quote | null;
+  isQuoteLoading?: boolean;
+  onQuoteRefresh?: () => void;
 
 interface SuggestionPanelProps {
   suggestions: {

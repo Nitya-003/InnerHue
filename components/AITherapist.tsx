@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Bot, X, Send, Heart, Sparkle, Loader2 } from 'lucide-react';
+import { Bot, X, Send, Heart, Sparkle, Loader2, WifiOff, AlertTriangle, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
@@ -44,8 +44,10 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [errorType, setErrorType] = useState<'network' | 'timeout' | 'parse' | 'server' | null>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     useEffect(() => {
         if (isOpen && inputRef.current) inputRef.current.focus();
@@ -54,6 +56,11 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, isLoading]);
+
+    // Cancel any in-flight request when the component unmounts
+    useEffect(() => {
+        return () => { abortControllerRef.current?.abort(); };
+    }, []);
 
     const handleSend = async () => {
         const text = input.trim();
@@ -64,12 +71,19 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
         setMessages(updatedMessages);
         setInput('');
         setIsLoading(true);
+        setErrorType(null);
 
         // Detect emotions for the callback
         const detected = detectEmotionsLocally(text);
         if (onEmotionDetected && detected.length > 0) {
             onEmotionDetected(detected.slice(0, 3));
         }
+
+        // ── Abort any previous in-flight request ────────────────────────────
+        abortControllerRef.current?.abort();
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         try {
             const res = await fetch('/api/chat', {
@@ -79,14 +93,58 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                     messages: updatedMessages,
                     emotion: activeEmotion ?? detected[0],
                 }),
+                signal: controller.signal,
             });
-            const data = await res.json() as { reply: string };
-            setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
-        } catch {
-            setMessages(prev => [...prev, {
-                role: 'assistant',
-                content: "I'm here for you. Could you tell me more about how you're feeling?",
-            }]);
+            clearTimeout(timeoutId);
+
+            // ── Check HTTP status before parsing ─────────────────────────────
+            if (!res.ok) {
+                console.error('[AITherapist] API responded with status:', res.status);
+                setErrorType('server');
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: "I'm having a little trouble connecting right now. Please try again in a moment. 💜",
+                }]);
+                return;
+            }
+
+            // ── Safely parse JSON ─────────────────────────────────────────────
+            let data: { reply?: unknown };
+            try {
+                data = await res.json();
+            } catch (parseError) {
+                console.error('[AITherapist] Failed to parse response JSON:', parseError);
+                setErrorType('parse');
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: "Something unexpected happened. I'm still here — please try again. 💜",
+                }]);
+                return;
+            }
+
+            // ── Validate response structure ───────────────────────────────────
+            const reply = typeof data?.reply === 'string' && data.reply.trim() !== ''
+                ? data.reply
+                : "I'm here for you. Could you tell me more about how you're feeling?";
+
+            setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
+        } catch (networkError) {
+            clearTimeout(timeoutId);
+            if ((networkError as Error).name === 'AbortError') {
+                console.error('[AITherapist] Request timed out or was cancelled');
+                setErrorType('timeout');
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: "The response is taking too long. Please try again. 💜",
+                }]);
+            } else {
+                console.error('[AITherapist] Network error:', networkError);
+                setErrorType('network');
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: "It seems like you're offline. Check your connection and try again. 💜",
+                }]);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -98,9 +156,12 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
     };
 
     const handleReset = () => {
+        abortControllerRef.current?.abort();   // cancel any in-flight request
+        abortControllerRef.current = null;
         setMessages([]);
         setInput('');
-        setIsLoading(false);
+        setErrorType(null);                    // clear stale error banner
+        setIsLoading(false);                   // ensure loading state is reset
         setIsOpen(false);
     };
 
@@ -226,6 +287,43 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
 
                             <div ref={bottomRef} />
                         </div>
+
+                        {/* Error Banner */}
+                        <AnimatePresence>
+                            {errorType && (
+                                <motion.div
+                                    key="error-banner"
+                                    initial={{ opacity: 0, y: -6 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -6 }}
+                                    transition={{ duration: 0.2 }}
+                                    className={`mx-4 mb-2 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium ${
+                                        errorType === 'network'
+                                            ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                                            : errorType === 'timeout'
+                                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                                            : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
+                                    }`}
+                                >
+                                    {errorType === 'network' && <WifiOff className="w-3.5 h-3.5 flex-shrink-0" />}
+                                    {errorType === 'timeout' && <Clock className="w-3.5 h-3.5 flex-shrink-0" />}
+                                    {(errorType === 'parse' || errorType === 'server') && <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />}
+                                    <span>
+                                        {errorType === 'network' && 'No connection — check your network'}
+                                        {errorType === 'timeout' && 'Response timed out — try again'}
+                                        {errorType === 'parse' && 'Unexpected response — try again'}
+                                        {errorType === 'server' && 'Service issue — try again shortly'}
+                                    </span>
+                                    <button
+                                        onClick={() => setErrorType(null)}
+                                        className="ml-auto opacity-60 hover:opacity-100 transition-opacity"
+                                        aria-label="Dismiss error"
+                                    >
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         {/* Input */}
                         <div className="px-4 pb-4 pt-2 border-t border-white/10">

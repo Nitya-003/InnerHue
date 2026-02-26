@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind, Volume2 } from 'lucide-react';
-import { FloatingBackground } from '@/components/FloatingBackground';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 // Soundscapes using Google Sound Library (CORS-enabled, reliable OGG files)
@@ -66,7 +65,7 @@ export default function MusicPage() {
 
   // Precompute random values for stable visualizer animation
   const visualizerBars = useMemo(() => {
-    return Array.from({ length: 16 }, (_, i) => ({
+    return Array.from({ length: 16 }, () => ({
       heights: [
         `${20 + Math.random() * 60}%`,
         `${40 + Math.random() * 60}%`,
@@ -107,7 +106,7 @@ export default function MusicPage() {
             audioRef.current?.removeEventListener('error', onError);
             resolve();
           };
-          const onError = (e: Event) => {
+          const onError = () => {
             audioRef.current?.removeEventListener('canplay', onCanPlay);
             audioRef.current?.removeEventListener('error', onError);
             reject(new Error('Audio failed to load: ' + src));
@@ -115,13 +114,13 @@ export default function MusicPage() {
           audioRef.current!.addEventListener('canplay', onCanPlay);
           audioRef.current!.addEventListener('error', onError);
         });
+        
         await audioRef.current.play();
         setCurrentTrack(trackId);
         setIsPlaying(true);
       }
     } catch (err) {
       console.error("Audio Playback Error:", err);
-      // Removed the alert so it doesn't annoy users, just logs to console
     }
   };
 
@@ -176,9 +175,10 @@ export default function MusicPage() {
               <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
                 {/* Album Art / Visualizer */}
                 <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
                   className="relative flex-shrink-0"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
                 >
                   <div 
                     className="w-64 h-64 lg:w-80 lg:h-80 rounded-2xl relative overflow-hidden shadow-2xl"
