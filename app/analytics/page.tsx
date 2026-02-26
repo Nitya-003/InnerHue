@@ -1,13 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, FileJson, FileText } from 'lucide-react';
-import { MoodChart } from '@/components/MoodChart';
+import {
+  ArrowLeft,
+  Calendar,
+  Heart,
+  Activity,
+  Trash2,
+} from 'lucide-react';
+
+import MoodPieChart from '@/components/MoodPieChart';
+import MoodBarChart from '@/components/MoodBarChart';
+
 import { BentoDashboard } from '@/components/BentoDashboard';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { ThemeToggle } from '@/components/ThemeToggle';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,45 +48,6 @@ export default function AnalyticsPage() {
     if (id) deleteMood(id);
   };
 
-  const handleExport = (format: 'csv' | 'json') => {
-    if (moodHistory.length === 0) return;
-
-    const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `innerhue_mood_history_${timestamp}.${format}`;
-    let content = '';
-    let type = '';
-
-    if (format === 'json') {
-      content = JSON.stringify(moodHistory, null, 2);
-      type = 'application/json';
-    } else {
-      // CSV Header
-      const headers = ['Date', 'Time', 'Mood', 'Emotion', 'Color', 'ID'];
-      const rows = moodHistory.map(entry => [
-        new Date(entry.timestamp).toLocaleDateString(),
-        new Date(entry.timestamp).toLocaleTimeString(),
-        entry.mood,
-        entry.emotion || '',
-        entry.color || '',
-        entry.id
-      ].map(field => `"${field}"`).join(','));
-
-      content = [headers.join(','), ...rows].join('\n');
-      type = 'text/csv';
-    }
-
-    // Trigger Download
-    const blob = new Blob([content], { type });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -91,6 +62,22 @@ export default function AnalyticsPage() {
     if (days < 7) return `${days}d ago`;
     return date.toLocaleDateString();
   };
+
+  // Prepare mood data for charts
+  const moodData = useMemo(() => {
+    const moodCounts: Record<string, number> = {};
+
+    moodHistory.forEach((entry) => {
+      moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
+    });
+
+    return Object.entries(moodCounts)
+      .map(([mood, count]) => ({
+        mood,
+        count,
+      }))
+      .sort((a, b) => b.count - a.count);
+  }, [moodHistory]);
 
   return (
     <motion.div
@@ -145,7 +132,7 @@ export default function AnalyticsPage() {
               <p className="text-white/70 mb-8">
                 Start your journey! Track your emotions to unlock insights.
               </p>
-              <Link href="/">
+              <Link href="/#mood-selection">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -169,6 +156,17 @@ export default function AnalyticsPage() {
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
                 <BentoDashboard />
+              </motion.div>
+
+              {/* Charts */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="grid md:grid-cols-2 gap-6"
+              >
+                <MoodPieChart data={moodData} />
+                <MoodBarChart data={moodData} />
               </motion.div>
 
               {/* History */}
