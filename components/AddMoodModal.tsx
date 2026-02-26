@@ -2,7 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Palette, Smile, Tag } from 'lucide-react';
+import { X, Plus, Palette, Smile, Tag, Loader2 } from 'lucide-react';
 import { CustomMoodStorage, CustomMood } from '@/lib/customMoods';
 
 interface AddMoodModalProps {
@@ -111,7 +111,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={handleClose}
+            onClick={() => { if (!isSubmitting) handleClose(); }}
             className="absolute inset-0 bg-transparent backdrop-blur-sm"
           />
 
@@ -132,7 +132,8 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                 </h2>
                 <button
                   onClick={handleClose}
-                  className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                  disabled={isSubmitting}
+                  className="p-2 hover:bg-white/10 rounded-full transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <X className="w-5 h-5 text-white/70" />
                 </button>
@@ -161,7 +162,8 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                         setFormData(prev => ({ ...prev, name: e.target.value }))
                       }
                       placeholder="e.g., Motivated, Zen, Adventurous"
-                      className="w-full px-3 py-2 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 bg-white/10 text-white placeholder-white/40"
+                      disabled={isSubmitting}
+                      className="w-full px-3 py-2 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 bg-white/10 text-white placeholder-white/40 disabled:opacity-50 disabled:cursor-not-allowed"
                       maxLength={20}
                     />
                   </div>
@@ -178,7 +180,8 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                           key={`${emoji}-${index}`}
                           type="button"
                           onClick={() => setFormData(prev => ({ ...prev, emoji }))}
-                          className={`p-2 rounded-md text-lg hover:bg-white/20 transition-colors ${formData.emoji === emoji ? 'bg-white/30 ring-2 ring-white/60' : ''
+                          disabled={isSubmitting}
+                          className={`p-2 rounded-md text-lg hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${formData.emoji === emoji ? 'bg-white/30 ring-2 ring-white/60' : ''
                             }`}
                         >
                           {emoji}
@@ -199,7 +202,8 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                           key={`${color}-${index}`}
                           type="button"
                           onClick={() => setFormData(prev => ({ ...prev, color }))}
-                          className={`w-8 h-8 rounded-full transition-all ${formData.color === color ? 'ring-2 ring-white scale-110' : 'hover:scale-105'
+                          disabled={isSubmitting}
+                          className={`w-8 h-8 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed ${formData.color === color ? 'ring-2 ring-white scale-110' : 'hover:scale-105'
                             }`}
                           style={{ backgroundColor: color }}
                           title={color}
@@ -218,7 +222,8 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                       onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                         setFormData(prev => ({ ...prev, category: e.target.value }))
                       }
-                      className="w-full px-3 py-2 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-white/40 bg-white/10 text-white [&>option]:text-gray-900"
+                      disabled={isSubmitting}
+                      className="w-full px-3 py-2 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-white/40 bg-white/10 text-white [&>option]:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {CATEGORY_OPTIONS.map((category) => (
                         <option key={category} value={category}>
@@ -251,7 +256,8 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="flex-1 px-4 py-2 text-white bg-white/10 rounded-md hover:bg-white/20 transition-colors border border-white/10"
+                    disabled={isSubmitting}
+                    className="flex-1 px-4 py-2 text-white bg-white/10 rounded-md hover:bg-white/20 transition-colors border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Cancel
                   </button>
@@ -260,7 +266,12 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                     disabled={isSubmitting || !formData.name.trim()}
                     className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-md hover:from-purple-700 hover:to-pink-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? 'Creating...' : 'Create Mood'}
+                    {isSubmitting ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Creating...
+                      </span>
+                    ) : 'Create Mood'}
                   </button>
                 </div>
               </form>

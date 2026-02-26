@@ -100,6 +100,7 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
     const handleReset = () => {
         setMessages([]);
         setInput('');
+        setIsLoading(false);
         setIsOpen(false);
     };
 
@@ -247,7 +248,7 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                                     className="bg-gradient-to-br from-violet-600 to-pink-600 text-white p-2.5 rounded-full disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                                     aria-label="Send"
                                 >
-                                    <Send className="w-4 h-4" />
+                                    {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                                 </motion.button>
                             </div>
                             {messages.length > 0 && (

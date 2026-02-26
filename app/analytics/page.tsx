@@ -9,6 +9,8 @@ import {
   Heart,
   Activity,
   Trash2,
+  Download,
+  Loader2,
 } from 'lucide-react';
 
 import MoodPieChart from '@/components/MoodPieChart';
@@ -34,6 +36,32 @@ export default function AnalyticsPage() {
   const clearHistory = useMoodStore(state => state.clearHistory);
   const deleteMood = useMoodStore(state => state.deleteMood);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportData = async () => {
+    if (isExporting || moodHistory.length === 0) return;
+    setIsExporting(true);
+    try {
+      const exportData = {
+        exportedAt: new Date().toISOString(),
+        totalEntries: moodHistory.length,
+        moods: moodHistory,
+      };
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `innerhue-moods-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+    } catch {
+      console.error('Export failed');
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const handleClearHistoryClick = () => {
     setClearDialogOpen(true);
@@ -186,18 +214,38 @@ export default function AnalyticsPage() {
                     </h3>
                   </div>
 
-                  <button
-                    onClick={handleClearHistoryClick}
-                    className="text-sm font-semibold 
-                    px-4 py-1.5 rounded-full 
-                    bg-red-500/20 
-                    text-red-300 
-                    hover:bg-red-500/30 
-                    hover:shadow-sm 
-                    transition-all duration-300"
-                  >
-                    Clear History
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleExportData}
+                      disabled={isExporting || moodHistory.length === 0}
+                      className="flex items-center gap-1.5 text-sm font-semibold
+                      px-4 py-1.5 rounded-full
+                      bg-violet-500/20
+                      text-violet-300
+                      hover:bg-violet-500/30
+                      hover:shadow-sm
+                      transition-all duration-300
+                      disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isExporting ? (
+                        <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Exporting...</>
+                      ) : (
+                        <><Download className="w-3.5 h-3.5" /> Export</>
+                      )}
+                    </button>
+                    <button
+                      onClick={handleClearHistoryClick}
+                      className="text-sm font-semibold
+                      px-4 py-1.5 rounded-full
+                      bg-red-500/20
+                      text-red-300
+                      hover:bg-red-500/30
+                      hover:shadow-sm
+                      transition-all duration-300"
+                    >
+                      Clear History
+                    </button>
+                  </div>
                 </div>
 
                 <div className="space-y-4">
