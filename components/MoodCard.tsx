@@ -36,6 +36,7 @@ export const MoodCard = memo(function MoodCard({ mood, index, isSelected, onSele
 
   return (
     <motion.div
+      layout
       variants={{
         hidden: {
           opacity: 0,
