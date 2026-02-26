@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { withRateLimit } from '@/lib/rateLimitMiddleware';
 
 const SYSTEM_PROMPT = `You are a compassionate AI emotional wellness companion named Hue. 
 Your role is to provide empathetic, supportive responses to help users explore and understand their emotions.
@@ -45,62 +46,121 @@ function getFallbackResponse(emotion: string, messageCount: number): string {
     return responses[messageCount % responses.length];
 }
 
-export async function POST(req: NextRequest) {
-    try {
-        const { messages, emotion } = await req.json() as {
-            messages: { role: string; content: string }[];
-            emotion?: string;
-        };
+export const POST = withRateLimit(
+    async (req: NextRequest) => {
+        // ── Parse request body ────────────────────────────────────────────────────
+        let messages: { role: string; content: string }[];
+        let emotion: string | undefined;
 
-        const apiKey = process.env.OPENAI_API_KEY;
-
-        // ── Fallback mode (no API key) ────────────────────────────────────────────
-        if (!apiKey) {
-            const reply = getFallbackResponse(emotion ?? 'default', messages.length);
-            return NextResponse.json({ reply });
+        try {
+            const body = await req.json() as {
+                messages: { role: string; content: string }[];
+                emotion?: string;
+            };
+            messages = body.messages;
+            emotion = body.emotion;
+        } catch (parseError) {
+            console.error('[Chat API] Failed to parse request body:', parseError);
+            return NextResponse.json(
+                { error: 'Invalid request body. Expected valid JSON.' },
+                { status: 400 }
+            );
         }
 
-        // ── OpenAI mode ───────────────────────────────────────────────────────────
-        const systemMessage = {
-            role: 'system',
-            content: emotion
-                ? `${SYSTEM_PROMPT}\n\nThe user is currently feeling: ${emotion}. Tailor your response to this emotional state.`
-                : SYSTEM_PROMPT,
-        };
-
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${apiKey}`,
-            },
-            body: JSON.stringify({
-                model: 'gpt-4o-mini',
-                messages: [systemMessage, ...messages],
-                max_tokens: 200,
-                temperature: 0.8,
-            }),
-        });
-
-        if (!response.ok) {
-            const err = await response.text();
-            console.error('OpenAI error:', err);
-            // Graceful fallback if API call fails
-            const reply = getFallbackResponse(emotion ?? 'default', messages.length);
-            return NextResponse.json({ reply });
+        // ── Validate messages field ───────────────────────────────────────────────
+        if (!Array.isArray(messages) || messages.length === 0) {
+            console.error('[Chat API] Invalid or missing messages array:', messages);
+            return NextResponse.json(
+                { error: 'Invalid request: "messages" must be a non-empty array.' },
+                { status: 400 }
+            );
         }
 
-        const data = await response.json() as {
-            choices: { message: { content: string } }[];
-        };
-        const reply = data.choices[0]?.message?.content ?? "I'm here for you. Tell me more.";
+        try {
+            const apiKey = process.env.OPENAI_API_KEY;
 
-        return NextResponse.json({ reply });
-    } catch (error) {
-        console.error('Chat API error:', error);
-        return NextResponse.json(
-            { reply: "I'm here to listen. Can you tell me more about how you're feeling?" },
-            { status: 200 }
-        );
+            // ── Fallback mode (no API key) ────────────────────────────────────────────
+            if (!apiKey) {
+                const reply = getFallbackResponse(emotion ?? 'default', messages.length);
+                return NextResponse.json({ reply });
+            }
+
+            // ── OpenAI mode ───────────────────────────────────────────────────────────
+            const systemMessage = {
+                role: 'system',
+                content: emotion
+                    ? `${SYSTEM_PROMPT}\n\nThe user is currently feeling: ${emotion}. Tailor your response to this emotional state.`
+                    : SYSTEM_PROMPT,
+            };
+
+            // ── Timeout protection (5 seconds) ────────────────────────────────────
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+            let response: Response;
+            try {
+                response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${apiKey}`,
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4o-mini',
+                        messages: [systemMessage, ...messages],
+                        max_tokens: 200,
+                        temperature: 0.8,
+                    }),
+                    signal: controller.signal,
+                });
+            } catch (fetchError) {
+                clearTimeout(timeoutId);
+                if ((fetchError as Error).name === 'AbortError') {
+                    console.error('[Chat API] OpenAI request timed out after 5s');
+                } else {
+                    console.error('[Chat API] OpenAI fetch failed:', fetchError);
+                }
+                const reply = getFallbackResponse(emotion ?? 'default', messages.length);
+                return NextResponse.json({ reply });
+            }
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const err = await response.text();
+                console.error('[Chat API] OpenAI HTTP error:', response.status, err);
+                const reply = getFallbackResponse(emotion ?? 'default', messages.length);
+                return NextResponse.json({ reply });
+            }
+
+            // ── Parse OpenAI response ─────────────────────────────────────────────
+            let data: { choices?: { message?: { content?: string } }[] };
+            try {
+                data = await response.json();
+            } catch (parseError) {
+                console.error('[Chat API] Failed to parse OpenAI response JSON:', parseError);
+                const reply = getFallbackResponse(emotion ?? 'default', messages.length);
+                return NextResponse.json({ reply });
+            }
+
+            // ── Validate response structure ───────────────────────────────────────
+            const content = data?.choices?.[0]?.message?.content;
+            if (typeof content !== 'string' || content.trim() === '') {
+                console.error('[Chat API] Unexpected OpenAI response structure:', JSON.stringify(data));
+                const reply = getFallbackResponse(emotion ?? 'default', messages.length);
+                return NextResponse.json({ reply });
+            }
+
+            return NextResponse.json({ reply: content });
+        } catch (error) {
+            console.error('Chat API error:', error);
+            return NextResponse.json(
+                { reply: "I'm here to listen. Can you tell me more about how you're feeling?" },
+                { status: 200 }
+            );
+        }
+    },
+    {
+        maxRequests: 30, // 30 requests
+        windowMs: 60 * 1000, // per 1 minute
     }
-}
+);
