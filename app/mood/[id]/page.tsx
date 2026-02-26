@@ -46,6 +46,7 @@ export default function MoodClient({
           const traditionalId = getTraditionalMoodId(mid);
           const traditionalMood = MoodData.getMoodById(traditionalId);
 
+          // Create adapter object that combines both systems
           return {
             id: reflectiveMood.id,
             name: reflectiveMood.label,
@@ -57,6 +58,7 @@ export default function MoodClient({
           } as MoodWithMeta;
         }
 
+        // Fall back to traditional mood system
         return MoodData.getMoodById(mid);
       })
       .filter(Boolean) as MoodWithMeta[];
@@ -78,6 +80,7 @@ export default function MoodClient({
 
   useEffect(() => {
     if (!moodData.length) return;
+
     const mood = moodData[currentMoodIndex];
     if (mood) {
       const suggestionId = mood.traditionalId || mood.id;
@@ -100,27 +103,62 @@ export default function MoodClient({
               <ArrowLeft className="w-5 h-5 text-white/70" />
             </motion.button>
           </Link>
+
+          <div className="flex items-center space-x-2">
+            {moodData.length > 1 ? (
+              <div className="flex items-center space-x-2">
+                <div className="flex space-x-1">
+                  {moodData.map((mood, index) => (
+                    <motion.button
+                      key={mood.id}
+                      onClick={() => setCurrentMoodIndex(index)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`text-2xl p-1 rounded-full transition-all ${index === currentMoodIndex
+                        ? 'bg-white/30 ring-2 ring-purple-400'
+                        : 'hover:bg-white/20'
+                        }`}
+                    >
+                      {mood.emoji}
+                    </motion.button>
+                  ))}
+                </div>
+                <h1 className="text-2xl font-bold text-white">
+                  Feeling {currentMood.name}
+                  <span className="text-sm text-white/60 ml-2">
+                    ({currentMoodIndex + 1} of {moodData.length})
+                  </span>
+                </h1>
+              </div>
+            ) : (
+              <>
+                <span className="text-xl md:text-2xl">{currentMood.emoji}</span>
+                <h1 className="text-lg md:text-2xl font-bold text-white">
+                  Feeling {currentMood.name}
+                </h1>
+              </>
+            )}
+          </div>
+
           <ThemeToggle />
         </div>
       </motion.header>
 
-      <main className="px-4 md:px-6 pb-20">
+      {/* Main Content */}
+      <main id="main" className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
           <OrbVisualizer key={currentMood.id} mood={currentMood} />
           <SuggestionPanel
             suggestions={suggestions}
             mood={currentMood}
             onRefresh={async () => {
-              const suggestionId =
-              currentMood.traditionalId || currentMood.id;
-
-            setSuggestions(
-            MoodData.getSuggestions(suggestionId)
-            );
-          }}
+              const suggestionId = currentMood.traditionalId || currentMood.id;
+              setSuggestions(MoodData.getSuggestions(suggestionId));
+            }}
           />
         </div>
       </main>
+
     </div>
   );
 }

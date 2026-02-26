@@ -32,7 +32,7 @@ export default function FAQsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f0720] text-white py-16 px-6">
+    <main id="main" className="min-h-screen bg-[#0f0720] text-white py-16 px-6">
       <div className="max-w-3xl mx-auto">
 
         {/* Back Button */}
@@ -74,6 +74,6 @@ export default function FAQsPage() {
         </div>
 
       </div>
-    </div>
+    </main>
   );
 }

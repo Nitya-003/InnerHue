@@ -10,7 +10,7 @@ export default function TestPage() {
   }, []);
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+    <main id="main" style={{ padding: '20px', fontFamily: 'Arial' }}>
       <h1>Test Page - InnerHue</h1>
       <p>If you can see this, Next.js is working!</p>
       <p>Current time: {time}</p>
@@ -18,6 +18,6 @@ export default function TestPage() {
         h1 { color: purple; }
         p { color: #333; }
       `}</style>
-    </div>
+    </main>
   );
 }

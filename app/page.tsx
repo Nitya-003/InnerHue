@@ -167,7 +167,7 @@ export default function Home() {
       <Hero />
 
       {/* Main Content */}
-      <main className="relative z-10 px-4 md:px-6 pb-20">
+      <main id="main" className="relative z-10 px-4 md:px-6 pb-20">
         <div className="max-w-7xl mx-auto">
           <motion.section
             initial={{ opacity: 0, y: 30 }}

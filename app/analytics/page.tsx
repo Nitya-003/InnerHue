@@ -145,8 +145,8 @@ export default function AnalyticsPage() {
         </div>
       </motion.header>
 
-      {/* Main Content */}
-      <main className="px-6 pb-20">
+      {/* Main */}
+      <main id="main" className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {moodHistory.length === 0 ? (
             <motion.div
