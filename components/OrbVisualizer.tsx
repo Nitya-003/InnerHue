@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface Mood {
   id: string;
@@ -59,17 +59,14 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
-  const [particles, setParticles] = useState<Particle[]>([]);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setParticles(Array.from({ length: 12 }, (_, i) => ({
+  const [particles] = useState<Particle[]>(() =>
+    Array.from({ length: 12 }, (_, i) => ({
       id: i,
       angle: (i * 30) * (Math.PI / 180),
       distance: 150 + Math.random() * 50,
-      duration: 3 + Math.random() * 2 // Moved here
-    })));
-  }, []);
+      duration: 3 + Math.random() * 2
+    }))
+  );
 
   return (
     <div className="relative">
