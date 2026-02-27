@@ -1,12 +1,9 @@
 'use client';
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind } from 'lucide-react';
+import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind, Sun, TreePine, Leaf, Wheat, Droplets, CloudLightning } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 const soundscapes = [
@@ -16,6 +13,8 @@ const soundscapes = [
     description: 'Continuous heavy rain falling on pavement.',
     icon: CloudRain,
     bgColor: 'linear-gradient(135deg, #3b82f6, #1e40af)',
+    primaryColor: '#3b82f6',
+    primaryRgb: '59, 130, 246',
     src: 'https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg'
   },
   {
@@ -24,6 +23,8 @@ const soundscapes = [
     description: 'Birds chirping and wind rustling in the trees.',
     icon: Trees,
     bgColor: 'linear-gradient(135deg, #10b981, #047857)',
+    primaryColor: '#10b981',
+    primaryRgb: '16, 185, 129',
     src: 'https://actions.google.com/sounds/v1/animals/june_songbirds.ogg'
   },
   {
@@ -32,6 +33,8 @@ const soundscapes = [
     description: 'Rhythmic waves crashing on the shore.',
     icon: Waves,
     bgColor: 'linear-gradient(135deg, #06b6d4, #0369a1)',
+    primaryColor: '#06b6d4',
+    primaryRgb: '6, 182, 212',
     src: 'https://actions.google.com/sounds/v1/water/waves_crashing_on_rock_beach.ogg'
   },
   {
@@ -40,7 +43,69 @@ const soundscapes = [
     description: 'Howling wind to block out distractions.',
     icon: Wind,
     bgColor: 'linear-gradient(135deg, #6b7280, #374151)',
+    primaryColor: '#6b7280',
+    primaryRgb: '107, 114, 128',
     src: 'https://actions.google.com/sounds/v1/weather/strong_wind.ogg'
+  },
+  {
+    id: 'summer-forest',
+    title: 'Summer Forest',
+    description: 'Warm summer ambience with insects and gentle breeze.',
+    icon: Sun,
+    bgColor: 'linear-gradient(135deg, #f59e0b, #d97706)',
+    primaryColor: '#f59e0b',
+    primaryRgb: '245, 158, 11',
+    src: 'https://actions.google.com/sounds/v1/ambiences/summer_forest.ogg'
+  },
+  {
+    id: 'summer-beach',
+    title: 'Summer Beach',
+    description: 'Relaxing seaside vibes with distant waves and seagulls.',
+    icon: Waves,
+    bgColor: 'linear-gradient(135deg, #f472b6, #db2777)',
+    primaryColor: '#f472b6',
+    primaryRgb: '244, 114, 182',
+    src: 'https://actions.google.com/sounds/v1/ambiences/summer_beach_parking_lot.ogg'
+  },
+  {
+    id: 'spring-forest',
+    title: 'Spring Forest',
+    description: 'Fresh spring morning with birdsong and rustling leaves.',
+    icon: Leaf,
+    bgColor: 'linear-gradient(135deg, #a3e635, #65a30d)',
+    primaryColor: '#a3e635',
+    primaryRgb: '163, 230, 53',
+    src: 'https://actions.google.com/sounds/v1/ambiences/spring_day_forest.ogg'
+  },
+  {
+    id: 'outdoor-farm',
+    title: 'Outdoor Farm',
+    description: 'Peaceful farm sounds with roosters and gentle wind.',
+    icon: Wheat,
+    bgColor: 'linear-gradient(135deg, #fb923c, #ea580c)',
+    primaryColor: '#fb923c',
+    primaryRgb: '251, 146, 60',
+    src: 'https://actions.google.com/sounds/v1/ambiences/outdoor_farm_sounds.ogg'
+  },
+  {
+    id: 'soft-rain',
+    title: 'Soft Rain Drips',
+    description: 'Gentle rain dripping softly, perfect for focus.',
+    icon: Droplets,
+    bgColor: 'linear-gradient(135deg, #818cf8, #4f46e5)',
+    primaryColor: '#818cf8',
+    primaryRgb: '129, 140, 248',
+    src: 'https://actions.google.com/sounds/v1/weather/rain_water_dripping_softly.ogg'
+  },
+  {
+    id: 'thunder-rain',
+    title: 'Thunder & Rain',
+    description: 'Dramatic thunderstorm with heavy summer rain.',
+    icon: CloudLightning,
+    bgColor: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
+    primaryColor: '#a78bfa',
+    primaryRgb: '167, 139, 250',
+    src: 'https://actions.google.com/sounds/v1/weather/summer_thunder_and_rain.ogg'
   }
 ];
 
@@ -131,13 +196,7 @@ export default function MusicPage() {
           <motion.div
             className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
             style={{
-              background: currentTrack === 'rain'
-                ? 'radial-gradient(circle, #3b82f6, transparent)'
-                : currentTrack === 'forest'
-                  ? 'radial-gradient(circle, #10b981, transparent)'
-                  : currentTrack === 'ocean'
-                    ? 'radial-gradient(circle, #06b6d4, transparent)'
-                    : 'radial-gradient(circle, #6b7280, transparent)',
+              background: `radial-gradient(circle, ${currentSoundscape.primaryColor}, transparent)`,
             }}
             animate={{
               scale: [1, 1.2, 1],
@@ -218,13 +277,7 @@ export default function MusicPage() {
                 `}
                 style={{
                   boxShadow: isActive
-                    ? track.id === 'rain'
-                      ? '0 0 0 2px rgba(59, 130, 246, 0.5), 0 4px 24px rgba(59, 130, 246, 0.2)'
-                      : track.id === 'forest'
-                        ? '0 0 0 2px rgba(16, 185, 129, 0.5), 0 4px 24px rgba(16, 185, 129, 0.2)'
-                        : track.id === 'ocean'
-                          ? '0 0 0 2px rgba(6, 182, 212, 0.5), 0 4px 24px rgba(6, 182, 212, 0.2)'
-                          : '0 0 0 2px rgba(107, 114, 128, 0.5), 0 4px 24px rgba(107, 114, 128, 0.2)'
+                    ? `0 0 0 2px rgba(${track.primaryRgb}, 0.5), 0 4px 24px rgba(${track.primaryRgb}, 0.2)`
                     : 'none'
                 }}
               >
@@ -233,21 +286,9 @@ export default function MusicPage() {
                   <div
                     className="relative flex-shrink-0 w-14 h-14 rounded-lg flex items-center justify-center"
                     style={{
-                      background: track.id === 'rain'
-                        ? 'linear-gradient(135deg, #3b82f6, #1e40af)'
-                        : track.id === 'forest'
-                          ? 'linear-gradient(135deg, #10b981, #047857)'
-                          : track.id === 'ocean'
-                            ? 'linear-gradient(135deg, #06b6d4, #0369a1)'
-                            : 'linear-gradient(135deg, #6b7280, #374151)',
+                      background: track.bgColor,
                       boxShadow: isActive
-                        ? track.id === 'rain'
-                          ? '0 4px 16px rgba(59, 130, 246, 0.4)'
-                          : track.id === 'forest'
-                            ? '0 4px 16px rgba(16, 185, 129, 0.4)'
-                            : track.id === 'ocean'
-                              ? '0 4px 16px rgba(6, 182, 212, 0.4)'
-                              : '0 4px 16px rgba(107, 114, 128, 0.4)'
+                        ? `0 4px 16px rgba(${track.primaryRgb}, 0.4)`
                         : 'none',
                     }}
                   >
@@ -272,13 +313,7 @@ export default function MusicPage() {
                           key={i}
                           className="w-1 rounded-full"
                           style={{
-                            background: track.id === 'rain'
-                              ? '#3b82f6'
-                              : track.id === 'forest'
-                                ? '#10b981'
-                                : track.id === 'ocean'
-                                  ? '#06b6d4'
-                                  : '#6b7280',
+                            background: track.primaryColor,
                           }}
                           animate={{
                             height: ['16px', '8px', '20px', '12px'],
