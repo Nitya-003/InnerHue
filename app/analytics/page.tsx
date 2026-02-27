@@ -231,6 +231,11 @@ export default function AnalyticsPage() {
                           <div className="font-semibold text-gray-800 capitalize flex items-center">
                             {entry.emotion || entry.mood}
                           </div>
+                          {entry.notes && (
+                            <p className="text-sm text-gray-600 italic mt-1 max-w-sm line-clamp-2">
+                              "{entry.notes}"
+                            </p>
+                          )}
                           <div className="text-xs text-gray-500 font-medium">
                             {getTimeAgo(entry.timestamp)}
                           </div>
