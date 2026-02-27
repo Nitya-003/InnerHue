@@ -1,19 +1,20 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind, Volume2 } from 'lucide-react';
+import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind, Sun, TreePine, Leaf, Wheat, Droplets, CloudLightning } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-// Soundscapes using Google Sound Library (CORS-enabled, reliable OGG files)
 const soundscapes = [
   {
     id: 'rain',
     title: 'Heavy Rain',
     description: 'Continuous heavy rain falling on pavement.',
     icon: CloudRain,
-    color: 'from-blue-400 to-indigo-500',
+    bgColor: 'linear-gradient(135deg, #3b82f6, #1e40af)',
+    primaryColor: '#3b82f6',
+    primaryRgb: '59, 130, 246',
     src: 'https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg'
   },
   {
@@ -21,7 +22,9 @@ const soundscapes = [
     title: 'Forest Morning',
     description: 'Birds chirping and wind rustling in the trees.',
     icon: Trees,
-    color: 'from-green-400 to-emerald-600',
+    bgColor: 'linear-gradient(135deg, #10b981, #047857)',
+    primaryColor: '#10b981',
+    primaryRgb: '16, 185, 129',
     src: 'https://actions.google.com/sounds/v1/animals/june_songbirds.ogg'
   },
   {
@@ -29,7 +32,9 @@ const soundscapes = [
     title: 'Ocean Waves',
     description: 'Rhythmic waves crashing on the shore.',
     icon: Waves,
-    color: 'from-cyan-400 to-blue-500',
+    bgColor: 'linear-gradient(135deg, #06b6d4, #0369a1)',
+    primaryColor: '#06b6d4',
+    primaryRgb: '6, 182, 212',
     src: 'https://actions.google.com/sounds/v1/water/waves_crashing_on_rock_beach.ogg'
   },
   {
@@ -37,51 +42,103 @@ const soundscapes = [
     title: 'Strong Wind',
     description: 'Howling wind to block out distractions.',
     icon: Wind,
-    color: 'from-gray-300 to-slate-500',
+    bgColor: 'linear-gradient(135deg, #6b7280, #374151)',
+    primaryColor: '#6b7280',
+    primaryRgb: '107, 114, 128',
     src: 'https://actions.google.com/sounds/v1/weather/strong_wind.ogg'
+  },
+  {
+    id: 'summer-forest',
+    title: 'Summer Forest',
+    description: 'Warm summer ambience with insects and gentle breeze.',
+    icon: Sun,
+    bgColor: 'linear-gradient(135deg, #f59e0b, #d97706)',
+    primaryColor: '#f59e0b',
+    primaryRgb: '245, 158, 11',
+    src: 'https://actions.google.com/sounds/v1/ambiences/summer_forest.ogg'
+  },
+  {
+    id: 'summer-beach',
+    title: 'Summer Beach',
+    description: 'Relaxing seaside vibes with distant waves and seagulls.',
+    icon: Waves,
+    bgColor: 'linear-gradient(135deg, #f472b6, #db2777)',
+    primaryColor: '#f472b6',
+    primaryRgb: '244, 114, 182',
+    src: 'https://actions.google.com/sounds/v1/ambiences/summer_beach_parking_lot.ogg'
+  },
+  {
+    id: 'spring-forest',
+    title: 'Spring Forest',
+    description: 'Fresh spring morning with birdsong and rustling leaves.',
+    icon: Leaf,
+    bgColor: 'linear-gradient(135deg, #a3e635, #65a30d)',
+    primaryColor: '#a3e635',
+    primaryRgb: '163, 230, 53',
+    src: 'https://actions.google.com/sounds/v1/ambiences/spring_day_forest.ogg'
+  },
+  {
+    id: 'outdoor-farm',
+    title: 'Outdoor Farm',
+    description: 'Peaceful farm sounds with roosters and gentle wind.',
+    icon: Wheat,
+    bgColor: 'linear-gradient(135deg, #fb923c, #ea580c)',
+    primaryColor: '#fb923c',
+    primaryRgb: '251, 146, 60',
+    src: 'https://actions.google.com/sounds/v1/ambiences/outdoor_farm_sounds.ogg'
+  },
+  {
+    id: 'soft-rain',
+    title: 'Soft Rain Drips',
+    description: 'Gentle rain dripping softly, perfect for focus.',
+    icon: Droplets,
+    bgColor: 'linear-gradient(135deg, #818cf8, #4f46e5)',
+    primaryColor: '#818cf8',
+    primaryRgb: '129, 140, 248',
+    src: 'https://actions.google.com/sounds/v1/weather/rain_water_dripping_softly.ogg'
+  },
+  {
+    id: 'thunder-rain',
+    title: 'Thunder & Rain',
+    description: 'Dramatic thunderstorm with heavy summer rain.',
+    icon: CloudLightning,
+    bgColor: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
+    primaryColor: '#a78bfa',
+    primaryRgb: '167, 139, 250',
+    src: 'https://actions.google.com/sounds/v1/weather/summer_thunder_and_rain.ogg'
   }
 ];
 
 export default function MusicPage() {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [currentTrack, setCurrentTrack] = useState<string | null>(null);
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState('rain');
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Initialize Audio Object
   useEffect(() => {
-    // We create the audio object on the client side only
+
     const audio = new Audio();
     audio.loop = true;
     audio.crossOrigin = 'anonymous';
+
     audioRef.current = audio;
 
-    // Cleanup on unmount
     return () => {
       audio.pause();
       audio.src = '';
       audioRef.current = null;
     };
+
   }, []);
 
-  // Precompute random values for stable visualizer animation
-  const visualizerBars = useMemo(() => {
-    return Array.from({ length: 16 }, () => ({
-      heights: [
-        `${20 + Math.random() * 60}%`,
-        `${40 + Math.random() * 60}%`,
-        `${20 + Math.random() * 60}%`
-      ],
-      duration: 0.5 + Math.random() * 0.3
-    }));
-  }, []);
-
-  // Handle Play/Pause Logic
   const togglePlay = async (trackId: string, src: string) => {
+
     if (!audioRef.current) return;
 
     try {
+
       if (currentTrack === trackId) {
-        // Toggle play/pause for the same track
+
         if (isPlaying) {
           audioRef.current.pause();
           setIsPlaying(false);
@@ -89,40 +146,47 @@ export default function MusicPage() {
           await audioRef.current.play();
           setIsPlaying(true);
         }
+
       } else {
-        // Switch to a new track
-        // 1. Reset state
+
         setIsPlaying(false);
         audioRef.current.pause();
 
-        // 2. Load new source
         audioRef.current.src = src;
         audioRef.current.load();
 
-        // 3. Wait for audio to be ready, then play
         await new Promise<void>((resolve, reject) => {
+
           const onCanPlay = () => {
             audioRef.current?.removeEventListener('canplay', onCanPlay);
             audioRef.current?.removeEventListener('error', onError);
             resolve();
           };
+
           const onError = () => {
             audioRef.current?.removeEventListener('canplay', onCanPlay);
             audioRef.current?.removeEventListener('error', onError);
-            reject(new Error('Audio failed to load: ' + src));
+            reject(new Error('Audio failed to load'));
           };
+
           audioRef.current!.addEventListener('canplay', onCanPlay);
           audioRef.current!.addEventListener('error', onError);
+
         });
-        
+
         await audioRef.current.play();
+
         setCurrentTrack(trackId);
         setIsPlaying(true);
       }
+
     } catch (err) {
-      console.error("Audio Playback Error:", err);
+      console.error('Audio Playback Error:', err);
     }
   };
+
+  const currentSoundscape = soundscapes.find(s => s.id === currentTrack)!;
+  const Icon = currentSoundscape.icon;
 
   return (
     <div className="min-h-screen bg-[#0f0720] relative overflow-hidden text-white">
@@ -132,13 +196,7 @@ export default function MusicPage() {
           <motion.div
             className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
             style={{
-              background: currentTrack === 'rain' 
-                ? 'radial-gradient(circle, #3b82f6, transparent)'
-                : currentTrack === 'forest'
-                ? 'radial-gradient(circle, #10b981, transparent)'
-                : currentTrack === 'ocean'
-                ? 'radial-gradient(circle, #06b6d4, transparent)'
-                : 'radial-gradient(circle, #6b7280, transparent)',
+              background: `radial-gradient(circle, ${currentSoundscape.primaryColor}, transparent)`,
             }}
             animate={{
               scale: [1, 1.2, 1],
@@ -153,7 +211,7 @@ export default function MusicPage() {
         </div>
       )}
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <main id="main" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <Link href="/" className="inline-flex items-center text-white/60 hover:text-white transition-colors group">
@@ -164,161 +222,29 @@ export default function MusicPage() {
         </div>
 
         {/* Main Player */}
-        <div className="mb-16">
-          {currentTrack ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="relative"
-            >
-              {/* Now Playing Section */}
-              <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
-                {/* Album Art / Visualizer */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="relative flex-shrink-0"
-                >
-                  <div 
-                    className="w-64 h-64 lg:w-80 lg:h-80 rounded-2xl relative overflow-hidden shadow-2xl"
-                    style={{
-                      background: currentTrack === 'rain' 
-                        ? 'linear-gradient(135deg, #3b82f6, #1e40af)'
-                        : currentTrack === 'forest'
-                        ? 'linear-gradient(135deg, #10b981, #047857)'
-                        : currentTrack === 'ocean'
-                        ? 'linear-gradient(135deg, #06b6d4, #0369a1)'
-                        : 'linear-gradient(135deg, #6b7280, #374151)',
-                    }}
-                  >
-                    {/* Glow Effect */}
-                    <div 
-                      className="absolute inset-0 opacity-60"
-                      style={{
-                        boxShadow: currentTrack === 'rain'
-                          ? '0 0 80px rgba(59, 130, 246, 0.6), inset 0 0 80px rgba(59, 130, 246, 0.3)'
-                          : currentTrack === 'forest'
-                          ? '0 0 80px rgba(16, 185, 129, 0.6), inset 0 0 80px rgba(16, 185, 129, 0.3)'
-                          : currentTrack === 'ocean'
-                          ? '0 0 80px rgba(6, 182, 212, 0.6), inset 0 0 80px rgba(6, 182, 212, 0.3)'
-                          : '0 0 80px rgba(107, 114, 128, 0.6), inset 0 0 80px rgba(107, 114, 128, 0.3)',
-                      }}
-                    />
-                    
-                    {/* Icon */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      {(() => {
-                        const track = soundscapes.find(s => s.id === currentTrack);
-                        const Icon = track?.icon || CloudRain;
-                        return <Icon className="w-32 h-32 text-white/90 drop-shadow-2xl" />;
-                      })()}
-                    </div>
+        <div className="text-center mb-10">
+          <p className="text-xs uppercase tracking-widest text-white/50 mb-3">
+            NOW PLAYING
+          </p>
 
-                    {/* Animated Bars */}
-                    {isPlaying && (
-                      <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center gap-1 p-4 h-24">
-                        {visualizerBars.map((bar, i) => (
-                          <motion.div
-                            key={i}
-                            className="w-1 bg-white/40 rounded-full"
-                            animate={{
-                              height: bar.heights,
-                            }}
-                            transition={{
-                              duration: bar.duration,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                            }}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
+          <h1 className="text-6xl font-bold mb-4">
+            {currentSoundscape.title}
+          </h1>
 
-                {/* Track Info & Controls */}
-                <div className="flex-1 w-full lg:w-auto">
-                  <div className="mb-6">
-                    <p className="text-sm text-white/50 font-medium mb-3">NOW PLAYING</p>
-                    <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4 tracking-tight">
-                      {soundscapes.find(s => s.id === currentTrack)?.title}
-                    </h1>
-                    <p className="text-lg text-white/60">
-                      {soundscapes.find(s => s.id === currentTrack)?.description}
-                    </p>
-                  </div>
+          <p className="text-white/60 mb-8">
+            {currentSoundscape.description}
+          </p>
 
-                  {/* Play Button */}
-                  <div className="flex items-center gap-6 mb-8">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => togglePlay(currentTrack, soundscapes.find(s => s.id === currentTrack)!.src)}
-                      className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-xl hover:shadow-2xl transition-shadow"
-                      style={{
-                        boxShadow: currentTrack === 'rain'
-                          ? '0 8px 32px rgba(59, 130, 246, 0.4)'
-                          : currentTrack === 'forest'
-                          ? '0 8px 32px rgba(16, 185, 129, 0.4)'
-                          : currentTrack === 'ocean'
-                          ? '0 8px 32px rgba(6, 182, 212, 0.4)'
-                          : '0 8px 32px rgba(107, 114, 128, 0.4)',
-                      }}
-                    >
-                      {isPlaying ? (
-                        <Pause className="w-7 h-7 text-black fill-current" />
-                      ) : (
-                        <Play className="w-7 h-7 text-black fill-current ml-1" />
-                      )}
-                    </motion.button>
-
-                    {isPlaying && (
-                      <motion.div
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-2 text-white/70"
-                      >
-                        <Volume2 className="w-5 h-5" />
-                        <span className="text-sm font-medium">Playing</span>
-                      </motion.div>
-                    )}
-                  </div>
-
-                  {/* Progress Bar Simulation */}
-                  {isPlaying && (
-                    <div className="w-full max-w-2xl">
-                      <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                        <motion.div
-                          className="h-full bg-white rounded-full"
-                          initial={{ width: "0%" }}
-                          animate={{ width: "100%" }}
-                          transition={{
-                            duration: 180,
-                            ease: "linear",
-                            repeat: Infinity,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20"
-            >
-              <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
-                Sonic Sanctuary
-              </h1>
-              <p className="text-xl text-white/50 mb-12">
-                Choose a soundscape to begin
-              </p>
-            </motion.div>
-          )}
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => togglePlay(currentTrack, currentSoundscape.src)}
+            className="w-16 h-16 rounded-full bg-white flex items-center justify-center"
+          >
+            {isPlaying ?
+              <Pause className="w-8 h-8 text-black" /> :
+              <Play className="w-8 h-8 text-black ml-1" />
+            }
+          </motion.button>
         </div>
 
         {/* Track List */}
@@ -326,11 +252,11 @@ export default function MusicPage() {
           <h2 className="text-2xl font-bold text-white mb-6 px-2">
             {currentTrack ? 'Switch Soundscape' : 'Available Soundscapes'}
           </h2>
-          
+
           {soundscapes.map((track, index) => {
             const isActive = currentTrack === track.id;
             const Icon = track.icon;
-            
+
             return (
               <motion.button
                 key={track.id}
@@ -350,37 +276,19 @@ export default function MusicPage() {
                   ${isActive ? 'bg-white/10' : 'bg-white/5 hover:bg-white/8'}
                 `}
                 style={{
-                  boxShadow: isActive 
-                    ? track.id === 'rain'
-                      ? '0 0 0 2px rgba(59, 130, 246, 0.5), 0 4px 24px rgba(59, 130, 246, 0.2)'
-                      : track.id === 'forest'
-                      ? '0 0 0 2px rgba(16, 185, 129, 0.5), 0 4px 24px rgba(16, 185, 129, 0.2)'
-                      : track.id === 'ocean'
-                      ? '0 0 0 2px rgba(6, 182, 212, 0.5), 0 4px 24px rgba(6, 182, 212, 0.2)'
-                      : '0 0 0 2px rgba(107, 114, 128, 0.5), 0 4px 24px rgba(107, 114, 128, 0.2)'
+                  boxShadow: isActive
+                    ? `0 0 0 2px rgba(${track.primaryRgb}, 0.5), 0 4px 24px rgba(${track.primaryRgb}, 0.2)`
                     : 'none'
                 }}
               >
                 <div className="flex items-center gap-4 p-4">
                   {/* Icon with Glow */}
-                  <div 
+                  <div
                     className="relative flex-shrink-0 w-14 h-14 rounded-lg flex items-center justify-center"
                     style={{
-                      background: track.id === 'rain'
-                        ? 'linear-gradient(135deg, #3b82f6, #1e40af)'
-                        : track.id === 'forest'
-                        ? 'linear-gradient(135deg, #10b981, #047857)'
-                        : track.id === 'ocean'
-                        ? 'linear-gradient(135deg, #06b6d4, #0369a1)'
-                        : 'linear-gradient(135deg, #6b7280, #374151)',
+                      background: track.bgColor,
                       boxShadow: isActive
-                        ? track.id === 'rain'
-                          ? '0 4px 16px rgba(59, 130, 246, 0.4)'
-                          : track.id === 'forest'
-                          ? '0 4px 16px rgba(16, 185, 129, 0.4)'
-                          : track.id === 'ocean'
-                          ? '0 4px 16px rgba(6, 182, 212, 0.4)'
-                          : '0 4px 16px rgba(107, 114, 128, 0.4)'
+                        ? `0 4px 16px rgba(${track.primaryRgb}, 0.4)`
                         : 'none',
                     }}
                   >
@@ -405,13 +313,7 @@ export default function MusicPage() {
                           key={i}
                           className="w-1 rounded-full"
                           style={{
-                            background: track.id === 'rain'
-                              ? '#3b82f6'
-                              : track.id === 'forest'
-                              ? '#10b981'
-                              : track.id === 'ocean'
-                              ? '#06b6d4'
-                              : '#6b7280',
+                            background: track.primaryColor,
                           }}
                           animate={{
                             height: ['16px', '8px', '20px', '12px'],
@@ -435,7 +337,7 @@ export default function MusicPage() {
             );
           })}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

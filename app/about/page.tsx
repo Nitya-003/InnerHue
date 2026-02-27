@@ -28,7 +28,7 @@ export default function AboutUs() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0f0720] relative overflow-hidden text-white font-sans">
+        <main id="main" className="min-h-screen bg-[#0f0720] relative overflow-hidden text-white font-sans">
             <FloatingBackground />
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-20">
@@ -188,6 +188,6 @@ export default function AboutUs() {
 
                 </motion.div>
             </div>
-        </div>
+        </main>
     );
 }
