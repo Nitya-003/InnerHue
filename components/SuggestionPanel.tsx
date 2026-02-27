@@ -1,7 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music } from 'lucide-react';
+import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music, Save, PenLine } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useMoodStore } from '@/lib/useMoodStore';
 import {
   Tooltip,
   TooltipContent,
@@ -21,6 +23,7 @@ interface SuggestionPanelProps {
   quoteData?: Quote | null;
   isQuoteLoading?: boolean;
   onQuoteRefresh?: () => void;
+  entryId?: string;
 }
 
 export function SuggestionPanel({
@@ -29,8 +32,32 @@ export function SuggestionPanel({
   onRefresh,
   quoteData,
   isQuoteLoading,
-  onQuoteRefresh
+  onQuoteRefresh,
+  entryId
 }: SuggestionPanelProps) {
+  const [notes, setNotes] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const updateMoodNotes = useMoodStore(state => state.updateMoodNotes);
+  const moodHistory = useMoodStore(state => state.moodHistory);
+
+  // Sync with existing notes if available (though entries are usually new here)
+  useEffect(() => {
+    if (entryId) {
+      const entry = moodHistory.find(e => e.id === entryId);
+      if (entry?.notes) {
+        setNotes(entry.notes);
+      }
+    }
+  }, [entryId, moodHistory]);
+
+  const handleSaveNotes = () => {
+    if (!entryId) return;
+    setIsSaving(true);
+    updateMoodNotes(entryId, notes);
+    setTimeout(() => {
+      setIsSaving(false);
+    }, 1000);
+  };
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -76,6 +103,53 @@ export function SuggestionPanel({
           <div>
             <h4 className="font-semibold text-gray-800 mb-2">Journal Prompt</h4>
             <p className="text-gray-700 leading-relaxed">{suggestions.prompt}</p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Reflection Notes */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50"
+      >
+        <div className="flex items-start space-x-3">
+          <div className="p-2 rounded-lg bg-indigo-100">
+            <PenLine className="w-5 h-5 text-indigo-600" />
+          </div>
+          <div className="flex-1">
+            <h4 className="font-semibold text-gray-800 mb-2">Reflection Notes</h4>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="How are you feeling? What's on your mind?..."
+              className="w-full h-32 p-3 rounded-xl bg-white/50 border border-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all resize-none text-gray-700 placeholder:text-gray-400"
+            />
+            <div className="flex justify-end mt-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleSaveNotes}
+                disabled={!entryId || isSaving}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${isSaving
+                    ? 'bg-green-500 text-white shadow-inner'
+                    : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md hover:shadow-lg'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    Saved!
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    Save Reflection
+                  </>
+                )}
+              </motion.button>
+            </div>
           </div>
         </div>
       </motion.div>

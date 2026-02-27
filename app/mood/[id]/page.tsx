@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
@@ -23,16 +24,15 @@ interface MoodWithMeta extends Mood {
   spotifyPlaylistId?: string;
 }
 
-export default function MoodClient({
-  id,
-  moods
-}: {
-  id: string;
-  moods?: string;
-}) {
+export default function MoodClient() {
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const id = params?.id as string;
+  const moods = searchParams.get('moods') || undefined;
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<MoodSuggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
+  const [entryIds, setEntryIds] = useState<Record<string, string>>({});
   const addMood = useMoodStore(state => state.addMood);
 
   useEffect(() => {
@@ -65,17 +65,20 @@ export default function MoodClient({
 
     setMoodData(moodsData);
 
+    const newEntryIds: Record<string, string> = {};
     moodIds.forEach(mid => {
       const moodInfo = moodsData.find(m => m.id === mid);
       if (moodInfo) {
-        addMood({
+        const eid = addMood({
           mood: mid,
           emotion: moodInfo.name,
           date: new Date().toDateString(),
           color: moodInfo.color,
         });
+        newEntryIds[mid] = eid;
       }
     });
+    setEntryIds(newEntryIds);
   }, [id, moods, addMood]);
 
   useEffect(() => {
@@ -151,6 +154,7 @@ export default function MoodClient({
           <SuggestionPanel
             suggestions={suggestions}
             mood={currentMood}
+            entryId={entryIds[currentMood.id]}
             onRefresh={async () => {
               const suggestionId = currentMood.traditionalId || currentMood.id;
               setSuggestions(MoodData.getSuggestions(suggestionId));

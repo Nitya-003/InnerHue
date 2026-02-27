@@ -9,6 +9,7 @@ export interface MoodEntry {
   timestamp: string;
   date: string;
   color?: string;
+  notes?: string;
 }
 
 export interface MoodStats {
@@ -24,16 +25,17 @@ interface MoodStore {
   // State
   moodHistory: MoodEntry[];
   stats: MoodStats;
-  
+
   // Actions
-  addMood: (mood: Omit<MoodEntry, 'id' | 'timestamp'>) => void;
+  addMood: (mood: Omit<MoodEntry, 'id' | 'timestamp'>) => string;
+  updateMoodNotes: (id: string, notes: string) => void;
   deleteMood: (id: string) => void;
   clearHistory: () => void;
-  
+
   // Selectors
   getMoodById: (id: string) => MoodEntry | undefined;
   getMoodsByDateRange: (startDate: Date, endDate: Date) => MoodEntry[];
-  
+
   // Internal
   _computeStats: () => void;
 }
@@ -44,27 +46,27 @@ const computeStats = (history: MoodEntry[]): MoodStats => {
   const today = new Date().toDateString();
   const weekStart = new Date();
   weekStart.setDate(weekStart.getDate() - 7);
-  
+
   const weeklyData: MoodEntry[] = [];
-  
+
   history.forEach(entry => {
     // Support both new (emotion) and old (mood) formats
     const moodKey = entry.emotion || entry.mood;
     moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
-    
+
     const entryDate = new Date(entry.timestamp);
     if (entryDate >= weekStart) {
       weeklyData.push(entry);
     }
   });
-  
+
   const todayEntries = history.filter(
     entry => new Date(entry.timestamp).toDateString() === today
   ).length;
-  
+
   const mostCommon = Object.entries(moodCounts)
     .sort(([, a], [, b]) => b - a)[0];
-  
+
   return {
     totalEntries: history.length,
     todayEntries,
@@ -91,14 +93,15 @@ export const useMoodStore = create<MoodStore>()(
     (set, get) => ({
       moodHistory: [],
       stats: initialStats,
-      
+
       addMood: (mood) => {
+        const id = crypto.randomUUID();
         const newEntry: MoodEntry = {
           ...mood,
-          id: crypto.randomUUID(),
+          id,
           timestamp: new Date().toISOString(),
         };
-        
+
         set(state => {
           const newHistory = [...state.moodHistory, newEntry];
           return {
@@ -106,8 +109,22 @@ export const useMoodStore = create<MoodStore>()(
             stats: computeStats(newHistory),
           };
         });
+
+        return id;
       },
-      
+
+      updateMoodNotes: (id, notes) => {
+        set(state => {
+          const newHistory = state.moodHistory.map(entry =>
+            entry.id === id ? { ...entry, notes } : entry
+          );
+          return {
+            moodHistory: newHistory,
+            stats: computeStats(newHistory),
+          };
+        });
+      },
+
       deleteMood: (id) => {
         set(state => {
           const newHistory = state.moodHistory.filter(entry => entry.id !== id);
@@ -117,25 +134,25 @@ export const useMoodStore = create<MoodStore>()(
           };
         });
       },
-      
+
       clearHistory: () => {
         set({
           moodHistory: [],
           stats: initialStats,
         });
       },
-      
+
       getMoodById: (id) => {
         return get().moodHistory.find(entry => entry.id === id);
       },
-      
+
       getMoodsByDateRange: (startDate, endDate) => {
         return get().moodHistory.filter(entry => {
           const entryDate = new Date(entry.timestamp);
           return entryDate >= startDate && entryDate <= endDate;
         });
       },
-      
+
       _computeStats: () => {
         set(state => ({
           stats: computeStats(state.moodHistory),
