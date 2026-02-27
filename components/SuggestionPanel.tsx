@@ -16,8 +16,9 @@ import { Mood, MoodSuggestion } from '@/types/mood';
 interface SuggestionPanelProps {
   suggestions: MoodSuggestion;
   mood: Mood;
-  onRefresh: () => void;
-  // New props for dynamic quotes
+  onRefresh: () => void | Promise<void>;
+  isRefreshing?: boolean;
+  // Props for dynamic quotes
   quoteData?: Quote | null;
   isQuoteLoading?: boolean;
   onQuoteRefresh?: () => void;
@@ -27,6 +28,7 @@ export function SuggestionPanel({
   suggestions,
   mood,
   onRefresh,
+  isRefreshing = false,
   quoteData,
   isQuoteLoading,
   onQuoteRefresh
@@ -46,9 +48,10 @@ export function SuggestionPanel({
                   whileHover={{ scale: 1.05, rotate: 180 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={onRefresh}
-                  className="transition-all"
+                  disabled={isRefreshing}
+                  className="transition-all disabled:opacity-50"
                 >
-                  <RefreshCw className="w-5 text-purple-600" />
+                  <RefreshCw className={`w-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
                 </motion.button>
               </div>
             </TooltipTrigger>
@@ -56,7 +59,7 @@ export function SuggestionPanel({
             <TooltipContent
               className="bg-white/80 backdrop-blur-md border-white/50 text-gray-800 shadow-xl"
             >
-              <p>Refresh Insights</p>
+              <p>{isRefreshing ? 'Refreshing insights...' : 'Refresh Insights'}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
