@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { LandingOrb } from './LandingOrb';
 import { useRouter } from 'next/navigation';
+import LearnMoreButton from '@/components/LearnMoreButton';
 
 export function Hero() {
   const router = useRouter();
@@ -91,7 +92,7 @@ export function Hero() {
         </motion.div>
 
         {/* Primary CTA Button - Glassmorphic Style with Custom Transition */}
-        <motion.div variants={itemVariants}>
+        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 justify-center">
           <motion.button
             onClick={() => router.push('/explore')}
             whileHover={{
@@ -151,6 +152,8 @@ export function Hero() {
               <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
             </motion.span>
           </motion.button>
+
+          <LearnMoreButton />
         </motion.div>
 
         {/* Secondary text */}

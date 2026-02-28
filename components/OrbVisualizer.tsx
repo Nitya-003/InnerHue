@@ -3,16 +3,9 @@
 import { motion, Variants } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { ShaderOrb } from './ShaderOrb';
+import type { Mood } from '@/types/mood';
 
-interface Mood {
-  id: string;
-  name: string;
-  emoji: string;
-  color: string;
-  glow: string;
-}
-
-interface OrbVisualizerProps {
+export interface OrbVisualizerProps {
   mood: Mood;
 }
 
@@ -97,13 +90,15 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
   useEffect(() => {
-    setParticles(Array.from({ length: 12 }, (_, i) => ({
-      id: i,
-      angle: (i * 30) * (Math.PI / 180),
-      distance: 150 + Math.random() * 50,
-      duration: 3 + Math.random() * 2
-    }))
-  );
+    setParticles(
+      Array.from({ length: 12 }, (_, i) => ({
+        id: i,
+        angle: (i * 30) * (Math.PI / 180),
+        distance: 150 + Math.random() * 50,
+        duration: 3 + Math.random() * 2,
+      }))
+    );
+  }, []);
 
   return (
     <div className="relative">
