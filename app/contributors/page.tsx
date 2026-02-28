@@ -38,19 +38,19 @@ interface Contributor {
 
 function ContributorCardSkeleton() {
   return (
-    <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 animate-pulse">
+    <div className="bg-card backdrop-blur-md rounded-2xl p-6 border border-border animate-pulse">
       <div className="flex items-start gap-4">
-        <div className="w-16 h-16 rounded-full bg-white/10 flex-shrink-0" />
+        <div className="w-16 h-16 rounded-full bg-secondary/50 flex-shrink-0" />
         <div className="flex-1 min-w-0">
-          <div className="h-5 bg-white/10 rounded-lg w-32 mb-2" />
-          <div className="h-3 bg-white/10 rounded-lg w-20 mb-3" />
-          <div className="h-3 bg-white/10 rounded-lg w-full mb-1" />
-          <div className="h-3 bg-white/10 rounded-lg w-4/5" />
+          <div className="h-5 bg-secondary/50 rounded-lg w-32 mb-2" />
+          <div className="h-3 bg-secondary/50 rounded-lg w-20 mb-3" />
+          <div className="h-3 bg-secondary/50 rounded-lg w-full mb-1" />
+          <div className="h-3 bg-secondary/50 rounded-lg w-4/5" />
         </div>
       </div>
       <div className="mt-4 flex gap-2">
-        <div className="h-6 bg-white/10 rounded-full w-20" />
-        <div className="h-6 bg-white/10 rounded-full w-24" />
+        <div className="h-6 bg-secondary/50 rounded-full w-20" />
+        <div className="h-6 bg-secondary/50 rounded-full w-24" />
       </div>
     </div>
   );
@@ -71,7 +71,7 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.04 }}
       whileHover={{ y: -4, scale: 1.01 }}
-      className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:border-purple-400/40 transition-all duration-300 shadow-lg hover:shadow-purple-500/10"
+      className="group relative bg-card hover:bg-card/80 backdrop-blur-md rounded-2xl p-6 border border-border hover:border-purple-400/40 transition-all duration-300 shadow-lg hover:shadow-purple-500/10"
     >
       {/* Glow effect on hover */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/5 group-hover:to-pink-500/5 transition-all duration-300 pointer-events-none" />
@@ -79,7 +79,7 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
       <div className="flex items-start gap-4">
         {/* Avatar */}
         <div className="relative flex-shrink-0">
-          <div className="w-16 h-16 rounded-full ring-2 ring-white/10 group-hover:ring-purple-400/50 transition-all duration-300 overflow-hidden">
+          <div className="w-16 h-16 rounded-full ring-2 ring-border group-hover:ring-purple-400/50 transition-all duration-300 overflow-hidden">
             <Image
               src={contributor.avatar_url}
               alt={displayName}
@@ -100,21 +100,21 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-base font-semibold text-white truncate">{displayName}</h3>
+            <h3 className="text-base font-semibold text-foreground truncate">{displayName}</h3>
             {contributor.name && (
-              <span className="text-xs text-gray-400 truncate">@{contributor.login}</span>
+              <span className="text-xs text-muted-foreground truncate">@{contributor.login}</span>
             )}
           </div>
 
           {contributor.location && (
-            <div className="flex items-center gap-1 mt-1 text-gray-400 text-xs">
+            <div className="flex items-center gap-1 mt-1 text-muted-foreground text-xs">
               <MapPin className="w-3 h-3 flex-shrink-0" />
               <span className="truncate">{contributor.location}</span>
             </div>
           )}
 
           {contributor.bio && (
-            <p className="text-gray-300 text-xs leading-relaxed mt-2 line-clamp-2">
+            <p className="text-muted-foreground text-xs leading-relaxed mt-2 line-clamp-2">
               {contributor.bio}
             </p>
           )}
@@ -134,7 +134,7 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
           href={contributor.html_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-all duration-200 group/link"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/50 hover:bg-secondary text-foreground text-xs font-medium transition-all duration-200 group/link"
           aria-label={`GitHub profile of ${displayName}`}
         >
           <Github className="w-3.5 h-3.5" />
@@ -147,7 +147,7 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
             href={blogUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-all duration-200 group/link"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/50 hover:bg-secondary text-foreground text-xs font-medium transition-all duration-200 group/link"
             aria-label={`Website of ${displayName}`}
           >
             <Globe className="w-3.5 h-3.5" />
@@ -161,7 +161,7 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
             href={`https://twitter.com/${contributor.twitter_username}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-sky-500/30 text-white text-xs font-medium transition-all duration-200 group/link"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/50 hover:bg-sky-500/30 text-foreground text-xs font-medium transition-all duration-200 group/link"
             aria-label={`Twitter profile of ${displayName}`}
           >
             <Twitter className="w-3.5 h-3.5" />
@@ -184,9 +184,9 @@ function StatChip({
   color: 'purple' | 'blue' | 'pink';
 }) {
   const colors = {
-    purple: 'bg-purple-500/20 text-purple-300 border-purple-500/20',
-    blue: 'bg-blue-500/20 text-blue-300 border-blue-500/20',
-    pink: 'bg-pink-500/20 text-pink-300 border-pink-500/20',
+    purple: 'bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-300 border-purple-200 dark:border-purple-500/20',
+    blue: 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300 border-blue-200 dark:border-blue-500/20',
+    pink: 'bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-300 border-pink-200 dark:border-pink-500/20',
   };
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] border ${colors[color]}`}>
@@ -255,7 +255,7 @@ export default function ContributorsPage() {
   const totalCommits = contributors.reduce((sum, c) => sum + c.contributions, 0);
 
   return (
-    <div className="min-h-screen bg-[#0f0720] relative overflow-hidden text-white font-sans">
+    <div className="min-h-screen bg-background relative overflow-hidden text-foreground font-sans">
       <FloatingBackground />
 
       <main id="main" className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
@@ -269,7 +269,7 @@ export default function ContributorsPage() {
           <div className="flex items-center justify-between mb-8">
             <Link
               href="/"
-              className="inline-flex items-center text-white/70 hover:text-white transition-colors group"
+              className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors group"
             >
               <ChevronLeft className="w-5 h-5 mr-1 group-hover:-translate-x-1 transition-transform" />
               Back to Home
@@ -312,7 +312,7 @@ export default function ContributorsPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed"
+              className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
             >
               InnerHue is built by an incredible open-source community. Every commit, issue, and
               pull request makes a difference — thank you all. 💜
@@ -329,7 +329,7 @@ export default function ContributorsPage() {
                 href="https://github.com/Nitya-003/InnerHue"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 text-white text-sm font-medium transition-all duration-200"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary/50 hover:bg-secondary border border-border hover:border-border text-foreground text-sm font-medium transition-all duration-200"
               >
                 <Github className="w-4 h-4" />
                 Nitya-003/InnerHue
@@ -376,8 +376,8 @@ export default function ContributorsPage() {
                 className={`bg-gradient-to-br ${stat.gradient} backdrop-blur-md rounded-2xl p-5 border ${stat.border} ${stat.className ?? ''}`}
               >
                 <div className="flex items-center gap-2 mb-1">{stat.icon}</div>
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
-                <p className="text-sm text-gray-400">{stat.label}</p>
+                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-sm text-muted-foreground">{stat.label}</p>
               </div>
             ))}
           </motion.div>
@@ -393,13 +393,13 @@ export default function ContributorsPage() {
           >
             {/* Search */}
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search contributors…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-full bg-white/5 border border-white/10 focus:border-purple-400/50 text-white placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:bg-white/10 focus:shadow-lg focus:shadow-purple-500/10"
+                className="w-full pl-10 pr-4 py-2.5 rounded-full bg-secondary/30 border border-border focus:border-purple-400/50 text-foreground placeholder-muted-foreground text-sm outline-none transition-all duration-200 focus:bg-secondary/50 focus:shadow-lg focus:shadow-purple-500/10"
               />
             </div>
 
@@ -410,8 +410,8 @@ export default function ContributorsPage() {
                   key={opt}
                   onClick={() => setSortBy(opt)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 capitalize ${sortBy === opt
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25'
-                      : 'bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25'
+                    : 'bg-secondary/50 border border-border text-muted-foreground hover:text-foreground hover:bg-secondary'
                     }`}
                 >
                   {opt}
@@ -423,7 +423,7 @@ export default function ContributorsPage() {
             <button
               onClick={fetchContributors}
               title="Refresh"
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 text-sm transition-all duration-200"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border text-muted-foreground hover:text-foreground hover:bg-secondary text-sm transition-all duration-200"
             >
               <RefreshCw className="w-4 h-4" />
               <span className="hidden sm:inline">Refresh</span>
@@ -436,7 +436,7 @@ export default function ContributorsPage() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-sm text-gray-400 mb-4"
+            className="text-sm text-muted-foreground mb-4"
           >
             Showing {filtered.length} of {contributors.length} contributors
           </motion.p>
@@ -461,8 +461,8 @@ export default function ContributorsPage() {
             <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
               <Users className="w-8 h-8 text-red-400" />
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">Failed to load contributors</h3>
-            <p className="text-gray-400 mb-6 text-sm max-w-sm mx-auto">{error}</p>
+            <h3 className="text-xl font-semibold text-foreground mb-2">Failed to load contributors</h3>
+            <p className="text-muted-foreground mb-6 text-sm max-w-sm mx-auto">{error}</p>
             <button
               onClick={fetchContributors}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium hover:opacity-90 transition-opacity shadow-lg shadow-purple-500/30"
@@ -480,7 +480,7 @@ export default function ContributorsPage() {
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
-            <p className="text-gray-400 text-lg">No contributors found for &ldquo;{search}&rdquo;</p>
+            <p className="text-muted-foreground text-lg">No contributors found for &ldquo;{search}&rdquo;</p>
             <button
               onClick={() => setSearch('')}
               className="mt-4 text-purple-400 hover:text-purple-300 text-sm underline underline-offset-4"
@@ -514,7 +514,7 @@ export default function ContributorsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="text-center mt-14 text-gray-500 text-sm"
+            className="text-center mt-14 text-muted-foreground/60 text-sm"
           >
             {lastUpdated && (
               <p>Last updated: {lastUpdated.toLocaleTimeString()}</p>
