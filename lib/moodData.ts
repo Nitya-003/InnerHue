@@ -762,8 +762,10 @@ export const MoodData = {
 
     // Then check custom moods
     if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { CustomMoodStorage } = require('./customMoods');
       const customMoods = CustomMoodStorage.getCustomMoods();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return customMoods.find((mood: any) => mood.id === id) || null;
     }
 
@@ -776,11 +778,13 @@ export const MoodData = {
 
     // Get custom moods if in browser environment
     if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { CustomMoodStorage } = require('./customMoods');
       const customMoods = CustomMoodStorage.getCustomMoods();
       const allMoods = [...defaultMoods, ...customMoods];
 
       // Add isCustom flag to distinguish between default and custom moods
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return allMoods.map((mood: any) => ({
         ...mood,
         isCustom: mood.hasOwnProperty('isCustom') ? mood.isCustom : false
@@ -788,6 +792,7 @@ export const MoodData = {
     }
 
     // Add isCustom: false to all default moods when on server
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return defaultMoods.map((mood: any) => ({
       ...mood,
       isCustom: false
@@ -796,6 +801,7 @@ export const MoodData = {
 
   getCustomMoods() {
     if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { CustomMoodStorage } = require('./customMoods');
       return CustomMoodStorage.getCustomMoods();
     }

@@ -23,6 +23,21 @@ const COLORS = [
   '#607D8B', '#E91E63'
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-gray-200 dark:border-white/10 p-3 rounded-xl shadow-lg">
+        <p className="font-semibold text-gray-800 dark:text-gray-200">{payload[0].name}</p>
+        <p className="text-sm font-medium" style={{ color: payload[0].payload.color }}>
+          Count: {payload[0].value}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function MoodPieChart({ data }: MoodPieChartProps) {
   // Transform data to include mood names and colors
   const chartData = data.map((item) => {
@@ -35,8 +50,8 @@ export default function MoodPieChart({ data }: MoodPieChartProps) {
   });
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
-      <h3 className="text-xl font-bold text-gray-800 mb-6">Mood Distribution</h3>
+    <div className="bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10 transition-colors duration-500">
+      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6">Mood Distribution</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
@@ -53,13 +68,7 @@ export default function MoodPieChart({ data }: MoodPieChartProps) {
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip
-            contentStyle={{
-              borderRadius: '12px',
-              border: 'none',
-              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-            }}
-          />
+          <Tooltip content={<CustomTooltip />} />
           <Legend verticalAlign="bottom" height={36} iconType="circle" />
         </PieChart>
       </ResponsiveContainer>

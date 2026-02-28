@@ -19,7 +19,7 @@ export default function StatsDashboard() {
     const { trendData, moodDistribution, emotionTagsData, timeBasedData, totalEntries } = useAdvancedStats(timeRange);
 
     return (
-        <div className="min-h-screen relative overflow-hidden bg-[#0f0720]">
+        <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[#0a091a] dark:via-[#161233] dark:to-[#0f172a] text-gray-900 dark:text-gray-100 transition-colors duration-500">
             {/* Background Aura */}
             <AuroraBackground emotionColor="#9333ea" emotionGlow="#d8b4fe" />
 
@@ -31,18 +31,18 @@ export default function StatsDashboard() {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.6 }}
-                    className="relative z-10 w-full mb-8"
+                    className="relative z-10 w-full mb-6 md:mb-8"
                 >
                     <div className="flex justify-between items-center w-full">
                         <div className="flex flex-col">
-                            <Link href="/" className="inline-flex items-center text-sm text-purple-300 hover:text-white mb-2 transition-colors">
+                            <Link href="/" className="inline-flex items-center text-sm text-purple-600 dark:text-purple-300 hover:text-purple-800 dark:hover:text-white mb-2 transition-colors">
                                 <ArrowLeft className="w-4 h-4 mr-2" />
                                 Back to Home
                             </Link>
-                            <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                            <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-pink-400 dark:to-purple-400 bg-clip-text text-transparent">
                                 Emotional Insights
                             </h1>
-                            <p className="text-gray-300 mt-2">
+                            <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm md:text-base">
                                 Understand your mood patterns and emotional wellness journey.
                             </p>
                         </div>
@@ -57,8 +57,8 @@ export default function StatsDashboard() {
                                         size="sm"
                                         onClick={() => setTimeRange(range)}
                                         className={`rounded-md px-3 md:px-4 capitalize transition-all ${timeRange === range
-                                            ? 'bg-purple-600/80 text-white shadow-lg shadow-purple-900/20'
-                                            : 'text-gray-300 hover:text-white hover:bg-white/10'
+                                            ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/20'
+                                            : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
                                             }`}
                                     >
                                         {range === 'all' ? 'All Time' : range.toUpperCase()}
@@ -69,10 +69,10 @@ export default function StatsDashboard() {
                                 <Link href="/music" aria-label="Relaxing Music">
                                     <motion.div
                                         whileHover={{ scale: 1.05 }}
-                                        className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
+                                        className="p-2 rounded-full bg-black/5 dark:bg-white/5 backdrop-blur-xl hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-300 border border-black/10 dark:border-white/10"
                                         title="Music"
                                     >
-                                        <Music className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                                        <Music className="w-5 h-5 md:w-6 md:h-6 text-gray-700 dark:text-white" />
                                     </motion.div>
                                 </Link>
                                 <ThemeToggle />
@@ -83,29 +83,29 @@ export default function StatsDashboard() {
 
                 {/* Global Summary Metric */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-                    <Card className="bg-white/5 border-white/10 backdrop-blur-sm text-white">
+                    <Card className="bg-white/80 dark:bg-white/5 border-black/5 dark:border-white/10 backdrop-blur-md shadow-lg transition-colors duration-500">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-purple-300 flex items-center">
+                            <CardTitle className="text-sm font-medium text-purple-600 dark:text-purple-300 flex items-center">
                                 <Calendar className="w-4 h-4 mr-2" />
                                 Total Entries
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-4xl font-bold text-white mb-1">{totalEntries}</div>
-                            <p className="text-xs text-gray-400">
+                            <div className="text-4xl font-bold text-gray-800 dark:text-white mb-1">{totalEntries}</div>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
                                 Logged {timeRange === '7d' ? 'this week' : timeRange === '30d' ? 'this month' : 'overall'}
                             </p>
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-white/5 border-white/10 backdrop-blur-sm text-white md:col-span-2 flex items-center p-6">
+                    <Card className="bg-white/80 dark:bg-white/5 border-black/5 dark:border-white/10 backdrop-blur-md shadow-lg transition-colors duration-500 md:col-span-2 flex items-center p-6">
                         <div className="flex gap-4 items-center w-full">
-                            <div className="bg-purple-500/20 p-3 rounded-full flex-shrink-0">
-                                <Info className="w-6 h-6 text-purple-300" />
+                            <div className="bg-purple-100 dark:bg-purple-500/20 p-3 rounded-full flex-shrink-0">
+                                <Info className="w-6 h-6 text-purple-600 dark:text-purple-300" />
                             </div>
                             <div>
-                                <h3 className="font-medium text-lg">Did you know?</h3>
-                                <p className="text-sm text-gray-300 mt-1">
+                                <h3 className="font-medium text-lg text-gray-800 dark:text-white">Did you know?</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                                     Visualizing emotional data helps increase self-awareness. Over time, spotting these trends makes it easier to identify what brings you joy and what causes stress.
                                 </p>
                             </div>

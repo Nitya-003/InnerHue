@@ -25,6 +25,21 @@ const COLORS = [
   '#607D8B', '#E91E63'
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-gray-200 dark:border-white/10 p-3 rounded-xl shadow-lg">
+        <p className="font-semibold text-gray-800 dark:text-gray-200">{payload[0].payload.name}</p>
+        <p className="text-sm font-medium" style={{ color: payload[0].payload.color }}>
+          Count: {payload[0].value}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function MoodBarChart({ data }: MoodBarChartProps) {
   // Transform data to include mood names and colors
   const chartData = data.map((item) => {
@@ -37,27 +52,23 @@ export default function MoodBarChart({ data }: MoodBarChartProps) {
   });
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
-      <h3 className="text-xl font-bold text-gray-800 mb-6">Mood Frequency</h3>
+    <div className="bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10 transition-colors duration-500">
+      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6">Mood Frequency</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData} layout="vertical">
-          <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+          <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" strokeOpacity={0.1} />
           <XAxis type="number" hide />
           <YAxis
             dataKey="name"
             type="category"
             width={80}
-            tick={{ fill: '#4B5563', fontSize: 12 }}
+            tick={{ fill: 'currentColor', fontSize: 12, opacity: 0.7 }}
             axisLine={false}
             tickLine={false}
           />
           <Tooltip
-            contentStyle={{
-              borderRadius: '12px',
-              border: 'none',
-              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-            }}
-            cursor={{ fill: 'transparent' }}
+            content={<CustomTooltip />}
+            cursor={{ fill: 'currentColor', opacity: 0.05 }}
           />
           <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={32}>
             {chartData.map((entry, index) => (

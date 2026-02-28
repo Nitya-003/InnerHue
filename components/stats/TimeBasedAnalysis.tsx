@@ -11,12 +11,12 @@ export function TimeBasedAnalysis({ data }: TimeBasedAnalysisProps) {
     const hasData = data && data.some(d => d.count > 0);
 
     return (
-        <Card className="col-span-full">
+        <Card className="col-span-full bg-white/80 dark:bg-white/5 border-black/5 dark:border-white/10 backdrop-blur-md shadow-lg transition-colors duration-500">
             <CardHeader>
-                <CardTitle>Peak Logging Times</CardTitle>
-                <CardDescription>When do you usually log your moods?</CardDescription>
+                <CardTitle className="text-gray-800 dark:text-white">Peak Logging Times</CardTitle>
+                <CardDescription className="text-gray-500 dark:text-gray-400">When do you usually log your moods?</CardDescription>
             </CardHeader>
-            <CardContent className="h-[250px] w-full">
+            <CardContent className="h-[250px] md:h-[300px] w-full">
                 {!hasData ? (
                     <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
                         No time history available.
@@ -39,8 +39,8 @@ export function TimeBasedAnalysis({ data }: TimeBasedAnalysisProps) {
                                 tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
                             />
                             <Tooltip
-                                cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }}
-                                contentStyle={{ borderRadius: '8px', border: '1px solid hsl(var(--border))', backgroundColor: 'hsl(var(--background))' }}
+                                cursor={{ fill: 'currentColor', opacity: 0.1 }}
+                                contentStyle={{ borderRadius: '12px', border: '1px solid hsl(var(--border))', backgroundColor: 'hsl(var(--background))', opacity: 0.9 }}
                             />
                             <Bar dataKey="count" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} barSize={40} />
                         </BarChart>

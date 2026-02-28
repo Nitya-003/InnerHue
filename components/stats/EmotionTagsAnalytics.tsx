@@ -10,12 +10,12 @@ export function EmotionTagsAnalytics({ data }: EmotionTagsAnalyticsProps) {
     const hasData = data && data.length > 0;
 
     return (
-        <Card className="col-span-full md:col-span-1">
+        <Card className="col-span-full md:col-span-1 bg-white/80 dark:bg-white/5 border-black/5 dark:border-white/10 backdrop-blur-md shadow-lg transition-colors duration-500">
             <CardHeader>
-                <CardTitle>Top Emotion Tags</CardTitle>
-                <CardDescription>Most frequently logged specific emotions.</CardDescription>
+                <CardTitle className="text-gray-800 dark:text-white">Top Emotion Tags</CardTitle>
+                <CardDescription className="text-gray-500 dark:text-gray-400">Most frequently logged specific emotions.</CardDescription>
             </CardHeader>
-            <CardContent className="h-[300px] w-full">
+            <CardContent className="h-[250px] md:h-[300px] w-full">
                 {!hasData ? (
                     <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
                         No tags data available.
@@ -34,8 +34,8 @@ export function EmotionTagsAnalytics({ data }: EmotionTagsAnalyticsProps) {
                                 width={80}
                             />
                             <Tooltip
-                                cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }}
-                                contentStyle={{ borderRadius: '8px', border: '1px solid hsl(var(--border))', backgroundColor: 'hsl(var(--background))' }}
+                                cursor={{ fill: 'currentColor', opacity: 0.1 }}
+                                contentStyle={{ borderRadius: '12px', border: '1px solid hsl(var(--border))', backgroundColor: 'hsl(var(--background))', opacity: 0.9 }}
                             />
                             <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} barSize={20} />
                         </BarChart>

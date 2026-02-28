@@ -20,12 +20,12 @@ export function WeeklyMonthlyTrend({ data, timeRange }: WeeklyMonthlyTrendProps)
     const hasData = data && data.some(d => d.count > 0);
 
     return (
-        <Card className="col-span-full md:col-span-2">
+        <Card className="col-span-full md:col-span-2 bg-white/80 dark:bg-white/5 border-black/5 dark:border-white/10 backdrop-blur-md shadow-lg transition-colors duration-500">
             <CardHeader>
-                <CardTitle>{chartConfig.title}</CardTitle>
-                <CardDescription>{chartConfig.description}</CardDescription>
+                <CardTitle className="text-gray-800 dark:text-white">{chartConfig.title}</CardTitle>
+                <CardDescription className="text-gray-500 dark:text-gray-400">{chartConfig.description}</CardDescription>
             </CardHeader>
-            <CardContent className="h-[300px] w-full">
+            <CardContent className="h-[250px] md:h-[350px] w-full">
                 {!hasData ? (
                     <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
                         No data available for this period.
@@ -59,7 +59,7 @@ export function WeeklyMonthlyTrend({ data, timeRange }: WeeklyMonthlyTrendProps)
                                 }}
                             />
                             <Tooltip
-                                contentStyle={{ borderRadius: '8px', border: '1px solid hsl(var(--border))', backgroundColor: 'hsl(var(--background))' }}
+                                contentStyle={{ borderRadius: '12px', border: '1px solid hsl(var(--border))', backgroundColor: 'hsl(var(--background))', opacity: 0.9 }}
                                 formatter={(value: number, name: string) => [Number(value).toFixed(1), 'Avg Sentiment']}
                                 labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 'bold', marginBottom: '4px' }}
                             />

@@ -80,6 +80,7 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
 
   // Suggest actions based on mood
   const getSuggestedActions = (moodId: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const actionMap: Record<string, Array<{ icon: any; label: string; action: string }>> = {
       happy: [
         { icon: BookOpen, label: 'Journal', action: 'Capture this joyful moment in writing' },
