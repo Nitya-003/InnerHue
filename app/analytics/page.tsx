@@ -9,6 +9,7 @@ import {
   Heart,
   Activity,
   Trash2,
+  LayoutDashboard,
 } from 'lucide-react';
 
 import MoodPieChart from '@/components/MoodPieChart';
@@ -115,7 +116,26 @@ export default function AnalyticsPage() {
             </h1>
           </div>
 
-          <ThemeToggle />
+          <div className="flex items-center space-x-2">
+            <Link href="/stats">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+                className="flex items-center space-x-2 px-3 py-2 md:px-4 
+                rounded-xl bg-purple-500/20 text-purple-300
+                border border-purple-500/10 shadow-sm 
+                hover:shadow-md hover:bg-purple-500/30
+                transition-all duration-300"
+              >
+                <LayoutDashboard className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden md:inline font-medium text-sm">
+                  Dashboard
+                </span>
+              </motion.button>
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 

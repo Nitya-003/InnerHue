@@ -2,6 +2,7 @@
 
 import { motion, Variants } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import { ShaderOrb } from '@/components/ShaderOrb';
 
 interface Mood {
   id: string;
@@ -65,18 +66,6 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     setTimeout(() => setConfetti([]), 2000);
   };
 
-  const particleVariants: Variants = {
-    animate: {
-      scale: [1, 1.5, 1],
-      opacity: [0.6, 1, 0.6],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      },
-    },
-  };
-
   const orbVariants: Variants = {
     idle: {
       scale: [1, 1.05, 1],
@@ -98,16 +87,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
-  const particleVariants: Variants = {
-    animate: {
-      scale: [0.8, 1.5, 0.8],
-      opacity: [0.2, 0.8, 0.2],
-      transition: {
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-  };
+
 
 
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
@@ -212,8 +192,6 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={`orbital-ring-${i}`}
-              className="absolute rounded-full border-2 opacity-30"
-              key={i}
               className="absolute rounded-full border-2 opacity-30 pointer-events-none"
               style={{
                 borderColor: mood.color,

@@ -17,6 +17,8 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import reflectiveMoods from '@/lib/reflectiveMoods';
 import { getTraditionalMoodId } from '@/lib/moodMapping';
 
+import { use } from 'react';
+
 // Extended type for reflective moods
 interface MoodWithMeta extends Mood {
   traditionalId?: string;
@@ -24,15 +26,17 @@ interface MoodWithMeta extends Mood {
 }
 
 interface MoodPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams?: {
+  }>;
+  searchParams?: Promise<{
     moods?: string;
-  };
+  }>;
 }
 
-export default function MoodPage({ params, searchParams }: MoodPageProps) {
+export default function MoodPage(props: MoodPageProps) {
+  const params = use(props.params);
+  const searchParams = props.searchParams ? use(props.searchParams) : undefined;
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<MoodSuggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
@@ -59,19 +63,19 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
           // Map reflective mood to traditional mood for getting suggestions
           const traditionalId = getTraditionalMoodId(id);
           const traditionalMood = MoodData.getMoodById(traditionalId);
-          
+
           // Create adapter object that combines both systems
           return {
             id: reflectiveMood.id,
             name: reflectiveMood.label,
-            emoji: reflectiveMood.label?.charAt(0).toUpperCase() || '✨', 
+            emoji: reflectiveMood.label?.charAt(0).toUpperCase() || '✨',
             color: reflectiveMood.color,
             glow: reflectiveMood.glow,
-            traditionalId: traditionalId, 
+            traditionalId: traditionalId,
             spotifyPlaylistId: traditionalMood?.spotifyPlaylistId,
           } as MoodWithMeta;
         }
-        
+
         // Fall back to traditional mood system
         return MoodData.getMoodById(id);
       })
@@ -96,7 +100,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   // Fix 2: Sync suggestions automatically when Index or Data changes
   useEffect(() => {
     if (!moodData.length) return;
-    
+
     const mood = moodData[currentMoodIndex];
     if (mood) {
       // Use traditionalId if available (for reflective moods), otherwise use the mood id
@@ -153,11 +157,10 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
                       onClick={() => setCurrentMoodIndex(index)}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
-                      className={`text-2xl p-1 rounded-full transition-all ${
-                        index === currentMoodIndex
+                      className={`text-2xl p-1 rounded-full transition-all ${index === currentMoodIndex
                           ? 'bg-white/30 ring-2 ring-purple-400'
                           : 'hover:bg-white/20'
-                      }`}
+                        }`}
                     >
                       {mood.emoji}
                     </motion.button>

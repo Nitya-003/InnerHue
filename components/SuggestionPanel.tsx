@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy, Sparkles } from 'lucide-react';
+import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music, Copy, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
   Tooltip,
@@ -16,15 +16,6 @@ import { Quote } from '@/data/fallbackQuotes';
 import { Mood, MoodSuggestion } from '@/types/mood';
 
 interface SuggestionPanelProps {
-  suggestions: MoodSuggestion;
-  mood: Mood;
-  onRefresh: () => void;
-  // New props for dynamic quotes
-  quoteData?: Quote | null;
-  isQuoteLoading?: boolean;
-  onQuoteRefresh?: () => void;
-
-interface SuggestionPanelProps {
   suggestions: {
     prompt: string;
     quote: string;
@@ -32,9 +23,13 @@ interface SuggestionPanelProps {
     keywords: string[];
     music: string;
   };
-  mood: any;
+  mood: any; // using any since Mood type might not match here perfectly without more typing or imports
   onRefresh: () => void | Promise<void>;
   isRefreshing?: boolean;
+  // New props for dynamic quotes
+  quoteData?: Quote | null;
+  isQuoteLoading?: boolean;
+  onQuoteRefresh?: () => void;
 }
 
 export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
@@ -106,8 +101,8 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
             className="text-2xl font-bold relative z-10 flex items-center gap-2 text-white"
             whileHover={{ scale: 1.02 }}
           >
-            <motion.span 
-              animate={{ rotate: [0, 15, -15, 0] }} 
+            <motion.span
+              animate={{ rotate: [0, 15, -15, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
               ✨
@@ -188,7 +183,7 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
           <motion.div className="absolute right-6 top-4 text-8xl font-serif opacity-5 group-hover:opacity-15 transition-opacity duration-500" style={{ color: mood.color }} animate={{ rotate: [0, 5, 0], scale: [1, 1.05, 1] }} transition={{ duration: 4, repeat: Infinity }}>&quot;</motion.div>
           <div className="flex items-start space-x-4 relative z-10">
             <motion.div className="p-3 rounded-xl shadow-md" style={{ background: `linear-gradient(135deg, ${mood.glow}30, ${mood.color}20)` }} whileHover={{ rotate: [0, -10, 10, 0], scale: 1.15 }} transition={{ duration: 0.5 }}>
-              <Quote className="w-6 h-6" style={{ color: mood.glow }} />
+              <QuoteIcon className="w-6 h-6" style={{ color: mood.glow }} />
             </motion.div>
             <div className="flex-1">
               <div className="flex items-start justify-between mb-2">
@@ -274,8 +269,8 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
               <a href="/music" className="block">
                 <div className="relative w-full h-[152px] rounded-xl overflow-hidden shadow-inner hover:shadow-lg transition-all" style={{ background: `linear-gradient(135deg, ${mood.color}15, ${mood.glow}10)`, border: `1px solid ${mood.color}30` }}>
                   <div className="absolute inset-0 flex flex-col items-center justify-center backdrop-blur-sm">
-                    <motion.div 
-                      animate={{ scale: [1, 1.1, 1] }} 
+                    <motion.div
+                      animate={{ scale: [1, 1.1, 1] }}
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                       className="mb-4"
                     >
@@ -283,13 +278,13 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
                     </motion.div>
                     <span className="text-lg font-semibold text-white mb-1">Calming Ambient Music</span>
                     <span className="text-sm" style={{ color: mood.color }}>Tap to explore soundscapes →</span>
-                    
+
                     {/* Animated visualizer bars */}
                     <div className="absolute bottom-0 left-0 right-0 h-16 flex items-end justify-center gap-1 px-4">
                       {[...Array(20)].map((_, i) => (
-                        <motion.div 
-                          key={i} 
-                          className="w-1 rounded-t-full" 
+                        <motion.div
+                          key={i}
+                          className="w-1 rounded-t-full"
                           style={{ background: `linear-gradient(to top, ${mood.color}, ${mood.glow})` }}
                           animate={{ height: [8, 20 + Math.random() * 30, 8] }}
                           transition={{ duration: 0.5 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.03 }}
