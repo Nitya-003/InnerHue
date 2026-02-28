@@ -20,6 +20,8 @@ import {
 } from 'lucide-react';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import ContributorOrb from '@/components/ContributorOrb';
+import AvatarStack from '@/components/AvatarStack';
 
 interface Contributor {
   login: string;
@@ -76,6 +78,13 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
       {/* Glow effect on hover */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/5 group-hover:to-pink-500/5 transition-all duration-300 pointer-events-none" />
 
+      {/* Rank badge */}
+      <div className="absolute -top-3 -right-3 z-20">
+        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-400 to-orange-400 flex items-center justify-center shadow-lg text-xs font-bold text-white">
+          {index + 1}
+        </div>
+      </div>
+
       <div className="flex items-start gap-4">
         {/* Avatar */}
         <div className="relative flex-shrink-0">
@@ -124,8 +133,6 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
       {/* Stats row */}
       <div className="mt-4 flex flex-wrap gap-2">
         <StatChip icon={<GitCommit className="w-3 h-3" />} label={`${contributor.contributions} commits`} color="purple" />
-        <StatChip icon={<BookOpen className="w-3 h-3" />} label={`${contributor.public_repos} repos`} color="blue" />
-        <StatChip icon={<Users className="w-3 h-3" />} label={`${contributor.followers} followers`} color="pink" />
       </div>
 
       {/* Links */}
@@ -134,12 +141,12 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
           href={contributor.html_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-all duration-200 group/link"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black text-white text-xs font-medium transition-all duration-200 hover:opacity-90"
           aria-label={`GitHub profile of ${displayName}`}
         >
-          <Github className="w-3.5 h-3.5" />
+          <Github className="w-3.5 h-3.5 text-white" />
           <span>GitHub</span>
-          <ExternalLink className="w-3 h-3 opacity-0 group-hover/link:opacity-100 transition-opacity" />
+          <ExternalLink className="w-3 h-3 ml-1 text-white opacity-70" />
         </a>
 
         {blogUrl && (
@@ -210,13 +217,20 @@ export default function ContributorsPage() {
     setError(null);
     try {
       const res = await fetch('/api/contributors');
-      if (!res.ok) throw new Error('Failed to fetch contributors');
-      const data = await res.json();
-      setContributors(data.contributors);
-      setFiltered(data.contributors);
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const message = data?.error || data?.message || 'Failed to fetch contributors';
+        throw new Error(message);
+      }
+
+      setContributors(data.contributors || []);
+      setFiltered(data.contributors || []);
       setLastUpdated(new Date());
     } catch (err) {
-      setError((err as Error).message || 'Something went wrong');
+      const message = (err as Error).message || 'Something went wrong';
+      console.error('Contributors fetch error:', message);
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -298,6 +312,11 @@ export default function ContributorsPage() {
                 </motion.div>
               </div>
             </motion.div>
+
+            {/* Simple avatar stack (GitHub-like) */}
+            {!loading && contributors.length > 0 && (
+              <AvatarStack contributors={contributors} />
+            )}
 
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
