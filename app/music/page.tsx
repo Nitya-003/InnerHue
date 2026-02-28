@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, Play, Pause,
-  CloudRain, Trees, Waves, Wind, Sun, TreePine, Leaf, Wheat, Droplets, CloudLightning,
+  CloudRain, Trees, Waves, Wind, Sun, Leaf, Wheat, Droplets, CloudLightning,
   Music2
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -85,7 +85,7 @@ const soundscapes = [
     icon: Leaf,
     bgColor: 'linear-gradient(135deg, #a3e635, #65a30d)',
     primaryColor: '#84cc16',
-    primaryRgb: '163, 230, 53',
+    primaryRgb: '132, 204, 22',
     tag: 'Calm',
     src: 'https://actions.google.com/sounds/v1/ambiences/spring_day_forest.ogg'
   },
@@ -96,7 +96,7 @@ const soundscapes = [
     icon: Wheat,
     bgColor: 'linear-gradient(135deg, #fb923c, #ea580c)',
     primaryColor: '#f97316',
-    primaryRgb: '251, 146, 60',
+    primaryRgb: '249, 115, 22',
     tag: 'Calm',
     src: 'https://actions.google.com/sounds/v1/ambiences/outdoor_farm_sounds.ogg'
   },
@@ -137,7 +137,9 @@ export default function MusicPage() {
   const [currentTrack, setCurrentTrack] = useState('rain');
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme === 'dark';
 
   useEffect(() => {
     const audio = new Audio();
@@ -365,8 +367,8 @@ export default function MusicPage() {
                   boxShadow: isActive
                     ? `0 0 0 2px rgba(${track.primaryRgb}, 0.6), 0 8px 32px rgba(${track.primaryRgb}, ${isDark ? '0.25' : '0.15'})`
                     : undefined,
-                  focusVisibleRingColor: track.primaryColor
-                } as React.CSSProperties}
+                  '--tw-ring-color': track.primaryColor
+                } as React.CSSProperties & Record<string, string>}
               >
                 {/* Card art (top square) */}
                 <div
