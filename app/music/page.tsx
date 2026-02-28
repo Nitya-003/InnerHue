@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, Play, Pause,
-  CloudRain, Trees, Waves, Wind, Sun, TreePine, Leaf, Wheat, Droplets, CloudLightning,
+  CloudRain, Trees, Waves, Wind, Sun, Leaf, Wheat, Droplets, CloudLightning,
   Music2
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
