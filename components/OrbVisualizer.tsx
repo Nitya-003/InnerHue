@@ -4,15 +4,7 @@ import { motion, Variants } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { ShaderOrb } from '@/components/ShaderOrb';
 
-interface Mood {
-  id: string;
-  name: string;
-  emoji: string;
-  color: string;
-  glow: string;
-}
-
-interface OrbVisualizerProps {
+export interface OrbVisualizerProps {
   mood: Mood;
 }
 
