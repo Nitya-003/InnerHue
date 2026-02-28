@@ -62,8 +62,8 @@ function ContributorCard({ contributor, index }: { contributor: Contributor; ind
     contributor.blog && contributor.blog.startsWith('http')
       ? contributor.blog
       : contributor.blog
-      ? `https://${contributor.blog}`
-      : null;
+        ? `https://${contributor.blog}`
+        : null;
 
   return (
     <motion.div
@@ -258,7 +258,7 @@ export default function ContributorsPage() {
     <div className="min-h-screen bg-[#0f0720] relative overflow-hidden text-white font-sans">
       <FloatingBackground />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
+      <main id="main" className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: -20 }}
@@ -409,11 +409,10 @@ export default function ContributorsPage() {
                 <button
                   key={opt}
                   onClick={() => setSortBy(opt)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 capitalize ${
-                    sortBy === opt
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 capitalize ${sortBy === opt
                       ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25'
                       : 'bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10'
-                  }`}
+                    }`}
                 >
                   {opt}
                 </button>
@@ -534,7 +533,7 @@ export default function ContributorsPage() {
             </p>
           </motion.div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

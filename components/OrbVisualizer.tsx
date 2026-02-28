@@ -23,12 +23,6 @@ interface Particle {
   duration: number; // Added
 }
 
-const particleVariants: Variants = {
-  animate: {
-    opacity: [0, 1, 0],
-    scale: [0, 1, 0],
-  },
-};
 
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -93,183 +87,182 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setParticles(Array.from({ length: 12 }, (_, i) => ({
       id: i,
       angle: (i * 30) * (Math.PI / 180),
       distance: 150 + Math.random() * 50,
-      duration: 3 + Math.random() * 2,
-    })));
-  }, []);
+      duration: 3 + Math.random() * 2
+    }))
+    );
 
-  return (
-    <div className="relative">
-      <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl border border-white/10">
-        <div className="text-center mb-6 md:mb-8">
-          <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
-            Your Emotional State
-          </h3>
-          <p className="text-white/70">
-            Visualizing the energy of feeling {mood.name.toLowerCase()}
-          </p>
-        </div>
+    return (
+      <div className="relative">
+        <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl border border-white/10">
+          <div className="text-center mb-6 md:mb-8">
+            <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+              Your Emotional State
+            </h3>
+            <p className="text-white/70">
+              Visualizing the energy of feeling {mood.name.toLowerCase()}
+            </p>
+          </div>
 
-        <div className="relative h-80 flex items-center justify-center">
-          {particles.map((particle) => (
+          <div className="relative h-80 flex items-center justify-center">
+            {particles.map((particle) => (
+              <motion.div
+                key={particle.id}
+                className="absolute w-2 h-2 rounded-full"
+                style={{
+                  left: `calc(50% + ${Math.cos(particle.angle) * particle.distance}px)`,
+                  top: `calc(50% + ${Math.sin(particle.angle) * particle.distance}px)`,
+                  backgroundColor: mood.glow,
+                } as React.CSSProperties}
+                variants={particleVariants}
+                initial="animate"
+                animate="animate"
+                transition={{
+                  delay: particle.id * 0.2,
+                  duration: particle.duration,
+                }}
+              />
+            ))}
+
             <motion.div
-              key={particle.id}
-              className="absolute w-2 h-2 rounded-full"
-              style={{
-                background: mood.glow,
-                left: `calc(50% + ${Math.cos(particle.angle) * particle.distance}px)`,
-                top: `calc(50% + ${Math.sin(particle.angle) * particle.distance}px)`,
+              className="relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 cursor-grab active:cursor-grabbing z-10"
+              variants={orbVariants}
+              initial="idle"
+              animate={isPlaying ? "active" : "idle"}
+              drag
+              dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
+              dragElastic={0.2}
+              dragSnapToOrigin
+              whileDrag={{ scale: 1.1, cursor: "grabbing" }}
+              onDragEnd={() => {
+                setShowPulse(true);
+                setTimeout(() => setShowPulse(false), 1000);
               }}
-              variants={particleVariants}
-              initial="animate"
-              animate="animate"
-              transition={{
-                delay: particle.id * 0.2,
-                duration: particle.duration,
-              }}
-            />
-          ))}
-
-          <motion.div
-            className="relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 cursor-grab active:cursor-grabbing z-10"
-            variants={orbVariants}
-            initial="idle"
-            animate={isPlaying ? "active" : "idle"}
-            drag
-            dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}
-            dragElastic={0.2}
-            dragSnapToOrigin
-            whileDrag={{ scale: 1.1, cursor: "grabbing" }}
-            onDragEnd={() => {
-              setShowPulse(true);
-              setTimeout(() => setShowPulse(false), 1000);
-            }}
-          >
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: `radial-gradient(circle, ${mood.glow}40 0%, ${mood.glow}20 40%, transparent 70%)`,
-                width: '100%',
-                height: '100%',
-                filter: 'blur(20px)',
-                x: '-50%',
-                y: '-50%',
-                left: '50%',
-                top: '50%',
-              }}
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.6, 1, 0.6],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-
-            {/* 3D Shader Orb */}
-            <div
-              className="w-40 h-40 md:w-48 md:h-48 relative cursor-pointer"
-              onClick={handleEmojiClick}
             >
-              <ShaderOrb mood={mood} />
-              {/* Emoji overlay */}
-              <motion.span
-                className="absolute bottom-2 right-2 text-2xl select-none pointer-events-none z-20"
-                animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              <motion.div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: `radial-gradient(circle, ${mood.glow}40 0%, ${mood.glow}20 40%, transparent 70%)`,
+                  width: '100%',
+                  height: '100%',
+                  filter: 'blur(20px)',
+                  x: '-50%',
+                  y: '-50%',
+                  left: '50%',
+                  top: '50%',
+                }}
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.6, 1, 0.6],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+
+              {/* 3D Shader Orb */}
+              <div
+                className="w-40 h-40 md:w-48 md:h-48 relative cursor-pointer"
+                onClick={handleEmojiClick}
+              >
+                <ShaderOrb mood={mood} />
+                {/* Emoji overlay */}
+                <motion.span
+                  className="absolute bottom-2 right-2 text-2xl select-none pointer-events-none z-20"
+                  animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  {mood.emoji}
+                </motion.span>
+              </div>
+            </motion.div>
+
+            {[...Array(3)].map((_, i) => (
+              <motion.div
+                key={`orbital-ring-${i}`}
+                className="absolute rounded-full border-2 opacity-30 pointer-events-none"
+                style={{
+                  width: 160 + i * 40,
+                  height: 160 + i * 40,
+                  left: '50%',
+                  top: '50%',
+                  borderColor: mood.color,
+                  x: '-50%',
+                  y: '-50%',
+                } as React.CSSProperties}
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.1, 0.3],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.5,
+                }}
+              />
+            ))}
+
+            {/* Drag Pulse Effect */}
+            {showPulse && (
+              <motion.div
+                className="absolute rounded-full border-4 pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  borderColor: mood.glow,
+                  x: '-50%',
+                  y: '-50%',
+                } as React.CSSProperties}
+                initial={{ width: 200, height: 200, opacity: 0.8, borderWidth: 4 }}
+                animate={{ width: 400, height: 400, opacity: 0, borderWidth: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              />
+            )}
+
+            {/* Confetti Effect */}
+            {confetti.map((particle) => (
+              <motion.div
+                key={particle.id}
+                className="absolute text-xl pointer-events-none z-30"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  x: '-50%',
+                  y: '-50%',
+                }}
+                initial={{ scale: 0, opacity: 1, x: '-50%', y: '-50%' }}
+                animate={{
+                  scale: [0, 1.5, 0],
+                  opacity: [1, 1, 0],
+                  x: `calc(-50% + ${Math.cos(particle.angle) * 200 + particle.drift}px)`,
+                  y: `calc(-50% + ${Math.sin(particle.angle) * 200 + particle.drift}px)`,
+                  rotate: [0, 360 * (Math.random() > 0.5 ? 1 : -1)]
+                }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
               >
                 {mood.emoji}
-              </motion.span>
-            </div>
-          </motion.div>
+              </motion.div>
+            ))}
+          </div>
 
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={`orbital-ring-${i}`}
-              className="absolute rounded-full border-2 opacity-30 pointer-events-none"
-              style={{
-                borderColor: mood.color,
-                width: 160 + i * 40,
-                height: 160 + i * 40,
-                left: '50%',
-                top: '50%',
-                x: '-50%',
-                y: '-50%',
-              }}
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.1, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: i * 0.5,
-              }}
-            />
-          ))}
-
-          {/* Drag Pulse Effect */}
-          {showPulse && (
-            <motion.div
-              className="absolute rounded-full border-4 pointer-events-none"
-              style={{
-                borderColor: mood.glow,
-                left: '50%',
-                top: '50%',
-                x: '-50%',
-                y: '-50%',
-              }}
-              initial={{ width: 200, height: 200, opacity: 0.8, borderWidth: 4 }}
-              animate={{ width: 400, height: 400, opacity: 0, borderWidth: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            />
-          )}
-
-          {/* Confetti Effect */}
-          {confetti.map((particle) => (
-            <motion.div
-              key={particle.id}
-              className="absolute text-xl pointer-events-none z-30"
-              style={{
-                left: '50%',
-                top: '50%',
-                x: '-50%',
-                y: '-50%',
-              }}
-              initial={{ scale: 0, opacity: 1, x: '-50%', y: '-50%' }}
-              animate={{
-                scale: [0, 1.5, 0],
-                opacity: [1, 1, 0],
-                x: `calc(-50% + ${Math.cos(particle.angle) * 200 + particle.drift}px)`,
-                y: `calc(-50% + ${Math.sin(particle.angle) * 200 + particle.drift}px)`,
-                rotate: [0, 360 * (Math.random() > 0.5 ? 1 : -1)]
-              }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
+          <div className="text-center mt-8">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all"
             >
-              {mood.emoji}
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="text-center mt-8">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all"
-          >
-            {isPlaying ? 'Pause Visualization' : 'Activate Visualization'}
-          </motion.button>
+              {isPlaying ? 'Pause Visualization' : 'Activate Visualization'}
+            </motion.button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 

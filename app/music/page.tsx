@@ -1,19 +1,26 @@
 'use client';
-
-import { useState, useRef, useEffect, useMemo } from 'react';
+export const dynamic = "force-dynamic";
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Play, Pause, CloudRain, Trees, Waves, Wind, Volume2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  ArrowLeft, Play, Pause,
+  CloudRain, Trees, Waves, Wind, Sun, Leaf, Wheat, Droplets, CloudLightning,
+  Music2
+} from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useTheme } from 'next-themes';
 
-// Soundscapes using Google Sound Library (CORS-enabled, reliable OGG files)
 const soundscapes = [
   {
     id: 'rain',
     title: 'Heavy Rain',
     description: 'Continuous heavy rain falling on pavement.',
     icon: CloudRain,
-    color: 'from-blue-400 to-indigo-500',
+    bgColor: 'linear-gradient(135deg, #3b82f6, #1e40af)',
+    primaryColor: '#3b82f6',
+    primaryRgb: '59, 130, 246',
+    tag: 'Focus',
     src: 'https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg'
   },
   {
@@ -21,7 +28,10 @@ const soundscapes = [
     title: 'Forest Morning',
     description: 'Birds chirping and wind rustling in the trees.',
     icon: Trees,
-    color: 'from-green-400 to-emerald-600',
+    bgColor: 'linear-gradient(135deg, #10b981, #047857)',
+    primaryColor: '#10b981',
+    primaryRgb: '16, 185, 129',
+    tag: 'Calm',
     src: 'https://actions.google.com/sounds/v1/animals/june_songbirds.ogg'
   },
   {
@@ -29,7 +39,10 @@ const soundscapes = [
     title: 'Ocean Waves',
     description: 'Rhythmic waves crashing on the shore.',
     icon: Waves,
-    color: 'from-cyan-400 to-blue-500',
+    bgColor: 'linear-gradient(135deg, #06b6d4, #0369a1)',
+    primaryColor: '#06b6d4',
+    primaryRgb: '6, 182, 212',
+    tag: 'Relax',
     src: 'https://actions.google.com/sounds/v1/water/waves_crashing_on_rock_beach.ogg'
   },
   {
@@ -37,25 +50,102 @@ const soundscapes = [
     title: 'Strong Wind',
     description: 'Howling wind to block out distractions.',
     icon: Wind,
-    color: 'from-gray-300 to-slate-500',
+    bgColor: 'linear-gradient(135deg, #6b7280, #374151)',
+    primaryColor: '#6b7280',
+    primaryRgb: '107, 114, 128',
+    tag: 'Focus',
     src: 'https://actions.google.com/sounds/v1/weather/strong_wind.ogg'
+  },
+  {
+    id: 'summer-forest',
+    title: 'Summer Forest',
+    description: 'Warm summer ambience with insects and gentle breeze.',
+    icon: Sun,
+    bgColor: 'linear-gradient(135deg, #f59e0b, #d97706)',
+    primaryColor: '#f59e0b',
+    primaryRgb: '245, 158, 11',
+    tag: 'Energise',
+    src: 'https://actions.google.com/sounds/v1/ambiences/summer_forest.ogg'
+  },
+  {
+    id: 'summer-beach',
+    title: 'Summer Beach',
+    description: 'Relaxing seaside vibes with distant waves and seagulls.',
+    icon: Waves,
+    bgColor: 'linear-gradient(135deg, #f472b6, #db2777)',
+    primaryColor: '#f472b6',
+    primaryRgb: '244, 114, 182',
+    tag: 'Relax',
+    src: 'https://actions.google.com/sounds/v1/ambiences/summer_beach_parking_lot.ogg'
+  },
+  {
+    id: 'spring-forest',
+    title: 'Spring Forest',
+    description: 'Fresh spring morning with birdsong and rustling leaves.',
+    icon: Leaf,
+    bgColor: 'linear-gradient(135deg, #a3e635, #65a30d)',
+    primaryColor: '#84cc16',
+    primaryRgb: '132, 204, 22',
+    tag: 'Calm',
+    src: 'https://actions.google.com/sounds/v1/ambiences/spring_day_forest.ogg'
+  },
+  {
+    id: 'outdoor-farm',
+    title: 'Outdoor Farm',
+    description: 'Peaceful farm sounds with roosters and gentle wind.',
+    icon: Wheat,
+    bgColor: 'linear-gradient(135deg, #fb923c, #ea580c)',
+    primaryColor: '#f97316',
+    primaryRgb: '249, 115, 22',
+    tag: 'Calm',
+    src: 'https://actions.google.com/sounds/v1/ambiences/outdoor_farm_sounds.ogg'
+  },
+  {
+    id: 'soft-rain',
+    title: 'Soft Rain Drips',
+    description: 'Gentle rain dripping softly, perfect for focus.',
+    icon: Droplets,
+    bgColor: 'linear-gradient(135deg, #818cf8, #4f46e5)',
+    primaryColor: '#818cf8',
+    primaryRgb: '129, 140, 248',
+    tag: 'Focus',
+    src: 'https://actions.google.com/sounds/v1/weather/rain_water_dripping_softly.ogg'
+  },
+  {
+    id: 'thunder-rain',
+    title: 'Thunder & Rain',
+    description: 'Dramatic thunderstorm with heavy summer rain.',
+    icon: CloudLightning,
+    bgColor: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
+    primaryColor: '#a78bfa',
+    primaryRgb: '167, 139, 250',
+    tag: 'Intense',
+    src: 'https://actions.google.com/sounds/v1/weather/summer_thunder_and_rain.ogg'
   }
 ];
 
-export default function MusicPage() {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [currentTrack, setCurrentTrack] = useState<string | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+const tagColors: Record<string, string> = {
+  Focus: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+  Calm: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+  Relax: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300',
+  Energise: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+  Intense: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
+};
 
-  // Initialize Audio Object
+export default function MusicPage() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState('rain');
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme === 'dark';
+
   useEffect(() => {
-    // We create the audio object on the client side only
     const audio = new Audio();
     audio.loop = true;
     audio.crossOrigin = 'anonymous';
     audioRef.current = audio;
-
-    // Cleanup on unmount
     return () => {
       audio.pause();
       audio.src = '';
@@ -63,25 +153,10 @@ export default function MusicPage() {
     };
   }, []);
 
-  // Precompute random values for stable visualizer animation
-  const visualizerBars = useMemo(() => {
-    return Array.from({ length: 16 }, () => ({
-      heights: [
-        `${20 + Math.random() * 60}%`,
-        `${40 + Math.random() * 60}%`,
-        `${20 + Math.random() * 60}%`
-      ],
-      duration: 0.5 + Math.random() * 0.3
-    }));
-  }, []);
-
-  // Handle Play/Pause Logic
   const togglePlay = async (trackId: string, src: string) => {
     if (!audioRef.current) return;
-
     try {
       if (currentTrack === trackId) {
-        // Toggle play/pause for the same track
         if (isPlaying) {
           audioRef.current.pause();
           setIsPlaying(false);
@@ -90,16 +165,10 @@ export default function MusicPage() {
           setIsPlaying(true);
         }
       } else {
-        // Switch to a new track
-        // 1. Reset state
         setIsPlaying(false);
         audioRef.current.pause();
-
-        // 2. Load new source
         audioRef.current.src = src;
         audioRef.current.load();
-
-        // 3. Wait for audio to be ready, then play
         await new Promise<void>((resolve, reject) => {
           const onCanPlay = () => {
             audioRef.current?.removeEventListener('canplay', onCanPlay);
@@ -109,333 +178,279 @@ export default function MusicPage() {
           const onError = () => {
             audioRef.current?.removeEventListener('canplay', onCanPlay);
             audioRef.current?.removeEventListener('error', onError);
-            reject(new Error('Audio failed to load: ' + src));
+            reject(new Error('Audio failed to load'));
           };
           audioRef.current!.addEventListener('canplay', onCanPlay);
           audioRef.current!.addEventListener('error', onError);
         });
-        
         await audioRef.current.play();
         setCurrentTrack(trackId);
         setIsPlaying(true);
       }
     } catch (err) {
-      console.error("Audio Playback Error:", err);
+      console.error('Audio Playback Error:', err);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#0f0720] relative overflow-hidden text-white">
-      {/* Ambient Glow Background */}
-      {currentTrack && (
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div
-            className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
-            style={{
-              background: currentTrack === 'rain' 
-                ? 'radial-gradient(circle, #3b82f6, transparent)'
-                : currentTrack === 'forest'
-                ? 'radial-gradient(circle, #10b981, transparent)'
-                : currentTrack === 'ocean'
-                ? 'radial-gradient(circle, #06b6d4, transparent)'
-                : 'radial-gradient(circle, #6b7280, transparent)',
-            }}
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.2, 0.3, 0.2],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        </div>
-      )}
+  const currentSoundscape = soundscapes.find(s => s.id === currentTrack)!;
+  const HeroIcon = currentSoundscape.icon;
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-12">
-          <Link href="/" className="inline-flex items-center text-white/60 hover:text-white transition-colors group">
-            <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-            <span className="text-sm font-medium">Back</span>
+  return (
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] relative overflow-hidden transition-colors duration-500">
+
+      {/* Ambient glow — visible in dark, subtle in light */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <motion.div
+          className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full blur-3xl"
+          style={{ background: `radial-gradient(circle, rgba(${currentSoundscape.primaryRgb}, 0.18), transparent 70%)` }}
+          animate={{ scale: [1, 1.15, 1], opacity: isDark ? [0.5, 0.7, 0.5] : [0.2, 0.35, 0.2] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full blur-3xl"
+          style={{ background: `radial-gradient(circle, rgba(${currentSoundscape.primaryRgb}, 0.1), transparent 70%)` }}
+          animate={{ scale: [1.1, 1, 1.1], opacity: isDark ? [0.3, 0.5, 0.3] : [0.1, 0.2, 0.1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
+
+      <main id="main" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8 pb-20">
+
+        {/* ── Header ── */}
+        <div className="flex items-center justify-between mb-10">
+          <Link
+            href="/"
+            className="inline-flex items-center text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors group"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm font-medium" style={{ fontFamily: 'Work Sans, sans-serif' }}>Back</span>
           </Link>
           <ThemeToggle />
         </div>
 
-        {/* Main Player */}
-        <div className="mb-16">
-          {currentTrack ? (
+        {/* ── Hero Player ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="mb-14"
+        >
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8">
+            {/* Album art */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="relative"
+              key={currentTrack}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="flex-shrink-0 w-44 h-44 sm:w-52 sm:h-52 rounded-2xl shadow-2xl flex items-center justify-center"
+              style={{
+                background: currentSoundscape.bgColor,
+                boxShadow: `0 20px 60px rgba(${currentSoundscape.primaryRgb}, ${isDark ? '0.45' : '0.3'})`
+              }}
             >
-              {/* Now Playing Section */}
-              <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
-                {/* Album Art / Visualizer */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="relative flex-shrink-0"
+              <HeroIcon className="w-20 h-20 text-white drop-shadow-lg" />
+            </motion.div>
+
+            {/* Info + controls */}
+            <div className="flex flex-col justify-end sm:pb-2 text-center sm:text-left">
+              <p
+                className="text-xs uppercase tracking-[0.2em] mb-2 font-semibold"
+                style={{ color: currentSoundscape.primaryColor, fontFamily: 'Work Sans, sans-serif' }}
+              >
+                Now Playing
+              </p>
+              <AnimatePresence mode="wait">
+                <motion.h1
+                  key={currentSoundscape.title}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-3 leading-tight"
+                  style={{ fontFamily: 'Fraunces, serif' }}
                 >
-                  <div 
-                    className="w-64 h-64 lg:w-80 lg:h-80 rounded-2xl relative overflow-hidden shadow-2xl"
-                    style={{
-                      background: currentTrack === 'rain' 
-                        ? 'linear-gradient(135deg, #3b82f6, #1e40af)'
-                        : currentTrack === 'forest'
-                        ? 'linear-gradient(135deg, #10b981, #047857)'
-                        : currentTrack === 'ocean'
-                        ? 'linear-gradient(135deg, #06b6d4, #0369a1)'
-                        : 'linear-gradient(135deg, #6b7280, #374151)',
-                    }}
-                  >
-                    {/* Glow Effect */}
-                    <div 
-                      className="absolute inset-0 opacity-60"
-                      style={{
-                        boxShadow: currentTrack === 'rain'
-                          ? '0 0 80px rgba(59, 130, 246, 0.6), inset 0 0 80px rgba(59, 130, 246, 0.3)'
-                          : currentTrack === 'forest'
-                          ? '0 0 80px rgba(16, 185, 129, 0.6), inset 0 0 80px rgba(16, 185, 129, 0.3)'
-                          : currentTrack === 'ocean'
-                          ? '0 0 80px rgba(6, 182, 212, 0.6), inset 0 0 80px rgba(6, 182, 212, 0.3)'
-                          : '0 0 80px rgba(107, 114, 128, 0.6), inset 0 0 80px rgba(107, 114, 128, 0.3)',
-                      }}
-                    />
-                    
-                    {/* Icon */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      {(() => {
-                        const track = soundscapes.find(s => s.id === currentTrack);
-                        const Icon = track?.icon || CloudRain;
-                        return <Icon className="w-32 h-32 text-white/90 drop-shadow-2xl" />;
-                      })()}
-                    </div>
+                  {currentSoundscape.title}
+                </motion.h1>
+              </AnimatePresence>
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={currentSoundscape.description}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-sm sm:text-base text-[hsl(var(--muted-foreground))] mb-6 max-w-xs"
+                  style={{ fontFamily: 'Source Serif 4, serif' }}
+                >
+                  {currentSoundscape.description}
+                </motion.p>
+              </AnimatePresence>
 
-                    {/* Animated Bars */}
-                    {isPlaying && (
-                      <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center gap-1 p-4 h-24">
-                        {visualizerBars.map((bar, i) => (
-                          <motion.div
-                            key={i}
-                            className="w-1 bg-white/40 rounded-full"
-                            animate={{
-                              height: bar.heights,
-                            }}
-                            transition={{
-                              duration: bar.duration,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                            }}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
+              {/* Play/Pause button */}
+              <div className="flex items-center gap-4 justify-center sm:justify-start">
+                <motion.button
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.94 }}
+                  onClick={() => togglePlay(currentTrack, currentSoundscape.src)}
+                  className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg text-white transition-all"
+                  style={{
+                    background: currentSoundscape.bgColor,
+                    boxShadow: `0 8px 24px rgba(${currentSoundscape.primaryRgb}, 0.45)`
+                  }}
+                  aria-label={isPlaying ? 'Pause' : 'Play'}
+                >
+                  {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-0.5" />}
+                </motion.button>
 
-                {/* Track Info & Controls */}
-                <div className="flex-1 w-full lg:w-auto">
-                  <div className="mb-6">
-                    <p className="text-sm text-white/50 font-medium mb-3">NOW PLAYING</p>
-                    <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4 tracking-tight">
-                      {soundscapes.find(s => s.id === currentTrack)?.title}
-                    </h1>
-                    <p className="text-lg text-white/60">
-                      {soundscapes.find(s => s.id === currentTrack)?.description}
-                    </p>
-                  </div>
-
-                  {/* Play Button */}
-                  <div className="flex items-center gap-6 mb-8">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => togglePlay(currentTrack, soundscapes.find(s => s.id === currentTrack)!.src)}
-                      className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-xl hover:shadow-2xl transition-shadow"
-                      style={{
-                        boxShadow: currentTrack === 'rain'
-                          ? '0 8px 32px rgba(59, 130, 246, 0.4)'
-                          : currentTrack === 'forest'
-                          ? '0 8px 32px rgba(16, 185, 129, 0.4)'
-                          : currentTrack === 'ocean'
-                          ? '0 8px 32px rgba(6, 182, 212, 0.4)'
-                          : '0 8px 32px rgba(107, 114, 128, 0.4)',
-                      }}
-                    >
-                      {isPlaying ? (
-                        <Pause className="w-7 h-7 text-black fill-current" />
-                      ) : (
-                        <Play className="w-7 h-7 text-black fill-current ml-1" />
-                      )}
-                    </motion.button>
-
-                    {isPlaying && (
+                {/* Animated waveform when playing */}
+                {isPlaying && (
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
                       <motion.div
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-2 text-white/70"
-                      >
-                        <Volume2 className="w-5 h-5" />
-                        <span className="text-sm font-medium">Playing</span>
-                      </motion.div>
-                    )}
+                        key={i}
+                        className="w-1 rounded-full"
+                        style={{ background: currentSoundscape.primaryColor }}
+                        animate={{ height: ['10px', '24px', '10px', '18px', '10px'] }}
+                        transition={{ duration: 0.7, repeat: Infinity, delay: i * 0.12, ease: 'easeInOut' }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ── Section Header ── */}
+        <div className="flex items-center gap-3 mb-6">
+          <Music2
+            className="w-5 h-5"
+            style={{ color: currentSoundscape.primaryColor }}
+          />
+          <h2 className="text-2xl font-bold" style={{ fontFamily: 'Fraunces, serif' }}>
+            Soundscapes
+          </h2>
+        </div>
+
+        {/* ── Spotify-style Grid ── */}
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.06, delayChildren: 0.1 } }
+          }}
+        >
+          {soundscapes.map((track) => {
+            const isActive = currentTrack === track.id;
+            const TrackIcon = track.icon;
+
+            return (
+              <motion.button
+                key={track.id}
+                variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => togglePlay(track.id, track.src)}
+                aria-pressed={isActive}
+                aria-label={isActive && isPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
+                className={`
+                  group relative text-left rounded-2xl p-4 transition-all duration-300 overflow-hidden
+                  border focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+                  ${isActive
+                    ? 'bg-[hsl(var(--card))] border-transparent'
+                    : 'bg-[hsl(var(--card))] border-[hsl(var(--border))] hover:border-transparent hover:bg-[hsl(var(--surface-elevated))]'
+                  }
+                `}
+                style={{
+                  boxShadow: isActive
+                    ? `0 0 0 2px rgba(${track.primaryRgb}, 0.6), 0 8px 32px rgba(${track.primaryRgb}, ${isDark ? '0.25' : '0.15'})`
+                    : undefined,
+                  '--tw-ring-color': track.primaryColor
+                } as React.CSSProperties & Record<string, string>}
+              >
+                {/* Card art (top square) */}
+                <div
+                  className="w-full aspect-square rounded-xl mb-4 flex items-center justify-center relative overflow-hidden"
+                  style={{
+                    background: track.bgColor,
+                    boxShadow: isActive ? `0 4px 20px rgba(${track.primaryRgb}, 0.4)` : '0 2px 8px rgba(0,0,0,0.12)'
+                  }}
+                >
+                  <TrackIcon
+                    className="w-12 h-12 text-white drop-shadow-lg transition-transform group-hover:scale-110 duration-300"
+                  />
+
+                  {/* Play overlay */}
+                  <div
+                    className={`
+                      absolute inset-0 flex items-center justify-center
+                      rounded-xl transition-opacity duration-200
+                      ${isActive ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'}
+                      bg-black/30 backdrop-blur-[1px]
+                    `}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-lg">
+                      <Play className="w-4 h-4 text-black ml-0.5" />
+                    </div>
                   </div>
 
-                  {/* Progress Bar Simulation */}
-                  {isPlaying && (
-                    <div className="w-full max-w-2xl">
-                      <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                  {/* Now-playing badge */}
+                  {isActive && isPlaying && (
+                    <div className="absolute bottom-2 right-2 flex items-center gap-[3px] bg-black/40 backdrop-blur-md rounded-full px-2 py-1">
+                      {[...Array(3)].map((_, i) => (
                         <motion.div
-                          className="h-full bg-white rounded-full"
-                          initial={{ width: "0%" }}
-                          animate={{ width: "100%" }}
-                          transition={{
-                            duration: 180,
-                            ease: "linear",
-                            repeat: Infinity,
-                          }}
+                          key={i}
+                          className="w-[3px] rounded-full bg-white"
+                          animate={{ height: ['6px', '14px', '6px'] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15, ease: 'easeInOut' }}
                         />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Pause overlay when active */}
+                  {isActive && (
+                    <div className="absolute inset-0 flex items-center justify-center rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/25 backdrop-blur-[1px]">
+                      <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-lg">
+                        {isPlaying
+                          ? <Pause className="w-4 h-4 text-black" />
+                          : <Play className="w-4 h-4 text-black ml-0.5" />
+                        }
                       </div>
                     </div>
                   )}
                 </div>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20"
-            >
-              <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
-                Sonic Sanctuary
-              </h1>
-              <p className="text-xl text-white/50 mb-12">
-                Choose a soundscape to begin
-              </p>
-            </motion.div>
-          )}
-        </div>
 
-        {/* Track List */}
-        <div className="space-y-3">
-          <h2 className="text-2xl font-bold text-white mb-6 px-2">
-            {currentTrack ? 'Switch Soundscape' : 'Available Soundscapes'}
-          </h2>
-          
-          {soundscapes.map((track, index) => {
-            const isActive = currentTrack === track.id;
-            const Icon = track.icon;
-            
-            return (
-              <motion.button
-                key={track.id}
-                onClick={() => togglePlay(track.id, track.src)}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05, duration: 0.3 }}
-                whileHover={{ x: 4 }}
-                aria-pressed={isActive}
-                aria-label={
-                  isActive && isPlaying
-                    ? `Pause ${track.title} soundscape`
-                    : `Play ${track.title} soundscape`
-                }
-                className={`
-                  w-full group relative overflow-hidden rounded-xl transition-all duration-300
-                  ${isActive ? 'bg-white/10' : 'bg-white/5 hover:bg-white/8'}
-                `}
-                style={{
-                  boxShadow: isActive 
-                    ? track.id === 'rain'
-                      ? '0 0 0 2px rgba(59, 130, 246, 0.5), 0 4px 24px rgba(59, 130, 246, 0.2)'
-                      : track.id === 'forest'
-                      ? '0 0 0 2px rgba(16, 185, 129, 0.5), 0 4px 24px rgba(16, 185, 129, 0.2)'
-                      : track.id === 'ocean'
-                      ? '0 0 0 2px rgba(6, 182, 212, 0.5), 0 4px 24px rgba(6, 182, 212, 0.2)'
-                      : '0 0 0 2px rgba(107, 114, 128, 0.5), 0 4px 24px rgba(107, 114, 128, 0.2)'
-                    : 'none'
-                }}
-              >
-                <div className="flex items-center gap-4 p-4">
-                  {/* Icon with Glow */}
-                  <div 
-                    className="relative flex-shrink-0 w-14 h-14 rounded-lg flex items-center justify-center"
-                    style={{
-                      background: track.id === 'rain'
-                        ? 'linear-gradient(135deg, #3b82f6, #1e40af)'
-                        : track.id === 'forest'
-                        ? 'linear-gradient(135deg, #10b981, #047857)'
-                        : track.id === 'ocean'
-                        ? 'linear-gradient(135deg, #06b6d4, #0369a1)'
-                        : 'linear-gradient(135deg, #6b7280, #374151)',
-                      boxShadow: isActive
-                        ? track.id === 'rain'
-                          ? '0 4px 16px rgba(59, 130, 246, 0.4)'
-                          : track.id === 'forest'
-                          ? '0 4px 16px rgba(16, 185, 129, 0.4)'
-                          : track.id === 'ocean'
-                          ? '0 4px 16px rgba(6, 182, 212, 0.4)'
-                          : '0 4px 16px rgba(107, 114, 128, 0.4)'
-                        : 'none',
-                    }}
-                  >
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-
-                  {/* Track Info */}
-                  <div className="flex-1 text-left min-w-0">
-                    <h3 className="text-base font-semibold text-white truncate">
+                {/* Track info */}
+                <div className="space-y-1 px-1">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3
+                      className="text-sm font-bold leading-snug truncate text-[hsl(var(--card-foreground))]"
+                      style={{ fontFamily: 'Fraunces, serif' }}
+                    >
                       {track.title}
                     </h3>
-                    <p className="text-sm text-white/50 truncate">
-                      {track.description}
-                    </p>
+                    <span
+                      className={`flex-shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${tagColors[track.tag]}`}
+                      style={{ fontFamily: 'Work Sans, sans-serif' }}
+                    >
+                      {track.tag}
+                    </span>
                   </div>
-
-                  {/* Playing Indicator or Play Icon */}
-                  {isActive && isPlaying ? (
-                    <div className="flex items-center gap-1">
-                      {[...Array(4)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          className="w-1 rounded-full"
-                          style={{
-                            background: track.id === 'rain'
-                              ? '#3b82f6'
-                              : track.id === 'forest'
-                              ? '#10b981'
-                              : track.id === 'ocean'
-                              ? '#06b6d4'
-                              : '#6b7280',
-                          }}
-                          animate={{
-                            height: ['16px', '8px', '20px', '12px'],
-                          }}
-                          transition={{
-                            duration: 0.6,
-                            repeat: Infinity,
-                            delay: i * 0.1,
-                            ease: "easeInOut",
-                          }}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Play className="w-4 h-4 text-white fill-current ml-0.5" />
-                    </div>
-                  )}
+                  <p
+                    className="text-xs text-[hsl(var(--muted-foreground))] line-clamp-2 leading-relaxed"
+                    style={{ fontFamily: 'Source Serif 4, serif' }}
+                  >
+                    {track.description}
+                  </p>
                 </div>
               </motion.button>
             );
           })}
-        </div>
-      </div>
+        </motion.div>
+      </main>
     </div>
   );
 }

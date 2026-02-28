@@ -3,7 +3,10 @@
     "next/core-web-vitals",
     "next/typescript"
   ],
-  "rules": {},
+  "rules": {
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-html-link-for-pages": "off"
+  },
   "ignorePatterns": [
     "node_modules/",
     ".next/",

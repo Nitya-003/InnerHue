@@ -1,5 +1,9 @@
 'use client';
 
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+export const revalidate = 0;
+
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import Link from 'next/link';
@@ -51,19 +55,17 @@ export default function TermsOfService() {
               <a
                 key={section.id}
                 href={`#${section.id}`}
-                className={`group flex items-center gap-3 transition-all duration-300 ${
-                  activeSection === section.id
-                    ? "text-cyan-400 font-semibold"
-                    : "text-gray-400 hover:text-white"
-                }`}
+                className={`group flex items-center gap-3 transition-all duration-300 ${activeSection === section.id
+                  ? "text-cyan-400 font-semibold"
+                  : "text-gray-400 hover:text-white"
+                  }`}
               >
                 {/* Active Indicator */}
                 <span
-                  className={`h-6 w-[3px] rounded-full transition-all duration-300 ${
-                    activeSection === section.id
-                      ? "bg-gradient-to-b from-cyan-400 to-indigo-500"
-                      : "bg-transparent group-hover:bg-white/30"
-                  }`}
+                  className={`h-6 w-[3px] rounded-full transition-all duration-300 ${activeSection === section.id
+                    ? "bg-gradient-to-b from-cyan-400 to-indigo-500"
+                    : "bg-transparent group-hover:bg-white/30"
+                    }`}
                 />
                 <span className="transition-all duration-300 group-hover:translate-x-1">
                   {section.title}
@@ -73,7 +75,7 @@ export default function TermsOfService() {
           </nav>
         </aside>
         {/* Main Content */}
-        <div className="flex-1 max-w-3xl">
+        <main id="main" className="flex-1 max-w-3xl">
           <Link
             href="/"
             className="inline-flex items-center text-sm text-gray-400 hover:text-cyan-400 transition-all duration-300 mb-10 group"
@@ -117,7 +119,7 @@ export default function TermsOfService() {
               </motion.section>
             ))}
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );
