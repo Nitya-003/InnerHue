@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import LearnMoreButton from "@/components/LearnMoreButton";
 import {
   Heart,
   Brain,
@@ -126,12 +127,7 @@ export default function LandingPage() {
                 </motion.button>
               </Link>
 
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="px-6 py-4 bg-white/10 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300 cursor-pointer"
-              >
-                Learn More
-              </motion.div>
+              <LearnMoreButton className="px-6 py-4" />
             </motion.div>
           </motion.section>
 
