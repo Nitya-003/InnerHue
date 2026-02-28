@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Github, Linkedin, Instagram } from "lucide-react";
+import Image from 'next/image';
+import contributors from '@/data/contributors.json';
 
 export function Footer() {
   const pathname = usePathname();
@@ -48,7 +50,7 @@ export function Footer() {
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none" />
 
           {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-14 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-14 relative z-10">
 
             {/* Brand */}
             <div className="space-y-6">
@@ -133,6 +135,35 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            {/* Contributors */}
+            <div>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-6">
+                Contributors
+              </h3>
+
+              <div className="flex items-center gap-3">
+                <a
+                  href="/contributors"
+                  className="text-sm text-muted-foreground hover:text-indigo-500 transition-all duration-300"
+                >
+                  View contributors
+                </a>
+              </div>
+
+              <div className="mt-4 flex -space-x-3">
+                {contributors && contributors.slice(0, 8).map((c: any, i: number) => (
+                  <a
+                    key={c.login + i}
+                    href="/contributors"
+                    title={c.login}
+                    className="block w-8 h-8 rounded-full ring-2 ring-white/10 overflow-hidden bg-white/5"
+                  >
+                    <Image src={c.avatar_url} alt={c.login} width={32} height={32} unoptimized />
+                  </a>
+                ))}
+              </div>
             </div>
 
             {/* Legal */}
