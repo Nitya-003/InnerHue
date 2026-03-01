@@ -2,8 +2,7 @@
 
 import { motion, Variants } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import { ShaderOrb } from './ShaderOrb';
-import type { Mood } from '@/types/mood';
+import { ShaderOrb } from '@/components/ShaderOrb';
 
 export interface OrbVisualizerProps {
   mood: Mood;
@@ -53,6 +52,12 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     setTimeout(() => setConfetti([]), 2000);
   };
 
+  const particleVariants: Variants = {
+    animate: {
+      scale: [1, 1.5, 1],
+      opacity: [0.2, 0.8, 0.2],
+    }
+  };
 
   const orbVariants: Variants = {
     idle: {
@@ -75,29 +80,18 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
-  const particleVariants: Variants = {
-    animate: {
-      scale: [0.8, 1.5, 0.8],
-      opacity: [0.2, 0.8, 0.2],
-      transition: {
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-  };
+
 
 
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
   useEffect(() => {
-    setParticles(
-      Array.from({ length: 12 }, (_, i) => ({
-        id: i,
-        angle: (i * 30) * (Math.PI / 180),
-        distance: 150 + Math.random() * 50,
-        duration: 3 + Math.random() * 2,
-      }))
-    );
+    setParticles(Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      angle: (i * 30) * (Math.PI / 180),
+      distance: 150 + Math.random() * 50,
+      duration: 3 + Math.random() * 2
+    })));
   }, []);
 
   return (

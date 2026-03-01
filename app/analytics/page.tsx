@@ -1,27 +1,39 @@
 'use client';
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
+
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import {
+  ArrowLeft,
+  Calendar,
+  Heart,
+  Activity,
+  Trash2,
+  LayoutDashboard,
+} from 'lucide-react';
+
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
 
 export default function AnalyticsPage() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [moodHistory, setMoodHistory] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [stats, setStats] = useState<any>({});
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateStats = useCallback((history: any[]) => {
     const moodCounts: { [key: string]: number } = {};
     const today = new Date().toDateString();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const thisWeek: any[] = [];
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     history.forEach((entry: any) => {
       // Support both new (emotion) and old (mood) formats
       const moodKey = entry.emotion || entry.mood;
@@ -38,6 +50,7 @@ export default function AnalyticsPage() {
 
     setStats({
       totalEntries: history.length,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       todayEntries: history.filter((entry: any) => new Date(entry.timestamp).toDateString() === today).length,
       weekEntries: thisWeek.length,
       mostCommonMood: mostCommon ? mostCommon[0] : null,
@@ -115,7 +128,7 @@ export default function AnalyticsPage() {
   }, [stats.moodCounts]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[#0a091a] dark:via-[#161233] dark:to-[#0f172a] text-gray-900 dark:text-gray-100 transition-colors duration-500">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -141,7 +154,26 @@ export default function AnalyticsPage() {
             </h1>
           </div>
 
-          <div className="w-20" /> {/* Spacer */}
+          <div className="flex items-center space-x-2">
+            <Link href="/stats">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+                className="flex items-center space-x-2 px-3 py-2 md:px-4 
+                rounded-xl bg-purple-500/20 text-purple-300
+                border border-purple-500/10 shadow-sm 
+                hover:shadow-md hover:bg-purple-500/30
+                transition-all duration-300"
+              >
+                <LayoutDashboard className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden md:inline font-medium text-sm">
+                  Dashboard
+                </span>
+              </motion.button>
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
       </motion.header>
 
@@ -155,8 +187,8 @@ export default function AnalyticsPage() {
               className="text-center py-20"
             >
               <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-600 mb-2">No reflections yet</h2>
-              <p className="text-gray-500 mb-8">Start your journey! Track your emotions to see insights here.</p>
+              <h2 className="text-2xl font-bold text-gray-600 dark:text-gray-300 mb-2">No reflections yet</h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-8">Start your journey! Track your emotions to see insights here.</p>
               <Link href="/">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -194,12 +226,12 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50"
+                className="bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10 transition-colors duration-500"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
                     <Calendar className="w-6 h-6 text-purple-600" />
-                    <h3 className="text-2xl font-bold text-gray-800">History</h3>
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">History</h3>
                   </div>
 
                   <button
@@ -218,7 +250,7 @@ export default function AnalyticsPage() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.05 * index }}
-                      className="group flex items-center justify-between p-4 rounded-xl bg-white/60 backdrop-blur border border-white/40 shadow-sm hover:shadow-md transition-all hover:bg-white/80"
+                      className="group flex items-center justify-between p-4 rounded-xl bg-white/60 dark:bg-white/5 backdrop-blur border border-white/40 dark:border-white/10 shadow-sm hover:shadow-md transition-all hover:bg-white/80 dark:hover:bg-white/10"
                     >
                       <div className="flex items-center space-x-4">
                         {/* Status Dot */}
@@ -228,15 +260,15 @@ export default function AnalyticsPage() {
                         />
 
                         <div>
-                          <div className="font-semibold text-gray-800 capitalize flex items-center">
+                          <div className="font-semibold text-gray-800 dark:text-gray-200 capitalize flex items-center">
                             {entry.emotion || entry.mood}
                           </div>
                           {entry.notes && (
-                            <p className="text-sm text-gray-600 italic mt-1 max-w-sm line-clamp-2">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 italic mt-1 max-w-sm line-clamp-2">
                               "{entry.notes}"
                             </p>
                           )}
-                          <div className="text-xs text-gray-500 font-medium">
+                          <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                             {getTimeAgo(entry.timestamp)}
                           </div>
                         </div>

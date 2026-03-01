@@ -55,7 +55,7 @@ export default function MoodClient() {
             emoji: reflectiveMood.label?.charAt(0).toUpperCase() || '✨',
             color: reflectiveMood.color,
             glow: reflectiveMood.glow,
-            traditionalId,
+            traditionalId: traditionalId,
             spotifyPlaylistId: traditionalMood?.spotifyPlaylistId,
           } as MoodWithMeta;
         }
