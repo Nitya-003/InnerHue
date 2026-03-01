@@ -3,11 +3,8 @@ import { Footer } from '@/components/Footer';
 import { BackToTop } from '@/components/BackToTop';
 import { Toaster } from 'react-hot-toast';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { TransitionProvider } from '@/components/TransitionProvider';
-
-const inter = Inter({ subsets: ['latin'] });
 
 const siteTitle = 'InnerHue';
 const siteDescription = 'Emotional Reflection Web App';
@@ -36,9 +33,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <a 
-          href="#main" 
+      <body className="font-sans">
+        <a
+          href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-purple-600 focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
         >
           Skip to main content
@@ -53,7 +50,7 @@ export default function RootLayout({
             {children}
             <Footer />
             <BackToTop />
-            <Toaster 
+            <Toaster
               position="bottom-right"
               toastOptions={{
                 duration: 3000,
