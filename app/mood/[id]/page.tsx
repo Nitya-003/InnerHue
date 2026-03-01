@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import type { OrbVisualizerProps } from '@/components/OrbVisualizer';
+import type { FC } from 'react';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { MoodData } from '@/lib/moodData';
 import { Mood, MoodSuggestion } from '@/types/mood';
@@ -15,9 +17,9 @@ import reflectiveMoods from '@/lib/reflectiveMoods';
 import { getTraditionalMoodId } from '@/lib/moodMapping';
 
 const OrbVisualizer = dynamic(
-  () => import('@/components/OrbVisualizer').then(m => m.OrbVisualizer),
+  () => import('@/components/OrbVisualizer').then((m) => ({ default: m.OrbVisualizer })),
   { ssr: false }
-);
+) as unknown as FC<OrbVisualizerProps>;
 
 interface MoodWithMeta extends Mood {
   traditionalId?: string;
