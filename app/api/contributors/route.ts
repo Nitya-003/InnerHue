@@ -1,5 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { withRateLimit } from '@/lib/rateLimitMiddleware';
+import fs from 'fs/promises';
+import path from 'path';
 
 export interface GitHubContributor {
   login: string;
@@ -49,6 +51,26 @@ async function fetchWithAuth(url: string) {
 export const GET = withRateLimit(
   async (req: NextRequest) => {
     try {
+      // If a pre-generated contributors JSON exists in the repo (updated by automation),
+      // prefer serving that to avoid hitting GitHub rate limits.
+      try {
+        const dataPath = path.join(process.cwd(), 'data', 'contributors.json');
+        const raw = await fs.readFile(dataPath, 'utf-8').catch(() => null);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return NextResponse.json(
+            { contributors: parsed, total: parsed.length },
+            {
+              status: 200,
+              headers: {
+                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+              },
+            }
+          );
+        }
+      } catch (e) {
+        // ignore and fall back to live GitHub fetch
+      }
       // Fetch all contributors (up to 100 per page)
       const contributors: GitHubContributor[] = await fetchWithAuth(
         `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contributors?per_page=100&anon=0`
