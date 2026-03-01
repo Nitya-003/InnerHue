@@ -55,12 +55,12 @@ export const FloatingBackground = memo(function FloatingBackground() {
           }}
         />
       ))}
-      
+
       {/* Floating particles - reduced and optimized */}
       {particles.map((particle) => (
         <motion.div
           key={`particle-${particle.id}`}
-          className="absolute w-1 h-1 bg-white/60 rounded-full will-change-transform"
+          className="absolute w-1 h-1 bg-foreground/20 dark:bg-white/40 rounded-full will-change-transform"
           style={{
             left: `${particle.x}%`,
             top: `${particle.y}%`,
