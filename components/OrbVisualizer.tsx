@@ -102,8 +102,8 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
       angle: (i * 30) * (Math.PI / 180),
       distance: 150 + Math.random() * 50,
       duration: 3 + Math.random() * 2
-    }))
-  );
+    })));
+  }, []);
 
   return (
     <div className="relative">

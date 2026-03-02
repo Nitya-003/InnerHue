@@ -1,91 +1,70 @@
 'use client';
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } from 'lucide-react';
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
+import { useMoodStore } from '@/lib/useMoodStore';
+
+function getExportDateString() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>({});
-
-  const calculateStats = useCallback((history: any[]) => {
-    const moodCounts: { [key: string]: number } = {};
-    const today = new Date().toDateString();
-    const thisWeek: any[] = [];
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 7);
-
-    history.forEach((entry: any) => {
-      // Support both new (emotion) and old (mood) formats
-      const moodKey = entry.emotion || entry.mood;
-      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
-
-      const entryDate = new Date(entry.timestamp);
-      if (entryDate >= weekStart) {
-        thisWeek.push(entry);
-      }
-    });
-
-    const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => (b as number) - (a as number))[0];
-
-    setStats({
-      totalEntries: history.length,
-      todayEntries: history.filter((entry: any) => new Date(entry.timestamp).toDateString() === today).length,
-      weekEntries: thisWeek.length,
-      mostCommonMood: mostCommon ? mostCommon[0] : null,
-      moodCounts,
-      weeklyData: thisWeek
-    });
-  }, []);
-
-  const loadData = useCallback(() => {
-    const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    setMoodHistory(history);
-    calculateStats(history);
-  }, [calculateStats]);
-
-  useEffect(() => {
-    loadData();
-
-    // Listen for updates from other tabs/components
-    window.addEventListener('storage', loadData);
-    return () => window.removeEventListener('storage', loadData);
-  }, [loadData]);
+  const moodHistory = useMoodStore(state => state.moodHistory);
+  const stats = useMoodStore(state => state.stats);
+  const clearHistory = useMoodStore(state => state.clearHistory);
+  const deleteMood = useMoodStore(state => state.deleteMood);
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
-      localStorage.setItem('moodHistory', '[]');
-      setMoodHistory([]);
-      calculateStats([]);
-      window.dispatchEvent(new Event('storage'));
+      clearHistory();
     }
   };
 
-  const handleDeleteEntry = (id: string, index: number) => {
-    const newHistory = [...moodHistory];
-    let updatedHistory;
-
+  const handleDeleteEntry = (id: string) => {
     if (id) {
-      updatedHistory = newHistory.filter(item => item.id !== id);
-    } else {
-      // Fallback: remove by index for legacy data
-      // Note: passed index is from the visual reversed list
-      // We'll rely on ID for best results
-      return;
+      deleteMood(id);
     }
+  };
 
-    localStorage.setItem('moodHistory', JSON.stringify(updatedHistory));
-    setMoodHistory(updatedHistory);
-    calculateStats(updatedHistory);
-    window.dispatchEvent(new Event('storage'));
+  const exportAsJson = () => {
+    setExportMenuOpen(false);
+    const data = useMoodStore.getState().moodHistory;
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    downloadBlob(blob, `innerhue-history-${getExportDateString()}.json`);
+  };
+
+  const exportAsCsv = () => {
+    setExportMenuOpen(false);
+    const data = useMoodStore.getState().moodHistory;
+    const escapeCsv = (val: unknown): string => {
+      if (val == null) return '';
+      const s = String(val);
+      if (s.includes(',') || s.includes('"') || s.includes('\n')) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    };
+    const headers = ['id', 'mood', 'timestamp', 'date', 'color', 'notes'];
+    const rows = data.map((entry: any) =>
+      headers.map(h => escapeCsv(h === 'mood' ? (entry.emotion ?? entry.mood) : entry[h])).join(',')
+    );
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    downloadBlob(blob, `innerhue-history-${getExportDateString()}.csv`);
   };
 
   const getTimeAgo = (dateString: string) => {
@@ -202,12 +181,41 @@ export default function AnalyticsPage() {
                     <h3 className="text-2xl font-bold text-gray-800">History</h3>
                   </div>
 
-                  <button
-                    onClick={handleClearHistory}
-                    className="text-sm text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded-full transition-colors font-medium border border-transparent hover:border-red-200"
-                  >
-                    Clear History
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <button
+                        onClick={() => setExportMenuOpen(prev => !prev)}
+                        onBlur={() => setTimeout(() => setExportMenuOpen(false), 150)}
+                        className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-700 hover:bg-purple-50 px-3 py-1.5 rounded-full transition-colors font-medium border border-purple-200 hover:border-purple-300"
+                      >
+                        <Download className="w-4 h-4" />
+                        Export Data
+                        <ChevronDown className={`w-4 h-4 transition-transform ${exportMenuOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      {exportMenuOpen && (
+                        <div className="absolute right-0 top-full mt-1 py-1 w-44 bg-white rounded-xl shadow-lg border border-gray-200 z-10">
+                          <button
+                            onClick={exportAsJson}
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-t-lg"
+                          >
+                            Download as JSON
+                          </button>
+                          <button
+                            onClick={exportAsCsv}
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-b-lg"
+                          >
+                            Download as CSV
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      onClick={handleClearHistory}
+                      className="text-sm text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded-full transition-colors font-medium border border-transparent hover:border-red-200"
+                    >
+                      Clear History
+                    </button>
+                  </div>
                 </div>
 
                 {/* history cards */}
@@ -248,7 +256,7 @@ export default function AnalyticsPage() {
                         </div>
 
                         <button
-                          onClick={() => handleDeleteEntry(entry.id, index)}
+                          onClick={() => handleDeleteEntry(entry.id)}
                           className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
                           title="Delete entry"
                         >
