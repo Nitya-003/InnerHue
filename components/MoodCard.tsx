@@ -1,10 +1,5 @@
-'use client';
+﻿'use client';
 
-import React, { memo } from 'react';
-import { motion } from "framer-motion";
-import { Check, Sparkles } from "lucide-react";
-
-export interface Mood {
 import { motion, AnimatePresence } from 'framer-motion';
 import './moodcard.css';
 
@@ -14,7 +9,7 @@ interface Mood {
   emoji: string;
   color: string;
   glow: string;
-  category: string;
+  category?: string;
 }
 
 export interface MoodCardProps {
@@ -24,70 +19,6 @@ export interface MoodCardProps {
   onSelect: () => void;
 }
 
-// 1. Define the component first
-const MoodCardBase = ({ mood, index, isSelected, onSelect }: MoodCardProps) => {
-  return (
-    <motion.button
-      onClick={onSelect}
-      aria-label={`Select ${mood.name} mood`}
-      aria-pressed={isSelected}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      whileHover={{ scale: 1.05, y: -5 }}
-      whileTap={{ scale: 0.95 }}
-      className={`
-        relative group p-4 rounded-2xl border transition-all duration-300 w-full aspect-square flex flex-col items-center justify-center gap-3
-        focus:outline-none focus-visible:ring-4 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black
-        ${isSelected 
-          ? "bg-white/20 border-white/50 shadow-[0_0_30px_rgba(255,255,255,0.3)]" 
-          : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
-        }
-      `}
-    >
-      {/* Background Glow */}
-      <div
-        aria-hidden="true"
-        className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl`}
-        style={{ background: `radial-gradient(circle at center, ${mood.glow}40, transparent 70%)` }}
-      />
-
-      {/* Emoji */}
-      <div className="relative z-10 text-4xl drop-shadow-lg filter group-hover:brightness-110 transition-all">
-        {mood.emoji}
-        {isSelected && (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="absolute -top-2 -right-2 bg-white text-purple-900 rounded-full p-1 shadow-lg"
-          >
-            <Check className="w-3 h-3 stroke-[3]" />
-          </motion.div>
-        )}
-      </div>
-
-      {/* Text */}
-      <span className="relative z-10 font-medium text-sm md:text-base text-white drop-shadow-md">
-        {mood.name}
-      </span>
-
-      {/* Sparkles */}
-      {isSelected && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 pointer-events-none"
-        >
-          <Sparkles className="absolute top-2 left-2 w-4 h-4 text-yellow-200 opacity-50 animate-pulse" />
-          <Sparkles className="absolute bottom-3 right-3 w-3 h-3 text-white opacity-50 animate-bounce" />
-        </motion.div>
-      )}
-    </motion.button>
-  );
-};
-
-// 2. Export the memoized version separately
-export const MoodCard = memo(MoodCardBase);
 export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
   const getCategoryStyle = (category: string) => {
     const styles = {
@@ -128,18 +59,18 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
       whileHover={{
         scale: isSelected ? 1.02 : 1.08,
         y: -8,
-        transition: { 
-          type: "spring", 
-          stiffness: 400, 
-          damping: 20 
+        transition: {
+          type: "spring",
+          stiffness: 400,
+          damping: 20
         }
       }}
       whileTap={{
         scale: 0.95,
-        transition: { 
-          type: "spring", 
-          stiffness: 500, 
-          damping: 30 
+        transition: {
+          type: "spring",
+          stiffness: 500,
+          damping: 30
         }
       }}
       animate={{
@@ -155,7 +86,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         relative cursor-pointer p-3 sm:p-5 rounded-2xl sm:rounded-3xl backdrop-blur-md border-2 transform-gpu group
         ${isSelected
           ? `bg-gradient-to-br from-white/95 to-white/85 shadow-2xl z-20`
-          : `bg-white/25 shadow-xl border-white/30 hover:bg-white/40 ${getCategoryStyle(mood.category)}`
+          : `bg-white/25 shadow-xl border-white/30 hover:bg-white/40 ${getCategoryStyle(mood.category ?? 'neutral')}`
         }
       `}
       onClick={onSelect}
@@ -176,10 +107,10 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             initial={{ scale: 0, rotate: -180, opacity: 0 }}
             animate={{ scale: 1, rotate: 0, opacity: 1 }}
             exit={{ scale: 0, rotate: 180, opacity: 0 }}
-            transition={{ 
-              type: "spring", 
-              stiffness: 500, 
-              damping: 25 
+            transition={{
+              type: "spring",
+              stiffness: 500,
+              damping: 25
             }}
             className="absolute -top-2.5 -right-2.5 w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center z-30 shadow-lg border-2 border-white"
           >
@@ -210,7 +141,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             scale: isSelected ? 1.1 : 1,
           }}
           transition={{
-            y: isSelected 
+            y: isSelected
               ? { type: "spring", stiffness: 300, damping: 20 }
               : { duration: 3, repeat: Infinity, ease: "easeInOut" },
             scale: { type: "spring", stiffness: 300, damping: 20 }
@@ -220,7 +151,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         </motion.div>
 
         {/* Enhanced text with smooth color transition */}
-        <motion.div 
+        <motion.div
           className={`text-xs sm:text-sm font-bold drop-shadow-lg leading-tight`}
           animate={{
             color: isSelected ? '#1f2937' : '#ffffff',
@@ -254,9 +185,9 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1.1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ 
-              duration: 0.4, 
-              ease: [0.4, 0, 0.2, 1] 
+            transition={{
+              duration: 0.4,
+              ease: [0.4, 0, 0.2, 1]
             }}
             className="absolute inset-0 rounded-3xl -z-10"
             style={{
@@ -272,11 +203,11 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         {isSelected && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ 
+            animate={{
               opacity: [0.6, 0],
               scale: [1, 1.3]
             }}
-            transition={{ 
+            transition={{
               duration: 0.8,
               ease: "easeOut",
               repeat: Infinity,

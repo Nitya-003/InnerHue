@@ -7,6 +7,7 @@ import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { Heart, BarChart3, Music } from 'lucide-react';
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
+import { QuoteCard } from '@/components/QuoteCard';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
@@ -151,8 +152,6 @@ export default function Home() {
           {/* NEW QUOTE CARD COMPONENT */}
           <QuoteCard />
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
           {/* Hero Section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

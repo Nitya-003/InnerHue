@@ -49,8 +49,8 @@ export function TransitionProvider({ children }: TransitionProviderProps) {
   }, [isTransitioning, router]);
 
   // Smooth easing curves
-  const smoothEase = [0.4, 0, 0.2, 1];
-  const bounceEase = [0.68, -0.6, 0.32, 1.6];
+  const smoothEase: [number, number, number, number] = [0.4, 0, 0.2, 1];
+  const bounceEase: [number, number, number, number] = [0.68, -0.6, 0.32, 1.6];
 
   return (
     <TransitionContext.Provider value={{ startTransition, isTransitioning }}>
