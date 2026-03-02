@@ -1,31 +1,17 @@
 'use client';
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide-react';
-import { MoodChart } from '@/components/MoodChart';
+import MoodPieChart from '@/components/MoodPieChart';
+import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
 
 export default function AnalyticsPage() {
   const [moodHistory, setMoodHistory] = useState<any[]>([]);
   const [stats, setStats] = useState<any>({});
 
-  useEffect(() => {
-    loadData();
-
-    // Listen for updates from other tabs/components
-    window.addEventListener('storage', loadData);
-    return () => window.removeEventListener('storage', loadData);
-  }, []);
-
-  const loadData = () => {
-    const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    setMoodHistory(history);
-    calculateStats(history);
-  };
-
-  const calculateStats = (history: any[]) => {
+  const calculateStats = useCallback((history: any[]) => {
     const moodCounts: { [key: string]: number } = {};
     const today = new Date().toDateString();
     const thisWeek: any[] = [];
@@ -54,7 +40,21 @@ export default function AnalyticsPage() {
       moodCounts,
       weeklyData: thisWeek
     });
-  };
+  }, []);
+
+  const loadData = useCallback(() => {
+    const history = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+    setMoodHistory(history);
+    calculateStats(history);
+  }, [calculateStats]);
+
+  useEffect(() => {
+    loadData();
+
+    // Listen for updates from other tabs/components
+    window.addEventListener('storage', loadData);
+    return () => window.removeEventListener('storage', loadData);
+  }, [loadData]);
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
@@ -99,6 +99,17 @@ export default function AnalyticsPage() {
     return date.toLocaleDateString();
   };
 
+  // Prepare mood data for charts
+  const moodData = useMemo(() => {
+    return Object.entries(stats.moodCounts || {})
+      .sort(([, a], [, b]) => (b as number) - (a as number))
+      .slice(0, 10)
+      .map(([mood, count]) => ({
+        mood,
+        count: count as number,
+      }));
+  }, [stats.moodCounts]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       {/* Header */}
@@ -130,8 +141,8 @@ export default function AnalyticsPage() {
         </div>
       </motion.header>
 
-      {/* Main Content */}
-      <main className="px-6 pb-20">
+      {/* Main */}
+      <main id="main" className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {moodHistory.length === 0 ? (
             <motion.div
@@ -160,7 +171,7 @@ export default function AnalyticsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <MoodStats stats={stats} />
+                <MoodStats />
               </motion.div>
 
               {/* Charts */}
@@ -168,8 +179,10 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
+                className="grid md:grid-cols-2 gap-6"
               >
-                <MoodChart moodHistory={moodHistory} stats={stats} />
+                <MoodPieChart data={moodData} />
+                <MoodBarChart data={moodData} />
               </motion.div>
 
               {/* History Dashboard */}
@@ -214,6 +227,11 @@ export default function AnalyticsPage() {
                           <div className="font-semibold text-gray-800 capitalize flex items-center">
                             {entry.emotion || entry.mood}
                           </div>
+                          {entry.notes && (
+                            <p className="text-sm text-gray-600 italic mt-1 max-w-sm line-clamp-2">
+                              "{entry.notes}"
+                            </p>
+                          )}
                           <div className="text-xs text-gray-500 font-medium">
                             {getTimeAgo(entry.timestamp)}
                           </div>

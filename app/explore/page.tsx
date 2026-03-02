@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
-import { Heart, BarChart3, Music, ArrowLeft } from 'lucide-react';
+import { Heart, BarChart3, Music, ArrowLeft, Search, X } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176', category: 'positive' },
@@ -50,6 +51,23 @@ const moods = [
 
 export default function ExplorePage() {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const categories = ['all', 'positive', 'stress', 'calm', 'energetic', 'intense', 'negative', 'playful'];
+
+  const filteredMoods = useMemo(() => {
+    return moods.filter(mood => {
+      const matchesSearch = mood.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = activeCategory === 'all' || mood.category === activeCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchTerm, activeCategory]);
 
   // Enhanced page entrance animation
   const pageVariants = {
@@ -77,36 +95,8 @@ export default function ExplorePage() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden"
+      className="min-h-screen bg-[#0f0720] relative overflow-hidden"
     >
-      {/* Animated Background Orbs - Optimized */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full will-change-transform"
-            style={{
-              background: `radial-gradient(circle, ${['rgba(255,107,107,0.15)', 'rgba(78,205,196,0.12)', 'rgba(69,183,209,0.15)', 'rgba(150,206,180,0.12)', 'rgba(255,234,167,0.10)'][i]} 0%, transparent 70%)`,
-              width: 200 + i * 60,
-              height: 200 + i * 60,
-              left: `${[15, 75, 25, 85, 50][i]}%`,
-              top: `${[20, 60, 75, 15, 45][i]}%`,
-              transform: 'translate(-50%, -50%)',
-            }}
-            animate={{
-              x: [0, 40, -40, 0],
-              y: [0, -30, 30, 0],
-              scale: [1, 1.1, 0.95, 1],
-            }}
-            transition={{
-              duration: 18 + i * 3,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          />
-        ))}
-      </div>
-
       <FloatingBackground />
 
       {/* Header with enhanced entrance */}
@@ -160,7 +150,7 @@ export default function ExplorePage() {
       </motion.header>
 
       {/* Main Content */}
-      <main className="relative z-10 px-6 pb-20">
+      <main id="main" className="relative z-10 px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section with staggered entrance */}
           <motion.div
@@ -189,34 +179,117 @@ export default function ExplorePage() {
             >
               Choose your emotional state and discover personalized insights, prompts, and music to guide your reflection journey.
             </motion.p>
+
+            {/* Search and Filters */}
+            {mounted && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.6 }}
+                className="mt-10 flex flex-col items-center space-y-6"
+              >
+                {/* Search Bar */}
+                <div className="relative w-full max-w-md group">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50 group-focus-within:text-pink-400 transition-colors" />
+                  <input
+                    type="text"
+                    placeholder="Search moods..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-12 pr-12 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500/50 transition-all font-medium"
+                    suppressHydrationWarning
+                  />
+                  {searchTerm && (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-white/10 transition-colors"
+                      suppressHydrationWarning
+                    >
+                      <X className="w-4 h-4 text-white/50" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Category Filters */}
+                <div className="flex flex-wrap justify-center gap-2 px-4">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setActiveCategory(category)}
+                      suppressHydrationWarning
+                      className={`
+                        px-5 py-2 rounded-full text-sm font-semibold capitalize transition-all duration-300
+                        ${activeCategory === category
+                          ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg ring-2 ring-pink-500/30"
+                          : "bg-white/10 text-white/70 hover:bg-white/20 border border-white/10 hover:border-white/20"
+                        }
+                      `}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Mood Cards Grid with wave entrance effect */}
-          <motion.div
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 max-w-7xl mx-auto"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  delayChildren: 0.6,
-                  staggerChildren: 0.03
+          {mounted && (
+            <motion.div
+              layout
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 max-w-7xl mx-auto min-h-[400px]"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    delayChildren: 0.3,
+                    staggerChildren: 0.03
+                  }
                 }
-              }
-            }}
-          >
-            {moods.map((mood, index) => (
-              <MoodCard
-                key={mood.id}
-                mood={mood}
-                index={index}
-                isSelected={selectedMood === mood.id}
-                onSelect={() => setSelectedMood(mood.id)}
-              />
-            ))}
-          </motion.div>
+              }}
+            >
+              <AnimatePresence mode="popLayout">
+                {filteredMoods.length > 0 ? (
+                  filteredMoods.map((mood, index) => (
+                    <MoodCard
+                      key={mood.id}
+                      mood={mood}
+                      index={index}
+                      isSelected={selectedMood === mood.id}
+                      onSelect={() => setSelectedMood(mood.id)}
+                    />
+                  ))
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="col-span-full py-20 flex flex-col items-center text-center space-y-4"
+                  >
+                    <div className="p-6 rounded-full bg-white/5 border border-white/10">
+                      <Search className="w-12 h-12 text-white/20" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-white mb-2">No moods found</h3>
+                      <p className="text-gray-400">Try adjusting your search or category filters.</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setSearchTerm('');
+                        setActiveCategory('all');
+                      }}
+                      className="text-pink-400 font-semibold hover:underline"
+                    >
+                      Clear all filters
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}
 
           {/* Continue Button */}
           {selectedMood && (

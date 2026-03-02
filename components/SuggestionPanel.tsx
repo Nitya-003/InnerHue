@@ -1,35 +1,96 @@
 ﻿'use client';
 
 import { motion } from 'framer-motion';
+import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music, Save, PenLine } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { RefreshCw, MessageCircle, Quote, Hash, Music, Copy } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useMoodStore } from '@/lib/useMoodStore';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { QuoteCard } from '@/components/QuoteCard';
+import { QuoteSkeleton } from '@/components/QuoteSkeleton';
+import { Quote } from '@/data/fallbackQuotes';
+import { Mood, MoodSuggestion } from '@/types/mood';
 
 interface SuggestionPanelProps {
-  suggestions: {
-    prompt: string;
-    quote: string;
-    author: string;
-    keywords: string[];
-    music: string;
-  };
-  mood: any;
+  suggestions: MoodSuggestion;
+  mood: Mood;
   onRefresh: () => void | Promise<void>;
   isRefreshing?: boolean;
+  // Props for dynamic quotes
+  quoteData?: Quote | null;
+  isQuoteLoading?: boolean;
+  onQuoteRefresh?: () => void;
+  entryId?: string;
 }
 
-export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = false }: SuggestionPanelProps) {
-  const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
+export function SuggestionPanel({
+  suggestions,
+  mood,
+  onRefresh,
+  isRefreshing = false,
+  quoteData,
+  isQuoteLoading,
+  onQuoteRefresh,
+  entryId
+}: SuggestionPanelProps) {
+  const [notes, setNotes] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const updateMoodNotes = useMoodStore(state => state.updateMoodNotes);
+  const moodHistory = useMoodStore(state => state.moodHistory);
 
+  // Sync with existing notes if available (though entries are usually new here)
   useEffect(() => {
-    setIsPlayerLoaded(false);
-  }, [mood.id]);
+    if (entryId) {
+      const entry = moodHistory.find(e => e.id === entryId);
+      if (entry?.notes) {
+        setNotes(entry.notes);
+      }
+    }
+  }, [entryId, moodHistory]);
+
+  const handleSaveNotes = () => {
+    if (!entryId) return;
+    setIsSaving(true);
+    updateMoodNotes(entryId, notes);
+    setTimeout(() => {
+      setIsSaving(false);
+    }, 1000);
+  };
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-2xl font-bold text-gray-800">
+          Personalized Insights
+        </h3>
+        <TooltipProvider delayDuration={500}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="px-2 pt-2 pb-[1px] rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all">
+                <motion.button
+                  whileHover={{ scale: 1.05, rotate: 180 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={onRefresh}
+                  disabled={isRefreshing}
+                  className="transition-all disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
+                </motion.button>
+              </div>
+            </TooltipTrigger>
+
+            <TooltipContent
+              className="bg-white/80 backdrop-blur-md border-white/50 text-gray-800 shadow-xl"
+            >
+              <p>{isRefreshing ? 'Refreshing insights...' : 'Refresh Insights'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
   const handleCopy = () => {
     navigator.clipboard.writeText(`"${suggestions.quote}" — ${suggestions.author}`);
@@ -56,9 +117,25 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{suggestions.prompt}</p>
             </div>
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
 
-        {/* Quote */}
+      {/* Quote Section - Dynamic or Static */}
+      {onQuoteRefresh ? (
+        // Dynamic Quote Mode
+        isQuoteLoading ? (
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50">
+            <QuoteSkeleton />
+          </div>
+        ) : quoteData ? (
+          <QuoteCard
+            quote={quoteData}
+            loading={!!isQuoteLoading}
+            onRefresh={onQuoteRefresh}
+          />
+        ) : null
+      ) : (
+        // Legacy Static Fallback (if props not provided)
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -76,20 +153,9 @@ export function SuggestionPanel({ suggestions, mood, onRefresh, isRefreshing = f
               </blockquote>
               <cite className="text-sm text-gray-500 dark:text-gray-400">— {suggestions.author}</cite>
             </div>
-
-            <div className="absolute right-2">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleCopy}
-                className="p-[6px] rounded-full text-pink-400 hover:bg-pink-50 hover:text-pink-600 transition-colors opacity-70 hover:opacity-100"
-                aria-label="Copy quote"
-              >
-                <Copy className="w-4 h-4" />
-              </motion.button>
-            </div>
           </div>
         </motion.div>
+      )}
 
         {/* Keywords Cloud */}
         <motion.div

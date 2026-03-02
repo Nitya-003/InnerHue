@@ -4,12 +4,29 @@ import { BackToTop } from '@/components/BackToTop';
 import { Providers } from '@/components/Providers';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import { TransitionProvider } from '@/components/TransitionProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
+const siteTitle = 'InnerHue';
+const siteDescription = 'Emotional Reflection Web App';
+
 export const metadata: Metadata = {
-  title: 'InnerHue',
-  description: 'Emotional Reflection Web App',
+  title: siteTitle,
+  description: siteDescription,
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://innerhue.vercel.app'),
+  openGraph: {
+    type: 'website',
+    title: siteTitle,
+    description: siteDescription,
+    siteName: siteTitle,
+  },
+  twitter: {
+    card: 'summary',
+    title: siteTitle,
+    description: siteDescription,
+  },
 };
 
 export default function RootLayout({

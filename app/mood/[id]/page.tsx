@@ -1,67 +1,96 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
-import { OrbVisualizer } from '@/components/OrbVisualizer';
+import { ArrowLeft } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import type { OrbVisualizerProps } from '@/components/OrbVisualizer';
+import type { FC } from 'react';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { MoodData } from '@/lib/moodData';
+import { Mood, MoodSuggestion } from '@/types/mood';
+import { useMoodStore } from '@/lib/useMoodStore';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import reflectiveMoods from '@/lib/reflectiveMoods';
+import { getTraditionalMoodId } from '@/lib/moodMapping';
 
-interface MoodPageProps {
-  params: {
-    id: string;
-  };
-  searchParams?: {
-    moods?: string;
-  };
+const OrbVisualizer = dynamic(
+  () => import('@/components/OrbVisualizer').then((m) => ({ default: m.OrbVisualizer })),
+  { ssr: false }
+) as unknown as FC<OrbVisualizerProps>;
+
+interface MoodWithMeta extends Mood {
+  traditionalId?: string;
+  spotifyPlaylistId?: string;
 }
 
-export default function MoodPage({ params, searchParams }: MoodPageProps) {
-  const [moodData, setMoodData] = useState<any[]>([]);
-  const [suggestions, setSuggestions] = useState<any>(null);
+export default function MoodClient() {
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const id = params?.id as string;
+  const moods = searchParams.get('moods') || undefined;
+  const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
+  const [suggestions, setSuggestions] = useState<MoodSuggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  
-  // Fix 1: Main Data Fetching & Index Reset
+  const [entryIds, setEntryIds] = useState<Record<string, string>>({});
+  const addMood = useMoodStore(state => state.addMood);
+
   useEffect(() => {
-    // 🔥 Reset index when route/params change
-    setCurrentMoodIndex(0);
+    const moodIds = moods ? moods.split(',') : [id];
 
-    // Get all selected moods from query param, fallback to single mood from URL
-    const moodIds = searchParams?.moods ? searchParams.moods.split(',') : [params.id];
-    
-    // Get mood data for all selected moods
     const moodsData = moodIds
-      .map(id => MoodData.getMoodById(id))
-      .filter(Boolean);
-    
-    setMoodData(moodsData);
-    
-    // Note: We removed the manual setSuggestions here. 
-    // The new useEffect below handles the initial suggestion load automatically.
-    
-    // Save to local storage for analytics
-    const savedMoods = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    moodIds.forEach(moodId => {
-      savedMoods.push({
-        mood: moodId,
-        timestamp: new Date().toISOString(),
-        date: new Date().toDateString()
-      });
-    });
-    localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
-  }, [params.id, searchParams?.moods]);
+      .map(mid => {
+        const reflectiveMood = reflectiveMoods.find(m => m.id === mid);
 
-  // Fix 2: Sync suggestions automatically when Index or Data changes
+        if (reflectiveMood) {
+          const traditionalId = getTraditionalMoodId(mid);
+          const traditionalMood = MoodData.getMoodById(traditionalId);
+
+          // Create adapter object that combines both systems
+          return {
+            id: reflectiveMood.id,
+            name: reflectiveMood.label,
+            emoji: reflectiveMood.label?.charAt(0).toUpperCase() || '✨',
+            color: reflectiveMood.color,
+            glow: reflectiveMood.glow,
+            traditionalId,
+            spotifyPlaylistId: traditionalMood?.spotifyPlaylistId,
+          } as MoodWithMeta;
+        }
+
+        // Fall back to traditional mood system
+        return MoodData.getMoodById(mid);
+      })
+      .filter(Boolean) as MoodWithMeta[];
+
+    setMoodData(moodsData);
+
+    const newEntryIds: Record<string, string> = {};
+    moodIds.forEach(mid => {
+      const moodInfo = moodsData.find(m => m.id === mid);
+      if (moodInfo) {
+        const eid = addMood({
+          mood: mid,
+          emotion: moodInfo.name,
+          date: new Date().toDateString(),
+          color: moodInfo.color,
+        });
+        newEntryIds[mid] = eid;
+      }
+    });
+    setEntryIds(newEntryIds);
+  }, [id, moods, addMood]);
+
   useEffect(() => {
     if (!moodData.length) return;
 
     const mood = moodData[currentMoodIndex];
     if (mood) {
-        const newSuggestions = MoodData.getSuggestions(mood.id);
-        setSuggestions(newSuggestions);
+      const suggestionId = mood.traditionalId || mood.id;
+      setSuggestions(MoodData.getSuggestions(suggestionId));
     }
   }, [currentMoodIndex, moodData]);
 
@@ -77,7 +106,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     );
   }
 
-  const currentMood = moodData[currentMoodIndex] || moodData[0];
+  const currentMood = moodData[currentMoodIndex];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950">
@@ -99,24 +128,20 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
             </motion.button>
           </Link>
 
-          <div className="flex items-center  space-x-2">
+          <div className="flex items-center space-x-2">
             {moodData.length > 1 ? (
               <div className="flex items-center space-x-2">
                 <div className="flex space-x-1">
                   {moodData.map((mood, index) => (
                     <motion.button
                       key={mood.id}
-                      onClick={() => {
-                        // Logic simplified: The useEffect handles the suggestion sync
-                        setCurrentMoodIndex(index);
-                      }}
+                      onClick={() => setCurrentMoodIndex(index)}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
-                      className={`text-2xl p-1 rounded-full transition-all ${
-                        index === currentMoodIndex 
-                          ? 'bg-white/30 ring-2 ring-purple-400' 
-                          : 'hover:bg-white/20'
-                      }`}
+                      className={`text-2xl p-1 rounded-full transition-all ${index === currentMoodIndex
+                        ? 'bg-white/30 ring-2 ring-purple-400'
+                        : 'hover:bg-white/20'
+                        }`}
                     >
                       {mood.emoji}
                     </motion.button>
@@ -162,42 +187,21 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       </motion.header>
 
       {/* Main Content */}
-      <main className="px-6 pb-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 items-start">
-            {/* Left Side - Orb Visualizer */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              {/* Fix 3: Added key prop to force re-render on mood change */}
-              <OrbVisualizer key={currentMood.id} mood={currentMood} />
-            </motion.div>
-
-            {/* Right Side - Suggestions */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <SuggestionPanel 
-                suggestions={suggestions} 
-                mood={currentMood}
-                isRefreshing={isRefreshing}
-                onRefresh={async () => {
-                  setIsRefreshing(true);
-                  // Small delay to show visual feedback
-                  await new Promise(resolve => setTimeout(resolve, 300));
-                  const newSuggestions = MoodData.getSuggestions(currentMood.id);
-                  setSuggestions({ ...newSuggestions });
-                  setIsRefreshing(false);
-                }}
-              />
-            </motion.div>
-          </div>
+      <main id="main" className="px-4 md:px-6 pb-20">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
+          <OrbVisualizer key={currentMood.id} mood={currentMood} />
+          <SuggestionPanel
+            suggestions={suggestions}
+            mood={currentMood}
+            entryId={entryIds[currentMood.id]}
+            onRefresh={async () => {
+              const suggestionId = currentMood.traditionalId || currentMood.id;
+              setSuggestions(MoodData.getSuggestions(suggestionId));
+            }}
+          />
         </div>
       </main>
+
     </div>
   );
 }

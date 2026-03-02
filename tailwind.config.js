@@ -24,6 +24,9 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        surface: "hsl(var(--surface))",
+        "surface-elevated": "hsl(var(--surface-elevated))",
+        "surface-overlay": "hsl(var(--surface-overlay))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -51,6 +54,16 @@ module.exports = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        journal: {
+          background: "#F6F1EB",
+          surface: "#EAE3DA",
+          card: "#FFFFFFD9",
+          mauve: "#C8A2C8",
+          sage: "#A3B18A",
+          terracotta: "#D4A373",
+          textPrimary: "#2E2E2E",
+          textSecondary: "#6B6B6B",
         },
       },
       borderRadius: {

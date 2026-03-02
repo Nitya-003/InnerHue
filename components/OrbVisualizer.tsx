@@ -2,18 +2,20 @@
 
 import { motion, Variants } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import { ShaderOrb } from './ShaderOrb';
+import type { Mood } from '@/types/mood';
 
-interface Mood {
-  id: string;
-  name: string;
-  emoji: string;
-  color: string;
-  glow: string;
-}
-
-interface OrbVisualizerProps {
+export interface OrbVisualizerProps {
   mood: Mood;
 }
+
+interface Particle {
+  id: number;
+  angle: number;
+  distance: number;
+  duration: number; // Added
+}
+
 
 export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,6 +53,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     setTimeout(() => setConfetti([]), 2000);
   };
 
+
   const orbVariants: Variants = {
     idle: {
       scale: [1, 1.05, 1],
@@ -72,7 +75,30 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
+  const particleVariants: Variants = {
+    animate: {
+      scale: [0.8, 1.5, 0.8],
+      opacity: [0.2, 0.8, 0.2],
+      transition: {
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+    },
+  };
 
+
+  const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 12 }, (_, i) => ({
+        id: i,
+        angle: (i * 30) * (Math.PI / 180),
+        distance: 150 + Math.random() * 50,
+        duration: 3 + Math.random() * 2,
+      }))
+    );
+  }, []);
 
   return (
     <div className="relative">
@@ -87,10 +113,27 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
         </div>
 
         <div className="relative h-80 flex items-center justify-center">
-
+          {particles.map((particle) => (
+            <motion.div
+              key={particle.id}
+              className="absolute w-2 h-2 rounded-full"
+              style={{
+                left: `calc(50% + ${Math.cos(particle.angle) * particle.distance}px)`,
+                top: `calc(50% + ${Math.sin(particle.angle) * particle.distance}px)`,
+                backgroundColor: mood.glow,
+              } as React.CSSProperties}
+              variants={particleVariants}
+              initial="animate"
+              animate="animate"
+              transition={{
+                delay: particle.id * 0.2,
+                duration: particle.duration,
+              }}
+            />
+          ))}
 
           <motion.div
-            className="relative flex items-center justify-center w-48 h-48 cursor-grab active:cursor-grabbing z-10"
+            className="relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 cursor-grab active:cursor-grabbing z-10"
             variants={orbVariants}
             initial="idle"
             animate={isPlaying ? "active" : "idle"}
@@ -108,8 +151,8 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               className="absolute inset-0 rounded-full"
               style={{
                 background: `radial-gradient(circle, ${mood.glow}40 0%, ${mood.glow}20 40%, transparent 70%)`,
-                width: 200,
-                height: 200,
+                width: '100%',
+                height: '100%',
                 filter: 'blur(20px)',
                 x: '-50%',
                 y: '-50%',
@@ -127,65 +170,36 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
               }}
             />
 
-            <motion.div
-              className="w-32 h-32 rounded-full relative overflow-hidden shadow-2xl"
-              style={{
-                background: `linear-gradient(135deg, ${mood.color} 0%, ${mood.glow} 100%)`,
-                boxShadow: `0 0 40px ${mood.glow}60, inset 0 0 20px rgba(255,255,255,0.3)`,
-              }}
+            {/* 3D Shader Orb */}
+            <div
+              className="w-40 h-40 md:w-48 md:h-48 relative cursor-pointer"
+              onClick={handleEmojiClick}
             >
-              <motion.div
-                className="absolute inset-2 rounded-full"
-                style={{
-                  background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8) 0%, transparent 50%)`,
-                }}
-                animate={{
-                  opacity: [0.3, 0.8, 0.3],
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-
-              <div
-                className="absolute inset-0 flex items-center justify-center cursor-pointer z-20"
-                onClick={handleEmojiClick}
+              <ShaderOrb mood={mood} />
+              {/* Emoji overlay */}
+              <motion.span
+                className="absolute bottom-2 right-2 text-2xl select-none pointer-events-none z-20"
+                animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <motion.span
-                  className="text-4xl select-none"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0],
-                  }}
-                  whileTap={{ scale: 0.8 }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  {mood.emoji}
-                </motion.span>
-              </div>
-            </motion.div>
+                {mood.emoji}
+              </motion.span>
+            </div>
           </motion.div>
 
           {[...Array(3)].map((_, i) => (
             <motion.div
-              key={i}
+              key={`orbital-ring-${i}`}
               className="absolute rounded-full border-2 opacity-30 pointer-events-none"
               style={{
-                borderColor: mood.color,
                 width: 160 + i * 40,
                 height: 160 + i * 40,
                 left: '50%',
                 top: '50%',
+                borderColor: mood.color,
                 x: '-50%',
                 y: '-50%',
-              }}
+              } as React.CSSProperties}
               animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.3, 0.1, 0.3],
@@ -204,12 +218,12 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
             <motion.div
               className="absolute rounded-full border-4 pointer-events-none"
               style={{
-                borderColor: mood.glow,
                 left: '50%',
                 top: '50%',
+                borderColor: mood.glow,
                 x: '-50%',
                 y: '-50%',
-              }}
+              } as React.CSSProperties}
               initial={{ width: 200, height: 200, opacity: 0.8, borderWidth: 4 }}
               animate={{ width: 400, height: 400, opacity: 0, borderWidth: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
