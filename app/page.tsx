@@ -5,14 +5,10 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight, Plus } from 'lucide-react';
 import { MoodCard } from '@/components/MoodCard';
-import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
-import { AuroraBackground } from '@/components/AuroraBackground';
+import { FloatingBackground } from '@/components/FloatingBackground';
+import { Heart, BarChart3, Music } from 'lucide-react';
+import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 import { QuoteCard } from '@/components/QuoteCard';
-import AITherapist from '@/components/AITherapist';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { Hero } from '@/components/landing/Hero';
-import { ErrorState } from '@/components/ErrorState';
-import FeatureRow from '@/components/landing/FeatureRow';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
@@ -170,9 +166,8 @@ export default function Home() {
       <main id="main" className="relative z-10 px-4 md:px-6 pb-20">
         <div className="max-w-7xl mx-auto">
 
-          {/* Mood Selection Grid */}
-          <motion.div
-            id="mood-selection"
+          {/* Hero Section */}
+          <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
