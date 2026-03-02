@@ -1,7 +1,8 @@
- 'use client';
-import { useState } from 'react';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+"use client";
+import { useState } from "react";
+import { useEffect } from "react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
   Palette,
@@ -10,52 +11,241 @@ import {
   Link2,
   BookOpen,
   RotateCcw,
-  Settings
-} from 'lucide-react';
-import { FloatingBackground } from '@/components/FloatingBackground';
-import { usePersonalization } from '@/hooks/usePersonalization';
+  Settings,
+} from "lucide-react";
+import { FloatingBackground } from "@/components/FloatingBackground";
+import { usePersonalization } from "@/hooks/usePersonalization";
 import {
   ColorPalettePicker,
   IntensitySlider,
   SubcategoryBuilder,
   MoodCombinationBuilder,
   VocabularyBuilder,
-} from '@/components/personalization';
+} from "@/components/personalization";
 
 // Mood data for the personalization features
 const moods = [
-  { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176', category: 'positive' },
-  { id: 'excited', name: 'Excited', emoji: '🤩', color: '#AB47BC', glow: '#BA68C8', category: 'energetic' },
-  { id: 'grateful', name: 'Grateful', emoji: '🙏', color: '#26A69A', glow: '#4DB6AC', category: 'positive' },
-  { id: 'hopeful', name: 'Hopeful', emoji: '🌟', color: '#FFCA28', glow: '#FFD54F', category: 'positive' },
-  { id: 'calm', name: 'Calm', emoji: '😌', color: '#66BB6A', glow: '#81C784', category: 'calm' },
-  { id: 'peaceful', name: 'Peaceful', emoji: '🕊️', color: '#4FC3F7', glow: '#81D4FA', category: 'calm' },
-  { id: 'sad', name: 'Sad', emoji: '😢', color: '#42A5F5', glow: '#64B5F6', category: 'negative' },
-  { id: 'lonely', name: 'Lonely', emoji: '😔', color: '#7E57C2', glow: '#9575CD', category: 'negative' },
-  { id: 'anxious', name: 'Anxious', emoji: '😰', color: '#FF7043', glow: '#FF8A65', category: 'stress' },
-  { id: 'stressed', name: 'Stressed', emoji: '😤', color: '#FF5722', glow: '#FF6F00', category: 'stress' },
-  { id: 'angry', name: 'Angry', emoji: '😡', color: '#EF5350', glow: '#E57373', category: 'intense' },
-  { id: 'confused', name: 'Confused', emoji: '😕', color: '#FFA726', glow: '#FFB74D', category: 'neutral' },
-  { id: 'nostalgic', name: 'Nostalgic', emoji: '📸', color: '#D4A574', glow: '#DDBF94', category: 'neutral' },
-  { id: 'energized', name: 'Energized', emoji: '⚡', color: '#FFEB3B', glow: '#FFF176', category: 'energetic' },
-  { id: 'creative', name: 'Creative', emoji: '🎨', color: '#FF7043', glow: '#FFAB91', category: 'playful' },
-  { id: 'content', name: 'Content', emoji: '😊', color: '#AED581', glow: '#C5E1A5', category: 'calm' },
+  {
+    id: "happy",
+    name: "Happy",
+    emoji: "😊",
+    color: "#FFD93D",
+    glow: "#FFF176",
+    category: "positive",
+  },
+  {
+    id: "excited",
+    name: "Excited",
+    emoji: "🤩",
+    color: "#AB47BC",
+    glow: "#BA68C8",
+    category: "energetic",
+  },
+  {
+    id: "grateful",
+    name: "Grateful",
+    emoji: "🙏",
+    color: "#26A69A",
+    glow: "#4DB6AC",
+    category: "positive",
+  },
+  {
+    id: "hopeful",
+    name: "Hopeful",
+    emoji: "🌟",
+    color: "#FFCA28",
+    glow: "#FFD54F",
+    category: "positive",
+  },
+  {
+    id: "calm",
+    name: "Calm",
+    emoji: "😌",
+    color: "#66BB6A",
+    glow: "#81C784",
+    category: "calm",
+  },
+  {
+    id: "peaceful",
+    name: "Peaceful",
+    emoji: "🕊️",
+    color: "#4FC3F7",
+    glow: "#81D4FA",
+    category: "calm",
+  },
+  {
+    id: "sad",
+    name: "Sad",
+    emoji: "😢",
+    color: "#42A5F5",
+    glow: "#64B5F6",
+    category: "negative",
+  },
+  {
+    id: "lonely",
+    name: "Lonely",
+    emoji: "😔",
+    color: "#7E57C2",
+    glow: "#9575CD",
+    category: "negative",
+  },
+  {
+    id: "anxious",
+    name: "Anxious",
+    emoji: "😰",
+    color: "#FF7043",
+    glow: "#FF8A65",
+    category: "stress",
+  },
+  {
+    id: "stressed",
+    name: "Stressed",
+    emoji: "😤",
+    color: "#FF5722",
+    glow: "#FF6F00",
+    category: "stress",
+  },
+  {
+    id: "angry",
+    name: "Angry",
+    emoji: "😡",
+    color: "#EF5350",
+    glow: "#E57373",
+    category: "intense",
+  },
+  {
+    id: "confused",
+    name: "Confused",
+    emoji: "😕",
+    color: "#FFA726",
+    glow: "#FFB74D",
+    category: "neutral",
+  },
+  {
+    id: "nostalgic",
+    name: "Nostalgic",
+    emoji: "📸",
+    color: "#D4A574",
+    glow: "#DDBF94",
+    category: "neutral",
+  },
+  {
+    id: "energized",
+    name: "Energized",
+    emoji: "⚡",
+    color: "#FFEB3B",
+    glow: "#FFF176",
+    category: "energetic",
+  },
+  {
+    id: "creative",
+    name: "Creative",
+    emoji: "🎨",
+    color: "#FF7043",
+    glow: "#FFAB91",
+    category: "playful",
+  },
+  {
+    id: "content",
+    name: "Content",
+    emoji: "😊",
+    color: "#AED581",
+    glow: "#C5E1A5",
+    category: "calm",
+  },
 ];
 
-type TabType = 'colors' | 'intensity' | 'subcategories' | 'combinations' | 'vocabulary';
+type TabType =
+  | "colors"
+  | "intensity"
+  | "subcategories"
+  | "combinations"
+  | "vocabulary";
 
-const tabs: { id: TabType; label: string; icon: React.ElementType; description: string }[] = [
-  { id: 'colors', label: 'Color Palettes', icon: Palette, description: 'Customize mood colors' },
-  { id: 'intensity', label: 'Intensity', icon: Sliders, description: 'Track emotional depth' },
-  { id: 'subcategories', label: 'Subcategories', icon: Tags, description: 'Define mood variations' },
-  { id: 'combinations', label: 'Combinations', icon: Link2, description: 'Mix emotions together' },
-  { id: 'vocabulary', label: 'Vocabulary', icon: BookOpen, description: 'Personal emotion words' },
+const tabs: {
+  id: TabType;
+  label: string;
+  icon: React.ElementType;
+  description: string;
+}[] = [
+  {
+    id: "colors",
+    label: "Color Palettes",
+    icon: Palette,
+    description: "Customize mood colors",
+  },
+  {
+    id: "intensity",
+    label: "Intensity",
+    icon: Sliders,
+    description: "Track emotional depth",
+  },
+  {
+    id: "subcategories",
+    label: "Subcategories",
+    icon: Tags,
+    description: "Define mood variations",
+  },
+  {
+    id: "combinations",
+    label: "Combinations",
+    icon: Link2,
+    description: "Mix emotions together",
+  },
+  {
+    id: "vocabulary",
+    label: "Vocabulary",
+    icon: BookOpen,
+    description: "Personal emotion words",
+  },
 ];
 
 export default function PersonalizationPage() {
-  const [activeTab, setActiveTab] = useState<TabType>('colors');
+  const [activeTab, setActiveTab] = useState<TabType>("colors");
   const [selectedMood, setSelectedMood] = useState(moods[0]);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  const [reminderEnabled, setReminderEnabled] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("moodReminderEnabled") === "true";
+    }
+    return false;
+  });
+
+  const [reminderTime, setReminderTime] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("moodReminderTime") || "20:00";
+    }
+    return "20:00";
+  });
+
+  useEffect(() => {
+    if (!reminderEnabled) return;
+
+    const interval = setInterval(() => {
+      const now = new Date();
+      const currentTime =
+        now.getHours().toString().padStart(2, "0") +
+        ":" +
+        now.getMinutes().toString().padStart(2, "0");
+
+      if (currentTime === reminderTime) {
+        const today = new Date().toDateString();
+        const lastNotified = localStorage.getItem("moodReminderLastSent");
+
+        if (lastNotified !== today) {
+          new Notification("🌈 Time to Log Your Mood!", {
+            body: "Take a moment to reflect and log how you're feeling today 💜",
+            icon: "/favicon.ico",
+          });
+
+          localStorage.setItem("moodReminderLastSent", today);
+        }
+      }
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [reminderEnabled, reminderTime]);
 
   const {
     settings,
@@ -77,14 +267,35 @@ export default function PersonalizationPage() {
     stats,
   } = usePersonalization();
 
+  const handleReminderToggle = async () => {
+    if (!reminderEnabled) {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        alert("Please allow notifications to enable reminders.");
+        return;
+      }
+    }
+
+    const newValue = !reminderEnabled;
+    setReminderEnabled(newValue);
+    localStorage.setItem("moodReminderEnabled", String(newValue));
+  };
+
+  const handleTimeChange = (time: string) => {
+    setReminderTime(time);
+    localStorage.setItem("moodReminderTime", time);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
-      case 'colors':
+      case "colors":
         return (
           <div className="space-y-6">
             {/* Mood Selector */}
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-              <label className="block text-sm text-white/70 mb-3">Select a mood to customize</label>
+              <label className="block text-sm text-white/70 mb-3">
+                Select a mood to customize
+              </label>
               <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
                 {moods.map((mood) => {
                   const customPalette = getCustomPalette(mood.id);
@@ -94,10 +305,11 @@ export default function PersonalizationPage() {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setSelectedMood(mood)}
-                      className={`relative p-2 rounded-xl flex flex-col items-center gap-1 transition-all ${selectedMood.id === mood.id
-                          ? 'bg-white/25 ring-2 ring-white'
-                          : 'bg-white/10 hover:bg-white/15'
-                        }`}
+                      className={`relative p-2 rounded-xl flex flex-col items-center gap-1 transition-all ${
+                        selectedMood.id === mood.id
+                          ? "bg-white/25 ring-2 ring-white"
+                          : "bg-white/10 hover:bg-white/15"
+                      }`}
                     >
                       <span className="text-xl">{mood.emoji}</span>
                       <span className="text-xs text-white/80 truncate w-full text-center">
@@ -106,7 +318,9 @@ export default function PersonalizationPage() {
                       {customPalette && (
                         <div
                           className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white"
-                          style={{ backgroundColor: customPalette.primaryColor }}
+                          style={{
+                            backgroundColor: customPalette.primaryColor,
+                          }}
                         />
                       )}
                     </motion.button>
@@ -128,35 +342,46 @@ export default function PersonalizationPage() {
           </div>
         );
 
-      case 'intensity':
+      case "intensity":
         return (
           <div className="space-y-6">
             {/* Intensity Settings */}
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h3 className="text-lg font-semibold text-white mb-4">Intensity Settings</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">
+                Intensity Settings
+              </h3>
 
               <div className="flex items-center justify-between py-3 border-b border-white/10">
                 <div>
-                  <p className="text-white font-medium">Enable Intensity Tracking</p>
-                  <p className="text-sm text-white/60">Track how strongly you feel each emotion</p>
+                  <p className="text-white font-medium">
+                    Enable Intensity Tracking
+                  </p>
+                  <p className="text-sm text-white/60">
+                    Track how strongly you feel each emotion
+                  </p>
                 </div>
                 <button
-                  onClick={() => toggleIntensityTracking(!settings.enableIntensityTracking)}
-                  className={`relative w-14 h-8 rounded-full transition-colors ${settings.enableIntensityTracking
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500'
-                      : 'bg-white/20'
-                    }`}
+                  onClick={() =>
+                    toggleIntensityTracking(!settings.enableIntensityTracking)
+                  }
+                  className={`relative w-14 h-8 rounded-full transition-colors ${
+                    settings.enableIntensityTracking
+                      ? "bg-gradient-to-r from-purple-500 to-pink-500"
+                      : "bg-white/20"
+                  }`}
                 >
                   <motion.div
                     className="absolute top-1 w-6 h-6 rounded-full bg-white shadow-lg"
                     animate={{ x: settings.enableIntensityTracking ? 28 : 4 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />
                 </button>
               </div>
 
               <div className="py-4">
-                <p className="text-white font-medium mb-2">Default Intensity Level</p>
+                <p className="text-white font-medium mb-2">
+                  Default Intensity Level
+                </p>
                 <p className="text-sm text-white/60 mb-4">
                   Starting intensity when selecting emotions
                 </p>
@@ -180,10 +405,11 @@ export default function PersonalizationPage() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSelectedMood(mood)}
-                    className={`flex-shrink-0 px-3 py-2 rounded-xl flex items-center gap-2 transition-all ${selectedMood.id === mood.id
-                        ? 'bg-white/25 ring-1 ring-white'
-                        : 'bg-white/10 hover:bg-white/15'
-                      }`}
+                    className={`flex-shrink-0 px-3 py-2 rounded-xl flex items-center gap-2 transition-all ${
+                      selectedMood.id === mood.id
+                        ? "bg-white/25 ring-1 ring-white"
+                        : "bg-white/10 hover:bg-white/15"
+                    }`}
                   >
                     <span>{mood.emoji}</span>
                     <span className="text-white text-sm">{mood.name}</span>
@@ -192,43 +418,64 @@ export default function PersonalizationPage() {
               </div>
               <IntensitySlider
                 value={5}
-                onChange={() => { }}
+                onChange={() => {}}
                 moodName={selectedMood.name}
-                moodColor={getCustomPalette(selectedMood.id)?.primaryColor || selectedMood.color}
+                moodColor={
+                  getCustomPalette(selectedMood.id)?.primaryColor ||
+                  selectedMood.color
+                }
                 disabled={!settings.enableIntensityTracking}
               />
             </div>
           </div>
         );
 
-      case 'subcategories':
+      case "subcategories":
         return (
           <div className="space-y-6">
             {/* Mood Selector for Subcategories */}
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-              <label className="block text-sm text-white/70 mb-3">Select a mood to add subcategories</label>
+              <label className="block text-sm text-white/70 mb-3">
+                Select a mood to add subcategories
+              </label>
               <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                {moods.filter(m => ['stressed', 'anxious', 'happy', 'sad', 'angry', 'calm'].includes(m.id)).map((mood) => {
-                  const subcats = getSubcategoriesForMood(mood.id);
-                  return (
-                    <motion.button
-                      key={mood.id}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setSelectedMood(mood)}
-                      className={`relative p-3 rounded-xl flex flex-col items-center gap-1 transition-all ${selectedMood.id === mood.id
-                          ? 'bg-white/25 ring-2 ring-white'
-                          : 'bg-white/10 hover:bg-white/15'
+                {moods
+                  .filter((m) =>
+                    [
+                      "stressed",
+                      "anxious",
+                      "happy",
+                      "sad",
+                      "angry",
+                      "calm",
+                    ].includes(m.id),
+                  )
+                  .map((mood) => {
+                    const subcats = getSubcategoriesForMood(mood.id);
+                    return (
+                      <motion.button
+                        key={mood.id}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setSelectedMood(mood)}
+                        className={`relative p-3 rounded-xl flex flex-col items-center gap-1 transition-all ${
+                          selectedMood.id === mood.id
+                            ? "bg-white/25 ring-2 ring-white"
+                            : "bg-white/10 hover:bg-white/15"
                         }`}
-                    >
-                      <span className="text-2xl">{mood.emoji}</span>
-                      <span className="text-sm text-white/80">{mood.name}</span>
-                      {subcats.length > 0 && (
-                        <span className="text-xs text-white/50">{subcats.length} subs</span>
-                      )}
-                    </motion.button>
-                  );
-                })}
+                      >
+                        <span className="text-2xl">{mood.emoji}</span>
+                        <span className="text-sm text-white/80">
+                          {mood.name}
+                        </span>
+                        {subcats.length > 0 && (
+                          <span className="text-xs text-white/50">
+                            {subcats.length} subs
+                          </span>
+                        )}
+                      </motion.button>
+                    );
+                  })}
               </div>
             </div>
 
@@ -245,7 +492,7 @@ export default function PersonalizationPage() {
           </div>
         );
 
-      case 'combinations':
+      case "combinations":
         return (
           <MoodCombinationBuilder
             availableMoods={moods}
@@ -256,7 +503,7 @@ export default function PersonalizationPage() {
           />
         );
 
-      case 'vocabulary':
+      case "vocabulary":
         return (
           <VocabularyBuilder
             availableMoods={moods}
@@ -271,7 +518,6 @@ export default function PersonalizationPage() {
 
   return (
     <div className="min-h-screen bg-[#0f0720] relative overflow-hidden">
-
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -300,22 +546,30 @@ export default function PersonalizationPage() {
           {/* Stats Badge */}
           <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur rounded-xl border border-white/20">
             <div className="text-center">
-              <p className="text-xl font-bold text-white">{stats.totalCustomPalettes}</p>
+              <p className="text-xl font-bold text-white">
+                {stats.totalCustomPalettes}
+              </p>
               <p className="text-xs text-white/60">Colors</p>
             </div>
             <div className="w-px h-8 bg-white/20" />
             <div className="text-center">
-              <p className="text-xl font-bold text-white">{stats.totalSubcategories}</p>
+              <p className="text-xl font-bold text-white">
+                {stats.totalSubcategories}
+              </p>
               <p className="text-xs text-white/60">Subcats</p>
             </div>
             <div className="w-px h-8 bg-white/20" />
             <div className="text-center">
-              <p className="text-xl font-bold text-white">{stats.totalCombinations}</p>
+              <p className="text-xl font-bold text-white">
+                {stats.totalCombinations}
+              </p>
               <p className="text-xs text-white/60">Combos</p>
             </div>
             <div className="w-px h-8 bg-white/20" />
             <div className="text-center">
-              <p className="text-xl font-bold text-white">{stats.totalCustomWords}</p>
+              <p className="text-xl font-bold text-white">
+                {stats.totalCustomWords}
+              </p>
               <p className="text-xs text-white/60">Words</p>
             </div>
           </div>
@@ -336,9 +590,60 @@ export default function PersonalizationPage() {
               Make It Yours
             </h2>
             <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              Customize how you express and track your emotions with personalized colors,
-              intensity levels, subcategories, and your own emotional vocabulary.
+              Customize how you express and track your emotions with
+              personalized colors, intensity levels, subcategories, and your own
+              emotional vocabulary.
             </p>
+          </motion.div>
+
+          {/* 🔔 Daily Mood Reminder */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-8 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20"
+          >
+            <h3 className="text-lg font-semibold text-white mb-4">
+              🔔 Daily Mood Reminder
+            </h3>
+
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <p className="text-white font-medium">Enable Reminder</p>
+                <p className="text-sm text-white/60">
+                  Get notified daily to log your mood.
+                </p>
+              </div>
+
+              <button
+                onClick={handleReminderToggle}
+                className={`relative w-14 h-8 rounded-full transition-colors ${
+                  reminderEnabled
+                    ? "bg-gradient-to-r from-purple-500 to-pink-500"
+                    : "bg-white/20"
+                }`}
+              >
+                <motion.div
+                  className="absolute top-1 w-6 h-6 rounded-full bg-white shadow-lg"
+                  animate={{ x: reminderEnabled ? 28 : 4 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              </button>
+            </div>
+
+            {reminderEnabled && (
+              <div className="mt-6">
+                <label className="block text-white font-medium mb-2">
+                  Reminder Time
+                </label>
+                <input
+                  type="time"
+                  value={reminderTime}
+                  onChange={(e) => handleTimeChange(e.target.value)}
+                  className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg"
+                />
+              </div>
+            )}
           </motion.div>
 
           {/* Tabs */}
@@ -357,17 +662,24 @@ export default function PersonalizationPage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex-shrink-0 px-4 py-3 rounded-xl flex items-center gap-2 transition-all backdrop-blur-lg ${activeTab === tab.id
-                        ? 'bg-white/20 border border-white/30'
-                        : 'bg-white/5 border border-white/10 hover:bg-white/10'
-                      }`}
+                    className={`flex-shrink-0 px-4 py-3 rounded-xl flex items-center gap-2 transition-all backdrop-blur-lg ${
+                      activeTab === tab.id
+                        ? "bg-white/20 border border-white/30"
+                        : "bg-white/5 border border-white/10 hover:bg-white/10"
+                    }`}
                   >
-                    <Icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-white' : 'text-white/70'}`} />
+                    <Icon
+                      className={`w-5 h-5 ${activeTab === tab.id ? "text-white" : "text-white/70"}`}
+                    />
                     <div className="text-left">
-                      <p className={`text-sm font-medium ${activeTab === tab.id ? 'text-white' : 'text-white/80'}`}>
+                      <p
+                        className={`text-sm font-medium ${activeTab === tab.id ? "text-white" : "text-white/80"}`}
+                      >
                         {tab.label}
                       </p>
-                      <p className="text-xs text-white/50 hidden sm:block">{tab.description}</p>
+                      <p className="text-xs text-white/50 hidden sm:block">
+                        {tab.description}
+                      </p>
                     </div>
                   </motion.button>
                 );
