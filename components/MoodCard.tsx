@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { useState } from 'react';
 import './moodcard.css';
+import { useState } from "react";
+import { Check } from "lucide-react";
 
 interface Mood {
   id: string;

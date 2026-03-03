@@ -389,9 +389,6 @@ export default function Home() {
         </div>
       </motion.header>
 
-      {/* Hero Section */}
-      <Hero />
-
       {/* Main Content */}
       <main id="main" className="relative z-10 px-4 md:px-6 pb-20">
         <div className="max-w-7xl mx-auto">
