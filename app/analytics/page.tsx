@@ -28,6 +28,38 @@ export default function AnalyticsPage() {
   const clearHistory = useMoodStore(state => state.clearHistory);
   const deleteMood = useMoodStore(state => state.deleteMood);
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMoodFilter, setSelectedMoodFilter] = useState<string>('all');
+
+  const uniqueMoods = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          moodHistory
+            .map((entry: any) => (entry.emotion || entry.mood || '').trim())
+            .filter(Boolean)
+        )
+      ),
+    [moodHistory]
+  );
+
+  const filteredHistory = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    return moodHistory.filter((entry: any) => {
+      const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
+      const notes = (entry.notes || '').toLowerCase();
+
+      const matchesQuery =
+        !query || moodLabel.includes(query) || notes.includes(query);
+
+      const matchesMood =
+        selectedMoodFilter === 'all' ||
+        moodLabel === (selectedMoodFilter || '').toLowerCase();
+
+      return matchesQuery && matchesMood;
+    });
+  }, [moodHistory, searchQuery, selectedMoodFilter]);
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
@@ -218,54 +250,102 @@ export default function AnalyticsPage() {
                   </div>
                 </div>
 
-                {/* history cards */}
-                <div className="space-y-3">
-                  {moodHistory.slice().reverse().slice(0, 15).map((entry, index) => (
-                    <motion.div
-                      key={entry.id || index}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 * index }}
-                      className="group flex items-center justify-between p-4 rounded-xl bg-white/60 backdrop-blur border border-white/40 shadow-sm hover:shadow-md transition-all hover:bg-white/80"
-                    >
-                      <div className="flex items-center space-x-4">
-                        {/* Status Dot */}
-                        <div
-                          className="w-3 h-3 rounded-full shadow-sm"
-                          style={{ backgroundColor: entry.color || '#ddd', boxShadow: `0 0 8px ${entry.color || '#ddd'}` }}
-                        />
+                <div className="flex flex-col gap-4 mb-4 md:flex-row md:items-center md:justify-between">
+                  <div className="relative w-full md:max-w-xs">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                      placeholder="Search by mood or notes..."
+                      className="w-full rounded-full border border-gray-200 bg-white/70 px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200"
+                    />
+                  </div>
 
-                        <div>
-                          <div className="font-semibold text-gray-800 capitalize flex items-center">
-                            {entry.emotion || entry.mood}
-                          </div>
-                          {entry.notes && (
-                            <p className="text-sm text-gray-600 italic mt-1 max-w-sm line-clamp-2">
-                              "{entry.notes}"
-                            </p>
-                          )}
-                          <div className="text-xs text-gray-500 font-medium">
-                            {getTimeAgo(entry.timestamp)}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-4">
-                        <div className="text-sm text-gray-400 hidden sm:block">
-                          {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </div>
-
+                  {uniqueMoods.length > 1 && (
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedMoodFilter('all')}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                          selectedMoodFilter === 'all'
+                            ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                            : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
+                        }`}
+                      >
+                        All moods
+                      </button>
+                      {uniqueMoods.map(mood => (
                         <button
-                          onClick={() => handleDeleteEntry(entry.id)}
-                          className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                          title="Delete entry"
+                          key={mood}
+                          type="button"
+                          onClick={() => setSelectedMoodFilter(mood)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                            selectedMoodFilter === mood
+                              ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
+                          }`}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          {mood}
                         </button>
-                      </div>
-                    </motion.div>
-                  ))}
+                      ))}
+                    </div>
+                  )}
                 </div>
+
+                {/* history cards */}
+                {filteredHistory.length === 0 ? (
+                  <p className="py-6 text-center text-sm text-gray-500">
+                    No reflections match your current search or filters.
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {filteredHistory.slice().reverse().slice(0, 15).map((entry, index) => (
+                      <motion.div
+                        key={entry.id || index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.05 * index }}
+                        className="group flex items-center justify-between rounded-xl border border-white/40 bg-white/60 p-4 shadow-sm backdrop-blur hover:bg-white/80 hover:shadow-md transition-all"
+                      >
+                        <div className="flex items-center space-x-4">
+                          {/* Status Dot */}
+                          <div
+                            className="h-3 w-3 rounded-full shadow-sm"
+                            style={{ backgroundColor: entry.color || '#ddd', boxShadow: `0 0 8px ${entry.color || '#ddd'}` }}
+                          />
+
+                          <div>
+                            <div className="flex items-center font-semibold capitalize text-gray-800">
+                              {entry.emotion || entry.mood}
+                            </div>
+                            {entry.notes && (
+                              <p className="mt-1 max-w-sm text-sm italic text-gray-600 line-clamp-2">
+                                "{entry.notes}"
+                              </p>
+                            )}
+                            <div className="text-xs font-medium text-gray-500">
+                              {getTimeAgo(entry.timestamp)}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                          <div className="hidden text-sm text-gray-400 sm:block">
+                            {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+
+                          <button
+                            onClick={() => handleDeleteEntry(entry.id)}
+                            className="opacity-0 p-2 text-gray-400 transition-all hover:bg-red-50 hover:text-red-500 rounded-full group-hover:opacity-100"
+                            title="Delete entry"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
               </motion.div>
             </div>
           )}
