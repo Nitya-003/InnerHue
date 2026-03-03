@@ -1,7 +1,9 @@
-﻿'use client';
+﻿"use client";
 
-import { motion, AnimatePresence } from 'framer-motion';
-import './moodcard.css';
+import { motion, AnimatePresence } from "framer-motion";
+import "./moodcard.css";
+import { useState } from "react";
+import { Check } from "lucide-react";
 
 interface Mood {
   id: string;
@@ -10,6 +12,14 @@ interface Mood {
   color: string;
   glow: string;
   category?: string;
+  reflection?: {
+    question: string;
+    actions: {
+      label: string;
+      description: string;
+      icon: string;
+    }[];
+  };
 }
 
 interface MoodCardProps {
@@ -21,16 +31,21 @@ interface MoodCardProps {
 }
 
 export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const reflection = mood.reflection;
   const getCategoryStyle = (category: string) => {
     const styles = {
-      positive: 'border-emerald-300/50 hover:border-emerald-300 hover:bg-emerald-50/20',
-      energetic: 'border-orange-300/50 hover:border-orange-300 hover:bg-orange-50/20',
-      calm: 'border-blue-300/50 hover:border-blue-300 hover:bg-blue-50/20',
-      stress: 'border-red-300/50 hover:border-red-300 hover:bg-red-50/20',
-      negative: 'border-purple-300/50 hover:border-purple-300 hover:bg-purple-50/20',
-      intense: 'border-red-400/50 hover:border-red-400 hover:bg-red-50/20',
-      playful: 'border-pink-300/50 hover:border-pink-300 hover:bg-pink-50/20',
-      neutral: 'border-gray-300/50 hover:border-gray-300 hover:bg-gray-50/20'
+      positive:
+        "border-emerald-300/50 hover:border-emerald-300 hover:bg-emerald-50/20",
+      energetic:
+        "border-orange-300/50 hover:border-orange-300 hover:bg-orange-50/20",
+      calm: "border-blue-300/50 hover:border-blue-300 hover:bg-blue-50/20",
+      stress: "border-red-300/50 hover:border-red-300 hover:bg-red-50/20",
+      negative:
+        "border-purple-300/50 hover:border-purple-300 hover:bg-purple-50/20",
+      intense: "border-red-400/50 hover:border-red-400 hover:bg-red-50/20",
+      playful: "border-pink-300/50 hover:border-pink-300 hover:bg-pink-50/20",
+      neutral: "border-gray-300/50 hover:border-gray-300 hover:bg-gray-50/20",
     };
     return styles[category as keyof typeof styles] || styles.neutral;
   };
@@ -54,9 +69,9 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             type: "spring",
             stiffness: 300,
             damping: 25,
-            delay: index * 0.02
-          }
-        }
+            delay: index * 0.02,
+          },
+        },
       }}
       whileHover={{
         scale: isSelected ? 1.02 : 1.08,
@@ -64,16 +79,16 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         transition: {
           type: "spring",
           stiffness: 400,
-          damping: 20
-        }
+          damping: 20,
+        },
       }}
       whileTap={{
         scale: 0.95,
         transition: {
           type: "spring",
           stiffness: 500,
-          damping: 30
-        }
+          damping: 30,
+        },
       }}
       animate={{
         scale: isSelected ? 1.05 : 1,
@@ -81,14 +96,15 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         transition: {
           type: "spring",
           stiffness: 400,
-          damping: 25
-        }
+          damping: 25,
+        },
       }}
       className={`
         relative cursor-pointer p-3 sm:p-5 rounded-2xl sm:rounded-3xl backdrop-blur-md border-2 transform-gpu group
-        ${isSelected
-          ? `bg-gradient-to-br from-white/95 to-white/85 shadow-2xl z-20`
-          : `bg-white/25 shadow-xl border-white/30 hover:bg-white/40 ${getCategoryStyle(mood.category ?? 'neutral')}`
+        ${
+          isSelected
+            ? `bg-gradient-to-br from-white/95 to-white/85 shadow-2xl z-20`
+            : `bg-white/25 shadow-xl border-white/30 hover:bg-white/40 ${getCategoryStyle(mood.category ?? "neutral")}`
         }
       `}
       onClick={onSelect}
@@ -97,11 +113,11 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
       style={{
         boxShadow: isSelected
           ? `0 25px 50px rgba(139, 92, 246, 0.4), 0 0 0 3px ${mood.color}80, 0 0 40px ${mood.glow}40`
-          : '0 10px 30px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(255, 255, 255, 0.08)',
+          : "0 10px 30px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(255, 255, 255, 0.08)",
         borderColor: isSelected ? mood.color : undefined,
-        transition: 'box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease'
+        transition:
+          "box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease",
       }}
-      className="mood-card-container aspect-square w-full"
     >
       {/* Enhanced selection indicator with AnimatePresence */}
       <AnimatePresence>
@@ -113,7 +129,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             transition={{
               type: "spring",
               stiffness: 500,
-              damping: 25
+              damping: 25,
             }}
             className="absolute -top-2.5 -right-2.5 w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center z-30 shadow-lg border-2 border-white"
           >
@@ -147,7 +163,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             y: isSelected
               ? { type: "spring", stiffness: 300, damping: 20 }
               : { duration: 3, repeat: Infinity, ease: "easeInOut" },
-            scale: { type: "spring", stiffness: 300, damping: 20 }
+            scale: { type: "spring", stiffness: 300, damping: 20 },
           }}
         >
           {/* Animated gradient background on hover */}
@@ -159,30 +175,30 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             animate={
               isHovered
                 ? {
-                  background: [
-                    `linear-gradient(135deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
-                    `linear-gradient(225deg, ${mood.glow}25, ${mood.color}20, ${mood.glow}15)`,
-                    `linear-gradient(315deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
-                    `linear-gradient(45deg, ${mood.glow}25, ${mood.color}20, ${mood.glow}15)`,
-                    `linear-gradient(135deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
-                  ],
-                }
+                    background: [
+                      `linear-gradient(135deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
+                      `linear-gradient(225deg, ${mood.glow}25, ${mood.color}20, ${mood.glow}15)`,
+                      `linear-gradient(315deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
+                      `linear-gradient(45deg, ${mood.glow}25, ${mood.color}20, ${mood.glow}15)`,
+                      `linear-gradient(135deg, ${mood.color}25, ${mood.glow}20, ${mood.color}15)`,
+                    ],
+                  }
                 : {}
             }
             transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
           />
 
-        {/* Enhanced text with smooth color transition */}
-        <motion.div
-          className={`text-xs sm:text-sm font-bold drop-shadow-lg leading-tight`}
-          animate={{
-            color: isSelected ? '#1f2937' : '#ffffff',
-            scale: isSelected ? 1.05 : 1
-          }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-        >
-          {mood.name}
-        </motion.div>
+          {/* Enhanced text with smooth color transition */}
+          <motion.div
+            className={`text-xs sm:text-sm font-bold drop-shadow-lg leading-tight`}
+            animate={{
+              color: isSelected ? "#1f2937" : "#ffffff",
+              scale: isSelected ? 1.05 : 1,
+            }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            {mood.name}
+          </motion.div>
 
           {/* Shimmer sweep effect */}
           <motion.div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
@@ -217,7 +233,11 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
                 }}
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 0.6, scale: 1, y: [0, -10, 0] }}
-                transition={{ type: "keyframes", duration: 2, repeat: Infinity }}
+                transition={{
+                  type: "keyframes",
+                  duration: 2,
+                  repeat: Infinity,
+                }}
               />
               <motion.div
                 className="absolute w-12 h-12 rounded-full pointer-events-none"
@@ -298,14 +318,10 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             animate={{ opacity: 1, scale: 1.1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{
-              duration: 0.4,
-              ease: [0.4, 0, 0.2, 1]
-            }}
-            transition={{
               duration: 4 + (index % 3),
-              repeat: Infinity,
               ease: "easeInOut",
               delay: index * 0.08,
+              repeat: Infinity,
             }}
           >
             <motion.div
@@ -347,7 +363,11 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
                 animate={{
                   opacity: [0.4, 0.7, 0.4],
                 }}
-                transition={{ duration: 2, repeat: Infinity, ease: [0.4, 0, 0.2, 1] }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: [0.4, 0, 0.2, 1],
+                }}
                 style={{
                   background: `radial-gradient(circle at center, ${mood.glow}40 0%, ${mood.color}25 40%, transparent 70%)`,
                 }}
@@ -360,15 +380,14 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{
               opacity: [0.6, 0],
-              scale: [1, 1.3]
+              scale: [1, 1.3],
             }}
             transition={{
               duration: 0.8,
               ease: "easeOut",
               repeat: Infinity,
-              repeatDelay: 1.5
+              repeatDelay: 1.5,
             }}
-            transition={{ duration: 0.3 }}
           />
 
           {/* Bottom color accent line */}
@@ -383,7 +402,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             }}
             transition={{ duration: 0.3 }}
           />
-        </button>
+        </motion.div>
 
         {/* ====== BACK FACE (Reflection Card) ====== */}
         <div
@@ -402,25 +421,26 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
           </p>
 
           {/* Single quick recommendation */}
-          {reflection.actions[0] && (() => {
-            const action = reflection.actions[0];
-            const IconComp = actionIcons[action.icon];
-            return (
-              <span
-                className="reflection-action"
-                title={action.description}
-                style={{
-                  borderColor: `${mood.color}40`,
-                  background: `${mood.color}25`,
-                }}
-              >
-                <IconComp className="w-2.5 h-2.5" />
-                {action.label}
-              </span>
-            );
-          })()}
+          {reflection.actions[0] &&
+            (() => {
+              const action = reflection.actions[0];
+              const IconComp = Check;
+              return (
+                <span
+                  className="reflection-action"
+                  title={action.description}
+                  style={{
+                    borderColor: `${mood.color}40`,
+                    background: `${mood.color}25`,
+                  }}
+                >
+                  <IconComp className="w-2.5 h-2.5" />
+                  {action.label}
+                </span>
+              );
+            })()}
         </div>
       </div>
     </motion.div>
   );
-});
+}
