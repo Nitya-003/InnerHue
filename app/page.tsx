@@ -6,9 +6,14 @@ import { motion } from 'framer-motion';
 import { Heart, BarChart3, Music, Brain, Sparkles, ArrowRight, Plus } from 'lucide-react';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
-import { Heart, BarChart3, Music } from 'lucide-react';
+import { AuroraBackground } from '@/components/AuroraBackground';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { SkeletonMoodCard } from '@/components/SkeletonMoodCard';
+import { ErrorState } from '@/components/ErrorState';
+import AITherapist from '@/components/AITherapist'; 
 import SimpleLangFlowChatbot from '@/components/SimpleLangFlowChatbot';
 import { QuoteCard } from '@/components/QuoteCard';
+import FeatureRow from "@/components/FeatureRow";
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176' },
@@ -158,9 +163,6 @@ export default function Home() {
           </nav>
         </div>
       </motion.header>
-
-      {/* Hero Section */}
-      <Hero />
 
       {/* Main Content */}
       <main id="main" className="relative z-10 px-4 md:px-6 pb-20">

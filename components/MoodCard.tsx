@@ -2,6 +2,8 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import './moodcard.css';
+import { useState } from "react";
+import { Check } from "lucide-react";
 
 interface Mood {
   id: string;
@@ -21,6 +23,7 @@ interface MoodCardProps {
 }
 
 export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
   const getCategoryStyle = (category: string) => {
     const styles = {
       positive: 'border-emerald-300/50 hover:border-emerald-300 hover:bg-emerald-50/20',
@@ -101,7 +104,6 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         borderColor: isSelected ? mood.color : undefined,
         transition: 'box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease'
       }}
-      className="mood-card-container aspect-square w-full"
     >
       {/* Enhanced selection indicator with AnimatePresence */}
       <AnimatePresence>
@@ -298,10 +300,6 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             animate={{ opacity: 1, scale: 1.1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{
-              duration: 0.4,
-              ease: [0.4, 0, 0.2, 1]
-            }}
-            transition={{
               duration: 4 + (index % 3),
               repeat: Infinity,
               ease: "easeInOut",
@@ -368,7 +366,6 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
               repeat: Infinity,
               repeatDelay: 1.5
             }}
-            transition={{ duration: 0.3 }}
           />
 
           {/* Bottom color accent line */}
@@ -383,44 +380,25 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             }}
             transition={{ duration: 0.3 }}
           />
-        </button>
+        </motion.div>
 
         {/* ====== BACK FACE (Reflection Card) ====== */}
         <div
-          className="mood-card-back flex flex-col items-center justify-center gap-3 p-3 sm:p-4 cursor-pointer"
-          onClick={onSelect}
-          role="button"
-          tabIndex={-1}
-          aria-label={`Deselect ${mood.name} mood`}
-          style={{
-            boxShadow: `0 20px 50px ${mood.color}40, 0 0 30px ${mood.glow}25, inset 0 1px 0 rgba(255,255,255,0.2)`,
-          }}
-        >
-          {/* Quote */}
-          <p className="text-[0.65rem] sm:text-xs leading-snug text-white/85 italic text-center px-1">
-            &ldquo;{reflection.question}&rdquo;
-          </p>
-
-          {/* Single quick recommendation */}
-          {reflection.actions[0] && (() => {
-            const action = reflection.actions[0];
-            const IconComp = actionIcons[action.icon];
-            return (
-              <span
-                className="reflection-action"
-                title={action.description}
-                style={{
-                  borderColor: `${mood.color}40`,
-                  background: `${mood.color}25`,
-                }}
-              >
-                <IconComp className="w-2.5 h-2.5" />
-                {action.label}
-              </span>
-            );
-          })()}
-        </div>
-      </div>
+  className="mood-card-back flex flex-col items-center justify-center gap-3 p-3 sm:p-4 cursor-pointer"
+  onClick={onSelect}
+  role="button"
+  tabIndex={-1}
+  aria-label={`Deselect ${mood.name} mood`}
+  style={{
+    boxShadow: `0 20px 50px ${mood.color}40, 0 0 30px ${mood.glow}25, inset 0 1px 0 rgba(255,255,255,0.2)`,
+  }}
+>
+  {/* Quote */}
+  <p className="text-[0.65rem] sm:text-xs leading-snug text-white/85 italic text-center px-1">
+    Reflection feature coming soon ✨
+  </p>
+</div>
+</div>
     </motion.div>
   );
-});
+}
