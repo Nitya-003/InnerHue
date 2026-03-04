@@ -1,0 +1,22 @@
+# Development Dockerfile for hot reload
+FROM node:18-alpine AS dev
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install all dependencies
+RUN \
+  if [ -f package-lock.json ]; then npm ci; \
+  else npm install; \
+  fi
+
+# Set environment variables
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Expose port
+EXPOSE 3000
+
+# Start development server
+CMD ["npm", "run", "dev"]
