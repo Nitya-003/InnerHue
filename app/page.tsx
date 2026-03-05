@@ -65,6 +65,16 @@ interface Orb {
 
 export default function Home() {
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+  useEffect(() => {
+  const savedMoods = localStorage.getItem("selectedMoods");
+  if (savedMoods) {
+    setSelectedMoods(JSON.parse(savedMoods));
+  }
+}, []);
+  useEffect(() => {
+  localStorage.setItem("selectedMoods", JSON.stringify(selectedMoods));
+}, [selectedMoods]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
   const maxSelections = 3;
