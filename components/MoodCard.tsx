@@ -23,7 +23,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
   const [emojiDuration, setEmojiDuration] = useState(4);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+
     setEmojiDuration(4 + Math.random() * 2);
   }, []);
 

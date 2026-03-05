@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Bookmark, Share2 } from 'lucide-react';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
-import { MoodData } from '@/lib/moodData';
+import { MoodData, Mood, Suggestion } from '@/lib/moodData';
 import { getQuoteByMood } from '@/lib/getQuote';
 import { moodTags } from '@/lib/quoteTags';
 import { Quote } from '@/data/fallbackQuotes';
@@ -21,8 +21,8 @@ interface MoodPageProps {
 }
 
 export default function MoodPage({ params, searchParams }: MoodPageProps) {
-  const [moodData, setMoodData] = useState<any[]>([]);
-  const [suggestions, setSuggestions] = useState<any>(null);
+  const [moodData, setMoodData] = useState<Mood[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);
