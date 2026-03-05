@@ -14,7 +14,7 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 ## ✨ Features
 
 ### 🎨 Mood Selection
-- **20+ Emotional States**: From happiness to melancholy, each with unique colors and personalities
+- **38 Emotional States**: From happiness to melancholy, each with unique colors and personalities
 - **Floating Card Interface**: Disney-inspired 3D animations with shimmer and hover effects
 - **Intuitive Design**: Beautiful gradient backgrounds and smooth transitions
 
@@ -54,22 +54,73 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 ---
 
 ## 🗺️ System Architecture
-To understand how InnerHue processes your emotional data, here is the high-level logic flow:
+
+### High-Level Component Map
+
 ```mermaid
-graph TD
-    A[User Selection] -->|Select Mood| B(Mood Engine)
-    B --> C{Dynamic Mapping}
-    C -->|Update| D[3D Orb Visualizer]
-    C -->|Fetch| E[AI Suggestions & Quotes]
-    C -->|Filter| F[Curated Music Playlists]
-    D --> G[Local Storage Persistence]
-    E --> G
-    F --> G
-    G --> H[Analytics Dashboard]
+graph TB
+    subgraph "Presentation Layer"
+        A[Home Page]
+        B[Mood Detail Page]
+        C[Analytics Dashboard]
+        D[Music Player]
+    end
     
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style D fill:#6272a4,stroke:#333,stroke-width:2px,color:#fff
-    style H fill:#50fa7b,stroke:#333,stroke-width:2px
+    subgraph "Component Layer"
+        E[MoodCard]
+        F[OrbVisualizer]
+        G[SuggestionPanel]
+        H[FloatingBackground]
+        I[MoodChart]
+    end
+    
+    subgraph "Data Layer"
+        J[moodData.ts]
+        K[getQuote.ts]
+        L[useLocalStorage Hook]
+    end
+    
+    A --> E
+    A --> H
+    B --> F
+    B --> G
+    C --> I
+    D --> J
+    E --> J
+    F --> J
+    G --> K
+    I --> L
+```
+
+### Emotional Reflection Pipeline
+
+```mermaid
+flowchart LR
+    A[User Selects Mood] --> B{Multi-Select?}
+    B -->|Yes| C[Store Selections]
+    B -->|No| D[Single Mood]
+    C --> E[Navigate to Detail]
+    D --> E
+    E --> F[Load Mood Config]
+    F --> G[Render 3D Orb]
+    G --> H[Fetch Quote]
+    H --> I[Generate Prompt]
+    I --> J[Show Music Recs]
+    J --> K[Persist to Storage]
+    K --> L[Update Analytics]
+```
+
+### 3D Orb State Management
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle: Component Mount
+    Idle --> Active: User Clicks Activate
+    Active --> Idle: User Clicks Pause
+    Idle --> Animating: Mood Selected
+    Animating --> Idle: Animation Complete
+    Active --> Particles: Trigger Particles
+    Particles --> Active: Particles Fade
 ```
 
 ---
@@ -87,105 +138,21 @@ InnerHue follows **Apple-level design aesthetics** with:
 
 ## 🚀 Getting Started
 
-1. **Clone the repository**
+Quick start for local development:
+
 ```bash
+# Clone the repository
 git clone https://github.com/Nitya-003/innerhue.git
 cd innerhue
-```
 
-2. **Install dependencies**
-```bash
+# Install dependencies
 npm install
-```
 
-3. **Run the development server**
-```bash
+# Run the development server
 npm run dev
 ```
 
-## 🐳 Docker Deployment
-
-InnerHue is fully containerized for consistent deployment across environments.
-
-### Prerequisites
-- Docker Engine 20.10+
-- Docker Compose 2.0+ (optional but recommended)
-
-### Quick Start with Docker Compose
-
-1. **Production deployment (recommended)**
-```bash
-docker-compose up innerhue
-```
-
-2. **Development with hot reload**
-```bash
-docker-compose --profile dev up innerhue-dev
-```
-
-### Manual Docker Commands
-
-1. **Build the Docker image**
-```bash
-docker build -t innerhue .
-```
-
-2. **Run the container**
-```bash
-docker run -p 3000:3000 innerhue
-```
-
-3. **Access the application**
-Open [http://localhost:3000](http://localhost:3000) in your browser
-
-### Docker Image Details
-- **Base Image**: `node:18-alpine` for optimal size and security
-- **Multi-stage Build**: Separate stages for dependencies, building, and runtime
-- **Image Size**: < 300MB (optimized for production)
-- **Architecture**: Supports both AMD64 and ARM64 (Apple Silicon)
-
-### Environment Variables
-```bash
-NODE_ENV=production          # Set environment mode
-NEXT_TELEMETRY_DISABLED=1   # Disable Next.js telemetry
-PORT=3000                   # Application port (default: 3000)
-HOSTNAME=0.0.0.0           # Bind to all network interfaces
-```
-
-### Docker Development Workflow
-```bash
-# Pull the latest image from GitHub Container Registry
-docker pull ghcr.io/nitya-003/innerhue:latest
-
-# Or build locally with caching
-docker build --target runner -t innerhue:local .
-
-# Run with custom environment
-docker run -d \
-  --name innerhue-prod \
-  --restart unless-stopped \
-  -p 3000:3000 \
-  -e NODE_ENV=production \
-  innerhue:local
-```
-
-### Health Checks
-The Docker container includes health checks to ensure reliability:
-```bash
-# Check container health
-docker inspect innerhue-app --format='{{.State.Health.Status}}'
-
-# View health check logs
-docker inspect innerhue-app --format='{{range .State.Health.Log}}{{.Output}}{{end}}'
-```
-
-### CI/CD Integration
-Every push and PR automatically:
-- ✅ Runs linting and security audits
-- ✅ Builds and tests Docker images
-- ✅ Validates image size (< 300MB)
-- ✅ Performs security vulnerability scanning
-- ✅ Deploys to GitHub Container Registry
+For detailed setup instructions, environment configuration, and troubleshooting, see [SETUP.md](./SETUP.md).
 
 ---
 
@@ -200,14 +167,27 @@ InnerHue uses a comprehensive emotional color palette:
 
 ---
 
-## 🔄 Future Enhancements
+## 🔄 2026 Roadmap
 
-- [ ] **Backend Integration**: Express.js API with MongoDB
-- [ ] **Real NLP**: OpenAI or Cohere integration for dynamic suggestions
-- [ ] **Social Features**: Share insights with friends and family
+### Q1 2026
+- [ ] **User Authentication**: Secure login with NextAuth.js
+- [ ] **Cloud Sync**: Backup mood history to cloud storage
+- [ ] **Enhanced Analytics**: Weekly/monthly trend reports
+
+### Q2 2026
+- [ ] **AI-Powered Insights**: OpenAI integration for personalized suggestions
 - [ ] **Voice Journaling**: Audio recordings with sentiment analysis
-- [ ] **Meditation Timer**: Guided meditation based on current mood
+- [ ] **Social Sharing**: Share mood insights with friends
+
+### Q3 2026
+- [ ] **Mobile App**: React Native companion app
 - [ ] **Wearable Integration**: Apple Watch and Fitbit mood tracking
+- [ ] **Meditation Module**: Guided meditations based on mood
+
+### Q4 2026
+- [ ] **Community Features**: Anonymous mood boards
+- [ ] **Therapist Integration**: Professional dashboard
+- [ ] **Advanced NLP**: Cohere API for deeper emotional analysis
 
 ---
 ## 👥 Contributors

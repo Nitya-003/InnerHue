@@ -12,6 +12,14 @@ interface Mood {
   color: string;
   glow: string;
   category?: string;
+  reflection?: {
+    question: string;
+    actions: {
+      label: string;
+      description: string;
+      icon: string;
+    }[];
+  };
 }
 
 interface MoodCardProps {
