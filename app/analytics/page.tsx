@@ -7,51 +7,56 @@ import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } f
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
-import { useMoodStore } from '@/lib/useMoodStore';
-
-function getExportDateString() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+import type { MoodHistoryEntry, MoodStats as MoodStatsType } from '@/types/mood';
 
 export default function AnalyticsPage() {
-  const moodHistory = useMoodStore(state => state.moodHistory);
-  const stats = useMoodStore(state => state.stats);
-  const clearHistory = useMoodStore(state => state.clearHistory);
-  const deleteMood = useMoodStore(state => state.deleteMood);
-  const [exportMenuOpen, setExportMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedMoodFilter, setSelectedMoodFilter] = useState<string>('all');
+  const [moodHistory, setMoodHistory] = useState<MoodHistoryEntry[]>([]);
+  const [stats, setStats] = useState<MoodStatsType>({
+    totalEntries: 0,
+    todayEntries: 0,
+    weekEntries: 0,
+    mostCommonMood: null,
+    moodCounts: {},
+    weeklyData: []
+  });
 
-  const uniqueMoods = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          moodHistory
-            .map((entry: any) => (entry.emotion || entry.mood || '').trim())
-            .filter(Boolean)
-        )
-      ),
-    [moodHistory]
-  );
+  const calculateStats = useCallback((history: MoodHistoryEntry[]) => {
+    const moodCounts: { [key: string]: number } = {};
+    const today = new Date().toDateString();
+    const thisWeek: MoodHistoryEntry[] = [];
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - 7);
 
-  const filteredHistory = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
+    history.forEach((entry) => {
+      // Support both new (emotion) and old (mood) formats
+      const moodKey = entry.emotion || entry.mood;
+      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
+
+      const entryDate = new Date(entry.timestamp);
+      if (entryDate >= weekStart) {
+        thisWeek.push(entry);
+      }
+    });
+
+    const mostCommon = Object.entries(moodCounts)
+      .sort(([, a], [, b]) => b - a)[0];
+
+    setStats({
+      totalEntries: history.length,
+      todayEntries: history.filter((entry) => new Date(entry.timestamp).toDateString() === today).length,
+      weekEntries: thisWeek.length,
+      mostCommonMood: mostCommon ? mostCommon[0] : null,
+      moodCounts,
+      weeklyData: thisWeek
+    });
+  }, []);
 
     return moodHistory.filter((entry: any) => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
       const notes = (entry.notes || '').toLowerCase();
 
-      const matchesQuery =
-        !query || moodLabel.includes(query) || notes.includes(query);
+  useEffect(() => {
+    loadData();
 
       const matchesMood =
         selectedMoodFilter === 'all' ||

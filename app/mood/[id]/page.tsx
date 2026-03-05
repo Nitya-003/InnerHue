@@ -11,29 +11,23 @@ import type { FC } from 'react';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { MoodData } from '@/lib/moodData';
-import { Mood, MoodSuggestion } from '@/types/mood';
-import { useMoodStore } from '@/lib/useMoodStore';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import reflectiveMoods from '@/lib/reflectiveMoods';
-import { getTraditionalMoodId } from '@/lib/moodMapping';
+import { getQuoteByMood } from '@/lib/getQuote';
+import { moodTags } from '@/lib/quoteTags';
+import { Quote } from '@/data/fallbackQuotes';
+import type { Mood, Suggestion, MoodHistoryEntry } from '@/types/mood';
 
-const OrbVisualizer = dynamic(
-  () => import('@/components/OrbVisualizer').then((m) => ({ default: m.OrbVisualizer })),
-  { ssr: false }
-) as unknown as FC<OrbVisualizerProps>;
-
-interface MoodWithMeta extends Mood {
-  traditionalId?: string;
-  spotifyPlaylistId?: string;
+interface MoodPageProps {
+  params: {
+    id: string;
+  };
+  searchParams?: {
+    moods?: string;
+  };
 }
 
-export default function MoodClient() {
-  const params = useParams();
-  const searchParams = useSearchParams();
-  const id = params?.id as string;
-  const moods = searchParams.get('moods') || undefined;
-  const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
-  const [suggestions, setSuggestions] = useState<MoodSuggestion | null>(null);
+export default function MoodPage({ params, searchParams }: MoodPageProps) {
+  const [moodData, setMoodData] = useState<Mood[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [entryIds, setEntryIds] = useState<Record<string, string>>({});
   const addMood = useMoodStore(state => state.addMood);
@@ -67,32 +61,29 @@ export default function MoodClient() {
       .filter(Boolean) as MoodWithMeta[];
 
     setMoodData(moodsData);
-
-    const newEntryIds: Record<string, string> = {};
-    moodIds.forEach(mid => {
-      const moodInfo = moodsData.find(m => m.id === mid);
-      if (moodInfo) {
-        const eid = addMood({
-          mood: mid,
-          emotion: moodInfo.name,
-          date: new Date().toDateString(),
-          color: moodInfo.color,
-        });
-        newEntryIds[mid] = eid;
-      }
-    });
-    setEntryIds(newEntryIds);
-  }, [id, moods, addMood]);
-
-  useEffect(() => {
-    if (!moodData.length) return;
-
-    const mood = moodData[currentMoodIndex];
-    if (mood) {
-      const suggestionId = mood.traditionalId || mood.id;
-      setSuggestions(MoodData.getSuggestions(suggestionId));
+    
+    if (moodsData.length > 0) {
+      // Get suggestions for the first mood initially
+      const moodSuggestions = MoodData.getSuggestions(moodsData[0].id);
+      setSuggestions(moodSuggestions);
     }
-  }, [currentMoodIndex, moodData]);
+    
+    // Save to local storage for analytics
+    if (typeof window !== 'undefined') {
+      const savedMoods: MoodHistoryEntry[] = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+      moodIds.forEach(moodId => {
+        const mood = MoodData.getMoodById(moodId);
+        savedMoods.push({
+          id: crypto.randomUUID(),
+          mood: moodId,
+          timestamp: new Date().toISOString(),
+          date: new Date().toDateString(),
+          color: mood?.color
+        });
+      });
+      localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
+    }
+  }, [params.id, searchParams?.moods]);
 
   if (!moodData.length || !suggestions) {
     return (

@@ -1,10 +1,7 @@
 /**
- * Mood type definitions for InnerHue application
+ * Mood types for InnerHue application
  */
 
-/**
- * Represents a mood with its visual properties
- */
 export interface Mood {
   id: string;
   name: string;
@@ -13,10 +10,16 @@ export interface Mood {
   glow: string;
 }
 
-/**
- * Represents mood suggestions for journaling and activities
- */
-export interface MoodSuggestion {
+export interface MoodHistoryEntry {
+  id: string;
+  mood: string;
+  timestamp: string;
+  date: string;
+  color?: string;
+  emotion?: string;
+}
+
+export interface Suggestion {
   prompt: string;
   quote: string;
   author: string;
@@ -24,31 +27,11 @@ export interface MoodSuggestion {
   music: string;
 }
 
-/**
- * Represents a song in a music playlist
- */
-export interface Song {
-  title: string;
-  artist: string;
-  duration: string;
-}
-
-/**
- * Represents a music playlist for a mood
- */
-export interface MoodPlaylist {
-  id: string;
-  name: string;
-  description: string;
-  color: string;
-  songs: Song[];
-}
-
-/**
- * Represents a mood entry in the history
- */
-export interface MoodHistoryEntry {
-  mood: string;
-  timestamp: string;
-  date: string;
+export interface MoodStats {
+  totalEntries: number;
+  todayEntries: number;
+  weekEntries: number;
+  mostCommonMood: string | null;
+  moodCounts: { [key: string]: number };
+  weeklyData: MoodHistoryEntry[];
 }
