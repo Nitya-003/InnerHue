@@ -337,7 +337,7 @@ export default function Home() {
       className="min-h-screen relative overflow-hidden bg-[#0f0720]"
     >
       {/* Dynamic Aurora Background */}
-      <AuroraBackground emotionColor={auroraColor} emotionGlow={auroraGlow} />
+      <FloatingBackground />
 
       {/* Header */}
       <motion.header
@@ -480,37 +480,6 @@ export default function Home() {
             </div>
 
             <div className="space-y-20 sm:space-y-24 max-w-6xl mx-auto">
-              <FeatureRow
-                icon={Brain}
-                title="Emotion Reflection"
-                description="Select from 38 distinct emotional states and dive deep into your feelings with guided introspection. Each emotion opens a pathway to understanding your inner landscape."
-                align="left"
-                index={0}
-              />
-
-              <FeatureRow
-                icon={Sparkles}
-                title="Personalized Insights"
-                description="Get tailored prompts, affirmations, and thoughtful questions based on your current emotional state. Our reflection system adapts to your unique journey."
-                align="right"
-                index={1}
-              />
-
-              <FeatureRow
-                icon={Music}
-                title="Therapeutic Music"
-                description="Discover curated playlists and ambient sounds designed to complement and enhance your emotional journey. Let sound guide your reflection."
-                align="left"
-                index={2}
-              />
-
-              <FeatureRow
-                icon={BarChart3}
-                title="Mood Analytics"
-                description="Track emotional patterns over time with beautiful visualizations and gain insights into your well-being. Witness your growth unfold."
-                align="right"
-                index={3}
-              />
             </div>
           </section>
 
