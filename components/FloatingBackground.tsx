@@ -27,7 +27,7 @@ export function FloatingBackground() {
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+
     setShapes(Array.from({ length: 25 }, (_, i) => ({
       id: i,
       size: Math.random() * 150 + 30,

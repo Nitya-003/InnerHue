@@ -66,7 +66,7 @@ export default function Home() {
   const maxSelections = 3;
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+
     setOrbs(Array.from({ length: 8 }, (_, i) => ({
       id: i,
       color: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'][i],
