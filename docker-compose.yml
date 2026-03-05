@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  innerhue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: innerhue-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - innerhue-network
+
+  # For development with hot reload (optional service)
+  innerhue-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: dev
+    container_name: innerhue-dev
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+    networks:
+      - innerhue-network
+    profiles:
+      - dev
+
+networks:
+  innerhue-network:
+    driver: bridge
+    name: innerhue-net
+
+# Use this for development: docker-compose --profile dev up innerhue-dev
+# Use this for production: docker-compose up innerhue

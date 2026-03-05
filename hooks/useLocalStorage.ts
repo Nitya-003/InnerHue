@@ -41,10 +41,5 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
         }
     };
 
-    useEffect(() => {
-        // Optional: Listen for storage events or custom events if we want this hook to be reactive across the app
-        // For this simple app, we primarily mostly need read on mount or save on interaction
-    }, []);
-
     return [storedValue, setValue] as const;
 }
