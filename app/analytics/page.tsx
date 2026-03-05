@@ -6,19 +6,27 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide-react';
 import { MoodChart } from '@/components/MoodChart';
 import { MoodStats } from '@/components/MoodStats';
+import type { MoodHistoryEntry, MoodStats as MoodStatsType } from '@/types/mood';
 
 export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>({});
+  const [moodHistory, setMoodHistory] = useState<MoodHistoryEntry[]>([]);
+  const [stats, setStats] = useState<MoodStatsType>({
+    totalEntries: 0,
+    todayEntries: 0,
+    weekEntries: 0,
+    mostCommonMood: null,
+    moodCounts: {},
+    weeklyData: []
+  });
 
-  const calculateStats = useCallback((history: any[]) => {
+  const calculateStats = useCallback((history: MoodHistoryEntry[]) => {
     const moodCounts: { [key: string]: number } = {};
     const today = new Date().toDateString();
-    const thisWeek: any[] = [];
+    const thisWeek: MoodHistoryEntry[] = [];
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);
 
-    history.forEach((entry: any) => {
+    history.forEach((entry) => {
       // Support both new (emotion) and old (mood) formats
       const moodKey = entry.emotion || entry.mood;
       moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
@@ -30,11 +38,11 @@ export default function AnalyticsPage() {
     });
 
     const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => (b as number) - (a as number))[0];
+      .sort(([, a], [, b]) => b - a)[0];
 
     setStats({
       totalEntries: history.length,
-      todayEntries: history.filter((entry: any) => new Date(entry.timestamp).toDateString() === today).length,
+      todayEntries: history.filter((entry) => new Date(entry.timestamp).toDateString() === today).length,
       weekEntries: thisWeek.length,
       mostCommonMood: mostCommon ? mostCommon[0] : null,
       moodCounts,
@@ -49,7 +57,6 @@ export default function AnalyticsPage() {
   }, [calculateStats]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
 
     // Listen for updates from other tabs/components

@@ -10,6 +10,7 @@ import { MoodData } from '@/lib/moodData';
 import { getQuoteByMood } from '@/lib/getQuote';
 import { moodTags } from '@/lib/quoteTags';
 import { Quote } from '@/data/fallbackQuotes';
+import type { Mood, Suggestion, MoodHistoryEntry } from '@/types/mood';
 
 interface MoodPageProps {
   params: {
@@ -21,8 +22,8 @@ interface MoodPageProps {
 }
 
 export default function MoodPage({ params, searchParams }: MoodPageProps) {
-  const [moodData, setMoodData] = useState<any[]>([]);
-  const [suggestions, setSuggestions] = useState<any>(null);
+  const [moodData, setMoodData] = useState<Mood[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);
@@ -68,15 +69,20 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
     }
     
     // Save to local storage for analytics
-    const savedMoods = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-    moodIds.forEach(moodId => {
-      savedMoods.push({
-        mood: moodId,
-        timestamp: new Date().toISOString(),
-        date: new Date().toDateString()
+    if (typeof window !== 'undefined') {
+      const savedMoods: MoodHistoryEntry[] = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+      moodIds.forEach(moodId => {
+        const mood = MoodData.getMoodById(moodId);
+        savedMoods.push({
+          id: crypto.randomUUID(),
+          mood: moodId,
+          timestamp: new Date().toISOString(),
+          date: new Date().toDateString(),
+          color: mood?.color
+        });
       });
-    });
-    localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
+      localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
+    }
   }, [params.id, searchParams?.moods]);
 
   if (!moodData.length || !suggestions) {
