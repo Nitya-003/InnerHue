@@ -4,7 +4,7 @@
     "id": 181471078,
     "avatar_url": "https://avatars.githubusercontent.com/u/181471078?v=4",
     "html_url": "https://github.com/Nitya-003",
-    "contributions": 150,
+    "contributions": 151,
     "name": "Nitya Gosain",
     "bio": ".",
     "blog": "",
@@ -18,7 +18,7 @@
     "id": 195285937,
     "avatar_url": "https://avatars.githubusercontent.com/u/195285937?v=4",
     "html_url": "https://github.com/rishima17",
-    "contributions": 62,
+    "contributions": 63,
     "name": "Rishima",
     "bio": "B.Tech CSE'28 || Full-Stack Developer ||  Java  || Open Source Contributor\r\n",
     "blog": "https://rishima-portfolio.vercel.app/",
@@ -74,7 +74,7 @@
     "id": 181780004,
     "avatar_url": "https://avatars.githubusercontent.com/u/181780004?v=4",
     "html_url": "https://github.com/navin-oss",
-    "contributions": 17,
+    "contributions": 19,
     "name": "Navin  Karavade",
     "bio": "Aspiring Software Engineer specializing in AI/ML 🤖 and Data Science 📊.  \r\nSkilled in Python 🐍, C 💻, Java, HTML 🎨, and CSS ✨.\r\n",
     "blog": "",
@@ -164,7 +164,7 @@
     "blog": "https://portfolio-eight-ruby-81.vercel.app",
     "twitter_username": null,
     "location": "India",
-    "public_repos": 26,
+    "public_repos": 27,
     "followers": 3
   },
   {
@@ -179,7 +179,7 @@
     "twitter_username": null,
     "location": "Fulia, Nadia, West Bengal",
     "public_repos": 74,
-    "followers": 18
+    "followers": 19
   },
   {
     "login": "ARUNNG2004",
@@ -207,7 +207,7 @@
     "twitter_username": null,
     "location": "Bhubaneswar, Odisha",
     "public_repos": 66,
-    "followers": 39
+    "followers": 40
   },
   {
     "login": "Aditya-18849",
@@ -224,46 +224,18 @@
     "followers": 2
   },
   {
-    "login": "google-labs-jules[bot]",
-    "id": 161369871,
-    "avatar_url": "https://avatars.githubusercontent.com/in/842251?v=4",
-    "html_url": "https://github.com/apps/google-labs-jules",
-    "contributions": 4,
-    "name": null,
+    "login": "Shalini828",
+    "id": 221092454,
+    "avatar_url": "https://avatars.githubusercontent.com/u/221092454?v=4",
+    "html_url": "https://github.com/Shalini828",
+    "contributions": 5,
+    "name": "Shalini Kumari",
     "bio": null,
     "blog": "",
     "twitter_username": null,
-    "location": null,
-    "public_repos": 0,
-    "followers": 0
-  },
-  {
-    "login": "omkarhole",
-    "id": 182200831,
-    "avatar_url": "https://avatars.githubusercontent.com/u/182200831?v=4",
-    "html_url": "https://github.com/omkarhole",
-    "contributions": 4,
-    "name": "Omkar",
-    "bio": "Full Stack Developer and CS student building real-world web apps with the MERN stack and clean code.",
-    "blog": "https://portfolio-gamma-smoky-11.vercel.app/",
-    "twitter_username": null,
-    "location": "india",
-    "public_repos": 56,
-    "followers": 10
-  },
-  {
-    "login": "ayushkumar2601",
-    "id": 176748658,
-    "avatar_url": "https://avatars.githubusercontent.com/u/176748658?v=4",
-    "html_url": "https://github.com/ayushkumar2601",
-    "contributions": 4,
-    "name": "Ayush Kumar",
-    "bio": "Held together by music, commits and duct tapes...\r\n",
-    "blog": "",
-    "twitter_username": null,
-    "location": "Kolkata",
-    "public_repos": 47,
-    "followers": 22
+    "location": "Delhi, India",
+    "public_repos": 40,
+    "followers": 4
   },
   {
     "login": "NithinRegidi",
@@ -280,6 +252,48 @@
     "followers": 1
   },
   {
+    "login": "ayushkumar2601",
+    "id": 176748658,
+    "avatar_url": "https://avatars.githubusercontent.com/u/176748658?v=4",
+    "html_url": "https://github.com/ayushkumar2601",
+    "contributions": 4,
+    "name": "Ayush Kumar",
+    "bio": "Held together by music, commits and duct tapes...\r\n",
+    "blog": "",
+    "twitter_username": null,
+    "location": "Kolkata",
+    "public_repos": 48,
+    "followers": 22
+  },
+  {
+    "login": "omkarhole",
+    "id": 182200831,
+    "avatar_url": "https://avatars.githubusercontent.com/u/182200831?v=4",
+    "html_url": "https://github.com/omkarhole",
+    "contributions": 4,
+    "name": "Omkar",
+    "bio": "Full Stack Developer and CS student building real-world web apps with the MERN stack and clean code.",
+    "blog": "https://portfolio-gamma-smoky-11.vercel.app/",
+    "twitter_username": null,
+    "location": "india",
+    "public_repos": 57,
+    "followers": 10
+  },
+  {
+    "login": "google-labs-jules[bot]",
+    "id": 161369871,
+    "avatar_url": "https://avatars.githubusercontent.com/in/842251?v=4",
+    "html_url": "https://github.com/apps/google-labs-jules",
+    "contributions": 4,
+    "name": null,
+    "bio": null,
+    "blog": "",
+    "twitter_username": null,
+    "location": null,
+    "public_repos": 0,
+    "followers": 0
+  },
+  {
     "login": "GandrothuNagaSaiRishitha",
     "id": 227855799,
     "avatar_url": "https://avatars.githubusercontent.com/u/227855799?v=4",
@@ -290,22 +304,22 @@
     "blog": "",
     "twitter_username": null,
     "location": null,
-    "public_repos": 18,
+    "public_repos": 20,
     "followers": 8
   },
   {
-    "login": "Shalini828",
-    "id": 221092454,
-    "avatar_url": "https://avatars.githubusercontent.com/u/221092454?v=4",
-    "html_url": "https://github.com/Shalini828",
-    "contributions": 3,
-    "name": "Shalini Kumari",
+    "login": "parthsahay24",
+    "id": 118983535,
+    "avatar_url": "https://avatars.githubusercontent.com/u/118983535?v=4",
+    "html_url": "https://github.com/parthsahay24",
+    "contributions": 2,
+    "name": "Parth Sahay",
     "bio": null,
     "blog": "",
     "twitter_username": null,
-    "location": "Delhi, India",
-    "public_repos": 40,
-    "followers": 4
+    "location": null,
+    "public_repos": 17,
+    "followers": 0
   },
   {
     "login": "udaykiran243",
@@ -320,20 +334,6 @@
     "location": "India",
     "public_repos": 43,
     "followers": 7
-  },
-  {
-    "login": "parthsahay24",
-    "id": 118983535,
-    "avatar_url": "https://avatars.githubusercontent.com/u/118983535?v=4",
-    "html_url": "https://github.com/parthsahay24",
-    "contributions": 2,
-    "name": "Parth Sahay",
-    "bio": null,
-    "blog": "",
-    "twitter_username": null,
-    "location": null,
-    "public_repos": 16,
-    "followers": 0
   },
   {
     "login": "akshay0611",
@@ -375,7 +375,7 @@
     "twitter_username": null,
     "location": "Earth",
     "public_repos": 25,
-    "followers": 30
+    "followers": 31
   },
   {
     "login": "Ysh2006-ai",
