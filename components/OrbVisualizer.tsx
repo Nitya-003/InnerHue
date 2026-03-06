@@ -90,14 +90,13 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [particles, setParticles] = useState<{ id: number; angle: number; distance: number; duration: number }[]>([]);
 
   useEffect(() => {
-    setParticles(
-      Array.from({ length: 12 }, (_, i) => ({
-        id: i,
-        angle: (i * 30) * (Math.PI / 180),
-        distance: 150 + Math.random() * 50,
-        duration: 3 + Math.random() * 2,
-      }))
-    );
+
+    setParticles(Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      angle: (i * 30) * (Math.PI / 180),
+      distance: 150 + Math.random() * 50,
+      duration: 3 + Math.random() * 2 // Moved here
+    })));
   }, []);
 
   return (

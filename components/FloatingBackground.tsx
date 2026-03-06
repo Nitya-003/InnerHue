@@ -20,14 +20,50 @@ export const FloatingBackground = memo(function FloatingBackground() {
     ][i % 6],
   })), []);
 
-  // Fewer particles
-  const particles = useMemo(() => Array.from({ length: 15 }, (_, i) => ({
-    id: i,
-    x: (i * 7) % 100,
-    y: (i * 11) % 100,
-    duration: 6 + (i % 4) * 2,
-    delay: i * 0.3,
-  })), []);
+interface Particle {
+  id: number;
+  left: number;
+  top: number;
+  duration: number;
+  delay: number;
+}
+
+export function FloatingBackground() {
+  const [shapes, setShapes] = useState<Shape[]>([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
+
+  useEffect(() => {
+
+    setShapes(Array.from({ length: 25 }, (_, i) => ({
+      id: i,
+      size: Math.random() * 150 + 30,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      color: [
+        'rgba(139, 92, 246, 0.15)',
+        'rgba(236, 72, 153, 0.15)',
+        'rgba(59, 130, 246, 0.15)',
+        'rgba(16, 185, 129, 0.15)',
+        'rgba(245, 158, 11, 0.15)',
+        'rgba(168, 85, 247, 0.15)',
+        'rgba(244, 114, 182, 0.15)',
+        'rgba(34, 197, 94, 0.15)',
+        'rgba(251, 146, 60, 0.15)',
+        'rgba(99, 102, 241, 0.15)'
+      ][Math.floor(Math.random() * 10)],
+      shape: Math.random() > 0.5 ? 'circle' : 'square',
+      duration: 12 + Math.random() * 8,
+      delay: Math.random() * 2
+    })));
+
+    setParticles(Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: 4 + Math.random() * 4,
+      delay: Math.random() * 4
+    })));
+  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">

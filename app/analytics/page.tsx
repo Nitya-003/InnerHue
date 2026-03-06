@@ -56,6 +56,7 @@ export default function AnalyticsPage() {
       const notes = (entry.notes || '').toLowerCase();
 
   useEffect(() => {
+
     loadData();
 
       const matchesMood =

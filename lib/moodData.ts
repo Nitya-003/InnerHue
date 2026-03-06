@@ -1,3 +1,19 @@
+export interface Mood {
+  id: string;
+  name: string;
+  emoji: string;
+  color: string;
+  glow: string;
+}
+
+export interface Suggestion {
+  prompt: string;
+  quote: string;
+  author: string;
+  keywords: string[];
+  music: string;
+}
+
 export const MoodData = {
   moods: {
     happy: {

@@ -325,7 +325,18 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchData();
+
+    setOrbs(Array.from({ length: 8 }, (_, i) => ({
+      id: i,
+      color: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'][i],
+      width: Math.random() * 300 + 100,
+      height: Math.random() * 300 + 100,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      x: Math.random() * 100 - 50,
+      y: Math.random() * 100 - 50,
+      duration: 8 + Math.random() * 4
+    })));
   }, []);
 
   return (
