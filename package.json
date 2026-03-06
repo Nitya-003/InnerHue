@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "description": "A beautifully animated emotional wellness platform that helps users explore, visualize, and understand their feelings through interactive mood tracking, 3D visualizations, and personalized insights.",
-  "homepage": "https://github.com/NithinRegidi/InnerHue-OSS#readme",
+  "homepage": "https://Nitya-003.github.io/InnerHue",
   "bugs": {
-    "url": "https://github.com/NithinRegidi/InnerHue-OSS/issues"
+    "url": "https://github.com/Nitya-003/InnerHue/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NithinRegidi/InnerHue-OSS.git"
+    "url": "git+https://github.com/Nitya-003/InnerHue.git"
   },
   "license": "ISC",
   "author": "",
