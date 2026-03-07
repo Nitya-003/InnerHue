@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import { motion } from 'framer-motion';
-import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music, Save, PenLine } from 'lucide-react';
+import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useMoodStore } from '@/lib/useMoodStore';
