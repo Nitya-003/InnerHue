@@ -32,6 +32,15 @@ export const getQuoteByMood = async (tag: string): Promise<Quote> => {
     // If no specific tag match, use any quote
     const pool = relevantQuotes.length > 0 ? relevantQuotes : fallbackQuotes;
 
+    // Ensure we have a valid fallback quote
+    if (pool.length === 0) {
+      return {
+        content: "You're stronger than you think.",
+        author: "InnerHue",
+        tags: [tag]
+      };
+    }
+
     return pool[Math.floor(Math.random() * pool.length)];
   }
 };
