@@ -19,7 +19,7 @@ export function ErrorState({ message = "Something went wrong.", onRetry }: Error
       <div className="bg-red-500/20 p-4 rounded-full mb-4">
         <AlertCircle className="w-8 h-8 text-red-400" />
       </div>
-      <h3 className="text-xl font-bold text-white mb-2">Unable to Load Data</h3>
+      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Unable to Load Data</h3>
       <p className="text-gray-300 mb-6">{message}</p>
       
       <button 

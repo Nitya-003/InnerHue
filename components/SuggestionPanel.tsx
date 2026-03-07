@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music, Save, PenLine } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { useMoodStore } from '@/lib/useMoodStore';
 import {
   Tooltip,
@@ -13,10 +14,10 @@ import {
 import { QuoteCard } from '@/components/QuoteCard';
 import { QuoteSkeleton } from '@/components/QuoteSkeleton';
 import { Quote } from '@/data/fallbackQuotes';
-import { Mood, MoodSuggestion } from '@/types/mood';
+import { Mood, Suggestion } from '@/types/mood';
 
 interface SuggestionPanelProps {
-  suggestions: MoodSuggestion;
+  suggestions: Suggestion;
   mood: Mood;
   onRefresh: () => void | Promise<void>;
   isRefreshing?: boolean;
@@ -60,42 +61,13 @@ export function SuggestionPanel({
       setIsSaving(false);
     }, 1000);
   };
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-bold text-gray-800">
-          Personalized Insights
-        </h3>
-        <TooltipProvider delayDuration={500}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="px-2 pt-2 pb-[1px] rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all">
-                <motion.button
-                  whileHover={{ scale: 1.05, rotate: 180 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={onRefresh}
-                  disabled={isRefreshing}
-                  className="transition-all disabled:opacity-50"
-                >
-                  <RefreshCw className={`w-5 text-purple-600 ${isRefreshing ? 'animate-spin' : ''}`} />
-                </motion.button>
-              </div>
-            </TooltipTrigger>
-
-            <TooltipContent
-              className="bg-white/80 backdrop-blur-md border-white/50 text-gray-800 shadow-xl"
-            >
-              <p>{isRefreshing ? 'Refreshing insights...' : 'Refresh Insights'}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
 
   const handleCopy = () => {
     navigator.clipboard.writeText(`"${suggestions.quote}" — ${suggestions.author}`);
     toast.success('Quote copied!');
   };
+
+  const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
 
   return (
     <TooltipProvider>
@@ -117,8 +89,7 @@ export function SuggestionPanel({
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{suggestions.prompt}</p>
             </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
 
       {/* Quote Section - Dynamic or Static */}
       {onQuoteRefresh ? (
@@ -144,7 +115,7 @@ export function SuggestionPanel({
         >
           <div className="flex items-start space-x-3 relative">
             <div className="p-2 rounded-lg bg-pink-100 dark:bg-pink-900/50">
-              <Quote className="w-5 h-5 text-pink-600 dark:text-pink-400" />
+              <QuoteIcon className="w-5 h-5 text-pink-600 dark:text-pink-400" />
             </div>
             <div>
               <h4 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Inspirational Quote</h4>

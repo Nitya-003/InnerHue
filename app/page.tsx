@@ -306,6 +306,7 @@ export default function Home() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
+  const [orbs, setOrbs] = useState<{ id: number; color: string; width: number; height: number; left: number; top: number; x: number; y: number; duration: number }[]>([]);
   const maxSelections = 3;
 
   // Derive active emotion color for aurora

@@ -4,16 +4,21 @@ import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Bookmark, Share2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import type { OrbVisualizerProps } from '@/components/OrbVisualizer';
-import type { FC } from 'react';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
+import { OrbVisualizer } from '@/components/OrbVisualizer';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { MoodData, Mood, Suggestion } from '@/lib/moodData';
-import { getQuoteByMood } from '@/lib/getQuote';
-import { moodTags } from '@/lib/quoteTags';
-import { Quote } from '@/data/fallbackQuotes';
-import type { Mood, Suggestion, MoodHistoryEntry } from '@/types/mood';
+import { reflectiveMoods } from '@/lib/reflectiveMoods';
+import { getTraditionalMoodId } from '@/lib/moodMapping';
+import { useMoodStore } from '@/lib/useMoodStore';
+import type { MoodHistoryEntry } from '@/types/mood';
+
+interface MoodWithMeta extends Mood {
+  traditionalId?: string;
+  spotifyPlaylistId?: string;
+}
 
 interface MoodPageProps {
   params: {
@@ -25,7 +30,12 @@ interface MoodPageProps {
 }
 
 export default function MoodPage({ params, searchParams }: MoodPageProps) {
-  const [moodData, setMoodData] = useState<Mood[]>([]);
+  const routeParams = useParams();
+  const searchParamsHook = useSearchParams();
+  const id = (routeParams?.id as string) || params.id;
+  const moods = searchParamsHook?.get('moods') || searchParams?.moods;
+
+  const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [entryIds, setEntryIds] = useState<Record<string, string>>({});
@@ -82,7 +92,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       });
       localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
     }
-  }, [params.id, searchParams?.moods]);
+  }, [params.id, searchParams?.moods, id, moods]);
 
   if (!moodData.length || !suggestions) {
     return (

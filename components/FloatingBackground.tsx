@@ -1,29 +1,23 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { memo, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
-export const FloatingBackground = memo(function FloatingBackground() {
-  // Reduced number of shapes for better performance
-  const shapes = useMemo(() => Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    size: 80 + (i * 20),
-    x: (i * 8) % 100,
-    y: (i * 12) % 100,
-    color: [
-      'rgba(139, 92, 246, 0.12)',
-      'rgba(236, 72, 153, 0.10)',
-      'rgba(59, 130, 246, 0.12)',
-      'rgba(167, 139, 250, 0.10)',
-      'rgba(244, 114, 182, 0.08)',
-      'rgba(96, 165, 250, 0.10)',
-    ][i % 6],
-  })), []);
+interface Shape {
+  id: number;
+  size: number;
+  x: number;
+  y: number;
+  color: string;
+  shape: string;
+  duration: number;
+  delay: number;
+}
 
 interface Particle {
   id: number;
-  left: number;
-  top: number;
+  x: number;
+  y: number;
   duration: number;
   delay: number;
 }
@@ -33,7 +27,6 @@ export function FloatingBackground() {
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
-
     setShapes(Array.from({ length: 25 }, (_, i) => ({
       id: i,
       size: Math.random() * 150 + 30,
@@ -58,8 +51,8 @@ export function FloatingBackground() {
 
     setParticles(Array.from({ length: 50 }, (_, i) => ({
       id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
       duration: 4 + Math.random() * 4,
       delay: Math.random() * 4
     })));
@@ -67,7 +60,6 @@ export function FloatingBackground() {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Background shapes - using CSS animations where possible */}
       {shapes.map((shape) => (
         <motion.div
           key={shape.id}
@@ -92,7 +84,6 @@ export function FloatingBackground() {
         />
       ))}
 
-      {/* Floating particles - reduced and optimized */}
       {particles.map((particle) => (
         <motion.div
           key={`particle-${particle.id}`}
@@ -115,4 +106,4 @@ export function FloatingBackground() {
       ))}
     </div>
   );
-});
+}
