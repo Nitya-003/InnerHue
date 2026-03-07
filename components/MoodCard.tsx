@@ -30,12 +30,7 @@ interface MoodCardProps {
 }
 
 export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
-  const [emojiDuration, setEmojiDuration] = useState(4);
-
-  useEffect(() => {
-
-    setEmojiDuration(4 + Math.random() * 2);
-  }, []);
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div

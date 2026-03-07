@@ -126,7 +126,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/10 dark:border-white/10">
-                <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                   <Plus className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" />
                   Create Custom Mood
                 </h2>
@@ -135,7 +135,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
                   disabled={isSubmitting}
                   className="p-2 hover:bg-white/10 rounded-full transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  <X className="w-5 h-5 text-white/70" />
+                  <X className="w-5 h-5 text-gray-600 dark:text-white/70" />
                 </button>
               </div>
 
@@ -151,7 +151,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
                   {/* Mood Name */}
                   <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-2">
                       <Tag className="w-4 h-4 inline mr-1" />
                       Mood Name
                     </label>
@@ -170,7 +170,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
                   {/* Emoji Selection */}
                   <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-2">
                       <Smile className="w-4 h-4 inline mr-1" />
                       Choose Emoji
                     </label>
@@ -192,7 +192,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
                   {/* Color Selection */}
                   <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-2">
                       <Palette className="w-4 h-4 inline mr-1" />
                       Choose Color
                     </label>
@@ -214,7 +214,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
                   {/* Category Selection */}
                   <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-2">
                       Category
                     </label>
                     <select
@@ -235,7 +235,7 @@ export function AddMoodModal({ isOpen, onClose, onMoodAdded }: AddMoodModalProps
 
                   {/* Preview */}
                   <div>
-                    <label className="block text-sm font-medium text-white/90 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-2">
                       Preview
                     </label>
                     <div
