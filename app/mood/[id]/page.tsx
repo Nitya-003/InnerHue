@@ -5,7 +5,6 @@ import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Bookmark, Share2 } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import { SuggestionPanel } from '@/components/SuggestionPanel';
 import { OrbVisualizer } from '@/components/OrbVisualizer';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -38,7 +37,6 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
-  const [entryIds, setEntryIds] = useState<Record<string, string>>({});
   const addMood = useMoodStore(state => state.addMood);
 
   useEffect(() => {
@@ -193,7 +191,6 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
           <SuggestionPanel
             suggestions={suggestions}
             mood={currentMood}
-            entryId={entryIds[currentMood.id]}
             onRefresh={async () => {
               const suggestionId = currentMood.traditionalId || currentMood.id;
               setSuggestions(MoodData.getSuggestions(suggestionId));

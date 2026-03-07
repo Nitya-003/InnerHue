@@ -8,6 +8,7 @@ export interface Mood {
   emoji: string;
   color: string;
   glow: string;
+  spotifyPlaylistId?: string;
 }
 
 export interface MoodHistoryEntry {
