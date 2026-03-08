@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Shape {
   id: number;
@@ -16,8 +16,8 @@ interface Shape {
 
 interface Particle {
   id: number;
-  left: number;
-  top: number;
+  x: number;
+  y: number;
   duration: number;
   delay: number;
 }
@@ -27,7 +27,6 @@ export function FloatingBackground() {
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
-
     setShapes(Array.from({ length: 25 }, (_, i) => ({
       id: i,
       size: Math.random() * 150 + 30,
@@ -52,8 +51,8 @@ export function FloatingBackground() {
 
     setParticles(Array.from({ length: 50 }, (_, i) => ({
       id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
       duration: 4 + Math.random() * 4,
       delay: Math.random() * 4
     })));
@@ -64,50 +63,44 @@ export function FloatingBackground() {
       {shapes.map((shape) => (
         <motion.div
           key={shape.id}
-          className={`absolute ${shape.shape === 'circle' ? 'rounded-full' : 'rounded-lg rotate-45'}`}
+          className="absolute rounded-full will-change-transform"
           style={{
             width: shape.size,
             height: shape.size,
             background: `radial-gradient(circle, ${shape.color} 0%, transparent 70%)`,
             left: `${shape.x}%`,
             top: `${shape.y}%`,
-            filter: 'blur(2px)'
           }}
           animate={{
-            x: [0, 50, -50, 0],
-            y: [0, -40, 40, 0],
-            scale: [1, 1.3, 0.8, 1],
-            opacity: [0.2, 0.8, 0.2],
-            rotate: shape.shape === 'square' ? [45, 135, 225, 315, 45] : [0, 360]
+            x: [0, 30, -30, 0],
+            y: [0, -25, 25, 0],
+            scale: [1, 1.15, 0.9, 1],
           }}
           transition={{
-            duration: shape.duration,
+            duration: 20 + shape.id * 2,
             repeat: Infinity,
-            ease: "easeInOut",
-            delay: shape.delay
+            ease: "linear",
           }}
         />
       ))}
-      
-      {/* Additional floating particles */}
+
       {particles.map((particle) => (
         <motion.div
           key={`particle-${particle.id}`}
-          className="absolute w-1 h-1 bg-white rounded-full"
+          className="absolute w-1 h-1 bg-foreground/20 dark:bg-white/40 rounded-full will-change-transform"
           style={{
-            left: `${particle.left}%`,
-            top: `${particle.top}%`,
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
           }}
           animate={{
-            y: [0, -100, 0],
-            opacity: [0, 1, 0],
-            scale: [0, 1, 0]
+            y: [0, -80, 0],
+            opacity: [0, 0.8, 0],
           }}
           transition={{
             duration: particle.duration,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: particle.delay
+            delay: particle.delay,
           }}
         />
       ))}
