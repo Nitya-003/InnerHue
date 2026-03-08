@@ -7,20 +7,45 @@ import { ArrowLeft, Calendar, TrendingUp, Heart, Activity, Trash2 } from 'lucide
 import { MoodChart } from '@/components/MoodChart';
 import { MoodStats } from '@/components/MoodStats';
 
-export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>({});
+interface MoodEntry {
+  id?: string;
+  mood?: string;
+  emotion?: string;
+  timestamp: string;
+  date?: string;
+  color?: string;
+}
 
-  const calculateStats = useCallback((history: any[]) => {
+interface Stats {
+  totalEntries: number;
+  todayEntries: number;
+  weekEntries: number;
+  mostCommonMood: string | null;
+  moodCounts: { [key: string]: number };
+  weeklyData: MoodEntry[];
+}
+
+export default function AnalyticsPage() {
+  const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
+  const [stats, setStats] = useState<Stats>({
+    totalEntries: 0,
+    todayEntries: 0,
+    weekEntries: 0,
+    mostCommonMood: null,
+    moodCounts: {},
+    weeklyData: []
+  });
+
+  const calculateStats = useCallback((history: MoodEntry[]) => {
     const moodCounts: { [key: string]: number } = {};
     const today = new Date().toDateString();
     const thisWeek: any[] = [];
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);
 
-    history.forEach((entry: any) => {
+    history.forEach((entry) => {
       // Support both new (emotion) and old (mood) formats
-      const moodKey = entry.emotion || entry.mood;
+      const moodKey = entry.emotion || entry.mood || 'unknown';
       moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
 
       const entryDate = new Date(entry.timestamp);
@@ -30,11 +55,11 @@ export default function AnalyticsPage() {
     });
 
     const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => (b as number) - (a as number))[0];
+      .sort(([, a], [, b]) => b - a)[0];
 
     setStats({
       totalEntries: history.length,
-      todayEntries: history.filter((entry: any) => new Date(entry.timestamp).toDateString() === today).length,
+      todayEntries: history.filter((entry) => new Date(entry.timestamp).toDateString() === today).length,
       weekEntries: thisWeek.length,
       mostCommonMood: mostCommon ? mostCommon[0] : null,
       moodCounts,
@@ -227,7 +252,7 @@ export default function AnalyticsPage() {
                         </div>
 
                         <button
-                          onClick={() => handleDeleteEntry(entry.id, index)}
+                          onClick={() => entry.id && handleDeleteEntry(entry.id, index)}
                           className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
                           title="Delete entry"
                         >
