@@ -9,9 +9,27 @@ import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
 import type { MoodHistoryEntry, MoodStats as MoodStatsType } from '@/types/mood';
 
+interface MoodEntry {
+  id?: string;
+  mood?: string;
+  emotion?: string;
+  timestamp: string;
+  date?: string;
+  color?: string;
+}
+
+interface Stats {
+  totalEntries: number;
+  todayEntries: number;
+  weekEntries: number;
+  mostCommonMood: string | null;
+  moodCounts: { [key: string]: number };
+  weeklyData: MoodEntry[];
+}
+
 export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<MoodHistoryEntry[]>([]);
-  const [stats, setStats] = useState<MoodStatsType>({
+  const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
+  const [stats, setStats] = useState<Stats>({
     totalEntries: 0,
     todayEntries: 0,
     weekEntries: 0,
@@ -20,7 +38,7 @@ export default function AnalyticsPage() {
     weeklyData: []
   });
 
-  const calculateStats = useCallback((history: MoodHistoryEntry[]) => {
+  const calculateStats = useCallback((history: MoodEntry[]) => {
     const moodCounts: { [key: string]: number } = {};
     const today = new Date().toDateString();
     const thisWeek: MoodHistoryEntry[] = [];
@@ -29,7 +47,7 @@ export default function AnalyticsPage() {
 
     history.forEach((entry) => {
       // Support both new (emotion) and old (mood) formats
-      const moodKey = entry.emotion || entry.mood;
+      const moodKey = entry.emotion || entry.mood || 'unknown';
       moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
 
       const entryDate = new Date(entry.timestamp);
@@ -282,14 +300,9 @@ export default function AnalyticsPage() {
                       </button>
                       {uniqueMoods.map(mood => (
                         <button
-                          key={mood}
-                          type="button"
-                          onClick={() => setSelectedMoodFilter(mood)}
-                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                            selectedMoodFilter === mood
-                              ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
-                              : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
-                          }`}
+                          onClick={() => entry.id && handleDeleteEntry(entry.id, index)}
+                          className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                          title="Delete entry"
                         >
                           {mood}
                         </button>
