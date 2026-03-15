@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Settings, BarChart3, Music } from 'lucide-react';
@@ -12,6 +12,8 @@ import reflectiveMoods, { ReflectiveMood } from '@/lib/reflectiveMoods';
 export default function EmotionsPage() {
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const maxSelections = 3;
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const handleMoodToggle = (moodId: string) => {
     setSelectedMoods(prev => {
@@ -24,8 +26,15 @@ export default function EmotionsPage() {
     });
   };
 
-  // Group moods by category for better organization
-  const groupedMoods = reflectiveMoods.reduce((acc, mood) => {
+  const filteredMoods = useMemo(() => {
+    return reflectiveMoods.filter((mood) => {
+      const matchesSearch = mood.label.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = activeCategory ? mood.category === activeCategory : true;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchQuery, activeCategory]);
+
+  const groupedMoods = filteredMoods.reduce((acc, mood) => {
     if (!acc[mood.category]) {
       acc[mood.category] = [];
     }
@@ -136,17 +145,43 @@ export default function EmotionsPage() {
             </div>
           </motion.div>
 
+          {/* Search and Filter */}
+          <div className="mb-6">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search moods..."
+              className="w-full p-3 rounded-lg bg-white/10 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/20"
+            />
+            <div className="flex gap-2 mt-4">
+              {Object.keys(categoryLabels).map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(activeCategory === category ? null : category)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    activeCategory === category ? 'bg-white text-[#0f0720]' : 'bg-white/10 text-white'
+                  }`}
+                >
+                  {categoryLabels[category]}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Mood Categories */}
           <div className="space-y-8">
-            {Object.entries(groupedMoods).map(([category, moods], categoryIndex) => (
+            {Object.entries(
+              groupedMoods
+            ).map(([category, moods], categoryIndex) => (
               <motion.div
                 key={category}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   duration: 0.4,
-                  delay: 0.2 + (categoryIndex * 0.08),
-                  ease: [0.4, 0, 0.2, 1]
+                  delay: 0.2 + categoryIndex * 0.08,
+                  ease: [0.4, 0, 0.2, 1],
                 }}
               >
                 <h3 className="text-xs font-medium uppercase tracking-wider text-white/50 mb-3">
