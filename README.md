@@ -1,4 +1,4 @@
-# 🌈 InnerHue - Emotional Reflection Web App
+# InnerHue - Emotional Reflection Web App
 
 A beautifully animated emotional wellness platform that helps users explore, visualize, and understand their feelings through interactive mood tracking, 3D visualizations, and personalized insights.
 
@@ -11,38 +11,38 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎨 Mood Selection
+### Mood Selection
 - **38 Emotional States**: From happiness to melancholy, each with unique colors and personalities
 - **Floating Card Interface**: Disney-inspired 3D animations with shimmer and hover effects
 - **Intuitive Design**: Beautiful gradient backgrounds and smooth transitions
 
-### 🔮 3D Orb Visualizer
+### 3D Orb Visualizer
 - **Dynamic Visualization**: Interactive orbs that change color, glow, and animation based on selected mood
 - **Particle Effects**: Floating particles and ripple rings for immersive experience
 - **Responsive Animations**: Smooth Framer Motion animations with customizable states
 
-### 💬 AI-Powered Suggestions
+### AI-Powered Suggestions
 - **Journal Prompts**: Thoughtful questions tailored to your emotional state
 - **Inspirational Quotes**: Curated quotes from renowned authors and thinkers
 - **Keyword Clouds**: Emotion-related words to expand emotional vocabulary
 - **Music Recommendations**: Spotify-style playlists matching your mood
 
-### 📊 Analytics Dashboard
+### Analytics Dashboard
 - **Mood Tracking**: Visual charts showing emotional patterns over time
 - **Statistics**: Daily, weekly, and overall mood insights
 - **Recent Activity**: Timeline of your emotional journey
 - **Progress Visualization**: Beautiful bar and pie charts
 
-### 🎵 Music Integration
+### Music Integration
 - **Curated Playlists**: Genre-specific music recommendations for each mood
 - **Interactive Player**: Play/pause functionality with beautiful UI
 - **Mood-Based Organization**: Easy switching between emotional soundscapes
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend**: Next.js 13 with App Router
 - **Styling**: TailwindCSS with custom design system
@@ -53,7 +53,7 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 
 ---
 
-## 🗺️ System Architecture
+## System Architecture
 
 ### High-Level Component Map
 
@@ -125,7 +125,7 @@ stateDiagram-v2
 
 ---
 
-## 🎯 Design Philosophy
+## Design Philosophy
 
 InnerHue follows **Apple-level design aesthetics** with:
 - **Glassmorphism**: Backdrop blur effects and translucent cards
@@ -136,7 +136,7 @@ InnerHue follows **Apple-level design aesthetics** with:
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 Quick start for local development:
 
@@ -156,7 +156,7 @@ For detailed setup instructions, environment configuration, and troubleshooting,
 
 ---
 
-## 🎨 Color System
+## Color System
 
 InnerHue uses a comprehensive emotional color palette:
 - **Happy**: Golden yellows (#FFD93D)
@@ -167,7 +167,7 @@ InnerHue uses a comprehensive emotional color palette:
 
 ---
 
-## 🔄 2026 Roadmap
+## 2026 Roadmap
 
 ### Q1 2026
 - [ ] **User Authentication**: Secure login with NextAuth.js
@@ -190,24 +190,25 @@ InnerHue uses a comprehensive emotional color palette:
 - [ ] **Advanced NLP**: Cohere API for deeper emotional analysis
 
 ---
-## 👥 Contributors
 
-Thanks to these amazing people for contributing 💙
+## Contributors
+
+Thanks to these amazing people for contributing
 
 <a href="https://github.com/Nitya-003/InnerHue/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Nitya-003/InnerHue" />
 </a>
 
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Framer Motion** for incredible animation capabilities
 - **TailwindCSS** for the flexible design system
@@ -216,4 +217,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**InnerHue** - *Discover the colors of your emotions* 🌈✨
+**InnerHue** - *Discover the colors of your emotions* 
