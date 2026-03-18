@@ -134,3 +134,6 @@ export const GET = withRateLimit(
     windowMs: 15 * 60 * 1000, // per 15 minutes
   }
 );
+
+// Added revalidate export for static compatibility
+export const revalidate = 300;
