@@ -137,3 +137,6 @@ export const GET = withRateLimit(
 
 // Added revalidate export for static compatibility
 export const revalidate = 300;
+
+// Added dynamic export to enforce server-side rendering
+export const dynamic = 'force-dynamic';
