@@ -28,7 +28,7 @@ export default function AboutUs() {
     };
 
     return (
-        <main id="main" className="min-h-screen bg-[#0f0720] relative overflow-hidden text-white font-sans">
+        <main id="main" className="min-h-screen bg-background relative overflow-hidden text-foreground font-sans">
             <FloatingBackground />
 
             <div className="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-20">
@@ -46,7 +46,7 @@ export default function AboutUs() {
                     >
                         <Link
                             href="/"
-                            className="inline-flex items-center text-white/60 hover:text-white mb-6 transition-colors duration-200 group"
+                            className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6 transition-colors duration-200 group"
                         >
                             <ChevronLeft className="w-5 h-5 mr-1 transition-transform duration-200 group-hover:-translate-x-1" />
                             Back to Home
@@ -70,7 +70,7 @@ export default function AboutUs() {
                                 About InnerHue
                             </h1>
                         </div>
-                        <p className="text-xl text-gray-300 max-w-2xl leading-relaxed">
+                        <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
                             Your mindful companion for navigating the complex landscape of human emotions.
                         </p>
                     </div>
@@ -91,9 +91,9 @@ export default function AboutUs() {
                             borderColor: 'rgba(168, 85, 247, 0.4)',
                         }}
                         transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-                        className="md:col-span-2 bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-2xl border border-white/10 cursor-default"
+                        className="md:col-span-2 bg-muted/40 dark:bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-2xl border border-border cursor-default"
                     >
-                        <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+                        <h2 className="text-3xl font-bold text-foreground mb-6 flex items-center gap-3">
                             <motion.span
                                 whileHover={{ rotate: 20, scale: 1.2 }}
                                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
@@ -103,7 +103,7 @@ export default function AboutUs() {
                             </motion.span>
                             Our Mission
                         </h2>
-                        <p className="text-lg text-gray-200 leading-relaxed">
+                        <p className="text-lg text-muted-foreground leading-relaxed">
                             In a world that never stops moving, it&apos;s easy to lose touch with how we really feel.
                             <strong> InnerHue</strong> was born from a simple belief: acknowledging your emotions is the first step towards well-being.
                             We aim to provide a safe, beautiful, and intuitive space where you can pause, reflect, and find clarity amidst the chaos.
@@ -120,7 +120,7 @@ export default function AboutUs() {
                             backgroundColor: 'rgba(255,255,255,0.1)',
                         }}
                         transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-                        className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/5 cursor-default"
+                        className="bg-muted/20 dark:bg-white/5 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-border cursor-default"
                     >
                         <motion.div
                             whileHover={{ scale: 1.15, rotate: -8, backgroundColor: 'rgba(168, 85, 247, 0.35)' }}
@@ -129,8 +129,8 @@ export default function AboutUs() {
                         >
                             <BrainCircuit className="w-7 h-7" />
                         </motion.div>
-                        <h3 className="text-2xl font-bold text-white mb-4">How It Works</h3>
-                        <p className="text-gray-300 leading-relaxed">
+                        <h3 className="text-2xl font-bold text-foreground mb-4">How It Works</h3>
+                        <p className="text-muted-foreground leading-relaxed">
                             InnerHue uses color psychology and mood tracking to help you visualize your emotional state.
                             By selecting your current mood, you unlock personalized journal prompts, inspirational quotes, and
                             curated resources designed to support exactly how you&apos;re feeling right now.
@@ -147,7 +147,7 @@ export default function AboutUs() {
                             backgroundColor: 'rgba(255,255,255,0.1)',
                         }}
                         transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-                        className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/5 cursor-default"
+                        className="bg-muted/20 dark:bg-white/5 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-border cursor-default"
                     >
                         <motion.div
                             whileHover={{ scale: 1.15, rotate: 8, backgroundColor: 'rgba(59, 130, 246, 0.35)' }}
@@ -156,8 +156,8 @@ export default function AboutUs() {
                         >
                             <Users className="w-7 h-7" />
                         </motion.div>
-                        <h3 className="text-2xl font-bold text-white mb-4">For Everyone</h3>
-                        <p className="text-gray-300 leading-relaxed">
+                        <h3 className="text-2xl font-bold text-foreground mb-4">For Everyone</h3>
+                        <p className="text-muted-foreground leading-relaxed">
                             Whether you&apos;re feeling overwhelmed, ecstatic, or somewhere in between, InnerHue is here for you.
                             We believe that every emotion is valid and deserves to be heard. There is no &quot;right&quot; or &quot;wrong&quot; way to feel—only
                             your unique human experience.
@@ -181,7 +181,7 @@ export default function AboutUs() {
                         >
                             &quot;To feel is to be human.&quot;
                         </motion.h3>
-                        <p className="text-gray-400">
+                        <p className="text-muted-foreground">
                             Thank you for being part of our journey.
                         </p>
                     </motion.div>
