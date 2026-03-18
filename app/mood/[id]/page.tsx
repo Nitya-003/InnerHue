@@ -19,20 +19,12 @@ interface MoodWithMeta extends Mood {
   spotifyPlaylistId?: string;
 }
 
-interface MoodPageProps {
-  params: {
-    id: string;
-  };
-  searchParams?: {
-    moods?: string;
-  };
-}
-
-export default function MoodPage({ params, searchParams }: MoodPageProps) {
-  const routeParams = useParams();
+export default function MoodPage() {
+  const routeParams = useParams<{ id: string }>();
   const searchParamsHook = useSearchParams();
-  const id = (routeParams?.id as string) || params.id;
-  const moods = searchParamsHook?.get('moods') || searchParams?.moods;
+
+  const id = routeParams?.id;
+  const moods = searchParamsHook?.get('moods') ?? undefined;
 
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
@@ -40,6 +32,8 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
   const addMood = useMoodStore(state => state.addMood);
 
   useEffect(() => {
+    if (!id) return;
+
     const moodIds = moods ? moods.split(',') : [id];
 
     const moodsData = moodIds
@@ -50,7 +44,6 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
           const traditionalId = getTraditionalMoodId(mid);
           const traditionalMood = MoodData.getMoodById(traditionalId);
 
-          // Create adapter object that combines both systems
           return {
             id: reflectiveMood.id,
             name: reflectiveMood.label,
@@ -62,19 +55,16 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
           } as MoodWithMeta;
         }
 
-        // Fall back to traditional mood system
         return MoodData.getMoodById(mid);
       })
       .filter(Boolean) as MoodWithMeta[];
 
     setMoodData(moodsData);
-    
+
     if (moodsData.length > 0) {
-      // Get suggestions for the first mood initially
-      const moodSuggestions = MoodData.getSuggestions(moodsData[0].id);
-      setSuggestions(moodSuggestions);
+      setSuggestions(MoodData.getSuggestions(moodsData[0].id));
     }
-    
+
     // Save to local storage for analytics
     if (typeof window !== 'undefined') {
       const savedMoods: MoodHistoryEntry[] = JSON.parse(localStorage.getItem('moodHistory') || '[]');
@@ -90,7 +80,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       });
       localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
     }
-  }, [params.id, searchParams?.moods, id, moods]);
+  }, [id, moods]);
 
   if (!moodData.length || !suggestions) {
     return (
