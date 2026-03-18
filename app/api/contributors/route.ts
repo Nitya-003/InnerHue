@@ -135,5 +135,5 @@ export const GET = withRateLimit(
   }
 );
 
-// Added revalidate export for static compatibility
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
