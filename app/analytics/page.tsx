@@ -17,6 +17,7 @@ interface MoodEntry {
   timestamp: string;
   date?: string;
   color?: string;
+  notes?: string; // Added notes property
 }
 
 interface Stats {
@@ -242,7 +243,7 @@ export default function AnalyticsPage() {
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <button
-                        onClick={() => setExportMenuOpen(prev => !prev)}
+                        onClick={() => setExportMenuOpen(!exportMenuOpen)}
                         onBlur={() => setTimeout(() => setExportMenuOpen(false), 150)}
                         className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-700 hover:bg-purple-50 px-3 py-1.5 rounded-full transition-colors font-medium border border-purple-200 hover:border-purple-300"
                       >
