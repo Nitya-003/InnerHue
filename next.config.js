@@ -8,11 +8,11 @@ if (isGithubActions) {
 
 const nextConfig = {
   reactStrictMode: true,
+  output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
-  output: 'export', 
   basePath: repoName,
   assetPrefix: repoName,
   transpilePackages: [

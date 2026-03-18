@@ -59,13 +59,13 @@ export default function EmotionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0720] text-white transition-colors duration-500">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-        className="sticky top-0 z-50 bg-[#0f0720]/80 backdrop-blur-sm border-b border-white/10 p-4 md:p-6"
+        className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border p-4 md:p-6"
       >
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center">
@@ -75,9 +75,9 @@ export default function EmotionsPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                  className="p-2 rounded-lg bg-muted/40 dark:bg-white/10 hover:bg-muted/60 dark:hover:bg-white/20 transition-colors"
                 >
-                  <ArrowLeft className="w-5 h-5 text-white/70" />
+                  <ArrowLeft className="w-5 h-5 text-muted-foreground" />
                 </motion.div>
               </Link>
 
@@ -92,10 +92,10 @@ export default function EmotionsPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                  className="p-2 rounded-lg bg-muted/40 dark:bg-white/10 hover:bg-muted/60 dark:hover:bg-white/20 transition-colors"
                   title="Personalization"
                 >
-                  <Settings className="w-5 h-5 text-white/70" />
+                  <Settings className="w-5 h-5 text-muted-foreground" />
                 </motion.div>
               </Link>
               <Link href="/analytics">
@@ -103,9 +103,9 @@ export default function EmotionsPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                  className="p-2 rounded-lg bg-muted/40 dark:bg-white/10 hover:bg-muted/60 dark:hover:bg-white/20 transition-colors"
                 >
-                  <BarChart3 className="w-5 h-5 text-white/70" />
+                  <BarChart3 className="w-5 h-5 text-muted-foreground" />
                 </motion.div>
               </Link>
               <Link href="/music">
@@ -113,9 +113,9 @@ export default function EmotionsPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                  className="p-2 rounded-lg bg-muted/40 dark:bg-white/10 hover:bg-muted/60 dark:hover:bg-white/20 transition-colors"
                 >
-                  <Music className="w-5 h-5 text-white/70" />
+                  <Music className="w-5 h-5 text-muted-foreground" />
                 </motion.div>
               </Link>
               <ThemeToggle />
@@ -137,10 +137,10 @@ export default function EmotionsPage() {
             <h2 className="text-4xl md:text-5xl font-semibold mb-4 leading-tight">
               What's here right now?
             </h2>
-            <p className="text-lg leading-relaxed text-white/70 max-w-2xl mx-auto">
+            <p className="text-lg leading-relaxed text-muted-foreground max-w-2xl mx-auto">
               Take a moment to notice what you're feeling. Choose up to {maxSelections} emotional states that resonate with your present experience.
             </p>
-            <div className="mt-4 text-sm text-white/60">
+            <div className="mt-4 text-sm text-muted-foreground">
               {selectedMoods.length} of {maxSelections} selected
             </div>
           </motion.div>
@@ -184,7 +184,7 @@ export default function EmotionsPage() {
                   ease: [0.4, 0, 0.2, 1],
                 }}
               >
-                <h3 className="text-xs font-medium uppercase tracking-wider text-white/50 mb-3">
+                <h3 className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-3">
                   {categoryLabels[category] || category}
                 </h3>
                 <div className="flex flex-wrap gap-3">
@@ -224,7 +224,7 @@ export default function EmotionsPage() {
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                          className="text-sm font-medium px-4 py-2 rounded-full bg-white/10 text-white"
+                          className="text-sm font-medium px-4 py-2 rounded-full bg-muted/40 dark:bg-white/10 text-foreground"
                         >
                           {mood.label}
                         </motion.span>
@@ -237,7 +237,7 @@ export default function EmotionsPage() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-                      className="px-8 py-3 bg-white text-[#0f0720] rounded-full font-medium shadow-sm hover:shadow-md transition-all"
+                      className="px-8 py-3 bg-foreground text-background rounded-full font-medium shadow-sm hover:shadow-md transition-all"
                     >
                       Continue to Reflection
                     </motion.button>
@@ -254,7 +254,7 @@ export default function EmotionsPage() {
             transition={{ duration: 0.4, delay: 0.6 }}
             className="mt-16 text-center"
           >
-            <p className="text-sm text-white/60 max-w-md mx-auto leading-relaxed">
+            <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
               There's no right or wrong here. Whatever you're feeling is welcome.
               These labels are suggestions — you know your experience best.
             </p>
