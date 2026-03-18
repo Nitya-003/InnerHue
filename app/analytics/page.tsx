@@ -68,11 +68,17 @@ export default function AnalyticsPage() {
     });
   }, []);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
+
+  const filteredHistory = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+
     return moodHistory.filter((entry: any) => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
       const notes = (entry.notes || '').toLowerCase();
 
-      const matchesQuery = true; // Placeholder logic for matchesQuery
+      const matchesQuery = !q || moodLabel.includes(q) || notes.includes(q);
       const matchesMood =
         selectedMoodFilter === 'all' ||
         moodLabel === (selectedMoodFilter || '').toLowerCase();
