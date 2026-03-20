@@ -1,10 +1,10 @@
-# 🤝 Contributing to InnerHue
+# Contributing to InnerHue
 
 First off, thank you for considering contributing! InnerHue is built at the intersection of technology and emotional wellness, and your help is what makes this vision grow. By contributing, you’re helping build a more emotionally aware digital world.
 
 ---
 
-## 🚀 How Can I Contribute?
+## How Can I Contribute?
 
 ### 1. Reporting Bugs
 - **Use the Template:** All bugs must be reported using our **[Bug Report Template]**. This ensures we have the technical details needed to fix the issue quickly.
@@ -23,7 +23,7 @@ First off, thank you for considering contributing! InnerHue is built at the inte
 
 ---
 
-## 🎨 Design Guidelines
+## Design Guidelines
 InnerHue is a high-aesthetic project. To maintain our standard:
 * **Animations:** Use `framer-motion` for smooth, professional transitions. Avoid "instant" or "jittery" state changes.
 * **Glassmorphism:** Utilize `backdrop-blur`, translucent backgrounds, and subtle borders to create depth.
@@ -32,14 +32,14 @@ InnerHue is a high-aesthetic project. To maintain our standard:
 
 ---
 
-## 🛠️ Development Workflow
+## Development Workflow
 - **Setup:** Run `npm install` to install the necessary dependencies.
 - **Development:** Use `npm run dev` to launch the local development server.
 - **Type Safety:** We use **TypeScript** for a robust codebase. Please ensure your code is fully typed and avoid using `any`.
 
 ---
 
-### ⚠️ Contribution Standard
+### Contribution Standard
 > **Please Note:** To maintain project organization, any Issue or Pull Request that does not follow the provided templates may be closed. We appreciate your cooperation in keeping InnerHue professional!
 
 *Need guidance? Let's connect on [LinkedIn](https://www.linkedin.com/in/nitya-gosain1103)!*
