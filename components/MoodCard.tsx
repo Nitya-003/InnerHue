@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './moodcard.css';
 
 interface Mood {
@@ -27,12 +27,10 @@ interface MoodCardProps {
   index: number;
   isSelected: boolean;
   onSelect: () => void;
-  onDelete?: (moodId: string) => void; // Added onDelete prop
 }
 
-export function MoodCard({ mood, index, isSelected, onSelect, onDelete }: MoodCardProps) {
+export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
   const [emojiDuration, setEmojiDuration] = useState(4);
-  const [isHovered, setIsHovered] = useState(false); // Added isHovered state
 
   useEffect(() => {
     setEmojiDuration(4 + Math.random() * 2);
@@ -69,20 +67,6 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete }: MoodCa
           : '0 10px 30px rgba(0,0,0,0.12)',
       }}
     >
-      {/* Delete Button */}
-      {onDelete && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(mood.id);
-          }}
-          className="absolute top-2 left-2 z-20 rounded-full bg-white/70 px-2 py-1 text-xs"
-          aria-label={`Delete ${mood.name}`}
-        >
-          Delete
-        </button>
-      )}
       {/* Animated Glow Background */}
       <motion.div
         className="absolute inset-0 rounded-3xl pointer-events-none"

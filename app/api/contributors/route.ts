@@ -134,6 +134,3 @@ export const GET = withRateLimit(
     windowMs: 15 * 60 * 1000, // per 15 minutes
   }
 );
-
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
