@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import './moodcard.css';
 
 interface Mood {
@@ -27,12 +27,12 @@ interface MoodCardProps {
   index: number;
   isSelected: boolean;
   onSelect: () => void;
-  onDelete?: (moodId: string) => void;
+  onDelete?: (moodId: string) => void; // Added onDelete prop
 }
 
 export function MoodCard({ mood, index, isSelected, onSelect, onDelete }: MoodCardProps) {
   const [emojiDuration, setEmojiDuration] = useState(4);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); // Added isHovered state
 
   useEffect(() => {
     setEmojiDuration(4 + Math.random() * 2);

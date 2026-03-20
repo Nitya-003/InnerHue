@@ -55,7 +55,7 @@ export function Hero() {
       >
         {/* Subtle badge */}
         <motion.div variants={itemVariants} className="mb-8">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/40 dark:bg-white/5 backdrop-blur-xl border border-border text-sm text-muted-foreground">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 text-sm text-white/70">
             <Sparkles className="w-4 h-4 text-purple-400" />
             Your journey to self-awareness begins here
           </span>
@@ -64,7 +64,7 @@ export function Hero() {
         {/* Main Tagline */}
         <motion.h1
           variants={itemVariants}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight tracking-tight"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight"
           style={{
             fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           }}
@@ -78,7 +78,7 @@ export function Hero() {
         {/* Sub-headline */}
         <motion.p
           variants={itemVariants}
-          className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed font-light"
+          className="text-lg sm:text-xl md:text-2xl text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed font-light"
         >
           A peaceful space to visualize and explore your inner landscape.
         </motion.p>
@@ -101,13 +101,13 @@ export function Hero() {
             }}
             whileTap={{ scale: 0.92 }}
             className="group relative inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 
-                       bg-muted/40 dark:bg-white/10 backdrop-blur-2xl 
-                       border border-border 
+                       bg-white/10 backdrop-blur-2xl 
+                       border border-white/20 
                        rounded-full
-                       text-foreground text-lg sm:text-xl font-medium
+                       text-white text-lg sm:text-xl font-medium
                        shadow-[0_8px_32px_rgba(139,92,246,0.2)]
                        transition-all duration-500 ease-out
-                       hover:bg-muted/60 dark:hover:bg-white/15 hover:border-border
+                       hover:bg-white/15 hover:border-white/30
                        cursor-pointer overflow-hidden
                        disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -159,7 +159,7 @@ export function Hero() {
         {/* Secondary text */}
         <motion.p
           variants={itemVariants}
-          className="mt-8 text-sm text-muted-foreground/60"
+          className="mt-8 text-sm text-white/40"
         >
           No account needed • Free forever • Your data stays private
         </motion.p>
