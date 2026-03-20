@@ -45,21 +45,21 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-5 w-full max-w-md bg-card backdrop-blur-xl p-8 rounded-2xl border border-border shadow-2xl ring-1 ring-border"
+      className="flex flex-col gap-5 w-full max-w-md bg-white/5 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl ring-1 ring-white/5"
     >
       <div className="text-center mb-2">
         <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
           Welcome Back
         </h2>
-        <p className="text-muted-foreground text-sm mt-2">Enter your details to access your dashboard</p>
+        <p className="text-gray-400 text-sm mt-2">Enter your details to access your dashboard</p>
       </div>
 
       {/* Email Input Group */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground ml-1">Email Address</label>
+        <label className="text-sm font-medium text-gray-300 ml-1">Email Address</label>
         <input
           {...register("email")}
-          className="bg-background/50 border border-input p-3.5 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all duration-200 hover:border-border"
+          className="bg-gray-900/50 border border-white/10 p-3.5 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all duration-200 hover:border-white/20"
           placeholder="you@example.com"
         />
         {errors.email && <p className="text-red-400 text-xs ml-1 font-medium">{errors.email.message}</p>}
@@ -67,11 +67,11 @@ export default function LoginForm() {
 
       {/* Password Input Group */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground ml-1">Password</label>
+        <label className="text-sm font-medium text-gray-300 ml-1">Password</label>
         <input
           type="password"
           {...register("password")}
-          className="bg-background/50 border border-input p-3.5 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all duration-200 hover:border-border"
+          className="bg-gray-900/50 border border-white/10 p-3.5 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all duration-200 hover:border-white/20"
           placeholder="••••••••"
         />
         {errors.password && <p className="text-red-400 text-xs ml-1 font-medium">{errors.password.message}</p>}
@@ -85,7 +85,7 @@ export default function LoginForm() {
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
-            <span className="h-4 w-4 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+            <span className="h-4 w-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
             Logging in...
           </span>
         ) : (
@@ -95,7 +95,7 @@ export default function LoginForm() {
 
       {/* Footer Link */}
       <div className="text-center mt-2">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-gray-400">
           Don&apos;t have an account?{" "}
           <Link
             href="/signup"

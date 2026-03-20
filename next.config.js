@@ -20,6 +20,9 @@ const nextConfig = {
     '@react-three/drei',
     'three',
   ],
+  experimental: {
+    outputFileTracingRoot: undefined,
+  },
 };
 
 module.exports = nextConfig;

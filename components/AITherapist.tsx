@@ -178,7 +178,7 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => setIsOpen(true)}
-                        className="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-primary to-secondary text-foreground p-4 rounded-full shadow-2xl shadow-violet-500/40"
+                        className="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-violet-600 to-pink-600 text-white p-4 rounded-full shadow-2xl shadow-violet-500/40"
                         aria-label="Open AI Therapist"
                     >
                         <div className="relative w-6 h-6">
@@ -260,8 +260,8 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                                     )}
                                     <div
                                         className={`px-4 py-3 rounded-2xl text-sm max-w-[80%] leading-relaxed ${msg.role === 'user'
-                                            ? 'bg-gradient-to-br from-violet-600 to-pink-600 text-white rounded-br-sm'
-                                            : 'bg-white/10 text-white/90 rounded-bl-sm'
+                                                ? 'bg-gradient-to-br from-violet-600 to-pink-600 text-white rounded-br-sm'
+                                                : 'bg-white/10 text-white/90 rounded-bl-sm'
                                             }`}
                                     >
                                         {msg.content}
@@ -343,7 +343,7 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                                     whileTap={{ scale: 0.95 }}
                                     onClick={handleSend}
                                     disabled={!input.trim() || isLoading}
-                                    className="bg-gradient-to-br from-primary to-secondary text-foreground p-2.5 rounded-full disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                    className="bg-gradient-to-br from-violet-600 to-pink-600 text-white p-2.5 rounded-full disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                                     aria-label="Send"
                                 >
                                     {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}

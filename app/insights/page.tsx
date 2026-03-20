@@ -2,27 +2,16 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { Sparkles, BarChart3, Shield, Rocket, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { Sparkles, BarChart3, Shield, Rocket } from 'lucide-react';
 
 export default function Insights() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background px-6 py-24">
+    <div className="relative min-h-screen overflow-hidden bg-[#0b0f2a] px-6 py-24">
 
       {/* ✨ Floating Particles */}
       <Particles />
 
       <main id="main" className="max-w-6xl mx-auto relative z-10">
-
-        {/* Header nav */}
-        <div className="flex items-center justify-between mb-12">
-          <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors group">
-            <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-            <span className="text-sm font-medium">Back</span>
-          </Link>
-          <ThemeToggle />
-        </div>
 
         {/* Title */}
         <motion.h1
@@ -37,9 +26,9 @@ export default function Insights() {
         </motion.h1>
 
         {/* Description */}
-        <p className="text-xl text-muted-foreground text-center max-w-3xl mx-auto mb-20 leading-relaxed">
+        <p className="text-xl text-gray-300 text-center max-w-3xl mx-auto mb-20 leading-relaxed">
           Insight is a sudden, clear, and deep understanding of a complex situation —
-          a <span className="text-yellow-600 dark:text-yellow-300 font-semibold">lightbulb moment</span>
+          a <span className="text-yellow-300 font-semibold">lightbulb moment</span>
           where clarity replaces confusion and deeper truth reveals itself.
         </p>
 
@@ -147,10 +136,10 @@ function PremiumSection({ icon, title, items, accent }: PremiumSectionProps) {
       <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r ${accent}
         opacity-60 blur-xl group-hover:opacity-100 transition duration-500`} />
 
-      <div className="relative bg-card/90 backdrop-blur-2xl 
-        rounded-3xl p-8 border border-border
-        shadow-[0_0_40px_rgba(139,92,246,0.15)]
-        group-hover:shadow-[0_0_80px_rgba(236,72,153,0.25)]
+      <div className="relative bg-[#0f172a]/90 backdrop-blur-2xl 
+        rounded-3xl p-8 border border-white/10
+        shadow-[0_0_40px_rgba(139,92,246,0.3)]
+        group-hover:shadow-[0_0_80px_rgba(236,72,153,0.4)]
         transition-all duration-500"
       >
 
@@ -159,7 +148,7 @@ function PremiumSection({ icon, title, items, accent }: PremiumSectionProps) {
             {icon}
           </div>
 
-          <h2 className="text-2xl font-bold text-foreground tracking-wide">
+          <h2 className="text-2xl font-bold text-white tracking-wide">
             {title}
           </h2>
         </div>
@@ -169,11 +158,11 @@ function PremiumSection({ icon, title, items, accent }: PremiumSectionProps) {
             <motion.li
               key={index}
               whileHover={{ x: 6 }}
-              className="relative pl-6 text-muted-foreground
+              className="relative pl-6 text-gray-300
               before:absolute before:left-0 before:top-2
               before:w-2.5 before:h-2.5 before:rounded-full
-              before:bg-gradient-to-r before:from-foreground/60 before:to-purple-400
-              hover:text-foreground transition-all duration-300"
+              before:bg-gradient-to-r before:from-white before:to-purple-400
+              hover:text-white transition-all duration-300"
             >
               {item}
             </motion.li>
@@ -201,7 +190,7 @@ function Particles() {
       {particles.map((p, i) => (
         <div
           key={i}
-          className="absolute w-1.5 h-1.5 bg-foreground/30 rounded-full animate-pulse"
+          className="absolute w-1.5 h-1.5 bg-white/40 rounded-full animate-pulse"
           style={{
             top: p.top,
             left: p.left,
