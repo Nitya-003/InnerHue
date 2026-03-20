@@ -7,6 +7,7 @@ import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { Heart, BarChart3, Music, ArrowLeft, Search, X } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176', category: 'positive' },
@@ -95,7 +96,7 @@ export default function ExplorePage() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen bg-[#0f0720] relative overflow-hidden"
+      className="min-h-screen bg-background relative overflow-hidden"
     >
       <FloatingBackground />
 
@@ -117,7 +118,7 @@ export default function ExplorePage() {
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-lg bg-white/10 backdrop-blur-xl shadow-sm hover:shadow-md transition-all border border-white/20"
               >
-                <ArrowLeft className="w-6 h-6 text-white" />
+                <ArrowLeft className="w-6 h-6 text-foreground" />
               </motion.div>
             </Link>
             <div className="flex items-center space-x-2">
@@ -132,19 +133,20 @@ export default function ExplorePage() {
             <Link href="/analytics">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/10 backdrop-blur-xl shadow-sm hover:shadow-md transition-all border border-white/20"
+                className="p-2 rounded-lg bg-muted/40 dark:bg-white/10 backdrop-blur-xl shadow-sm hover:shadow-md transition-all border border-border"
               >
-                <BarChart3 className="w-6 h-6 text-white" />
+                <BarChart3 className="w-6 h-6 text-foreground" />
               </motion.div>
             </Link>
             <Link href="/music">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/10 backdrop-blur-xl shadow-sm hover:shadow-md transition-all border border-white/20"
+                className="p-2 rounded-lg bg-muted/40 dark:bg-white/10 backdrop-blur-xl shadow-sm hover:shadow-md transition-all border border-border"
               >
-                <Music className="w-6 h-6 text-white" />
+                <Music className="w-6 h-6 text-foreground" />
               </motion.div>
             </Link>
+            <ThemeToggle />
           </nav>
         </div>
       </motion.header>
@@ -167,7 +169,7 @@ export default function ExplorePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg"
+              className="text-4xl md:text-5xl font-bold text-foreground mb-4 drop-shadow-lg"
             >
               How are you feeling today?
             </motion.h2>
@@ -175,7 +177,7 @@ export default function ExplorePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto drop-shadow"
+              className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto drop-shadow"
             >
               Choose your emotional state and discover personalized insights, prompts, and music to guide your reflection journey.
             </motion.p>
@@ -196,16 +198,16 @@ export default function ExplorePage() {
                     placeholder="Search moods..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-12 py-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500/50 transition-all font-medium"
+                    className="w-full pl-12 pr-12 py-4 bg-muted/40 dark:bg-white/10 backdrop-blur-xl border border-border rounded-2xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500/50 transition-all font-medium"
                     suppressHydrationWarning
                   />
                   {searchTerm && (
                     <button
                       onClick={() => setSearchTerm('')}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-white/10 transition-colors"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted/40 dark:hover:bg-white/10 transition-colors"
                       suppressHydrationWarning
                     >
-                      <X className="w-4 h-4 text-white/50" />
+                      <X className="w-4 h-4 text-muted-foreground" />
                     </button>
                   )}
                 </div>
@@ -221,7 +223,7 @@ export default function ExplorePage() {
                         px-5 py-2 rounded-full text-sm font-semibold capitalize transition-all duration-300
                         ${activeCategory === category
                           ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg ring-2 ring-pink-500/30"
-                          : "bg-white/10 text-white/70 hover:bg-white/20 border border-white/10 hover:border-white/20"
+                          : "bg-muted/40 dark:bg-white/10 text-foreground/70 hover:bg-muted/60 dark:hover:bg-white/20 border border-border hover:border-border"
                         }
                       `}
                     >
@@ -269,12 +271,12 @@ export default function ExplorePage() {
                     exit={{ opacity: 0, scale: 0.9 }}
                     className="col-span-full py-20 flex flex-col items-center text-center space-y-4"
                   >
-                    <div className="p-6 rounded-full bg-white/5 border border-white/10">
-                      <Search className="w-12 h-12 text-white/20" />
+                    <div className="p-6 rounded-full bg-muted/40 dark:bg-white/5 border border-border">
+                      <Search className="w-12 h-12 text-muted-foreground" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold text-white mb-2">No moods found</h3>
-                      <p className="text-gray-400">Try adjusting your search or category filters.</p>
+                      <h3 className="text-2xl font-bold text-foreground mb-2">No moods found</h3>
+                      <p className="text-muted-foreground">Try adjusting your search or category filters.</p>
                     </div>
                     <button
                       onClick={() => {
