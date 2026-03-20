@@ -12,7 +12,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
-  output: 'export', 
+  output: 'standalone',
   basePath: repoName,
   assetPrefix: repoName,
   transpilePackages: [
@@ -20,9 +20,6 @@ const nextConfig = {
     '@react-three/drei',
     'three',
   ],
-  experimental: {
-    outputFileTracingRoot: undefined,
-  },
 };
 
 module.exports = nextConfig;

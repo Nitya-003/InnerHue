@@ -19,20 +19,11 @@ interface MoodWithMeta extends Mood {
   spotifyPlaylistId?: string;
 }
 
-interface MoodPageProps {
-  params: {
-    id: string;
-  };
-  searchParams?: {
-    moods?: string;
-  };
-}
-
-export default function MoodPage({ params, searchParams }: MoodPageProps) {
+export default function MoodPage() {
   const routeParams = useParams();
   const searchParamsHook = useSearchParams();
-  const id = (routeParams?.id as string) || params.id;
-  const moods = searchParamsHook?.get('moods') || searchParams?.moods;
+  const id = routeParams?.id as string;
+  const moods = searchParamsHook?.get('moods') || undefined;
 
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
@@ -90,7 +81,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       });
       localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
     }
-  }, [params.id, searchParams?.moods, id, moods]);
+  }, [id, moods]);
 
   if (!moodData.length || !suggestions) {
     return (

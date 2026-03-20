@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './moodcard.css';
 
 interface Mood {
@@ -31,6 +31,7 @@ interface MoodCardProps {
 
 export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
   const [emojiDuration, setEmojiDuration] = useState(4);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     setEmojiDuration(4 + Math.random() * 2);
