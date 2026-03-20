@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } from 'lucide-react';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
@@ -17,7 +16,6 @@ interface MoodEntry {
   timestamp: string;
   date?: string;
   color?: string;
-  notes?: string; // Added notes property
 }
 
 interface Stats {
@@ -40,7 +38,7 @@ export default function AnalyticsPage() {
     weeklyData: []
   });
 
-  const calculateStats = useCallback((history: MoodHistoryEntry[]) => {
+  const calculateStats = useCallback((history: MoodEntry[]) => {
     const moodCounts: { [key: string]: number } = {};
     const today = new Date().toDateString();
     const thisWeek: MoodHistoryEntry[] = [];
@@ -48,12 +46,14 @@ export default function AnalyticsPage() {
     weekStart.setDate(weekStart.getDate() - 7);
 
     history.forEach((entry) => {
-      if (entry.date && new Date(entry.date) >= weekStart) {
-        thisWeek.push(entry);
-      }
       // Support both new (emotion) and old (mood) formats
       const moodKey = entry.emotion || entry.mood || 'unknown';
       moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
+
+      const entryDate = new Date(entry.timestamp);
+      if (entryDate >= weekStart) {
+        thisWeek.push(entry);
+      }
     });
 
     const mostCommon = Object.entries(moodCounts)
@@ -69,17 +69,14 @@ export default function AnalyticsPage() {
     });
   }, []);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
-
-  const filteredHistory = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-
     return moodHistory.filter((entry: any) => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
       const notes = (entry.notes || '').toLowerCase();
 
-      const matchesQuery = !q || moodLabel.includes(q) || notes.includes(q);
+  useEffect(() => {
+
+    loadData();
+
       const matchesMood =
         selectedMoodFilter === 'all' ||
         moodLabel === (selectedMoodFilter || '').toLowerCase();
@@ -153,7 +150,7 @@ export default function AnalyticsPage() {
   }, [stats.moodCounts]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -165,7 +162,7 @@ export default function AnalyticsPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-card/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
               <ArrowLeft className="w-5 h-5 text-purple-600" />
               <span className="text-purple-600 font-medium">Back</span>
@@ -179,7 +176,7 @@ export default function AnalyticsPage() {
             </h1>
           </div>
 
-          <ThemeToggle />
+          <div className="w-20" /> {/* Spacer */}
         </div>
       </motion.header>
 
@@ -192,9 +189,9 @@ export default function AnalyticsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-20"
             >
-              <Heart className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-foreground mb-2">No reflections yet</h2>
-              <p className="text-muted-foreground mb-8">Start your journey! Track your emotions to see insights here.</p>
+              <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-600 mb-2">No reflections yet</h2>
+              <p className="text-gray-500 mb-8">Start your journey! Track your emotions to see insights here.</p>
               <Link href="/">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -232,18 +229,18 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border"
+                className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
                     <Calendar className="w-6 h-6 text-purple-600" />
-                    <h3 className="text-2xl font-bold text-foreground">History</h3>
+                    <h3 className="text-2xl font-bold text-gray-800">History</h3>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <button
-                        onClick={() => setExportMenuOpen(!exportMenuOpen)}
+                        onClick={() => setExportMenuOpen(prev => !prev)}
                         onBlur={() => setTimeout(() => setExportMenuOpen(false), 150)}
                         className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-700 hover:bg-purple-50 px-3 py-1.5 rounded-full transition-colors font-medium border border-purple-200 hover:border-purple-300"
                       >
@@ -252,16 +249,16 @@ export default function AnalyticsPage() {
                         <ChevronDown className={`w-4 h-4 transition-transform ${exportMenuOpen ? 'rotate-180' : ''}`} />
                       </button>
                       {exportMenuOpen && (
-                        <div className="absolute right-0 top-full mt-1 py-1 w-44 bg-popover rounded-xl shadow-lg border border-border z-10">
+                        <div className="absolute right-0 top-full mt-1 py-1 w-44 bg-white rounded-xl shadow-lg border border-gray-200 z-10">
                           <button
                             onClick={exportAsJson}
-                            className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted hover:text-primary rounded-t-lg"
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-t-lg"
                           >
                             Download as JSON
                           </button>
                           <button
                             onClick={exportAsCsv}
-                            className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted hover:text-primary rounded-b-lg"
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-b-lg"
                           >
                             Download as CSV
                           </button>
@@ -284,7 +281,7 @@ export default function AnalyticsPage() {
                       value={searchQuery}
                       onChange={e => setSearchQuery(e.target.value)}
                       placeholder="Search by mood or notes..."
-                      className="w-full rounded-full border border-input bg-background/70 px-4 py-2 text-sm text-foreground shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200"
+                      className="w-full rounded-full border border-gray-200 bg-white/70 px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200"
                     />
                   </div>
 
@@ -296,15 +293,14 @@ export default function AnalyticsPage() {
                         className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                           selectedMoodFilter === 'all'
                             ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
-                            : 'bg-background text-foreground border-border hover:bg-muted hover:border-muted-foreground/30'
+                            : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
                         }`}
                       >
                         All moods
                       </button>
-                      {uniqueMoods.map((mood, index) => (
+                      {uniqueMoods.map(mood => (
                         <button
-                          key={index}
-                          onClick={() => handleDeleteEntry(entry.id)}
+                          onClick={() => entry.id && handleDeleteEntry(entry.id, index)}
                           className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
                           title="Delete entry"
                         >
@@ -317,7 +313,7 @@ export default function AnalyticsPage() {
 
                 {/* history cards */}
                 {filteredHistory.length === 0 ? (
-                  <p className="py-6 text-center text-sm text-muted-foreground">
+                  <p className="py-6 text-center text-sm text-gray-500">
                     No reflections match your current search or filters.
                   </p>
                 ) : (
@@ -328,7 +324,7 @@ export default function AnalyticsPage() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.05 * index }}
-                        className="group flex items-center justify-between rounded-xl border border-border bg-card/60 p-4 shadow-sm backdrop-blur hover:bg-card/80 hover:shadow-md transition-all"
+                        className="group flex items-center justify-between rounded-xl border border-white/40 bg-white/60 p-4 shadow-sm backdrop-blur hover:bg-white/80 hover:shadow-md transition-all"
                       >
                         <div className="flex items-center space-x-4">
                           {/* Status Dot */}
@@ -338,28 +334,28 @@ export default function AnalyticsPage() {
                           />
 
                           <div>
-                            <div className="flex items-center font-semibold capitalize text-foreground">
+                            <div className="flex items-center font-semibold capitalize text-gray-800">
                               {entry.emotion || entry.mood}
                             </div>
                             {entry.notes && (
-                              <p className="mt-1 max-w-sm text-sm italic text-muted-foreground line-clamp-2">
+                              <p className="mt-1 max-w-sm text-sm italic text-gray-600 line-clamp-2">
                                 "{entry.notes}"
                               </p>
                             )}
-                            <div className="text-xs font-medium text-muted-foreground">
+                            <div className="text-xs font-medium text-gray-500">
                               {getTimeAgo(entry.timestamp)}
                             </div>
                           </div>
                         </div>
 
                         <div className="flex items-center space-x-4">
-                          <div className="hidden text-sm text-muted-foreground sm:block">
+                          <div className="hidden text-sm text-gray-400 sm:block">
                             {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </div>
 
                           <button
                             onClick={() => handleDeleteEntry(entry.id)}
-                            className="opacity-0 p-2 text-muted-foreground transition-all hover:bg-red-100 dark:hover:bg-red-900/20 hover:text-red-500 rounded-full group-hover:opacity-100"
+                            className="opacity-0 p-2 text-gray-400 transition-all hover:bg-red-50 hover:text-red-500 rounded-full group-hover:opacity-100"
                             title="Delete entry"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -377,44 +373,3 @@ export default function AnalyticsPage() {
     </div>
   );
 }
-
-const loadData = () => {
-  // Define the loadData function logic here
-};
-
-const selectedMoodFilter: string = ''; // Ensure selectedMoodFilter is a string to avoid 'never' type error
-const searchQuery = '';
-const clearHistory = () => {
-  // Define the clearHistory function logic here
-};
-const deleteMood = (id: string) => {
-  // Define the deleteMood function logic here
-};
-const exportMenuOpen = false; // Placeholder for exportMenuOpen state
-const setExportMenuOpen = (value: boolean) => {
-  // Adjusted to accept a boolean value directly
-};
-
-// Updated usage to pass a boolean directly
-const toggleExportMenu = () => {
-  setExportMenuOpen(!exportMenuOpen);
-};
-
-const useMoodStore = {
-  getState: () => ({ moodHistory: [] })
-};
-const downloadBlob = (blob: Blob, filename: string) => {
-  // Define the downloadBlob function logic here
-};
-const getExportDateString = () => {
-  return new Date().toISOString();
-};
-const uniqueMoods: string[] = []; // Placeholder for uniqueMoods array
-const filteredHistory: MoodHistoryEntry[] = []; // Placeholder for filteredHistory array
-const entry: MoodHistoryEntry = { id: '', mood: '', emotion: '', timestamp: '', date: '', color: '' }; // Placeholder for entry object
-const setSearchQuery = (value: string) => {
-  // Placeholder for setSearchQuery function
-};
-const setSelectedMoodFilter = (value: string) => {
-  // Placeholder for setSelectedMoodFilter function
-};
