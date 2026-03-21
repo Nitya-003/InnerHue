@@ -26,28 +26,28 @@ export default function FeatureRow({ icon: Icon, title, description, align, inde
       {/* Content Card */}
       <div className="w-full md:w-1/2">
         <div className="
-          bg-white/10
+          bg-card/75 dark:bg-white/10
           backdrop-blur-lg
           rounded-3xl
           p-8 md:p-10
-          border border-white/20
+          border border-border dark:border-white/20
           transition-all duration-300
-          hover:bg-white/15
+          hover:bg-card dark:hover:bg-white/15
         ">
           <div className="flex items-start gap-4 mb-4">
             <div className="
               p-3 rounded-xl
-              bg-white/10
+              bg-card dark:bg-white/10
               shrink-0
             ">
-              <Icon className="w-6 h-6 text-white" />
+              <Icon className="w-6 h-6 text-foreground dark:text-white" />
             </div>
-            <h3 className="text-2xl md:text-3xl font-semibold text-white leading-tight">
+            <h3 className="text-2xl md:text-3xl font-semibold text-foreground dark:text-white leading-tight">
               {title}
             </h3>
           </div>
 
-          <p className="text-gray-300 leading-relaxed text-base md:text-lg">
+          <p className="text-muted-foreground dark:text-gray-300 leading-relaxed text-base md:text-lg">
             {description}
           </p>
         </div>
@@ -57,12 +57,12 @@ export default function FeatureRow({ icon: Icon, title, description, align, inde
       <div className="w-full md:w-1/2 h-64 md:h-80">
         <div className="
           w-full h-full
-          bg-white/5
+          bg-card/60 dark:bg-white/5
           rounded-3xl
-          border border-white/10
+          border border-border dark:border-white/10
           flex items-center justify-center
         ">
-          <Icon className="w-16 h-16 text-white/20" />
+          <Icon className="w-16 h-16 text-foreground/20 dark:text-white/20" />
         </div>
       </div>
     </motion.div>

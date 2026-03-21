@@ -71,7 +71,7 @@ export function BentoDashboard() {
                         animate="visible"
                         whileHover={{ y: -2 }}
                         className={`relative overflow-hidden rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 ${card.size}
-                        bg-white/5 backdrop-blur-lg border border-white/10`}
+                        bg-card/75 dark:bg-white/5 backdrop-blur-lg border border-border dark:border-white/10`}
                     >
                         <div className={`inline-flex p-2.5 rounded-xl ${card.color} mb-3 shadow-sm`}>
                             <card.icon className={`w-5 h-5 ${card.textColor}`} />
@@ -80,10 +80,10 @@ export function BentoDashboard() {
                         <div className={`text-2xl font-semibold ${card.textColor} mb-1`}>
                             {card.value}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-white/60 font-medium">{card.label}</div>
+                        <div className="text-xs text-muted-foreground dark:text-white/60 font-medium">{card.label}</div>
 
                         {/* Subtle progress indicator */}
-                        <div className="mt-3 h-0.5 bg-white/10 rounded-full overflow-hidden">
+                        <div className="mt-3 h-0.5 bg-muted dark:bg-white/10 rounded-full overflow-hidden">
                             <motion.div
                                 className={`h-full ${card.color} rounded-full`}
                                 initial={{ width: 0 }}
@@ -103,13 +103,13 @@ export function BentoDashboard() {
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
-                className="rounded-3xl p-6 shadow-sm bg-white/5 backdrop-blur-lg border border-white/10"
+                className="rounded-3xl p-6 shadow-sm bg-card/75 dark:bg-white/5 backdrop-blur-lg border border-border dark:border-white/10"
             >
                 <div className="flex items-center gap-2 mb-5">
                     <div className="p-2 rounded-xl bg-purple-500/20">
                         <Sparkles className="w-4 h-4 text-purple-300" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">Mood Frequency</h3>
+                    <h3 className="font-semibold text-foreground dark:text-white">Mood Frequency</h3>
                 </div>
                 <MoodBarChart data={chartData} />
             </motion.div>

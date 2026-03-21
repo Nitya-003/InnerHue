@@ -16,7 +16,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground relative overflow-hidden">
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(6)].map((_, i) => (
@@ -66,7 +66,7 @@ export default function LandingPage() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 href="/emotions"
-                className="px-4 sm:px-6 py-3 bg-white/20 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/30 transition-all duration-300 font-medium"
+                className="px-4 sm:px-6 py-3 bg-card/80 dark:bg-white/20 backdrop-blur text-foreground dark:text-white rounded-full border border-border dark:border-white/30 hover:bg-card dark:hover:bg-white/30 transition-all duration-300 font-medium"
               >
                 <span className="hidden sm:inline">Skip to App</span>
                 <span className="sm:hidden">App</span>
@@ -93,14 +93,14 @@ export default function LandingPage() {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="mb-8"
             >
-              <h2 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 drop-shadow-lg leading-tight">
+              <h2 className="text-6xl md:text-7xl lg:text-8xl font-bold text-foreground dark:text-white mb-6 drop-shadow-lg leading-tight">
                 Understand your emotions,{" "}
                 <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                   one feeling at a time
                 </span>
               </h2>
 
-              <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed">
+              <p className="text-xl md:text-2xl text-muted-foreground dark:text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed">
                 Discover the depth of your emotional landscape with personalized
                 insights, therapeutic music, and guided reflection journeys
                 tailored to your feelings.
@@ -139,10 +139,10 @@ export default function LandingPage() {
             className="py-20 md:py-24"
           >
             <div className="text-center mb-16">
-              <h3 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              <h3 className="text-4xl md:text-5xl font-bold text-foreground dark:text-white mb-4">
                 How InnerHue Works
               </h3>
-              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              <p className="text-xl text-muted-foreground dark:text-gray-300 max-w-2xl mx-auto">
                 A comprehensive approach to emotional wellness and
                 self-discovery
               </p>
@@ -193,7 +193,7 @@ export default function LandingPage() {
                     y: -8,
                     boxShadow: `0 30px 60px ${feature.shadowColor}, 0 0 40px ${feature.shadowColor}`,
                   }}
-                  className="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 hover:bg-white/30 hover:border-white/50 transition-all duration-300 group relative overflow-hidden"
+                  className="p-6 bg-card/75 dark:bg-white/10 backdrop-blur rounded-2xl border border-border dark:border-white/20 hover:bg-card dark:hover:bg-white/30 hover:border-border/80 dark:hover:border-white/50 transition-all duration-300 group relative overflow-hidden"
                 >
                   {/* Colorful gradient overlay on hover */}
                   <div
@@ -211,11 +211,11 @@ export default function LandingPage() {
                       <feature.icon className="w-8 h-8 text-white" />
                     </motion.div>
 
-                    <h4 className="text-xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-pink-300 group-hover:via-purple-300 group-hover:to-cyan-300 group-hover:bg-clip-text transition-all duration-300">
+                    <h4 className="text-xl font-bold text-foreground dark:text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-pink-300 group-hover:via-purple-300 group-hover:to-cyan-300 group-hover:bg-clip-text transition-all duration-300">
                       {feature.title}
                     </h4>
 
-                    <p className="text-gray-300 leading-relaxed group-hover:text-white transition-all duration-300">
+                    <p className="text-muted-foreground dark:text-gray-300 leading-relaxed group-hover:text-foreground dark:group-hover:text-white transition-all duration-300">
                       {feature.description}
                     </p>
                   </div>
@@ -232,11 +232,11 @@ export default function LandingPage() {
             className="text-center py-16"
           >
             <div className="max-w-3xl mx-auto">
-              <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              <h3 className="text-4xl md:text-5xl font-bold text-foreground dark:text-white mb-6">
                 Ready to explore your inner world?
               </h3>
 
-              <p className="text-xl text-gray-300 mb-8">
+              <p className="text-xl text-muted-foreground dark:text-gray-300 mb-8">
                 Join thousands who have discovered deeper self-awareness through
                 InnerHue&apos;s guided emotional reflection experience.
               </p>

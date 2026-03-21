@@ -292,8 +292,8 @@ export default function PersonalizationPage() {
         return (
           <div className="space-y-6">
             {/* Mood Selector */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-              <label className="block text-sm text-white/70 mb-3">
+            <div className="bg-card/80 dark:bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-border dark:border-white/20">
+              <label className="block text-sm text-muted-foreground dark:text-white/70 mb-3">
                 Select a mood to customize
               </label>
               <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
@@ -307,12 +307,12 @@ export default function PersonalizationPage() {
                       onClick={() => setSelectedMood(mood)}
                       className={`relative p-2 rounded-xl flex flex-col items-center gap-1 transition-all ${
                         selectedMood.id === mood.id
-                          ? "bg-white/25 ring-2 ring-white"
-                          : "bg-white/10 hover:bg-white/15"
+                          ? "bg-card ring-2 ring-foreground/30 dark:bg-white/25 dark:ring-white"
+                          : "bg-card/60 hover:bg-card dark:bg-white/10 dark:hover:bg-white/15"
                       }`}
                     >
                       <span className="text-xl">{mood.emoji}</span>
-                      <span className="text-xs text-white/80 truncate w-full text-center">
+                      <span className="text-xs text-foreground/80 dark:text-white/80 truncate w-full text-center">
                         {mood.name}
                       </span>
                       {customPalette && (
@@ -346,17 +346,17 @@ export default function PersonalizationPage() {
         return (
           <div className="space-y-6">
             {/* Intensity Settings */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h3 className="text-lg font-semibold text-white mb-4">
+            <div className="bg-card/80 dark:bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-border dark:border-white/20">
+              <h3 className="text-lg font-semibold text-foreground dark:text-white mb-4">
                 Intensity Settings
               </h3>
 
-              <div className="flex items-center justify-between py-3 border-b border-white/10">
+              <div className="flex items-center justify-between py-3 border-b border-border dark:border-white/10">
                 <div>
-                  <p className="text-white font-medium">
+                  <p className="text-foreground dark:text-white font-medium">
                     Enable Intensity Tracking
                   </p>
-                  <p className="text-sm text-white/60">
+                  <p className="text-sm text-muted-foreground dark:text-white/60">
                     Track how strongly you feel each emotion
                   </p>
                 </div>
@@ -367,7 +367,7 @@ export default function PersonalizationPage() {
                   className={`relative w-14 h-8 rounded-full transition-colors ${
                     settings.enableIntensityTracking
                       ? "bg-gradient-to-r from-purple-500 to-pink-500"
-                      : "bg-white/20"
+                      : "bg-muted/70 dark:bg-white/20"
                   }`}
                 >
                   <motion.div
@@ -379,10 +379,10 @@ export default function PersonalizationPage() {
               </div>
 
               <div className="py-4">
-                <p className="text-white font-medium mb-2">
+                <p className="text-foreground dark:text-white font-medium mb-2">
                   Default Intensity Level
                 </p>
-                <p className="text-sm text-white/60 mb-4">
+                <p className="text-sm text-muted-foreground dark:text-white/60 mb-4">
                   Starting intensity when selecting emotions
                 </p>
                 <IntensitySlider
@@ -397,7 +397,7 @@ export default function PersonalizationPage() {
 
             {/* Try Intensity Slider */}
             <div>
-              <p className="text-white/70 text-sm mb-3">Try it with a mood:</p>
+              <p className="text-muted-foreground dark:text-white/70 text-sm mb-3">Try it with a mood:</p>
               <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
                 {moods.slice(0, 8).map((mood) => (
                   <motion.button
@@ -407,12 +407,12 @@ export default function PersonalizationPage() {
                     onClick={() => setSelectedMood(mood)}
                     className={`flex-shrink-0 px-3 py-2 rounded-xl flex items-center gap-2 transition-all ${
                       selectedMood.id === mood.id
-                        ? "bg-white/25 ring-1 ring-white"
-                        : "bg-white/10 hover:bg-white/15"
+                        ? "bg-card ring-1 ring-foreground/30 dark:bg-white/25 dark:ring-white"
+                        : "bg-card/60 hover:bg-card dark:bg-white/10 dark:hover:bg-white/15"
                     }`}
                   >
                     <span>{mood.emoji}</span>
-                    <span className="text-white text-sm">{mood.name}</span>
+                    <span className="text-foreground dark:text-white text-sm">{mood.name}</span>
                   </motion.button>
                 ))}
               </div>
@@ -434,8 +434,8 @@ export default function PersonalizationPage() {
         return (
           <div className="space-y-6">
             {/* Mood Selector for Subcategories */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-              <label className="block text-sm text-white/70 mb-3">
+            <div className="bg-card/80 dark:bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-border dark:border-white/20">
+              <label className="block text-sm text-muted-foreground dark:text-white/70 mb-3">
                 Select a mood to add subcategories
               </label>
               <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
@@ -460,16 +460,16 @@ export default function PersonalizationPage() {
                         onClick={() => setSelectedMood(mood)}
                         className={`relative p-3 rounded-xl flex flex-col items-center gap-1 transition-all ${
                           selectedMood.id === mood.id
-                            ? "bg-white/25 ring-2 ring-white"
-                            : "bg-white/10 hover:bg-white/15"
+                            ? "bg-card ring-2 ring-foreground/30 dark:bg-white/25 dark:ring-white"
+                            : "bg-card/60 hover:bg-card dark:bg-white/10 dark:hover:bg-white/15"
                         }`}
                       >
                         <span className="text-2xl">{mood.emoji}</span>
-                        <span className="text-sm text-white/80">
+                        <span className="text-sm text-foreground/80 dark:text-white/80">
                           {mood.name}
                         </span>
                         {subcats.length > 0 && (
-                          <span className="text-xs text-white/50">
+                          <span className="text-xs text-muted-foreground dark:text-white/50">
                             {subcats.length} subs
                           </span>
                         )}
@@ -517,7 +517,7 @@ export default function PersonalizationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0720] relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -529,48 +529,48 @@ export default function PersonalizationPage() {
             <Link href="/emotions">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/10 backdrop-blur hover:bg-white/20 shadow-sm hover:shadow-md transition-all border border-white/10"
+                className="p-2 rounded-lg bg-card/75 dark:bg-white/10 backdrop-blur hover:bg-card dark:hover:bg-white/20 shadow-sm hover:shadow-md transition-all border border-border dark:border-white/10"
               >
-                <ArrowLeft className="w-6 h-6 text-white/70" />
+                <ArrowLeft className="w-6 h-6 text-muted-foreground dark:text-white/70" />
               </motion.div>
             </Link>
 
             <div className="flex items-center space-x-2">
-              <Settings className="text-white w-8 h-8" />
-              <h1 className="text-2xl sm:text-3xl font-bold text-white">
+              <Settings className="text-foreground dark:text-white w-8 h-8" />
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white">
                 Personalization
               </h1>
             </div>
           </div>
 
           {/* Stats Badge */}
-          <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur rounded-xl border border-white/20">
+          <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-card/75 dark:bg-white/10 backdrop-blur rounded-xl border border-border dark:border-white/20">
             <div className="text-center">
-              <p className="text-xl font-bold text-white">
+              <p className="text-xl font-bold text-foreground dark:text-white">
                 {stats.totalCustomPalettes}
               </p>
-              <p className="text-xs text-white/60">Colors</p>
+              <p className="text-xs text-muted-foreground dark:text-white/60">Colors</p>
             </div>
-            <div className="w-px h-8 bg-white/20" />
+            <div className="w-px h-8 bg-border dark:bg-white/20" />
             <div className="text-center">
-              <p className="text-xl font-bold text-white">
+              <p className="text-xl font-bold text-foreground dark:text-white">
                 {stats.totalSubcategories}
               </p>
-              <p className="text-xs text-white/60">Subcats</p>
+              <p className="text-xs text-muted-foreground dark:text-white/60">Subcats</p>
             </div>
-            <div className="w-px h-8 bg-white/20" />
+            <div className="w-px h-8 bg-border dark:bg-white/20" />
             <div className="text-center">
-              <p className="text-xl font-bold text-white">
+              <p className="text-xl font-bold text-foreground dark:text-white">
                 {stats.totalCombinations}
               </p>
-              <p className="text-xs text-white/60">Combos</p>
+              <p className="text-xs text-muted-foreground dark:text-white/60">Combos</p>
             </div>
-            <div className="w-px h-8 bg-white/20" />
+            <div className="w-px h-8 bg-border dark:bg-white/20" />
             <div className="text-center">
-              <p className="text-xl font-bold text-white">
+              <p className="text-xl font-bold text-foreground dark:text-white">
                 {stats.totalCustomWords}
               </p>
-              <p className="text-xs text-white/60">Words</p>
+              <p className="text-xs text-muted-foreground dark:text-white/60">Words</p>
             </div>
           </div>
         </div>
@@ -586,10 +586,10 @@ export default function PersonalizationPage() {
             transition={{ delay: 0.1 }}
             className="text-center mb-8"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground dark:text-white mb-3">
               Make It Yours
             </h2>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground dark:text-white/70 max-w-2xl mx-auto">
               Customize how you express and track your emotions with
               personalized colors, intensity levels, subcategories, and your own
               emotional vocabulary.
@@ -601,16 +601,16 @@ export default function PersonalizationPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="mb-8 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20"
+            className="mb-8 bg-card/80 dark:bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-border dark:border-white/20"
           >
-            <h3 className="text-lg font-semibold text-white mb-4">
+            <h3 className="text-lg font-semibold text-foreground dark:text-white mb-4">
               🔔 Daily Mood Reminder
             </h3>
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <p className="text-white font-medium">Enable Reminder</p>
-                <p className="text-sm text-white/60">
+                <p className="text-foreground dark:text-white font-medium">Enable Reminder</p>
+                <p className="text-sm text-muted-foreground dark:text-white/60">
                   Get notified daily to log your mood.
                 </p>
               </div>
@@ -620,7 +620,7 @@ export default function PersonalizationPage() {
                 className={`relative w-14 h-8 rounded-full transition-colors ${
                   reminderEnabled
                     ? "bg-gradient-to-r from-purple-500 to-pink-500"
-                    : "bg-white/20"
+                    : "bg-muted/70 dark:bg-white/20"
                 }`}
               >
                 <motion.div
@@ -633,14 +633,14 @@ export default function PersonalizationPage() {
 
             {reminderEnabled && (
               <div className="mt-6">
-                <label className="block text-white font-medium mb-2">
+                <label className="block text-foreground dark:text-white font-medium mb-2">
                   Reminder Time
                 </label>
                 <input
                   type="time"
                   value={reminderTime}
                   onChange={(e) => handleTimeChange(e.target.value)}
-                  className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg"
+                  className="bg-card/80 dark:bg-white/10 border border-border dark:border-white/20 text-foreground dark:text-white px-4 py-2 rounded-lg"
                 />
               </div>
             )}
@@ -664,20 +664,20 @@ export default function PersonalizationPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex-shrink-0 px-4 py-3 rounded-xl flex items-center gap-2 transition-all backdrop-blur-lg ${
                       activeTab === tab.id
-                        ? "bg-white/20 border border-white/30"
-                        : "bg-white/5 border border-white/10 hover:bg-white/10"
+                        ? "bg-card border border-border dark:bg-white/20 dark:border-white/30"
+                        : "bg-card/60 border border-border dark:bg-white/5 dark:border-white/10 hover:bg-card/90 dark:hover:bg-white/10"
                     }`}
                   >
                     <Icon
-                      className={`w-5 h-5 ${activeTab === tab.id ? "text-white" : "text-white/70"}`}
+                      className={`w-5 h-5 ${activeTab === tab.id ? "text-foreground dark:text-white" : "text-muted-foreground dark:text-white/70"}`}
                     />
                     <div className="text-left">
                       <p
-                        className={`text-sm font-medium ${activeTab === tab.id ? "text-white" : "text-white/80"}`}
+                        className={`text-sm font-medium ${activeTab === tab.id ? "text-foreground dark:text-white" : "text-foreground/80 dark:text-white/80"}`}
                       >
                         {tab.label}
                       </p>
-                      <p className="text-xs text-white/50 hidden sm:block">
+                      <p className="text-xs text-muted-foreground dark:text-white/50 hidden sm:block">
                         {tab.description}
                       </p>
                     </div>
@@ -710,9 +710,9 @@ export default function PersonalizationPage() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="inline-flex items-center gap-3 p-4 bg-red-500/20 rounded-xl border border-red-500/30"
+                  className="inline-flex items-center gap-3 p-4 bg-red-500/15 dark:bg-red-500/20 rounded-xl border border-red-500/30"
                 >
-                  <p className="text-white">Reset all personalization?</p>
+                  <p className="text-foreground dark:text-white">Reset all personalization?</p>
                   <button
                     onClick={() => {
                       resetAllPersonalization();
@@ -724,7 +724,7 @@ export default function PersonalizationPage() {
                   </button>
                   <button
                     onClick={() => setShowResetConfirm(false)}
-                    className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
+                    className="px-4 py-2 bg-card dark:bg-white/10 text-foreground dark:text-white rounded-lg hover:bg-card/80 dark:hover:bg-white/20 transition-colors"
                   >
                     Cancel
                   </button>
@@ -734,7 +734,7 @@ export default function PersonalizationPage() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setShowResetConfirm(true)}
-                  className="text-white/50 hover:text-white/70 flex items-center gap-2 mx-auto text-sm transition-colors"
+                  className="text-muted-foreground dark:text-white/50 hover:text-foreground dark:hover:text-white/70 flex items-center gap-2 mx-auto text-sm transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Reset All Personalization

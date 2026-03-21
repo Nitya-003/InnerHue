@@ -1,82 +1,43 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
-import type { MoodHistoryEntry, MoodStats as MoodStatsType } from '@/types/mood';
+import { useMoodStore } from '@/lib/useMoodStore';
 
 interface MoodEntry {
-  id?: string;
+  id: string;
   mood?: string;
   emotion?: string;
   timestamp: string;
   date?: string;
   color?: string;
-}
-
-interface Stats {
-  totalEntries: number;
-  todayEntries: number;
-  weekEntries: number;
-  mostCommonMood: string | null;
-  moodCounts: { [key: string]: number };
-  weeklyData: MoodEntry[];
+  notes?: string;
 }
 
 export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
-  const [stats, setStats] = useState<Stats>({
-    totalEntries: 0,
-    todayEntries: 0,
-    weekEntries: 0,
-    mostCommonMood: null,
-    moodCounts: {},
-    weeklyData: []
-  });
+  const moodHistory = useMoodStore((state) => state.moodHistory) as MoodEntry[];
+  const deleteMood = useMoodStore((state) => state.deleteMood);
+  const clearHistory = useMoodStore((state) => state.clearHistory);
+  const stats = useMoodStore((state) => state.stats);
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
-  const calculateStats = useCallback((history: MoodEntry[]) => {
-    const moodCounts: { [key: string]: number } = {};
-    const today = new Date().toDateString();
-    const thisWeek: MoodHistoryEntry[] = [];
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 7);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
 
-    history.forEach((entry) => {
-      // Support both new (emotion) and old (mood) formats
-      const moodKey = entry.emotion || entry.mood || 'unknown';
-      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
-
-      const entryDate = new Date(entry.timestamp);
-      if (entryDate >= weekStart) {
-        thisWeek.push(entry);
-      }
-    });
-
-    const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => b - a)[0];
-
-    setStats({
-      totalEntries: history.length,
-      todayEntries: history.filter((entry) => new Date(entry.timestamp).toDateString() === today).length,
-      weekEntries: thisWeek.length,
-      mostCommonMood: mostCommon ? mostCommon[0] : null,
-      moodCounts,
-      weeklyData: thisWeek
-    });
-  }, []);
+  const filteredHistory = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
 
     return moodHistory.filter((entry: any) => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
       const notes = (entry.notes || '').toLowerCase();
 
-  useEffect(() => {
-
-    loadData();
-
+      const matchesQuery = !q || moodLabel.includes(q) || notes.includes(q);
       const matchesMood =
         selectedMoodFilter === 'all' ||
         moodLabel === (selectedMoodFilter || '').toLowerCase();
@@ -84,6 +45,16 @@ export default function AnalyticsPage() {
       return matchesQuery && matchesMood;
     });
   }, [moodHistory, searchQuery, selectedMoodFilter]);
+
+  const uniqueMoods = useMemo(() => {
+    return Array.from(
+      new Set(
+        moodHistory
+          .map((entry) => entry.emotion || entry.mood)
+          .filter((value): value is string => Boolean(value))
+      )
+    ).sort();
+  }, [moodHistory]);
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
@@ -96,6 +67,19 @@ export default function AnalyticsPage() {
       deleteMood(id);
     }
   };
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const getExportDateString = () => new Date().toISOString().slice(0, 10);
 
   const exportAsJson = () => {
     setExportMenuOpen(false);
@@ -142,7 +126,7 @@ export default function AnalyticsPage() {
   const moodData = useMemo(() => {
     return Object.entries(stats.moodCounts || {})
       .sort(([, a], [, b]) => (b as number) - (a as number))
-      .slice(0, 10)
+      .slice(0, 8)
       .map(([mood, count]) => ({
         mood,
         count: count as number,
@@ -150,7 +134,7 @@ export default function AnalyticsPage() {
   }, [stats.moodCounts]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -162,7 +146,7 @@ export default function AnalyticsPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="flex items-center space-x-2 p-2 rounded-lg bg-card/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
             >
               <ArrowLeft className="w-5 h-5 text-purple-600" />
               <span className="text-purple-600 font-medium">Back</span>
@@ -176,7 +160,7 @@ export default function AnalyticsPage() {
             </h1>
           </div>
 
-          <div className="w-20" /> {/* Spacer */}
+          <ThemeToggle />
         </div>
       </motion.header>
 
@@ -189,9 +173,9 @@ export default function AnalyticsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-20"
             >
-              <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-600 mb-2">No reflections yet</h2>
-              <p className="text-gray-500 mb-8">Start your journey! Track your emotions to see insights here.</p>
+              <Heart className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-foreground mb-2">No reflections yet</h2>
+              <p className="text-muted-foreground mb-8">Start your journey! Track your emotions to see insights here.</p>
               <Link href="/">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -229,36 +213,36 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50"
+                className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border"
               >
-                <div className="flex items-center justify-between mb-6">
+                <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="flex items-center space-x-2">
                     <Calendar className="w-6 h-6 text-purple-600" />
-                    <h3 className="text-2xl font-bold text-gray-800">History</h3>
+                    <h3 className="text-2xl font-bold text-foreground">History</h3>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <div className="relative">
                       <button
-                        onClick={() => setExportMenuOpen(prev => !prev)}
+                        onClick={() => setExportMenuOpen(!exportMenuOpen)}
                         onBlur={() => setTimeout(() => setExportMenuOpen(false), 150)}
-                        className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-700 hover:bg-purple-50 px-3 py-1.5 rounded-full transition-colors font-medium border border-purple-200 hover:border-purple-300"
+                        className="flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                       >
                         <Download className="w-4 h-4" />
                         Export Data
                         <ChevronDown className={`w-4 h-4 transition-transform ${exportMenuOpen ? 'rotate-180' : ''}`} />
                       </button>
                       {exportMenuOpen && (
-                        <div className="absolute right-0 top-full mt-1 py-1 w-44 bg-white rounded-xl shadow-lg border border-gray-200 z-10">
+                        <div className="absolute right-0 top-full mt-1 py-1 w-44 bg-popover rounded-xl shadow-lg border border-border z-10">
                           <button
                             onClick={exportAsJson}
-                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-t-lg"
+                            className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted hover:text-primary rounded-t-lg"
                           >
                             Download as JSON
                           </button>
                           <button
                             onClick={exportAsCsv}
-                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-b-lg"
+                            className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted hover:text-primary rounded-b-lg"
                           >
                             Download as CSV
                           </button>
@@ -267,7 +251,7 @@ export default function AnalyticsPage() {
                     </div>
                     <button
                       onClick={handleClearHistory}
-                      className="text-sm text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded-full transition-colors font-medium border border-transparent hover:border-red-200"
+                      className="rounded-full border border-transparent px-3 py-1 text-sm font-medium text-destructive transition-colors hover:border-destructive/30 hover:bg-destructive/10"
                     >
                       Clear History
                     </button>
@@ -281,7 +265,7 @@ export default function AnalyticsPage() {
                       value={searchQuery}
                       onChange={e => setSearchQuery(e.target.value)}
                       placeholder="Search by mood or notes..."
-                      className="w-full rounded-full border border-gray-200 bg-white/70 px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200"
+                      className="w-full rounded-full border border-input bg-background px-4 py-2 text-sm text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                   </div>
 
@@ -293,16 +277,21 @@ export default function AnalyticsPage() {
                         className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                           selectedMoodFilter === 'all'
                             ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
-                            : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
+                            : 'bg-background text-foreground border-border hover:bg-muted hover:border-muted-foreground/30'
                         }`}
                       >
                         All moods
                       </button>
-                      {uniqueMoods.map(mood => (
+                      {uniqueMoods.map((mood, index) => (
                         <button
-                          onClick={() => entry.id && handleDeleteEntry(entry.id, index)}
-                          className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                          title="Delete entry"
+                          key={index}
+                          type="button"
+                          onClick={() => setSelectedMoodFilter(mood)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                            selectedMoodFilter === mood
+                              ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                              : 'bg-background text-foreground border-border hover:bg-muted hover:border-muted-foreground/30'
+                          }`}
                         >
                           {mood}
                         </button>
@@ -313,7 +302,7 @@ export default function AnalyticsPage() {
 
                 {/* history cards */}
                 {filteredHistory.length === 0 ? (
-                  <p className="py-6 text-center text-sm text-gray-500">
+                  <p className="py-6 text-center text-sm text-muted-foreground">
                     No reflections match your current search or filters.
                   </p>
                 ) : (
@@ -324,7 +313,7 @@ export default function AnalyticsPage() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.05 * index }}
-                        className="group flex items-center justify-between rounded-xl border border-white/40 bg-white/60 p-4 shadow-sm backdrop-blur hover:bg-white/80 hover:shadow-md transition-all"
+                        className="group flex items-center justify-between rounded-xl border border-border bg-card/60 p-4 shadow-sm backdrop-blur hover:bg-card/80 hover:shadow-md transition-all"
                       >
                         <div className="flex items-center space-x-4">
                           {/* Status Dot */}
@@ -334,28 +323,28 @@ export default function AnalyticsPage() {
                           />
 
                           <div>
-                            <div className="flex items-center font-semibold capitalize text-gray-800">
+                            <div className="flex items-center font-semibold capitalize text-foreground">
                               {entry.emotion || entry.mood}
                             </div>
                             {entry.notes && (
-                              <p className="mt-1 max-w-sm text-sm italic text-gray-600 line-clamp-2">
+                              <p className="mt-1 max-w-sm text-sm italic text-muted-foreground line-clamp-2">
                                 "{entry.notes}"
                               </p>
                             )}
-                            <div className="text-xs font-medium text-gray-500">
+                            <div className="text-xs font-medium text-muted-foreground">
                               {getTimeAgo(entry.timestamp)}
                             </div>
                           </div>
                         </div>
 
                         <div className="flex items-center space-x-4">
-                          <div className="hidden text-sm text-gray-400 sm:block">
+                          <div className="hidden text-sm text-muted-foreground sm:block">
                             {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </div>
 
                           <button
                             onClick={() => handleDeleteEntry(entry.id)}
-                            className="opacity-0 p-2 text-gray-400 transition-all hover:bg-red-50 hover:text-red-500 rounded-full group-hover:opacity-100"
+                            className="rounded-full p-2 text-muted-foreground opacity-0 transition-all hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
                             title="Delete entry"
                           >
                             <Trash2 className="h-4 w-4" />

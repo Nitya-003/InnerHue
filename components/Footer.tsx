@@ -37,9 +37,8 @@ export function Footer() {
           relative
           rounded-3xl
           border
-          border-white/20
-          bg-white/10
-          dark:bg-white/5
+          border-border/80 dark:border-white/20
+          bg-card/75 dark:bg-white/5
           backdrop-blur-2xl
           shadow-[0_8px_40px_rgba(0,0,0,0.25)]
           px-10

@@ -1,4 +1,5 @@
 const isGithubActions = process.env.GITHUB_ACTIONS || false;
+const shouldStaticExport = process.env.NEXT_OUTPUT_MODE === 'export';
 
 let repoName = '';
 if (isGithubActions) {
@@ -6,12 +7,14 @@ if (isGithubActions) {
   repoName = `/${repo.split('/')[1]}`;
 }
 
-const withPWA = require('next-pwa')({
+const nextPwa = require('next-pwa');
+
+const pwaOptions = {
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
-})
+};
 
 const nextConfig = {
   reactStrictMode: true,
@@ -19,7 +22,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
-  output: 'export', 
+  output: shouldStaticExport ? 'export' : 'standalone',
   basePath: repoName,
   assetPrefix: repoName,
   transpilePackages: [
@@ -27,9 +30,15 @@ const nextConfig = {
     '@react-three/drei',
     'three',
   ],
-  experimental: {
-    outputFileTracingRoot: undefined,
-  },
+  outputFileTracingRoot: __dirname,
 };
 
-module.exports = withPWA(nextConfig)
+// next-pwa has two API shapes across versions:
+// 1) withPWA(nextConfig) where options live under nextConfig.pwa
+// 2) withPWA(pwaOptions)(nextConfig)
+const probe = nextPwa({});
+
+module.exports =
+  typeof probe === 'function'
+    ? nextPwa(pwaOptions)(nextConfig)
+    : nextPwa({ ...nextConfig, pwa: pwaOptions });

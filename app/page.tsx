@@ -304,7 +304,7 @@ export default function Home() {
   localStorage.setItem("selectedMoods", JSON.stringify(selectedMoods));
 }, [selectedMoods]);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const [, setOrbs] = useState<{ id: number; color: string; width: number; height: number; left: number; top: number; x: number; y: number; duration: number }[]>([]);
   const maxSelections = 3;
@@ -328,14 +328,12 @@ export default function Home() {
   };
 
   const fetchData = () => {
-    setIsLoading(true);
     setError(false);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    setIsLoading(false);
   };
 
   useEffect(() => {
+    fetchData();
 
     setOrbs(Array.from({ length: 8 }, (_, i) => ({
       id: i,
@@ -356,7 +354,7 @@ export default function Home() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen relative overflow-hidden bg-[#0f0720]"
+      className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground"
     >
       {/* Dynamic Aurora Background */}
       <FloatingBackground />
@@ -380,7 +378,7 @@ export default function Home() {
             <Link href="/emotions">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-1.5 md:p-2 rounded-lg bg-white/10 backdrop-blur-xl hover:bg-white/20 transition-all duration-300 border border-white/20 flex items-center gap-2 text-white"
+                className="p-1.5 md:p-2 rounded-lg bg-card/75 dark:bg-white/10 backdrop-blur-xl hover:bg-card dark:hover:bg-white/20 transition-all duration-300 border border-border/80 dark:border-white/20 flex items-center gap-2 text-foreground dark:text-white"
                 title="Custom Moods"
               >
                 <Plus className="w-5 h-5 md:w-6 md:h-6" />
@@ -392,19 +390,19 @@ export default function Home() {
             <Link href="/analytics">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
+                className="p-2 rounded-full bg-card/65 dark:bg-white/5 backdrop-blur-xl hover:bg-card/90 dark:hover:bg-white/10 transition-all duration-300 border border-border/70 dark:border-white/10"
                 title="Analytics"
               >
-                <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-foreground dark:text-white" />
               </motion.div>
             </Link>
             <Link href="/music" aria-label="Relaxing Music">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-full bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-300 border border-white/10"
+                className="p-2 rounded-full bg-card/65 dark:bg-white/5 backdrop-blur-xl hover:bg-card/90 dark:hover:bg-white/10 transition-all duration-300 border border-border/70 dark:border-white/10"
                 title="Music"
               >
-                <Music className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <Music className="w-5 h-5 md:w-6 md:h-6 text-foreground dark:text-white" />
               </motion.div>
             </Link>
           </nav>
@@ -421,10 +419,10 @@ export default function Home() {
             transition={{ delay: 0.4 }}
             className="text-center mb-8 scroll-mt-24"
           >
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+            <h3 className="text-2xl md:text-3xl font-bold text-foreground dark:text-white mb-2">
               How are you feeling today?
             </h3>
-            <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto drop-shadow mb-6 leading-relaxed">
+            <p className="text-lg md:text-xl text-muted-foreground dark:text-gray-200 max-w-2xl mx-auto drop-shadow mb-6 leading-relaxed">
               Choose your emotional state and discover personalized insights,
               prompts, and music to guide your reflection journey.
             </p>
@@ -492,10 +490,10 @@ export default function Home() {
           {/* Features Section */}
           <section className="py-20 sm:py-24 px-4">
             <div className="text-center mb-16 sm:mb-20">
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white mb-3 sm:mb-4">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground dark:text-white mb-3 sm:mb-4">
                 How InnerHue Works
               </h3>
-              <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl text-muted-foreground dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
                 A comprehensive approach to emotional wellness and
                 self-discovery
               </p>
@@ -513,11 +511,11 @@ export default function Home() {
             className="text-center py-12 sm:py-16 px-4"
           >
             <div className="max-w-3xl mx-auto">
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground dark:text-white mb-4 sm:mb-6">
                 Ready to explore your inner world?
               </h3>
 
-              <p className="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8">
+              <p className="text-lg sm:text-xl text-muted-foreground dark:text-gray-300 mb-6 sm:mb-8">
                 Join thousands who have discovered deeper self-awareness through
                 InnerHue&apos;s guided emotional reflection experience.
               </p>

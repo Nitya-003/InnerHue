@@ -6,7 +6,7 @@ import { Sparkles, BarChart3, Shield, Rocket } from 'lucide-react';
 
 export default function Insights() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0b0f2a] px-6 py-24">
+    <div className="relative min-h-screen overflow-hidden px-6 py-24 bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground">
 
       {/* ✨ Floating Particles */}
       <Particles />
@@ -26,7 +26,7 @@ export default function Insights() {
         </motion.h1>
 
         {/* Description */}
-        <p className="text-xl text-gray-300 text-center max-w-3xl mx-auto mb-20 leading-relaxed">
+        <p className="text-xl text-muted-foreground dark:text-gray-300 text-center max-w-3xl mx-auto mb-20 leading-relaxed">
           Insight is a sudden, clear, and deep understanding of a complex situation —
           a <span className="text-yellow-300 font-semibold">lightbulb moment</span>
           where clarity replaces confusion and deeper truth reveals itself.
@@ -136,8 +136,8 @@ function PremiumSection({ icon, title, items, accent }: PremiumSectionProps) {
       <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r ${accent}
         opacity-60 blur-xl group-hover:opacity-100 transition duration-500`} />
 
-      <div className="relative bg-[#0f172a]/90 backdrop-blur-2xl 
-        rounded-3xl p-8 border border-white/10
+      <div className="relative bg-card/85 dark:bg-[#0f172a]/90 backdrop-blur-2xl 
+        rounded-3xl p-8 border border-border dark:border-white/10
         shadow-[0_0_40px_rgba(139,92,246,0.3)]
         group-hover:shadow-[0_0_80px_rgba(236,72,153,0.4)]
         transition-all duration-500"
@@ -148,7 +148,7 @@ function PremiumSection({ icon, title, items, accent }: PremiumSectionProps) {
             {icon}
           </div>
 
-          <h2 className="text-2xl font-bold text-white tracking-wide">
+          <h2 className="text-2xl font-bold text-foreground dark:text-white tracking-wide">
             {title}
           </h2>
         </div>
@@ -158,11 +158,11 @@ function PremiumSection({ icon, title, items, accent }: PremiumSectionProps) {
             <motion.li
               key={index}
               whileHover={{ x: 6 }}
-              className="relative pl-6 text-gray-300
+              className="relative pl-6 text-muted-foreground dark:text-gray-300
               before:absolute before:left-0 before:top-2
               before:w-2.5 before:h-2.5 before:rounded-full
               before:bg-gradient-to-r before:from-white before:to-purple-400
-              hover:text-white transition-all duration-300"
+              hover:text-foreground dark:hover:text-white transition-all duration-300"
             >
               {item}
             </motion.li>
@@ -190,7 +190,7 @@ function Particles() {
       {particles.map((p, i) => (
         <div
           key={i}
-          className="absolute w-1.5 h-1.5 bg-white/40 rounded-full animate-pulse"
+          className="absolute w-1.5 h-1.5 bg-foreground/40 dark:bg-white/40 rounded-full animate-pulse"
           style={{
             top: p.top,
             left: p.left,
