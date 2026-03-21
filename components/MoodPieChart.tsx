@@ -35,8 +35,8 @@ export default function MoodPieChart({ data }: MoodPieChartProps) {
   });
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
-      <h3 className="text-xl font-bold text-gray-800 mb-6">Mood Distribution</h3>
+    <div className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border">
+      <h3 className="text-xl font-bold text-foreground mb-6">Mood Distribution</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
@@ -55,8 +55,10 @@ export default function MoodPieChart({ data }: MoodPieChartProps) {
           </Pie>
           <Tooltip
             contentStyle={{
+              backgroundColor: 'hsl(var(--popover))',
+              color: 'hsl(var(--popover-foreground))',
               borderRadius: '12px',
-              border: 'none',
+              border: '1px solid hsl(var(--border))',
               boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
             }}
           />

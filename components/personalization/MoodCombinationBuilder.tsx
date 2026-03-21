@@ -86,16 +86,16 @@ export function MoodCombinationBuilder({
   );
 
   return (
-    <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+    <div className="bg-card/80 dark:bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-border dark:border-white/20">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <Link2 className="w-6 h-6 text-purple-400" />
           <div>
-            <h3 className="text-lg font-semibold text-white">Mood Combinations</h3>
-            <p className="text-sm text-white/60">Express complex emotions</p>
+            <h3 className="text-lg font-semibold text-foreground dark:text-white">Mood Combinations</h3>
+            <p className="text-sm text-muted-foreground dark:text-white/60">Express complex emotions</p>
           </div>
         </div>
-        <span className="text-sm text-white/50">{existingCombinations.length} created</span>
+        <span className="text-sm text-muted-foreground dark:text-white/50">{existingCombinations.length} created</span>
       </div>
 
       {/* Existing Combinations */}
@@ -108,14 +108,14 @@ export function MoodCombinationBuilder({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="group relative p-4 rounded-xl bg-gradient-to-r from-white/10 to-white/5 border border-white/20 hover:border-white/30 transition-all"
+                className="group relative p-4 rounded-xl bg-gradient-to-r from-card to-card/70 dark:from-white/10 dark:to-white/5 border border-border dark:border-white/20 hover:border-border/80 dark:hover:border-white/30 transition-all"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{combo.emoji}</span>
                     <div>
-                      <h4 className="text-white font-medium">{combo.name}</h4>
-                      <div className="flex items-center gap-1 text-white/50 text-sm">
+                      <h4 className="text-foreground dark:text-white font-medium">{combo.name}</h4>
+                      <div className="flex items-center gap-1 text-muted-foreground dark:text-white/50 text-sm">
                         {combo.moodIds.map((moodId, idx) => {
                           const mood = getMoodById(moodId);
                           return (
@@ -130,14 +130,14 @@ export function MoodCombinationBuilder({
                   </div>
                   <button
                     onClick={() => onRemove(combo.id)}
-                    className="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-white/20 transition-all"
+                    className="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-card dark:hover:bg-white/20 transition-all"
                     aria-label={`Remove ${combo.name}`}
                   >
-                    <X className="w-4 h-4 text-white/70" />
+                    <X className="w-4 h-4 text-muted-foreground dark:text-white/70" />
                   </button>
                 </div>
                 {combo.description && (
-                  <p className="mt-2 text-sm text-white/60">{combo.description}</p>
+                  <p className="mt-2 text-sm text-muted-foreground dark:text-white/60">{combo.description}</p>
                 )}
               </motion.div>
             ))}
@@ -148,7 +148,7 @@ export function MoodCombinationBuilder({
       {/* Suggestions */}
       {unusedSuggestions.length > 0 && !isAdding && (
         <div className="mb-4">
-          <div className="flex items-center gap-2 text-white/60 text-sm mb-3">
+          <div className="flex items-center gap-2 text-muted-foreground dark:text-white/60 text-sm mb-3">
             <Sparkles className="w-4 h-4" />
             <span>Quick Add Suggestions</span>
           </div>
@@ -159,7 +159,7 @@ export function MoodCombinationBuilder({
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => handleSuggestionClick(suggestion)}
-                className="px-4 py-2 rounded-xl bg-white/5 border border-dashed border-white/20 text-white/70 hover:bg-white/10 hover:border-white/30 transition-all flex items-center gap-2"
+                className="px-4 py-2 rounded-xl bg-card/70 dark:bg-white/5 border border-dashed border-border dark:border-white/20 text-foreground/80 dark:text-white/70 hover:bg-card dark:hover:bg-white/10 hover:border-border/80 dark:hover:border-white/30 transition-all flex items-center gap-2"
               >
                 <span>{suggestion.emoji}</span>
                 <span className="text-sm">{suggestion.name}</span>
@@ -179,7 +179,7 @@ export function MoodCombinationBuilder({
             className="space-y-4 overflow-hidden"
           >
             <div>
-              <label className="block text-sm text-white/70 mb-2">
+              <label className="block text-sm text-muted-foreground dark:text-white/70 mb-2">
                 Select 2-4 moods to combine
               </label>
               <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-48 overflow-y-auto p-1">
@@ -191,12 +191,12 @@ export function MoodCombinationBuilder({
                     onClick={() => handleMoodToggle(mood.id)}
                     className={`p-2 rounded-xl flex flex-col items-center gap-1 transition-all ${
                       selectedMoods.includes(mood.id)
-                        ? 'bg-white/25 ring-2 ring-white'
-                        : 'bg-white/10 hover:bg-white/15'
+                        ? 'bg-card ring-2 ring-foreground/30 dark:bg-white/25 dark:ring-white'
+                        : 'bg-card/70 hover:bg-card dark:bg-white/10 dark:hover:bg-white/15'
                     }`}
                   >
                     <span className="text-xl">{mood.emoji}</span>
-                    <span className="text-xs text-white/80 truncate w-full text-center">
+                    <span className="text-xs text-foreground/80 dark:text-white/80 truncate w-full text-center">
                       {mood.name}
                     </span>
                   </motion.button>
@@ -209,43 +209,43 @@ export function MoodCombinationBuilder({
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="p-3 rounded-xl bg-white/10 border border-white/20"
+                className="p-3 rounded-xl bg-card dark:bg-white/10 border border-border dark:border-white/20"
               >
                 <div className="flex items-center justify-center gap-2 text-2xl mb-2">
                   {selectedMoods.map((moodId, idx) => (
                     <React.Fragment key={moodId}>
                       {idx > 0 && (
-                        <ArrowRight className="w-4 h-4 text-white/40" />
+                        <ArrowRight className="w-4 h-4 text-muted-foreground dark:text-white/40" />
                       )}
                       <span>{getMoodById(moodId)?.emoji}</span>
                     </React.Fragment>
                   ))}
                 </div>
-                <p className="text-center text-white/60 text-sm">
+                <p className="text-center text-muted-foreground dark:text-white/60 text-sm">
                   {selectedMoods.map((id) => getMoodById(id)?.name).join(' + ')}
                 </p>
               </motion.div>
             )}
 
             <div>
-              <label className="block text-sm text-white/70 mb-2">Combination Name *</label>
+              <label className="block text-sm text-muted-foreground dark:text-white/70 mb-2">Combination Name *</label>
               <input
                 type="text"
                 value={combinationName}
                 onChange={(e) => setCombinationName(e.target.value)}
                 placeholder='e.g., "Grateful but Tired"'
-                className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20"
+                className="w-full px-4 py-2 rounded-xl bg-card dark:bg-white/10 border border-border dark:border-white/20 text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-white/40 focus:outline-none focus:border-border dark:focus:border-white/40 focus:ring-2 focus:ring-border dark:focus:ring-white/20"
               />
             </div>
 
             <div>
-              <label className="block text-sm text-white/70 mb-2">Description (optional)</label>
+              <label className="block text-sm text-muted-foreground dark:text-white/70 mb-2">Description (optional)</label>
               <textarea
                 value={combinationDescription}
                 onChange={(e) => setCombinationDescription(e.target.value)}
                 placeholder="When do you feel this way?"
                 rows={2}
-                className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 resize-none"
+                className="w-full px-4 py-2 rounded-xl bg-card dark:bg-white/10 border border-border dark:border-white/20 text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-white/40 focus:outline-none focus:border-border dark:focus:border-white/40 focus:ring-2 focus:ring-border dark:focus:ring-white/20 resize-none"
               />
             </div>
 
@@ -268,7 +268,7 @@ export function MoodCombinationBuilder({
                   setCombinationName('');
                   setCombinationDescription('');
                 }}
-                className="px-4 py-2 rounded-xl bg-white/10 text-white hover:bg-white/20"
+                className="px-4 py-2 rounded-xl bg-card dark:bg-white/10 text-foreground dark:text-white hover:bg-card/80 dark:hover:bg-white/20"
               >
                 Cancel
               </motion.button>
@@ -281,7 +281,7 @@ export function MoodCombinationBuilder({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setIsAdding(true)}
-            className="w-full py-3 rounded-xl border-2 border-dashed border-white/20 text-white/60 hover:border-white/40 hover:text-white/80 hover:bg-white/5 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-xl border-2 border-dashed border-border dark:border-white/20 text-muted-foreground dark:text-white/60 hover:border-border/80 dark:hover:border-white/40 hover:text-foreground dark:hover:text-white/80 hover:bg-card/60 dark:hover:bg-white/5 transition-all flex items-center justify-center gap-2"
           >
             <Plus className="w-5 h-5" />
             <span>Create New Combination</span>

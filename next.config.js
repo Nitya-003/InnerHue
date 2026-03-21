@@ -27,9 +27,7 @@ const nextConfig = {
     '@react-three/drei',
     'three',
   ],
-  experimental: {
-    outputFileTracingRoot: undefined,
-  },
+  outputFileTracingRoot: __dirname,
 };
 
 module.exports = withPWA(nextConfig)
