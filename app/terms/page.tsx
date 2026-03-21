@@ -56,7 +56,7 @@ export default function TermsOfService() {
                 key={section.id}
                 href={`#${section.id}`}
                 className={`group flex items-center gap-3 transition-all duration-300 ${activeSection === section.id
-                  ? "text-cyan-500 dark:text-cyan-400 font-semibold"
+                  ? "text-primary font-semibold"
                   : "text-muted-foreground hover:text-foreground"
                   }`}
               >
@@ -78,7 +78,7 @@ export default function TermsOfService() {
         <main id="main" className="flex-1 max-w-3xl">
           <Link
             href="/"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-cyan-500 dark:hover:text-cyan-400 transition-all duration-300 mb-10 group"
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-all duration-300 mb-10 group"
           >
             <ChevronLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
             Back to Home
@@ -105,7 +105,7 @@ export default function TermsOfService() {
                 {/* Animated Left Border */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-transparent group-hover:bg-gradient-to-b from-cyan-400 to-indigo-500 transition-all duration-500 rounded-full" />
                 <div className="pl-6">
-                  <h2 className="text-2xl font-semibold text-foreground mb-6 transition-colors duration-300 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 flex items-center gap-2">
+                  <h2 className="text-2xl font-semibold text-foreground mb-6 transition-colors duration-300 group-hover:text-primary flex items-center gap-2">
                     <span className="inline-block w-6 h-6 bg-gradient-to-br from-cyan-400 via-indigo-400 to-purple-500 rounded-full mr-2" />
                     {section.title}
                   </h2>
@@ -162,7 +162,7 @@ const sections = [
     id: "3",
     title: "3. User Conduct",
     content: (
-      <ul className="list-disc pl-6 space-y-3 marker:text-cyan-400">
+      <ul className="list-disc pl-6 space-y-3 marker:text-primary">
         <li>Users must not post unlawful, harmful, or abusive content.</li>
         <li>Users must not violate intellectual property rights.</li>
         <li>No malware, spam, or service interference is permitted.</li>

@@ -40,18 +40,19 @@ export default function MoodBarChart({ data }: MoodBarChartProps) {
     <div className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border">
       <h3 className="text-xl font-bold text-foreground mb-6">Mood Frequency</h3>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={chartData} layout="vertical">
+        <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 12, left: 12, bottom: 4 }}>
           <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" horizontal={false} />
           <XAxis type="number" hide />
           <YAxis
             dataKey="name"
             type="category"
-            width={80}
-            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+            width={108}
+            tick={{ fill: 'hsl(var(--foreground))', fontSize: 13, fontWeight: 500 }}
             axisLine={false}
             tickLine={false}
           />
           <Tooltip
+            formatter={(value: number, name: string) => [`${value} entries`, name]}
             contentStyle={{
               backgroundColor: 'hsl(var(--popover))',
               color: 'hsl(var(--popover-foreground))',

@@ -126,7 +126,7 @@ export default function AnalyticsPage() {
   const moodData = useMemo(() => {
     return Object.entries(stats.moodCounts || {})
       .sort(([, a], [, b]) => (b as number) - (a as number))
-      .slice(0, 10)
+      .slice(0, 8)
       .map(([mood, count]) => ({
         mood,
         count: count as number,
@@ -215,18 +215,18 @@ export default function AnalyticsPage() {
                 transition={{ delay: 0.3 }}
                 className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border"
               >
-                <div className="flex items-center justify-between mb-6">
+                <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="flex items-center space-x-2">
                     <Calendar className="w-6 h-6 text-purple-600" />
                     <h3 className="text-2xl font-bold text-foreground">History</h3>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <div className="relative">
                       <button
                         onClick={() => setExportMenuOpen(!exportMenuOpen)}
                         onBlur={() => setTimeout(() => setExportMenuOpen(false), 150)}
-                        className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-700 hover:bg-purple-50 px-3 py-1.5 rounded-full transition-colors font-medium border border-purple-200 hover:border-purple-300"
+                        className="flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                       >
                         <Download className="w-4 h-4" />
                         Export Data
@@ -251,7 +251,7 @@ export default function AnalyticsPage() {
                     </div>
                     <button
                       onClick={handleClearHistory}
-                      className="text-sm text-red-500 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900/20 px-3 py-1 rounded-full transition-colors font-medium border border-transparent hover:border-red-200 dark:hover:border-red-800"
+                      className="rounded-full border border-transparent px-3 py-1 text-sm font-medium text-destructive transition-colors hover:border-destructive/30 hover:bg-destructive/10"
                     >
                       Clear History
                     </button>
@@ -265,7 +265,7 @@ export default function AnalyticsPage() {
                       value={searchQuery}
                       onChange={e => setSearchQuery(e.target.value)}
                       placeholder="Search by mood or notes..."
-                      className="w-full rounded-full border border-input bg-background/70 px-4 py-2 text-sm text-foreground shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200"
+                      className="w-full rounded-full border border-input bg-background px-4 py-2 text-sm text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                   </div>
 
@@ -344,7 +344,7 @@ export default function AnalyticsPage() {
 
                           <button
                             onClick={() => handleDeleteEntry(entry.id)}
-                            className="opacity-0 p-2 text-muted-foreground transition-all hover:bg-red-100 dark:hover:bg-red-900/20 hover:text-red-500 rounded-full group-hover:opacity-100"
+                            className="rounded-full p-2 text-muted-foreground opacity-0 transition-all hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
                             title="Delete entry"
                           >
                             <Trash2 className="h-4 w-4" />
