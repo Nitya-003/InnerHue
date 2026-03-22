@@ -35,8 +35,8 @@ export default function MoodPieChart({ data }: MoodPieChartProps) {
   });
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
-      <h3 className="text-xl font-bold text-gray-800 mb-6">Mood Distribution</h3>
+    <div className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border">
+      <h3 className="text-xl font-bold text-foreground mb-6">Mood Distribution</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
@@ -45,22 +45,32 @@ export default function MoodPieChart({ data }: MoodPieChartProps) {
             nameKey="name"
             cx="50%"
             cy="50%"
-            outerRadius={100}
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-            labelLine={true}
+            innerRadius={60}
+            outerRadius={102}
+            label={false}
+            labelLine={false}
+            paddingAngle={2}
           >
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
           <Tooltip
+            formatter={(value: number, name: string) => [`${value} entries`, name]}
             contentStyle={{
+              backgroundColor: 'hsl(var(--popover))',
+              color: 'hsl(var(--popover-foreground))',
               borderRadius: '12px',
-              border: 'none',
+              border: '1px solid hsl(var(--border))',
               boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
             }}
           />
-          <Legend verticalAlign="bottom" height={36} iconType="circle" />
+          <Legend
+            verticalAlign="bottom"
+            iconType="circle"
+            wrapperStyle={{ paddingTop: 14, fontSize: '13px' }}
+            formatter={(value) => <span style={{ color: 'hsl(var(--foreground))' }}>{value}</span>}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>

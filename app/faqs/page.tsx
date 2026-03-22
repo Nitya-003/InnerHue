@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function FAQsPage() {
   const faqs = [
@@ -34,22 +32,21 @@ export default function FAQsPage() {
   ];
 
   return (
-    <main id="main" className="min-h-screen bg-background text-foreground py-16 px-6">
+    <main id="main" className="min-h-screen py-16 px-6 text-foreground dark:text-white bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))]">
       <div className="max-w-3xl mx-auto">
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-10">
-          <Link
+        {/* Back Button */}
+        <div className="mb-10">
+          <a
             href="/"
-            className="inline-block px-6 py-2 rounded-full bg-muted/40 dark:bg-white/10 backdrop-blur-md border border-border text-foreground font-medium shadow-md hover:bg-muted/60 dark:hover:bg-white/20 transition-all duration-300"
+            className="inline-block px-6 py-2 rounded-full bg-card/75 dark:bg-white/10 backdrop-blur-md border border-border dark:border-white/10 text-foreground dark:text-white font-medium shadow-md hover:bg-card dark:hover:bg-white/20 transition-all duration-300"
           >
             ← Back to Home
-          </Link>
-          <ThemeToggle />
+          </a>
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl md:text-5xl font-bold text-center mb-12 text-foreground">
+        <h1 className="text-4xl md:text-5xl font-bold text-center mb-12 text-foreground dark:text-white">
           Frequently Asked Questions
         </h1>
 
@@ -58,15 +55,15 @@ export default function FAQsPage() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="group relative p-6 rounded-2xl bg-muted/40 dark:bg-white/10 backdrop-blur-lg border border-border shadow-lg overflow-hidden transition-all duration-500 hover:shadow-purple-500/30 hover:border-purple-400 hover:-translate-y-1"
+              className="group relative p-6 rounded-2xl bg-card/75 dark:bg-white/10 backdrop-blur-lg border border-border dark:border-white/20 shadow-lg overflow-hidden transition-all duration-500 hover:shadow-purple-500/40 hover:border-purple-400 hover:-translate-y-1"
             >
               {/* Question */}
-              <h2 className="text-lg md:text-xl font-semibold text-pink-600 dark:text-pink-300 group-hover:text-foreground transition-colors duration-300">
+              <h2 className="text-lg md:text-xl font-semibold text-pink-300 group-hover:text-white transition-colors duration-300">
                 {faq.question}
               </h2>
 
               {/* Answer (Hidden by default, show on hover) */}
-              <p className="mt-4 text-muted-foreground max-h-0 opacity-0 overflow-hidden transition-all duration-500 group-hover:max-h-40 group-hover:opacity-100">
+              <p className="mt-4 text-muted-foreground dark:text-gray-200 max-h-0 opacity-0 overflow-hidden transition-all duration-500 group-hover:max-h-40 group-hover:opacity-100">
                 {faq.answer}
               </p>
 

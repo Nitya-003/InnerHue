@@ -151,7 +151,7 @@ export default function EmotionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground dark:text-white relative overflow-hidden">
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         {backgroundOrbs.map((orb) => (
@@ -194,9 +194,9 @@ export default function EmotionsPage() {
             <Link href="/">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-1.5 md:p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                className="p-1.5 md:p-2 rounded-lg bg-card/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all border border-border/80 dark:border-white/20"
               >
-                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-foreground dark:text-white" />
               </motion.div>
             </Link>
 
@@ -212,26 +212,26 @@ export default function EmotionsPage() {
             <Link href="/personalization">
               <motion.div 
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                className="p-2 rounded-lg bg-card/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all border border-border/80 dark:border-white/20"
                 title="Personalization"
               >
-                <Settings className="w-6 h-6 text-white" />
+                <Settings className="w-6 h-6 text-foreground dark:text-white" />
               </motion.div>
             </Link>
             <Link href="/analytics">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                className="p-2 rounded-lg bg-card/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all border border-border/80 dark:border-white/20"
               >
-                <BarChart3 className="w-6 h-6 text-white" />
+                <BarChart3 className="w-6 h-6 text-foreground dark:text-white" />
               </motion.div>
             </Link>
             <Link href="/music">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-2 rounded-lg bg-white/20 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/30"
+                className="p-2 rounded-lg bg-card/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all border border-border/80 dark:border-white/20"
               >
-                <Music className="w-6 h-6 text-white" />
+                <Music className="w-6 h-6 text-foreground dark:text-white" />
               </motion.div>
             </Link>
             <div className="scale-[1.4]">
@@ -251,13 +251,13 @@ export default function EmotionsPage() {
             transition={{ delay: 0.2 }}
             className="text-center mb-8 sm:mb-16 px-2 mt-4 md:mt-0"
           >
-            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-4 sm:mb-6 drop-shadow-lg tracking-tight">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-foreground dark:text-white mb-4 sm:mb-6 drop-shadow-lg tracking-tight">
               How are you feeling today?
             </h2>
-            <p className="text-base sm:text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed px-4">
+            <p className="text-base sm:text-xl md:text-2xl text-muted-foreground dark:text-gray-200 max-w-3xl mx-auto drop-shadow leading-relaxed px-4">
               Choose your emotional state and discover personalized insights, prompts, and music to guide your reflection journey.
             </p>
-            <div className="mt-3 sm:mt-4 text-gray-300 text-xs sm:text-sm">
+            <div className="mt-3 sm:mt-4 text-muted-foreground dark:text-gray-300 text-xs sm:text-sm">
               Select up to {maxSelections} emotions • {moods.length} emotions available
             </div>
           </motion.div>
@@ -269,7 +269,7 @@ export default function EmotionsPage() {
             transition={{ delay: 0.4 }}
             className="mb-8 sm:mb-12 text-center px-2"
           >
-            <div className="inline-flex flex-wrap justify-center gap-2 sm:gap-4 px-3 sm:px-6 py-3 sm:py-4 bg-white/10 backdrop-blur rounded-xl sm:rounded-2xl border border-white/20 max-w-full overflow-hidden">
+            <div className="inline-flex flex-wrap justify-center gap-2 sm:gap-4 px-3 sm:px-6 py-3 sm:py-4 bg-card/70 dark:bg-white/10 backdrop-blur rounded-xl sm:rounded-2xl border border-border/80 dark:border-white/20 max-w-full overflow-hidden">
               {[
                 { name: 'Positive', color: '#66BB6A' },
                 { name: 'Energetic', color: '#FF6D00' },
@@ -280,7 +280,7 @@ export default function EmotionsPage() {
                 { name: 'Playful', color: '#FF4081' },
                 { name: 'Neutral', color: '#9C27B0' }
               ].map(category => (
-                <div key={category.name} className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-white">
+                <div key={category.name} className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-foreground dark:text-white">
                   <div
                     className="w-2 h-2 sm:w-3 sm:h-3 rounded-full flex-shrink-0"
                     style={{ backgroundColor: category.color }}
@@ -340,8 +340,8 @@ export default function EmotionsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mt-8 sm:mt-12 text-center px-2"
             >
-              <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-white/10 backdrop-blur rounded-xl sm:rounded-2xl border border-white/20">
-                <p className="text-white mb-3 sm:mb-4 text-base sm:text-lg font-medium">
+              <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-card/75 dark:bg-white/10 backdrop-blur rounded-xl sm:rounded-2xl border border-border/80 dark:border-white/20">
+                <p className="text-foreground dark:text-white mb-3 sm:mb-4 text-base sm:text-lg font-medium">
                   Selected {selectedMoods.length} of {maxSelections} emotions
                   {selectedMoods.length >= maxSelections && (
                     <span className="block sm:inline text-sm sm:text-base mt-1 sm:mt-0 sm:ml-1">
@@ -357,7 +357,7 @@ export default function EmotionsPage() {
                         key={moodId}
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur rounded-full text-white text-sm sm:text-base font-medium flex items-center gap-1 sm:gap-2 border border-white/30"
+                        className="px-3 sm:px-4 py-1.5 sm:py-2 bg-background/80 dark:bg-white/15 backdrop-blur rounded-full text-foreground dark:text-white text-sm sm:text-base font-medium flex items-center gap-1 sm:gap-2 border border-border/70 dark:border-white/20"
                       >
                         <span className="text-base sm:text-lg">{mood.emoji}</span>
                         <span className="hidden sm:inline">{mood.name}</span>
