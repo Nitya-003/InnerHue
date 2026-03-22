@@ -11,7 +11,6 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { MoodData, Mood, Suggestion } from '@/lib/moodData';
 import { reflectiveMoods } from '@/lib/reflectiveMoods';
 import { getTraditionalMoodId } from '@/lib/moodMapping';
-import { useMoodStore } from '@/lib/useMoodStore';
 import type { MoodHistoryEntry } from '@/types/mood';
 
 interface MoodWithMeta extends Mood {
@@ -19,25 +18,15 @@ interface MoodWithMeta extends Mood {
   spotifyPlaylistId?: string;
 }
 
-interface MoodPageProps {
-  params: {
-    id: string;
-  };
-  searchParams?: {
-    moods?: string;
-  };
-}
-
-export default function MoodPage({ params, searchParams }: MoodPageProps) {
+export default function MoodPage() {
   const routeParams = useParams();
   const searchParamsHook = useSearchParams();
-  const id = (routeParams?.id as string) || params.id;
-  const moods = searchParamsHook?.get('moods') || searchParams?.moods;
+  const id = (routeParams?.id as string) || '';
+  const moods = searchParamsHook?.get('moods') || '';
 
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
-  const addMood = useMoodStore(state => state.addMood);
 
   useEffect(() => {
     const moodIds = moods ? moods.split(',') : [id];
@@ -90,7 +79,7 @@ export default function MoodPage({ params, searchParams }: MoodPageProps) {
       });
       localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
     }
-  }, [params.id, searchParams?.moods, id, moods]);
+  }, [id, moods]);
 
   if (!moodData.length || !suggestions) {
     return (

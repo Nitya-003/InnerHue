@@ -1,85 +1,44 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } from 'lucide-react';
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
-import type { MoodHistoryEntry, MoodStats as MoodStatsType } from '@/types/mood';
-
-interface MoodEntry {
-  id?: string;
-  mood?: string;
-  emotion?: string;
-  timestamp: string;
-  date?: string;
-  color?: string;
-}
-
-interface Stats {
-  totalEntries: number;
-  todayEntries: number;
-  weekEntries: number;
-  mostCommonMood: string | null;
-  moodCounts: { [key: string]: number };
-  weeklyData: MoodEntry[];
-}
+import { useMoodStore } from '@/lib/useMoodStore';
 
 export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
-  const [stats, setStats] = useState<Stats>({
-    totalEntries: 0,
-    todayEntries: 0,
-    weekEntries: 0,
-    mostCommonMood: null,
-    moodCounts: {},
-    weeklyData: []
-  });
+  const moodHistory = useMoodStore(state => state.moodHistory);
+  const stats = useMoodStore(state => state.stats);
+  const clearHistory = useMoodStore(state => state.clearHistory);
+  const deleteMood = useMoodStore(state => state.deleteMood);
 
-  const calculateStats = useCallback((history: MoodEntry[]) => {
-    const moodCounts: { [key: string]: number } = {};
-    const today = new Date().toDateString();
-    const thisWeek: MoodHistoryEntry[] = [];
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 7);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
-    history.forEach((entry) => {
-      // Support both new (emotion) and old (mood) formats
-      const moodKey = entry.emotion || entry.mood || 'unknown';
-      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
+  const uniqueMoods = useMemo(() => {
+    const moods = moodHistory
+      .map(entry => (entry.emotion || entry.mood || '').toLowerCase())
+      .filter(Boolean);
+    return Array.from(new Set(moods)).sort();
+  }, [moodHistory]);
 
-      const entryDate = new Date(entry.timestamp);
-      if (entryDate >= weekStart) {
-        thisWeek.push(entry);
-      }
-    });
+  const filteredHistory = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
 
-    const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => b - a)[0];
-
-    setStats({
-      totalEntries: history.length,
-      todayEntries: history.filter((entry) => new Date(entry.timestamp).toDateString() === today).length,
-      weekEntries: thisWeek.length,
-      mostCommonMood: mostCommon ? mostCommon[0] : null,
-      moodCounts,
-      weeklyData: thisWeek
-    });
-  }, []);
-
-    return moodHistory.filter((entry: any) => {
+    return moodHistory.filter(entry => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
       const notes = (entry.notes || '').toLowerCase();
 
-  useEffect(() => {
+      const matchesQuery =
+        normalizedQuery.length === 0 ||
+        moodLabel.includes(normalizedQuery) ||
+        notes.includes(normalizedQuery);
 
-    loadData();
-
-      const matchesMood =
-        selectedMoodFilter === 'all' ||
-        moodLabel === (selectedMoodFilter || '').toLowerCase();
+      const matchesMood = selectedMoodFilter === 'all' || moodLabel === selectedMoodFilter;
 
       return matchesQuery && matchesMood;
     });
@@ -92,14 +51,28 @@ export default function AnalyticsPage() {
   };
 
   const handleDeleteEntry = (id: string) => {
-    if (id) {
-      deleteMood(id);
-    }
+    deleteMood(id);
+  };
+
+  const getExportDateString = () => {
+    const date = new Date();
+    return date.toISOString().split('T')[0];
+  };
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
   };
 
   const exportAsJson = () => {
     setExportMenuOpen(false);
-    const data = useMoodStore.getState().moodHistory;
+    const data = moodHistory;
     const json = JSON.stringify(data, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     downloadBlob(blob, `innerhue-history-${getExportDateString()}.json`);
@@ -107,7 +80,7 @@ export default function AnalyticsPage() {
 
   const exportAsCsv = () => {
     setExportMenuOpen(false);
-    const data = useMoodStore.getState().moodHistory;
+    const data = moodHistory;
     const escapeCsv = (val: unknown): string => {
       if (val == null) return '';
       const s = String(val);
@@ -300,9 +273,14 @@ export default function AnalyticsPage() {
                       </button>
                       {uniqueMoods.map(mood => (
                         <button
-                          onClick={() => entry.id && handleDeleteEntry(entry.id, index)}
-                          className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                          title="Delete entry"
+                          key={mood}
+                          type="button"
+                          onClick={() => setSelectedMoodFilter(mood)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors capitalize ${
+                            selectedMoodFilter === mood
+                              ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
+                          }`}
                         >
                           {mood}
                         </button>
