@@ -15,7 +15,7 @@ export default function LearnMoreButton({ className = "", children }: Props) {
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.98 }}
         className={
-          "px-6 py-3 bg-white/10 backdrop-blur text-white rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300 " +
+          "px-6 py-3 bg-card/80 dark:bg-white/10 backdrop-blur text-foreground dark:text-white rounded-full border border-border dark:border-white/30 hover:bg-card dark:hover:bg-white/20 transition-all duration-300 " +
           className
         }
       >

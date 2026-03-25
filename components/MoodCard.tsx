@@ -11,6 +11,7 @@ interface Mood {
   emoji: string;
   color: string;
   glow: string;
+  isCustom?: boolean;
   category?: string;
   reflection?: {
     question: string;
@@ -27,14 +28,11 @@ interface MoodCardProps {
   index: number;
   isSelected: boolean;
   onSelect: () => void;
+  onDelete?: (moodId: string) => void; // Added onDelete prop
 }
 
-export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
-  const [emojiDuration, setEmojiDuration] = useState(4);
-
-  useEffect(() => {
-    setEmojiDuration(4 + Math.random() * 2);
-  }, []);
+export function MoodCard({ mood, index, isSelected, onSelect, onDelete }: MoodCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
@@ -59,14 +57,28 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
       className="relative aspect-square w-full rounded-3xl p-4 sm:p-6 flex flex-col items-center justify-center cursor-pointer overflow-hidden group backdrop-blur-md border-2"
       style={{
         background: isSelected
-          ? 'rgba(255,255,255,0.95)'
-          : 'rgba(255,255,255,0.25)',
-        borderColor: isSelected ? mood.color : 'rgba(255,255,255,0.3)',
+          ? 'hsl(var(--card) / 0.96)'
+          : 'hsl(var(--card) / 0.58)',
+        borderColor: isSelected ? mood.color : 'hsl(var(--border) / 0.8)',
         boxShadow: isSelected
           ? `0 20px 45px ${mood.color}50`
           : '0 10px 30px rgba(0,0,0,0.12)',
       }}
     >
+      {/* Delete Button */}
+      {onDelete && mood.isCustom && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(mood.id);
+          }}
+          className="absolute top-2 left-2 z-20 rounded-full border border-border/80 bg-card/85 px-2 py-1 text-xs text-foreground shadow-sm"
+          aria-label={`Delete ${mood.name}`}
+        >
+          Delete
+        </button>
+      )}
       {/* Animated Glow Background */}
       <motion.div
         className="absolute inset-0 rounded-3xl pointer-events-none"
@@ -118,7 +130,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
       <motion.div
         className="text-sm sm:text-base font-semibold relative z-10"
         animate={{
-          color: isSelected ? '#1f2937' : '#ffffff',
+          color: isSelected ? 'hsl(var(--foreground))' : 'hsl(var(--foreground) / 0.92)',
           scale: isSelected ? 1.05 : 1,
         }}
         transition={{ duration: 0.3 }}

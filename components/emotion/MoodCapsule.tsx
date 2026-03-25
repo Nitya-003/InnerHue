@@ -15,14 +15,14 @@ const toneMap = {
   calm: 'bg-green-500/20 text-green-200',
   stress: 'bg-orange-500/20 text-orange-200',
   hopeful: 'bg-purple-500/20 text-purple-200',
-  neutral: 'bg-white/10 text-white/80'
+  neutral: 'bg-card/70 dark:bg-white/10 text-foreground/80 dark:text-white/80'
 };
 
 const selectedToneMap = {
   calm: 'bg-green-500/30 ring-2 ring-green-400/50 text-green-100',
   stress: 'bg-orange-500/30 ring-2 ring-orange-400/50 text-orange-100',
   hopeful: 'bg-purple-500/30 ring-2 ring-purple-400/50 text-purple-100',
-  neutral: 'bg-white/20 ring-2 ring-white/40 text-white'
+  neutral: 'bg-card ring-2 ring-foreground/30 dark:bg-white/20 dark:ring-white/40 text-foreground dark:text-white'
 };
 
 export default function MoodCapsule({ 

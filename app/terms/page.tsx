@@ -1,9 +1,5 @@
 'use client';
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
-
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import Link from 'next/link';
@@ -36,7 +32,7 @@ export default function TermsOfService() {
   }, []);
 
   return (
-    <div className="bg-[#0b0f19] text-gray-200 min-h-screen relative">
+    <div className="bg-background text-foreground min-h-screen relative">
       {/* Soft Premium Background Glow */}
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.15),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.12),transparent_40%)]" />
       {/* Scroll Progress Bar */}
@@ -47,7 +43,7 @@ export default function TermsOfService() {
       <div className="max-w-7xl mx-auto px-6 py-20 flex gap-16">
         {/* Sidebar Navigation */}
         <aside className="hidden lg:block w-64 sticky top-24 h-fit">
-          <div className="text-xs uppercase tracking-widest text-gray-500 mb-8">
+          <div className="text-xs uppercase tracking-widest text-muted-foreground mb-8">
             On this page
           </div>
           <nav className="space-y-4 text-sm relative">
@@ -56,15 +52,15 @@ export default function TermsOfService() {
                 key={section.id}
                 href={`#${section.id}`}
                 className={`group flex items-center gap-3 transition-all duration-300 ${activeSection === section.id
-                  ? "text-cyan-400 font-semibold"
-                  : "text-gray-400 hover:text-white"
+                  ? "text-primary font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
                   }`}
               >
                 {/* Active Indicator */}
                 <span
                   className={`h-6 w-[3px] rounded-full transition-all duration-300 ${activeSection === section.id
                     ? "bg-gradient-to-b from-cyan-400 to-indigo-500"
-                    : "bg-transparent group-hover:bg-white/30"
+                    : "bg-transparent group-hover:bg-border"
                     }`}
                 />
                 <span className="transition-all duration-300 group-hover:translate-x-1">
@@ -78,7 +74,7 @@ export default function TermsOfService() {
         <main id="main" className="flex-1 max-w-3xl">
           <Link
             href="/"
-            className="inline-flex items-center text-sm text-gray-400 hover:text-cyan-400 transition-all duration-300 mb-10 group"
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-all duration-300 mb-10 group"
           >
             <ChevronLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
             Back to Home
@@ -86,7 +82,7 @@ export default function TermsOfService() {
           <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent mb-4">
             Terms of Service
           </h1>
-          <p className="text-gray-400 mb-8">
+          <p className="text-muted-foreground mb-8">
             Last updated: {new Date().toLocaleDateString("en-GB")}
           </p>
           <div className="space-y-12">
@@ -98,23 +94,23 @@ export default function TermsOfService() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="scroll-mt-32 relative group rounded-xl border border-white/10 bg-gradient-to-br from-[#181c2a] via-[#232a3d] to-[#1a2236] p-8 shadow-md"
+                className="scroll-mt-32 relative group rounded-xl border border-border bg-card p-8 shadow-md"
               >
                 {/* Glow Hover Effect */}
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/0 via-indigo-500/0 to-purple-500/0 group-hover:from-cyan-500/10 group-hover:via-indigo-500/10 group-hover:to-purple-500/10 transition-all duration-500 pointer-events-none" />
                 {/* Animated Left Border */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-transparent group-hover:bg-gradient-to-b from-cyan-400 to-indigo-500 transition-all duration-500 rounded-full" />
                 <div className="pl-6">
-                  <h2 className="text-2xl font-semibold text-white mb-6 transition-colors duration-300 group-hover:text-cyan-400 flex items-center gap-2">
+                  <h2 className="text-2xl font-semibold text-foreground mb-6 transition-colors duration-300 group-hover:text-primary flex items-center gap-2">
                     <span className="inline-block w-6 h-6 bg-gradient-to-br from-cyan-400 via-indigo-400 to-purple-500 rounded-full mr-2" />
                     {section.title}
                   </h2>
-                  <div className="text-gray-400 leading-relaxed space-y-4 text-[15.5px] group-hover:text-gray-300 transition-colors duration-300">
+                  <div className="text-muted-foreground leading-relaxed space-y-4 text-[15.5px] group-hover:text-foreground transition-colors duration-300">
                     {section.content}
                   </div>
                 </div>
                 {index !== sections.length - 1 && (
-                  <div className="mt-12 border-b border-white/10 group-hover:border-white/20 transition-all duration-300"></div>
+                  <div className="mt-12 border-b border-border group-hover:border-border/60 transition-all duration-300"></div>
                 )}
               </motion.section>
             ))}
@@ -162,7 +158,7 @@ const sections = [
     id: "3",
     title: "3. User Conduct",
     content: (
-      <ul className="list-disc pl-6 space-y-3 marker:text-cyan-400">
+      <ul className="list-disc pl-6 space-y-3 marker:text-primary">
         <li>Users must not post unlawful, harmful, or abusive content.</li>
         <li>Users must not violate intellectual property rights.</li>
         <li>No malware, spam, or service interference is permitted.</li>
