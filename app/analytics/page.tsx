@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } from 'lucide-react';
@@ -16,6 +16,7 @@ interface MoodEntry {
   timestamp: string;
   date?: string;
   color?: string;
+  notes?: string;
 }
 
 interface Stats {
@@ -29,6 +30,9 @@ interface Stats {
 
 export default function AnalyticsPage() {
   const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
   const [stats, setStats] = useState<Stats>({
     totalEntries: 0,
     todayEntries: 0,
@@ -41,7 +45,7 @@ export default function AnalyticsPage() {
   const calculateStats = useCallback((history: MoodEntry[]) => {
     const moodCounts: { [key: string]: number } = {};
     const today = new Date().toDateString();
-    const thisWeek: MoodHistoryEntry[] = [];
+    const thisWeek: MoodEntry[] = [];
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);
 
@@ -69,45 +73,69 @@ export default function AnalyticsPage() {
     });
   }, []);
 
+  // Load data on mount - TODO: integrate with actual data source
+  useEffect(() => {
+    // Placeholder: replace with actual data loading
+    calculateStats(moodHistory);
+  }, [moodHistory, calculateStats]);
+
+  // Filter history based on search and mood selection
+  const filteredHistory = useMemo(() => {
     return moodHistory.filter((entry: any) => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
       const notes = (entry.notes || '').toLowerCase();
-
-  useEffect(() => {
-
-    loadData();
-
-      const matchesMood =
-        selectedMoodFilter === 'all' ||
-        moodLabel === (selectedMoodFilter || '').toLowerCase();
-
+      const matchesQuery = moodLabel.includes(searchQuery.toLowerCase()) || 
+                          notes.includes(searchQuery.toLowerCase());
+      const matchesMood = selectedMoodFilter === 'all' ||
+                         moodLabel === (selectedMoodFilter || '').toLowerCase();
       return matchesQuery && matchesMood;
     });
   }, [moodHistory, searchQuery, selectedMoodFilter]);
 
+  // Get unique moods for filter buttons
+  const uniqueMoods = useMemo(() => {
+    return Array.from(new Set(
+      moodHistory.map((entry) => entry.emotion || entry.mood || 'unknown')
+    )).sort();
+  }, [moodHistory]);
+
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
-      clearHistory();
+      setMoodHistory([]);
     }
   };
 
   const handleDeleteEntry = (id: string) => {
     if (id) {
-      deleteMood(id);
+      setMoodHistory(moodHistory.filter(entry => entry.id !== id));
     }
+  };
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
+  const getExportDateString = (): string => {
+    const now = new Date();
+    return now.toISOString().split('T')[0];
   };
 
   const exportAsJson = () => {
     setExportMenuOpen(false);
-    const data = useMoodStore.getState().moodHistory;
-    const json = JSON.stringify(data, null, 2);
+    const json = JSON.stringify(moodHistory, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     downloadBlob(blob, `innerhue-history-${getExportDateString()}.json`);
   };
 
   const exportAsCsv = () => {
     setExportMenuOpen(false);
-    const data = useMoodStore.getState().moodHistory;
     const escapeCsv = (val: unknown): string => {
       if (val == null) return '';
       const s = String(val);
@@ -115,7 +143,7 @@ export default function AnalyticsPage() {
       return s;
     };
     const headers = ['id', 'mood', 'timestamp', 'date', 'color', 'notes'];
-    const rows = data.map((entry: any) =>
+    const rows = moodHistory.map((entry: any) =>
       headers.map(h => escapeCsv(h === 'mood' ? (entry.emotion ?? entry.mood) : entry[h])).join(',')
     );
     const csv = [headers.join(','), ...rows].join('\n');
@@ -298,11 +326,16 @@ export default function AnalyticsPage() {
                       >
                         All moods
                       </button>
-                      {uniqueMoods.map(mood => (
+                      {uniqueMoods.map((mood) => (
                         <button
-                          onClick={() => entry.id && handleDeleteEntry(entry.id, index)}
-                          className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                          title="Delete entry"
+                          key={mood}
+                          type="button"
+                          onClick={() => setSelectedMoodFilter(mood)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors capitalize ${
+                            selectedMoodFilter === mood
+                              ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
+                          }`}
                         >
                           {mood}
                         </button>
