@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { ArrowLeft, Activity, Heart, Calendar, Download, ChevronDown } from 'lucide-react';
 import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import MoodPieChart from '@/components/MoodPieChart';
@@ -31,6 +32,7 @@ interface Stats {
 }
 
 export default function AnalyticsPage() {
+  // State and hooks
   const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
@@ -50,6 +52,28 @@ export default function AnalyticsPage() {
     const thisWeek: MoodEntry[] = [];
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);
+
+    history.forEach((entry) => {
+      const moodKey = entry.emotion || entry.mood || 'unknown';
+      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
+      const entryDate = new Date(entry.timestamp);
+      if (entryDate >= weekStart) {
+        thisWeek.push(entry);
+      }
+    });
+
+    const mostCommon = Object.entries(moodCounts)
+      .sort(([, a], [, b]) => (b as number) - (a as number))[0];
+
+    setStats({
+      totalEntries: history.length,
+      todayEntries: history.filter((entry) => new Date(entry.timestamp).toDateString() === today).length,
+      weekEntries: thisWeek.length,
+      mostCommonMood: mostCommon ? mostCommon[0] : null,
+      moodCounts,
+      weeklyData: thisWeek
+    });
+  }, []);
 }
 
 export default function AnalyticsPage() {
@@ -65,13 +89,10 @@ export default function AnalyticsPage() {
   const filteredHistory = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
 
-  // Load data on mount - TODO: integrate with actual data source
   useEffect(() => {
-    // Placeholder: replace with actual data loading
     calculateStats(moodHistory);
   }, [moodHistory, calculateStats]);
 
-  // Filter history based on search and mood selection
   const filteredHistory = useMemo(() => {
     return moodHistory.filter((entry: any) => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
@@ -79,6 +100,7 @@ export default function AnalyticsPage() {
       const matchesQuery = moodLabel.includes(searchQuery.toLowerCase()) || 
                           notes.includes(searchQuery.toLowerCase());
       const matchesMood = selectedMoodFilter === 'all' ||
+                        moodLabel === (selectedMoodFilter || '').toLowerCase();
                          moodLabel === (selectedMoodFilter || '').toLowerCase();
 
       const matchesQuery = !q || moodLabel.includes(q) || notes.includes(q);
@@ -90,7 +112,6 @@ export default function AnalyticsPage() {
     });
   }, [moodHistory, searchQuery, selectedMoodFilter]);
 
-  // Get unique moods for filter buttons
   const uniqueMoods = useMemo(() => {
     return Array.from(new Set(
       moodHistory.map((entry) => entry.emotion || entry.mood || 'unknown')
@@ -183,7 +204,6 @@ export default function AnalyticsPage() {
     return date.toLocaleDateString();
   };
 
-  // Prepare mood data for charts
   const moodData = useMemo(() => {
     return Object.entries(stats.moodCounts || {})
       .sort(([, a], [, b]) => (b as number) - (a as number))
@@ -194,6 +214,7 @@ export default function AnalyticsPage() {
       }));
   }, [stats.moodCounts]);
 
+  // UI rendering
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -318,6 +339,7 @@ export default function AnalyticsPage() {
                     </button>
                   </div>
                 </div>
+                {/* ...rest of the dashboard UI... */}
 
                 <div className="flex flex-col gap-4 mb-4 md:flex-row md:items-center md:justify-between">
                   <div className="relative w-full md:max-w-xs">
