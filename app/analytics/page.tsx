@@ -87,20 +87,6 @@ export default function AnalyticsPage() {
     document.body.removeChild(a);
   };
 
-  const getExportDateString = (): string => {
-    const now = new Date();
-    return now.toISOString().split('T')[0];
-  };
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
-  };
-
   const getExportDateString = () => new Date().toISOString().slice(0, 10);
 
   const exportAsJson = () => {
