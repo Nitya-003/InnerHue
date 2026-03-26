@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Activity, Heart, Calendar, Download, ChevronDown, Trash2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
@@ -20,6 +20,17 @@ interface MoodEntry {
   notes?: string;
 }
 
+interface Stats {
+  totalEntries: number;
+  todayEntries: number;
+  weekEntries: number;
+  mostCommonMood: string | null;
+  moodCounts: { [key: string]: number };
+  weeklyData: MoodEntry[];
+}
+
+
+
 export default function AnalyticsPage() {
   const moodHistory = useMoodStore((state) => state.moodHistory) as MoodEntry[];
   const deleteMood = useMoodStore((state) => state.deleteMood);
@@ -27,21 +38,18 @@ export default function AnalyticsPage() {
   const stats = useMoodStore((state) => state.stats);
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
 
   const filteredHistory = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-
     return moodHistory.filter((entry: any) => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
       const notes = (entry.notes || '').toLowerCase();
-
-      const matchesQuery = !q || moodLabel.includes(q) || notes.includes(q);
-      const matchesMood =
-        selectedMoodFilter === 'all' ||
-        moodLabel === (selectedMoodFilter || '').toLowerCase();
-
+      const matchesQuery = moodLabel.includes(searchQuery.toLowerCase()) || 
+                          notes.includes(searchQuery.toLowerCase());
+      const matchesMood = selectedMoodFilter === 'all' ||
+                        moodLabel === (selectedMoodFilter || '').toLowerCase();
       return matchesQuery && matchesMood;
     });
   }, [moodHistory, searchQuery, selectedMoodFilter]);
@@ -69,29 +77,27 @@ export default function AnalyticsPage() {
   };
 
   const downloadBlob = (blob: Blob, filename: string) => {
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
   };
 
   const getExportDateString = () => new Date().toISOString().slice(0, 10);
 
   const exportAsJson = () => {
     setExportMenuOpen(false);
-    const data = useMoodStore.getState().moodHistory;
-    const json = JSON.stringify(data, null, 2);
+    const json = JSON.stringify(moodHistory, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     downloadBlob(blob, `innerhue-history-${getExportDateString()}.json`);
   };
 
   const exportAsCsv = () => {
     setExportMenuOpen(false);
-    const data = useMoodStore.getState().moodHistory;
     const escapeCsv = (val: unknown): string => {
       if (val == null) return '';
       const s = String(val);
@@ -99,7 +105,7 @@ export default function AnalyticsPage() {
       return s;
     };
     const headers = ['id', 'mood', 'timestamp', 'date', 'color', 'notes'];
-    const rows = data.map((entry: any) =>
+    const rows = moodHistory.map((entry: any) =>
       headers.map(h => escapeCsv(h === 'mood' ? (entry.emotion ?? entry.mood) : entry[h])).join(',')
     );
     const csv = [headers.join(','), ...rows].join('\n');
@@ -122,7 +128,6 @@ export default function AnalyticsPage() {
     return date.toLocaleDateString();
   };
 
-  // Prepare mood data for charts
   const moodData = useMemo(() => {
     return Object.entries(stats.moodCounts || {})
       .sort(([, a], [, b]) => (b as number) - (a as number))
@@ -133,6 +138,7 @@ export default function AnalyticsPage() {
       }));
   }, [stats.moodCounts]);
 
+  // UI rendering
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -257,6 +263,7 @@ export default function AnalyticsPage() {
                     </button>
                   </div>
                 </div>
+                {/* ...rest of the dashboard UI... */}
 
                 <div className="flex flex-col gap-4 mb-4 md:flex-row md:items-center md:justify-between">
                   <div className="relative w-full md:max-w-xs">
@@ -282,15 +289,15 @@ export default function AnalyticsPage() {
                       >
                         All moods
                       </button>
-                      {uniqueMoods.map((mood, index) => (
+                      {uniqueMoods.map((mood) => (
                         <button
-                          key={index}
+                          key={mood}
                           type="button"
                           onClick={() => setSelectedMoodFilter(mood)}
-                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors capitalize ${
                             selectedMoodFilter === mood
                               ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
-                              : 'bg-background text-foreground border-border hover:bg-muted hover:border-muted-foreground/30'
+                              : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
                           }`}
                         >
                           {mood}

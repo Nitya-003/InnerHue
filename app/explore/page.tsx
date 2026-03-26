@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { Heart, BarChart3, Music, ArrowLeft, Search, X } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { handleDirectionalMoodNavigation } from '@/lib/keyboardMoodNavigation';
 
 const moods = [
   { id: 'happy', name: 'Happy', emoji: '😊', color: '#FFD93D', glow: '#FFF176', category: 'positive' },
@@ -47,6 +49,7 @@ export default function ExplorePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [mounted, setMounted] = useState(false);
+  const moodGridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -229,8 +232,11 @@ export default function ExplorePage() {
           {/* Mood Cards Grid with wave entrance effect */}
           {mounted && (
             <motion.div
+              ref={moodGridRef}
               layout
               className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 max-w-7xl mx-auto min-h-[400px]"
+              role="radiogroup"
+              aria-label="Mood selection grid. Use Tab to move between mood options, arrow keys to move across the grid, and Enter or Space to choose a mood."
               initial="hidden"
               animate="visible"
               variants={{
@@ -253,6 +259,16 @@ export default function ExplorePage() {
                       index={index}
                       isSelected={selectedMood === mood.id}
                       onSelect={() => setSelectedMood(mood.id)}
+                      onKeyDown={(event) => {
+                        const nextTarget = handleDirectionalMoodNavigation(event, moodGridRef.current);
+                        const moodElement = nextTarget?.closest('[data-mood-id]');
+                        const nextMoodId = moodElement?.getAttribute('data-mood-id');
+                        if (nextMoodId) {
+                          setSelectedMood(nextMoodId);
+                        }
+                      }}
+                      selectionRole="radio"
+                      ariaLabel={`${mood.name} ${mood.emoji}`}
                     />
                   ))
                 ) : (
