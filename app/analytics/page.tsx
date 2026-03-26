@@ -38,15 +38,9 @@ export default function AnalyticsPage() {
   const stats = useMoodStore((state) => state.stats);
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
-
-  const filteredHistory = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-
-  useEffect(() => {
-    calculateStats(moodHistory);
-  }, [moodHistory, calculateStats]);
 
   const filteredHistory = useMemo(() => {
     return moodHistory.filter((entry: any) => {
@@ -56,21 +50,10 @@ export default function AnalyticsPage() {
                           notes.includes(searchQuery.toLowerCase());
       const matchesMood = selectedMoodFilter === 'all' ||
                         moodLabel === (selectedMoodFilter || '').toLowerCase();
-                         moodLabel === (selectedMoodFilter || '').toLowerCase();
-
-      const matchesQuery = !q || moodLabel.includes(q) || notes.includes(q);
-      const matchesMood =
-        selectedMoodFilter === 'all' ||
-        moodLabel === (selectedMoodFilter || '').toLowerCase();
-
       return matchesQuery && matchesMood;
     });
   }, [moodHistory, searchQuery, selectedMoodFilter]);
 
-  const uniqueMoods = useMemo(() => {
-    return Array.from(new Set(
-      moodHistory.map((entry) => entry.emotion || entry.mood || 'unknown')
-    )).sort();
   const uniqueMoods = useMemo(() => {
     return Array.from(
       new Set(
