@@ -30,6 +30,8 @@ interface MoodCardProps {
   onSelect: () => void;
   onDelete?: (moodId: string) => void;
   onKeyDown?: (event: any) => void;
+  selectionRole?: string;
+  ariaLabel?: string;
 }
 
 export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDown }: MoodCardProps) {
