@@ -1,11 +1,9 @@
 'use client';
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Activity, Heart, Calendar, Download, ChevronDown } from 'lucide-react';
-import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Activity, Heart, Calendar, Download, ChevronDown, Trash2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
@@ -31,50 +29,7 @@ interface Stats {
   weeklyData: MoodEntry[];
 }
 
-export default function AnalyticsPage() {
-  // State and hooks
-  const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
-  const [exportMenuOpen, setExportMenuOpen] = useState(false);
-  const [stats, setStats] = useState<Stats>({
-    totalEntries: 0,
-    todayEntries: 0,
-    weekEntries: 0,
-    mostCommonMood: null,
-    moodCounts: {},
-    weeklyData: []
-  });
 
-  const calculateStats = useCallback((history: MoodEntry[]) => {
-    const moodCounts: { [key: string]: number } = {};
-    const today = new Date().toDateString();
-    const thisWeek: MoodEntry[] = [];
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 7);
-
-    history.forEach((entry) => {
-      const moodKey = entry.emotion || entry.mood || 'unknown';
-      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
-      const entryDate = new Date(entry.timestamp);
-      if (entryDate >= weekStart) {
-        thisWeek.push(entry);
-      }
-    });
-
-    const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => (b as number) - (a as number))[0];
-
-    setStats({
-      totalEntries: history.length,
-      todayEntries: history.filter((entry) => new Date(entry.timestamp).toDateString() === today).length,
-      weekEntries: thisWeek.length,
-      mostCommonMood: mostCommon ? mostCommon[0] : null,
-      moodCounts,
-      weeklyData: thisWeek
-    });
-  }, []);
-}
 
 export default function AnalyticsPage() {
   const moodHistory = useMoodStore((state) => state.moodHistory) as MoodEntry[];
