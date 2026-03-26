@@ -28,10 +28,11 @@ interface MoodCardProps {
   index: number;
   isSelected: boolean;
   onSelect: () => void;
-  onDelete?: (moodId: string) => void; // Added onDelete prop
+  onDelete?: (moodId: string) => void;
+  onKeyDown?: (event: any) => void;
 }
 
-export function MoodCard({ mood, index, isSelected, onSelect, onDelete }: MoodCardProps) {
+export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDown }: MoodCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -44,6 +45,8 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete }: MoodCa
         scale: isSelected ? 1.05 : 1,
       }}
       transition={{
+      }}
+      onKeyDown={onKeyDown}
         delay: index * 0.05,
         type: 'spring',
         stiffness: 280,

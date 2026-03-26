@@ -66,13 +66,13 @@ export default function AnalyticsPage() {
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
-      setMoodHistory([]);
+      clearHistory();
     }
   };
 
   const handleDeleteEntry = (id: string) => {
     if (id) {
-      setMoodHistory(moodHistory.filter(entry => entry.id !== id));
+      deleteMood(id);
     }
   };
 
