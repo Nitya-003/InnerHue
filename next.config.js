@@ -12,9 +12,12 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
-  output: 'export', 
+  output: 'export',
   basePath: repoName,
   assetPrefix: repoName,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: repoName,
+  },
   transpilePackages: [
     '@react-three/fiber',
     '@react-three/drei',

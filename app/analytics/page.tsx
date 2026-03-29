@@ -7,83 +7,63 @@ import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } f
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
-import type { MoodHistoryEntry, MoodStats as MoodStatsType } from '@/types/mood';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { useMoodStore } from '@/lib/useMoodStore';
 
-interface MoodEntry {
-  id?: string;
-  mood?: string;
-  emotion?: string;
-  timestamp: string;
-  date?: string;
-  color?: string;
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-interface Stats {
-  totalEntries: number;
-  todayEntries: number;
-  weekEntries: number;
-  mostCommonMood: string | null;
-  moodCounts: { [key: string]: number };
-  weeklyData: MoodEntry[];
+function getExportDateString() {
+  return new Date().toISOString().slice(0, 10);
 }
 
 export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
-  const [stats, setStats] = useState<Stats>({
-    totalEntries: 0,
-    todayEntries: 0,
-    weekEntries: 0,
-    mostCommonMood: null,
-    moodCounts: {},
-    weeklyData: []
-  });
+  const moodHistory = useMoodStore(s => s.moodHistory);
+  const stats = useMoodStore(s => s.stats);
+  const deleteMood = useMoodStore(s => s.deleteMood);
+  const clearHistory = useMoodStore(s => s.clearHistory);
 
-  const calculateStats = useCallback((history: MoodEntry[]) => {
-    const moodCounts: { [key: string]: number } = {};
-    const today = new Date().toDateString();
-    const thisWeek: MoodHistoryEntry[] = [];
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 7);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMoodFilter, setSelectedMoodFilter] = useState<string>('all');
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
-    history.forEach((entry) => {
-      // Support both new (emotion) and old (mood) formats
-      const moodKey = entry.emotion || entry.mood || 'unknown';
-      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
-
-      const entryDate = new Date(entry.timestamp);
-      if (entryDate >= weekStart) {
-        thisWeek.push(entry);
-      }
+  const uniqueMoods = useMemo(() => {
+    const set = new Set<string>();
+    moodHistory.forEach(e => {
+      const label = e.emotion || e.mood;
+      if (label) set.add(label);
     });
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [moodHistory]);
 
-    const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => b - a)[0];
-
-    setStats({
-      totalEntries: history.length,
-      todayEntries: history.filter((entry) => new Date(entry.timestamp).toDateString() === today).length,
-      weekEntries: thisWeek.length,
-      mostCommonMood: mostCommon ? mostCommon[0] : null,
-      moodCounts,
-      weeklyData: thisWeek
-    });
-  }, []);
-
-    return moodHistory.filter((entry: any) => {
+  const filteredHistory = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return moodHistory.filter(entry => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
       const notes = (entry.notes || '').toLowerCase();
-
-  useEffect(() => {
-
-    loadData();
-
+      const matchesQuery = !q || moodLabel.includes(q) || notes.includes(q);
+      const displayMood = entry.emotion || entry.mood || '';
       const matchesMood =
-        selectedMoodFilter === 'all' ||
-        moodLabel === (selectedMoodFilter || '').toLowerCase();
-
+        selectedMoodFilter === 'all' || displayMood === selectedMoodFilter;
       return matchesQuery && matchesMood;
     });
   }, [moodHistory, searchQuery, selectedMoodFilter]);
+
+  const moodData = useMemo(() => {
+    return Object.entries(stats.moodCounts || {})
+      .sort(([, a], [, b]) => (b as number) - (a as number))
+      .slice(0, 10)
+      .map(([mood, count]) => ({
+        mood,
+        count: count as number,
+      }));
+  }, [stats.moodCounts]);
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
@@ -92,9 +72,7 @@ export default function AnalyticsPage() {
   };
 
   const handleDeleteEntry = (id: string) => {
-    if (id) {
-      deleteMood(id);
-    }
+    if (id) deleteMood(id);
   };
 
   const exportAsJson = () => {
@@ -114,9 +92,16 @@ export default function AnalyticsPage() {
       if (s.includes(',') || s.includes('"') || s.includes('\n')) return `"${s.replace(/"/g, '""')}"`;
       return s;
     };
-    const headers = ['id', 'mood', 'timestamp', 'date', 'color', 'notes'];
-    const rows = data.map((entry: any) =>
-      headers.map(h => escapeCsv(h === 'mood' ? (entry.emotion ?? entry.mood) : entry[h])).join(',')
+    const headers = ['id', 'mood', 'timestamp', 'date', 'color', 'notes'] as const;
+    const rows = data.map((entry) =>
+      [
+        entry.id,
+        entry.emotion ?? entry.mood,
+        entry.timestamp,
+        entry.date,
+        entry.color,
+        entry.notes,
+      ].map(escapeCsv).join(',')
     );
     const csv = [headers.join(','), ...rows].join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -138,49 +123,38 @@ export default function AnalyticsPage() {
     return date.toLocaleDateString();
   };
 
-  // Prepare mood data for charts
-  const moodData = useMemo(() => {
-    return Object.entries(stats.moodCounts || {})
-      .sort(([, a], [, b]) => (b as number) - (a as number))
-      .slice(0, 10)
-      .map(([mood, count]) => ({
-        mood,
-        count: count as number,
-      }));
-  }, [stats.moodCounts]);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
-      {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950/80 text-foreground">
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6"
+        className="p-6 border-b border-transparent dark:border-white/5"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <Link href="/">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all border border-white/50 dark:border-white/10"
             >
-              <ArrowLeft className="w-5 h-5 text-purple-600" />
-              <span className="text-purple-600 font-medium">Back</span>
+              <ArrowLeft className="w-5 h-5 text-purple-600 dark:text-purple-300" />
+              <span className="text-purple-600 dark:text-purple-300 font-medium">Back</span>
             </motion.button>
           </Link>
 
           <div className="flex items-center space-x-2">
-            <Activity className="w-8 h-8 text-purple-600" />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <Activity className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
               Mood Analytics
             </h1>
           </div>
 
-          <div className="w-20" /> {/* Spacer */}
+          <div className="flex items-center justify-end min-w-[5rem]">
+            <ThemeToggle />
+          </div>
         </div>
       </motion.header>
 
-      {/* Main */}
       <main id="main" className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {moodHistory.length === 0 ? (
@@ -189,9 +163,9 @@ export default function AnalyticsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-20"
             >
-              <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-600 mb-2">No reflections yet</h2>
-              <p className="text-gray-500 mb-8">Start your journey! Track your emotions to see insights here.</p>
+              <Heart className="w-16 h-16 text-gray-400 dark:text-purple-400/80 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-600 dark:text-gray-100 mb-2">No reflections yet</h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-8">Start your journey! Track your emotions to see insights here.</p>
               <Link href="/">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -204,7 +178,6 @@ export default function AnalyticsPage() {
             </motion.div>
           ) : (
             <div className="space-y-8">
-              {/* Stats Cards */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -213,7 +186,6 @@ export default function AnalyticsPage() {
                 <MoodStats />
               </motion.div>
 
-              {/* Charts */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -224,41 +196,43 @@ export default function AnalyticsPage() {
                 <MoodBarChart data={moodData} />
               </motion.div>
 
-              {/* History Dashboard */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50"
+                className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
-                    <Calendar className="w-6 h-6 text-purple-600" />
-                    <h3 className="text-2xl font-bold text-gray-800">History</h3>
+                    <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">History</h3>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <button
+                        type="button"
                         onClick={() => setExportMenuOpen(prev => !prev)}
                         onBlur={() => setTimeout(() => setExportMenuOpen(false), 150)}
-                        className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-700 hover:bg-purple-50 px-3 py-1.5 rounded-full transition-colors font-medium border border-purple-200 hover:border-purple-300"
+                        className="flex items-center gap-1.5 text-sm text-purple-600 dark:text-purple-300 hover:text-purple-700 dark:hover:text-purple-200 hover:bg-purple-50 dark:hover:bg-purple-950/50 px-3 py-1.5 rounded-full transition-colors font-medium border border-purple-200 dark:border-purple-500/30 hover:border-purple-300 dark:hover:border-purple-400/50"
                       >
                         <Download className="w-4 h-4" />
                         Export Data
                         <ChevronDown className={`w-4 h-4 transition-transform ${exportMenuOpen ? 'rotate-180' : ''}`} />
                       </button>
                       {exportMenuOpen && (
-                        <div className="absolute right-0 top-full mt-1 py-1 w-44 bg-white rounded-xl shadow-lg border border-gray-200 z-10">
+                        <div className="absolute right-0 top-full mt-1 py-1 w-44 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-10">
                           <button
+                            type="button"
                             onClick={exportAsJson}
-                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-t-lg"
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-950/60 hover:text-purple-700 dark:hover:text-purple-300 rounded-t-lg"
                           >
                             Download as JSON
                           </button>
                           <button
+                            type="button"
                             onClick={exportAsCsv}
-                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-b-lg"
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-950/60 hover:text-purple-700 dark:hover:text-purple-300 rounded-b-lg"
                           >
                             Download as CSV
                           </button>
@@ -266,8 +240,9 @@ export default function AnalyticsPage() {
                       )}
                     </div>
                     <button
+                      type="button"
                       onClick={handleClearHistory}
-                      className="text-sm text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded-full transition-colors font-medium border border-transparent hover:border-red-200"
+                      className="text-sm text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/40 px-3 py-1 rounded-full transition-colors font-medium border border-transparent hover:border-red-200 dark:hover:border-red-800/50"
                     >
                       Clear History
                     </button>
@@ -281,7 +256,7 @@ export default function AnalyticsPage() {
                       value={searchQuery}
                       onChange={e => setSearchQuery(e.target.value)}
                       placeholder="Search by mood or notes..."
-                      className="w-full rounded-full border border-gray-200 bg-white/70 px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200"
+                      className="w-full rounded-full border border-gray-200 dark:border-gray-600 bg-white/70 dark:bg-gray-900/60 px-4 py-2 text-sm text-gray-700 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm focus:border-purple-400 dark:focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-500/30"
                     />
                   </div>
 
@@ -293,16 +268,21 @@ export default function AnalyticsPage() {
                         className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                           selectedMoodFilter === 'all'
                             ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
-                            : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
+                            : 'bg-white dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600 hover:bg-purple-50 dark:hover:bg-purple-950/40 hover:border-purple-200 dark:hover:border-purple-500/40'
                         }`}
                       >
                         All moods
                       </button>
                       {uniqueMoods.map(mood => (
                         <button
-                          onClick={() => entry.id && handleDeleteEntry(entry.id, index)}
-                          className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                          title="Delete entry"
+                          key={mood}
+                          type="button"
+                          onClick={() => setSelectedMoodFilter(mood)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors capitalize ${
+                            selectedMoodFilter === mood
+                              ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                              : 'bg-white dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600 hover:bg-purple-50 dark:hover:bg-purple-950/40 hover:border-purple-200 dark:hover:border-purple-500/40'
+                          }`}
                         >
                           {mood}
                         </button>
@@ -311,9 +291,8 @@ export default function AnalyticsPage() {
                   )}
                 </div>
 
-                {/* history cards */}
                 {filteredHistory.length === 0 ? (
-                  <p className="py-6 text-center text-sm text-gray-500">
+                  <p className="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
                     No reflections match your current search or filters.
                   </p>
                 ) : (
@@ -324,38 +303,38 @@ export default function AnalyticsPage() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.05 * index }}
-                        className="group flex items-center justify-between rounded-xl border border-white/40 bg-white/60 p-4 shadow-sm backdrop-blur hover:bg-white/80 hover:shadow-md transition-all"
+                        className="group flex items-center justify-between rounded-xl border border-white/40 dark:border-white/10 bg-white/60 dark:bg-gray-900/50 p-4 shadow-sm backdrop-blur hover:bg-white/80 dark:hover:bg-gray-800/60 hover:shadow-md transition-all"
                       >
                         <div className="flex items-center space-x-4">
-                          {/* Status Dot */}
                           <div
                             className="h-3 w-3 rounded-full shadow-sm"
                             style={{ backgroundColor: entry.color || '#ddd', boxShadow: `0 0 8px ${entry.color || '#ddd'}` }}
                           />
 
                           <div>
-                            <div className="flex items-center font-semibold capitalize text-gray-800">
+                            <div className="flex items-center font-semibold capitalize text-gray-800 dark:text-gray-100">
                               {entry.emotion || entry.mood}
                             </div>
                             {entry.notes && (
-                              <p className="mt-1 max-w-sm text-sm italic text-gray-600 line-clamp-2">
-                                "{entry.notes}"
+                              <p className="mt-1 max-w-sm text-sm italic text-gray-600 dark:text-gray-400 line-clamp-2">
+                                {`"${entry.notes}"`}
                               </p>
                             )}
-                            <div className="text-xs font-medium text-gray-500">
+                            <div className="text-xs font-medium text-gray-500 dark:text-gray-500">
                               {getTimeAgo(entry.timestamp)}
                             </div>
                           </div>
                         </div>
 
                         <div className="flex items-center space-x-4">
-                          <div className="hidden text-sm text-gray-400 sm:block">
+                          <div className="hidden text-sm text-gray-400 dark:text-gray-500 sm:block">
                             {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </div>
 
                           <button
+                            type="button"
                             onClick={() => handleDeleteEntry(entry.id)}
-                            className="opacity-0 p-2 text-gray-400 transition-all hover:bg-red-50 hover:text-red-500 rounded-full group-hover:opacity-100"
+                            className="opacity-0 p-2 text-gray-400 dark:text-gray-500 transition-all hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-500 rounded-full group-hover:opacity-100"
                             title="Delete entry"
                           >
                             <Trash2 className="h-4 w-4" />

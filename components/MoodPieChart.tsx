@@ -5,7 +5,6 @@ import {
   Pie,
   Cell,
   Tooltip,
-  Legend,
   ResponsiveContainer
 } from 'recharts';
 import { MoodData } from '@/lib/moodData';
@@ -20,49 +19,93 @@ interface MoodPieChartProps {
 const COLORS = [
   '#4CAF50', '#2196F3', '#FFC107', '#F44336',
   '#9C27B0', '#00BCD4', '#FF9800', '#795548',
-  '#607D8B', '#E91E63'
+  '#607D8B', '#E91E63', '#26A69A', '#AB47BC',
+  '#FF7043', '#4FC3F7', '#FFD93D'
 ];
 
 export default function MoodPieChart({ data }: MoodPieChartProps) {
-  // Transform data to include mood names and colors
-  const chartData = data.map((item) => {
+  const chartData = data.map((item, index) => {
     const moodInfo = MoodData.getMoodById(item.mood);
     return {
       name: moodInfo ? moodInfo.name : item.mood,
       count: item.count,
-      color: moodInfo ? moodInfo.color : COLORS[0]
+      color: moodInfo?.color ?? COLORS[index % COLORS.length]
     };
   });
 
+  const totalCount = chartData.reduce((sum, d) => sum + d.count, 0);
+
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
-      <h3 className="text-xl font-bold text-gray-800 mb-6">Mood Distribution</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
-          <Pie
-            data={chartData}
-            dataKey="count"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={100}
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-            labelLine={true}
+    <div className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10 min-w-0 max-w-full">
+      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6">Mood Distribution</h3>
+      <div className="w-full min-h-[280px] min-w-0">
+        <ResponsiveContainer width="100%" height={280}>
+          <PieChart margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+            <Pie
+              data={chartData}
+              dataKey="count"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={105}
+              paddingAngle={chartData.length > 1 ? 0.5 : 0}
+              label={false}
+              labelLine={false}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip
+              content={({ active, payload }) => {
+                if (!active || !payload?.length) return null;
+                const p = payload[0];
+                const sliceName = String(p.name ?? p.payload?.name ?? '');
+                const value = Number(p.value ?? 0);
+                const pct =
+                  totalCount > 0
+                    ? Math.round((value / totalCount) * 100)
+                    : 0;
+                return (
+                  <div
+                    className="rounded-xl bg-white dark:bg-gray-900 px-3 py-2 text-sm shadow-lg border border-gray-100 dark:border-gray-700"
+                    style={{ boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  >
+                    <div className="font-medium text-gray-900 dark:text-gray-100">{sliceName}</div>
+                    <div className="text-gray-600 dark:text-gray-400 tabular-nums">
+                      {value} ({pct}%)
+                    </div>
+                  </div>
+                );
+              }}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="mt-6 w-full min-w-0 grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2">
+        {chartData.map((entry, idx) => (
+          <div
+            key={`${entry.name}-${idx}`}
+            className="flex items-start gap-2 min-w-0 rounded-lg bg-gray-100 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-600 px-2.5 py-1.5"
           >
-            {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
-            ))}
-          </Pie>
-          <Tooltip
-            contentStyle={{
-              borderRadius: '12px',
-              border: 'none',
-              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-            }}
-          />
-          <Legend verticalAlign="bottom" height={36} iconType="circle" />
-        </PieChart>
-      </ResponsiveContainer>
+            <span
+              className="mt-1 shrink-0 w-3 h-3 rounded-full"
+              style={{ backgroundColor: entry.color }}
+            />
+            <span className="text-sm text-gray-700 dark:text-gray-200 leading-snug break-words text-left">
+              {entry.name}
+              <span className="text-gray-500 dark:text-gray-400 tabular-nums">
+                {' '}
+                (
+                {totalCount > 0
+                  ? Math.round((entry.count / totalCount) * 100)
+                  : 0}
+                %)
+              </span>
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

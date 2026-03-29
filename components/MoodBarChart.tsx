@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 import {
   BarChart,
   Bar,
@@ -26,7 +28,13 @@ const COLORS = [
 ];
 
 export default function MoodBarChart({ data }: MoodBarChartProps) {
-  // Transform data to include mood names and colors
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme === 'dark';
+  const axisMuted = isDark ? '#a1a1aa' : '#4B5563';
+  const gridStroke = isDark ? '#374151' : '#e5e7eb';
+
   const chartData = data.map((item) => {
     const moodInfo = MoodData.getMoodById(item.mood);
     return {
@@ -37,17 +45,17 @@ export default function MoodBarChart({ data }: MoodBarChartProps) {
   });
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
-      <h3 className="text-xl font-bold text-gray-800 mb-6">Mood Frequency</h3>
+    <div className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10">
+      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6">Mood Frequency</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData} layout="vertical">
-          <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+          <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={gridStroke} />
           <XAxis type="number" hide />
           <YAxis
             dataKey="name"
             type="category"
             width={80}
-            tick={{ fill: '#4B5563', fontSize: 12 }}
+            tick={{ fill: axisMuted, fontSize: 12 }}
             axisLine={false}
             tickLine={false}
           />
@@ -55,7 +63,9 @@ export default function MoodBarChart({ data }: MoodBarChartProps) {
             contentStyle={{
               borderRadius: '12px',
               border: 'none',
-              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+              background: isDark ? 'hsl(240 8% 12%)' : '#fff',
+              color: isDark ? '#f3f4f6' : '#111827',
             }}
             cursor={{ fill: 'transparent' }}
           />

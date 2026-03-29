@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Bot, X, Send, Heart, Sparkle, Loader2, WifiOff, AlertTriangle, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getChatReply } from '@/lib/getChatReply';
 
 interface Message {
     role: 'user' | 'assistant';
@@ -86,47 +87,12 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
         const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         try {
-            const res = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    messages: updatedMessages,
-                    emotion: activeEmotion ?? detected[0],
-                }),
-                signal: controller.signal,
-            });
+            const reply = await getChatReply(
+                updatedMessages,
+                activeEmotion ?? detected[0],
+                controller.signal
+            );
             clearTimeout(timeoutId);
-
-            // ── Check HTTP status before parsing ─────────────────────────────
-            if (!res.ok) {
-                console.error('[AITherapist] API responded with status:', res.status);
-                setErrorType('server');
-                setMessages(prev => [...prev, {
-                    role: 'assistant',
-                    content: "I'm having a little trouble connecting right now. Please try again in a moment. 💜",
-                }]);
-                return;
-            }
-
-            // ── Safely parse JSON ─────────────────────────────────────────────
-            let data: { reply?: unknown };
-            try {
-                data = await res.json();
-            } catch (parseError) {
-                console.error('[AITherapist] Failed to parse response JSON:', parseError);
-                setErrorType('parse');
-                setMessages(prev => [...prev, {
-                    role: 'assistant',
-                    content: "Something unexpected happened. I'm still here — please try again. 💜",
-                }]);
-                return;
-            }
-
-            // ── Validate response structure ───────────────────────────────────
-            const reply = typeof data?.reply === 'string' && data.reply.trim() !== ''
-                ? data.reply
-                : "I'm here for you. Could you tell me more about how you're feeling?";
-
             setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
         } catch (networkError) {
             clearTimeout(timeoutId);

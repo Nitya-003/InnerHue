@@ -2,7 +2,8 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import './moodcard.css';
 
 interface Mood {
@@ -30,11 +31,21 @@ interface MoodCardProps {
 }
 
 export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
-  const [emojiDuration, setEmojiDuration] = useState(4);
+  const [isHovered, setIsHovered] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme === 'dark';
 
-  useEffect(() => {
-    setEmojiDuration(4 + Math.random() * 2);
-  }, []);
+  const cardBg = isSelected
+    ? isDark
+      ? 'rgba(35,35,52,0.92)'
+      : 'rgba(255,255,255,0.95)'
+    : isDark
+      ? 'rgba(18,18,32,0.65)'
+      : 'rgba(255,255,255,0.25)';
+
+  const labelColor = isSelected ? (isDark ? '#f3f4f6' : '#1f2937') : '#ffffff';
 
   return (
     <motion.div
@@ -58,13 +69,13 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
       onClick={onSelect}
       className="relative aspect-square w-full rounded-3xl p-4 sm:p-6 flex flex-col items-center justify-center cursor-pointer overflow-hidden group backdrop-blur-md border-2"
       style={{
-        background: isSelected
-          ? 'rgba(255,255,255,0.95)'
-          : 'rgba(255,255,255,0.25)',
-        borderColor: isSelected ? mood.color : 'rgba(255,255,255,0.3)',
+        background: cardBg,
+        borderColor: isSelected ? mood.color : isDark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.3)',
         boxShadow: isSelected
           ? `0 20px 45px ${mood.color}50`
-          : '0 10px 30px rgba(0,0,0,0.12)',
+          : isDark
+            ? '0 10px 28px rgba(0,0,0,0.45)'
+            : '0 10px 30px rgba(0,0,0,0.12)',
       }}
     >
       {/* Animated Glow Background */}
@@ -118,7 +129,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
       <motion.div
         className="text-sm sm:text-base font-semibold relative z-10"
         animate={{
-          color: isSelected ? '#1f2937' : '#ffffff',
+          color: labelColor,
           scale: isSelected ? 1.05 : 1,
         }}
         transition={{ duration: 0.3 }}

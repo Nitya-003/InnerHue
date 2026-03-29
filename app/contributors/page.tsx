@@ -20,8 +20,8 @@ import {
 } from 'lucide-react';
 import { FloatingBackground } from '@/components/FloatingBackground';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import ContributorOrb from '@/components/ContributorOrb';
 import AvatarStack from '@/components/AvatarStack';
+import contributorsStatic from '@/data/contributors.json';
 
 interface Contributor {
   login: string;
@@ -36,26 +36,6 @@ interface Contributor {
   location: string | null;
   public_repos: number;
   followers: number;
-}
-
-function ContributorCardSkeleton() {
-  return (
-    <div className="bg-card backdrop-blur-md rounded-2xl p-6 border border-border animate-pulse">
-      <div className="flex items-start gap-4">
-        <div className="w-16 h-16 rounded-full bg-secondary/50 flex-shrink-0" />
-        <div className="flex-1 min-w-0">
-          <div className="h-5 bg-secondary/50 rounded-lg w-32 mb-2" />
-          <div className="h-3 bg-secondary/50 rounded-lg w-20 mb-3" />
-          <div className="h-3 bg-secondary/50 rounded-lg w-full mb-1" />
-          <div className="h-3 bg-secondary/50 rounded-lg w-4/5" />
-        </div>
-      </div>
-      <div className="mt-4 flex gap-2">
-        <div className="h-6 bg-secondary/50 rounded-full w-20" />
-        <div className="h-6 bg-secondary/50 rounded-full w-24" />
-      </div>
-    </div>
-  );
 }
 
 function ContributorCard({ contributor, index }: { contributor: Contributor; index: number }) {
@@ -203,42 +183,23 @@ function StatChip({
   );
 }
 
+const INITIAL_CONTRIBUTORS = contributorsStatic as Contributor[];
+
 export default function ContributorsPage() {
-  const [contributors, setContributors] = useState<Contributor[]>([]);
-  const [filtered, setFiltered] = useState<Contributor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [contributors, setContributors] = useState<Contributor[]>(INITIAL_CONTRIBUTORS);
+  const [filtered, setFiltered] = useState<Contributor[]>(INITIAL_CONTRIBUTORS);
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState<'contributions' | 'name' | 'followers'>('contributions');
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const fetchContributors = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch('/api/contributors');
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        const message = data?.error || data?.message || 'Failed to fetch contributors';
-        throw new Error(message);
-      }
-
-      setContributors(data.contributors || []);
-      setFiltered(data.contributors || []);
-      setLastUpdated(new Date());
-    } catch (err) {
-      const message = (err as Error).message || 'Something went wrong';
-      console.error('Contributors fetch error:', message);
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchContributors();
+    setLastUpdated(new Date());
   }, []);
+
+  const refreshContributors = () => {
+    setContributors([...INITIAL_CONTRIBUTORS]);
+    setLastUpdated(new Date());
+  };
 
   // Filter + sort whenever deps change
   useEffect(() => {
@@ -314,7 +275,7 @@ export default function ContributorsPage() {
             </motion.div>
 
             {/* Simple avatar stack (GitHub-like) */}
-            {!loading && contributors.length > 0 && (
+            {contributors.length > 0 && (
               <AvatarStack contributors={contributors} />
             )}
 
@@ -359,7 +320,7 @@ export default function ContributorsPage() {
         </motion.header>
 
         {/* Stats banner */}
-        {!loading && !error && contributors.length > 0 && (
+        {contributors.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -403,8 +364,7 @@ export default function ContributorsPage() {
         )}
 
         {/* Search + Sort controls */}
-        {!loading && !error && (
-          <motion.div
+        <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45 }}
@@ -440,18 +400,18 @@ export default function ContributorsPage() {
 
             {/* Refresh */}
             <button
-              onClick={fetchContributors}
-              title="Refresh"
+              type="button"
+              onClick={refreshContributors}
+              title="Reset list to bundled data"
               className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border text-muted-foreground hover:text-foreground hover:bg-secondary text-sm transition-all duration-200"
             >
               <RefreshCw className="w-4 h-4" />
-              <span className="hidden sm:inline">Refresh</span>
+              <span className="hidden sm:inline">Reset</span>
             </button>
           </motion.div>
-        )}
 
         {/* Result count */}
-        {!loading && !error && search && (
+        {search && (
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -461,39 +421,8 @@ export default function ContributorsPage() {
           </motion.p>
         )}
 
-        {/* Loading skeletons */}
-        {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <ContributorCardSkeleton key={i} />
-            ))}
-          </div>
-        )}
-
-        {/* Error state */}
-        {error && !loading && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-20"
-          >
-            <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
-              <Users className="w-8 h-8 text-red-400" />
-            </div>
-            <h3 className="text-xl font-semibold text-foreground mb-2">Failed to load contributors</h3>
-            <p className="text-muted-foreground mb-6 text-sm max-w-sm mx-auto">{error}</p>
-            <button
-              onClick={fetchContributors}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium hover:opacity-90 transition-opacity shadow-lg shadow-purple-500/30"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Try again
-            </button>
-          </motion.div>
-        )}
-
         {/* Empty search state */}
-        {!loading && !error && filtered.length === 0 && search && (
+        {filtered.length === 0 && search && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -510,7 +439,7 @@ export default function ContributorsPage() {
         )}
 
         {/* Contributors grid */}
-        {!loading && !error && filtered.length > 0 && (
+        {filtered.length > 0 && (
           <AnimatePresence mode="wait">
             <motion.div
               key={sortBy + search}
@@ -528,7 +457,7 @@ export default function ContributorsPage() {
         )}
 
         {/* Footer note */}
-        {!loading && !error && contributors.length > 0 && (
+        {contributors.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
