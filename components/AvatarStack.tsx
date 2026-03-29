@@ -69,7 +69,7 @@ export default function AvatarStack({
               zIndex: 100 + visible.length,
             }}
           >
-            <span className="text-xs font-semibold text-foreground px-1">+{extra}</span>
+            <span className="text-xs font-semibold text-white px-1">+{extra}</span>
           </div>
         )}
       </div>

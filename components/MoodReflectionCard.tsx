@@ -129,7 +129,7 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
     >
       {/* Frosted Glass Card */}
       <div
-        className="relative overflow-hidden rounded-3xl backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl"
+        className="relative overflow-hidden rounded-3xl backdrop-blur-xl bg-card/80 dark:bg-white/10 border border-border dark:border-white/20 shadow-2xl text-foreground dark:text-white"
         style={{
           borderImage: `linear-gradient(135deg, ${mood.color}40, ${mood.glow}20) 1`,
           boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.1), 0 0 0 1px ${mood.color}20`
@@ -149,10 +149,10 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleClose}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors z-10"
+            className="absolute top-4 right-4 p-2 rounded-full bg-card/80 dark:bg-white/10 hover:bg-card dark:hover:bg-white/20 backdrop-blur-sm transition-colors z-10"
             aria-label="Close reflection card"
           >
-            <X className="w-5 h-5 text-white/80" />
+            <X className="w-5 h-5 text-foreground/80 dark:text-white/80" />
           </motion.button>
         )}
 
@@ -163,10 +163,10 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
               {mood.emoji}
             </span>
             <div>
-              <h3 className="text-2xl font-semibold light:text-black ">
+              <h3 className="text-2xl font-semibold text-foreground dark:text-white">
                 Feeling {mood.name}
               </h3>
-              <p className="text-sm mt-1">Reflection time</p>
+              <p className="text-sm mt-1 text-muted-foreground dark:text-white/70">Reflection time</p>
             </div>
           </div>
 
@@ -206,7 +206,7 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="pl-4 border-l-2 border-white/20"
+              className="pl-4 border-l-2 border-border dark:border-white/20"
             >
               <p className="text-sm italic">
                 "{suggestion.quote}"
@@ -235,12 +235,12 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
                   key={index}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="group flex items-center space-x-2 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-black/40 hover:border-white/30 transition-all"
+                  className="group flex items-center space-x-2 px-4 py-2.5 rounded-full bg-card/80 dark:bg-white/10 hover:bg-card dark:hover:bg-white/20 backdrop-blur-sm border border-border dark:border-white/20 hover:border-border/80 dark:hover:border-white/30 transition-all"
                   aria-label={action.action}
                   title={action.action}
                 >
-                  <action.icon className="w-4 h-4 group-hover:text-white/90 transition-colors" />
-                  <span className="text-sm group-hover:text-white/100 transition-colors">
+                  <action.icon className="w-4 h-4 group-hover:text-foreground dark:group-hover:text-white/90 transition-colors" />
+                  <span className="text-sm group-hover:text-foreground dark:group-hover:text-white transition-colors">
                     {action.label}
                   </span>
                 </motion.button>
@@ -259,7 +259,7 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
               {suggestion.keywords.slice(0, 6).map((keyword, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 text-xs rounded-full bg-white/5 border border-black/40"
+                  className="px-3 py-1 text-xs rounded-full bg-card/60 dark:bg-white/5 border border-border dark:border-white/20"
                 >
                   {keyword}
                 </span>

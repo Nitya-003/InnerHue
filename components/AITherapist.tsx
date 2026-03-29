@@ -144,7 +144,7 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => setIsOpen(true)}
-                        className="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-primary to-secondary text-foreground p-4 rounded-full shadow-2xl shadow-violet-500/40"
+                        className="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-violet-600 to-pink-600 text-white p-4 rounded-full shadow-2xl shadow-violet-500/40"
                         aria-label="Open AI Therapist"
                     >
                         <div className="relative w-6 h-6">
@@ -164,28 +164,23 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                        className="fixed bottom-6 right-6 z-50 w-[92vw] max-w-sm flex flex-col rounded-3xl overflow-hidden shadow-2xl shadow-black/40"
-                        style={{
-                            background: 'rgba(15, 10, 30, 0.85)',
-                            backdropFilter: 'blur(32px)',
-                            border: '1px solid rgba(255,255,255,0.12)',
-                            maxHeight: '80vh',
-                        }}
+                        className="fixed bottom-6 right-6 z-50 w-[92vw] max-w-sm flex flex-col rounded-3xl overflow-hidden shadow-2xl shadow-black/25 bg-card/95 dark:bg-[rgba(15,10,30,0.85)] backdrop-blur-3xl border border-border dark:border-white/10"
+                        style={{ maxHeight: '80vh' }}
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-violet-600/80 to-pink-600/80 backdrop-blur-xl">
                             <div className="flex items-center gap-3">
-                                <div className="bg-white/20 p-2 rounded-full">
+                                <div className="bg-card/80 dark:bg-white/20 p-2 rounded-full">
                                     <Bot className="w-5 h-5 text-white" />
                                 </div>
                                 <div>
                                     <h3 className="font-semibold text-white text-sm">Hue — AI Companion</h3>
-                                    <p className="text-xs text-white/70">Here to listen & support 💜</p>
+                                    <p className="text-xs text-white/80">Here to listen & support 💜</p>
                                 </div>
                             </div>
                             <button
                                 onClick={handleReset}
-                                className="text-white/70 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all"
+                                className="text-white/80 hover:text-white hover:bg-card/70 dark:hover:bg-white/10 p-2 rounded-full transition-all"
                                 aria-label="Close"
                             >
                                 <X className="w-4 h-4" />
@@ -204,7 +199,7 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                                         <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center flex-shrink-0 mt-0.5">
                                             <Bot className="w-4 h-4 text-white" />
                                         </div>
-                                        <div className="bg-white/10 rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-white/90 max-w-[85%]">
+                                        <div className="bg-card/85 dark:bg-white/10 rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-foreground dark:text-white/90 max-w-[85%]">
                                             Hey there 👋 I&apos;m Hue, your emotional wellness companion. How are you feeling right now?
                                         </div>
                                     </div>
@@ -226,8 +221,8 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                                     )}
                                     <div
                                         className={`px-4 py-3 rounded-2xl text-sm max-w-[80%] leading-relaxed ${msg.role === 'user'
-                                            ? 'bg-gradient-to-br from-violet-600 to-pink-600 text-white rounded-br-sm'
-                                            : 'bg-white/10 text-white/90 rounded-bl-sm'
+                                                ? 'bg-gradient-to-br from-violet-600 to-pink-600 text-white rounded-br-sm'
+                                                : 'bg-card/85 dark:bg-white/10 text-foreground dark:text-white/90 rounded-bl-sm'
                                             }`}
                                     >
                                         {msg.content}
@@ -244,9 +239,9 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center flex-shrink-0">
                                         <Bot className="w-4 h-4 text-white" />
                                     </div>
-                                    <div className="bg-white/10 rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-2">
+                                    <div className="bg-card/85 dark:bg-white/10 rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-2">
                                         <Loader2 className="w-4 h-4 text-violet-400 animate-spin" />
-                                        <span className="text-white/60 text-xs">Hue is thinking…</span>
+                                        <span className="text-muted-foreground dark:text-white/60 text-xs">Hue is thinking…</span>
                                     </div>
                                 </motion.div>
                             )}
@@ -292,7 +287,7 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                         </AnimatePresence>
 
                         {/* Input */}
-                        <div className="px-4 pb-4 pt-2 border-t border-white/10">
+                        <div className="px-4 pb-4 pt-2 border-t border-border dark:border-white/10">
                             <div className="flex gap-2">
                                 <input
                                     ref={inputRef}
@@ -302,14 +297,14 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                                     onKeyDown={e => e.key === 'Enter' && handleSend()}
                                     placeholder="I'm feeling…"
                                     disabled={isLoading}
-                                    className="flex-1 bg-white/10 border border-white/15 text-white placeholder-white/40 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/60 disabled:opacity-50"
+                                    className="flex-1 bg-card dark:bg-white/10 border border-border dark:border-white/15 text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-white/40 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/60 disabled:opacity-50"
                                 />
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={handleSend}
                                     disabled={!input.trim() || isLoading}
-                                    className="bg-gradient-to-br from-primary to-secondary text-foreground p-2.5 rounded-full disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                    className="bg-gradient-to-br from-violet-600 to-pink-600 text-white p-2.5 rounded-full disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                                     aria-label="Send"
                                 >
                                     {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
@@ -318,7 +313,7 @@ export default function AITherapist({ onEmotionDetected, onAutoNavigate, activeE
                             {messages.length > 0 && (
                                 <button
                                     onClick={() => setMessages([])}
-                                    className="mt-2 w-full text-xs text-white/40 hover:text-white/70 transition-colors"
+                                    className="mt-2 w-full text-xs text-muted-foreground dark:text-white/40 hover:text-foreground dark:hover:text-white/70 transition-colors"
                                 >
                                     Start new conversation
                                 </button>

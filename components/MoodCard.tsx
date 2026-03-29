@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
@@ -12,6 +12,7 @@ interface Mood {
   emoji: string;
   color: string;
   glow: string;
+  isCustom?: boolean;
   category?: string;
   reflection?: {
     question: string;
@@ -28,9 +29,13 @@ interface MoodCardProps {
   index: number;
   isSelected: boolean;
   onSelect: () => void;
+  onDelete?: (moodId: string) => void;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
+  selectionRole?: string;
+  ariaLabel?: string;
 }
 
-export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
+export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDown }: MoodCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -62,6 +67,7 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         stiffness: 280,
         damping: 22,
       }}
+      onKeyDown={onKeyDown}
       whileHover={{ scale: isSelected ? 1.05 : 1.08 }}
       whileTap={{ scale: 0.95 }}
       onHoverStart={() => setIsHovered(true)}
@@ -77,40 +83,32 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
             ? '0 10px 28px rgba(0,0,0,0.45)'
             : '0 10px 30px rgba(0,0,0,0.12)',
       }}
+      tabIndex={0}
+      role="button"
+      aria-pressed={isSelected}
+      aria-label={`Mood: ${mood.name}`}
     >
-      {/* Animated Glow Background */}
-      <motion.div
-        className="absolute inset-0 rounded-3xl pointer-events-none"
-        animate={
-          isHovered
-            ? { opacity: [0.2, 0.5, 0.2] }
-            : { opacity: 0 }
-        }
-        transition={{ duration: 2, repeat: Infinity }}
-        style={{
-          background: `radial-gradient(circle, ${mood.glow}40 0%, transparent 70%)`,
-        }}
-      />
+      {onDelete && mood.isCustom && (
+        <motion.div
+          className="absolute top-2 right-2 z-20"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          whileHover={{ scale: 1.1 }}
+          style={{
+            background: `linear-gradient(135deg, ${mood.color}, ${mood.glow})`,
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(mood.id);
+          }}
+          tabIndex={-1}
+          aria-label="Delete custom mood"
+        >
+          <Check className="w-4 h-4 stroke-[3]" />
+        </motion.div>
+      )}
 
-      {/* Selection Badge */}
-      <AnimatePresence>
-        {isSelected && (
-          <motion.div
-            initial={{ scale: 0, rotate: -90 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0 }}
-            transition={{ type: 'spring', stiffness: 400 }}
-            className="absolute -top-3 -right-3 w-8 h-8 rounded-full flex items-center justify-center text-white shadow-lg z-20"
-            style={{
-              background: `linear-gradient(135deg, ${mood.color}, ${mood.glow})`,
-            }}
-          >
-            <Check className="w-4 h-4 stroke-[3]" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Emoji */}
       <motion.div
         className="text-4xl sm:text-5xl mb-3 relative z-10 select-none"
         animate={{
@@ -125,7 +123,6 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         {mood.emoji}
       </motion.div>
 
-      {/* Mood Name */}
       <motion.div
         className="text-sm sm:text-base font-semibold relative z-10"
         animate={{
@@ -137,7 +134,6 @@ export function MoodCard({ mood, index, isSelected, onSelect }: MoodCardProps) {
         {mood.name}
       </motion.div>
 
-      {/* Bottom Accent Line */}
       <motion.div
         className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 rounded-full"
         style={{

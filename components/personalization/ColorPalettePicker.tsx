@@ -28,9 +28,9 @@ export function ColorPalettePicker({
   const effectiveGlow = currentPalette?.glowColor || originalGlow;
 
   return (
-    <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+    <div className="bg-card/80 dark:bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-border dark:border-white/20">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white">
+        <h3 className="text-lg font-semibold text-foreground dark:text-white">
           Color Palette for {moodName}
         </h3>
         {currentPalette && (
@@ -38,7 +38,7 @@ export function ColorPalettePicker({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onReset}
-            className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-lg text-white/80 hover:bg-white/20 transition-colors text-sm"
+            className="flex items-center gap-2 px-3 py-1.5 bg-card dark:bg-white/10 rounded-lg text-foreground/80 dark:text-white/80 hover:bg-card/80 dark:hover:bg-white/20 transition-colors text-sm"
           >
             <RotateCcw className="w-4 h-4" />
             Reset
@@ -48,7 +48,7 @@ export function ColorPalettePicker({
 
       {/* Current Preview */}
       <div className="mb-6">
-        <p className="text-sm text-white/70 mb-3">Current Preview</p>
+        <p className="text-sm text-muted-foreground dark:text-white/70 mb-3">Current Preview</p>
         <div
           className="w-full h-16 rounded-xl flex items-center justify-center relative overflow-hidden"
           style={{
@@ -132,10 +132,10 @@ export function ColorPalettePicker({
 
       {/* Custom Color Input */}
       <div className="mt-6 pt-4 border-t border-white/10">
-        <p className="text-sm text-white/70 mb-3">Or choose custom colors</p>
+        <p className="text-sm text-muted-foreground dark:text-white/70 mb-3">Or choose custom colors</p>
         <div className="flex gap-4">
           <div className="flex-1">
-            <label className="block text-xs text-white/60 mb-1">Primary</label>
+            <label className="block text-xs text-muted-foreground dark:text-white/60 mb-1">Primary</label>
             <div className="relative">
               <input
                 type="color"
@@ -152,7 +152,7 @@ export function ColorPalettePicker({
             </div>
           </div>
           <div className="flex-1">
-            <label className="block text-xs text-white/60 mb-1">Glow</label>
+            <label className="block text-xs text-muted-foreground dark:text-white/60 mb-1">Glow</label>
             <div className="relative">
               <input
                 type="color"

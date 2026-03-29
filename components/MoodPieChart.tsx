@@ -36,8 +36,8 @@ export default function MoodPieChart({ data }: MoodPieChartProps) {
   const totalCount = chartData.reduce((sum, d) => sum + d.count, 0);
 
   return (
-    <div className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10 min-w-0 max-w-full">
-      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6">Mood Distribution</h3>
+    <div className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border min-w-0 max-w-full">
+      <h3 className="text-xl font-bold text-foreground mb-6">Mood Distribution</h3>
       <div className="w-full min-h-[280px] min-w-0">
         <ResponsiveContainer width="100%" height={280}>
           <PieChart margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
@@ -68,11 +68,11 @@ export default function MoodPieChart({ data }: MoodPieChartProps) {
                     : 0;
                 return (
                   <div
-                    className="rounded-xl bg-white dark:bg-gray-900 px-3 py-2 text-sm shadow-lg border border-gray-100 dark:border-gray-700"
+                    className="rounded-xl bg-popover px-3 py-2 text-sm shadow-lg border border-border"
                     style={{ boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   >
-                    <div className="font-medium text-gray-900 dark:text-gray-100">{sliceName}</div>
-                    <div className="text-gray-600 dark:text-gray-400 tabular-nums">
+                    <div className="font-medium text-popover-foreground">{sliceName}</div>
+                    <div className="text-muted-foreground tabular-nums">
                       {value} ({pct}%)
                     </div>
                   </div>
@@ -86,15 +86,15 @@ export default function MoodPieChart({ data }: MoodPieChartProps) {
         {chartData.map((entry, idx) => (
           <div
             key={`${entry.name}-${idx}`}
-            className="flex items-start gap-2 min-w-0 rounded-lg bg-gray-100 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-600 px-2.5 py-1.5"
+            className="flex items-start gap-2 min-w-0 rounded-lg bg-muted/80 border border-border px-2.5 py-1.5"
           >
             <span
               className="mt-1 shrink-0 w-3 h-3 rounded-full"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-sm text-gray-700 dark:text-gray-200 leading-snug break-words text-left">
+            <span className="text-sm text-foreground leading-snug break-words text-left">
               {entry.name}
-              <span className="text-gray-500 dark:text-gray-400 tabular-nums">
+              <span className="text-muted-foreground tabular-nums">
                 {' '}
                 (
                 {totalCount > 0

@@ -45,27 +45,28 @@ export default function MoodBarChart({ data }: MoodBarChartProps) {
   });
 
   return (
-    <div className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-white/10">
-      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6">Mood Frequency</h3>
+    <div className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border">
+      <h3 className="text-xl font-bold text-foreground mb-6">Mood Frequency</h3>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={chartData} layout="vertical">
+        <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 12, left: 12, bottom: 4 }}>
           <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={gridStroke} />
           <XAxis type="number" hide />
           <YAxis
             dataKey="name"
             type="category"
-            width={80}
-            tick={{ fill: axisMuted, fontSize: 12 }}
+            width={108}
+            tick={{ fill: axisMuted, fontSize: 13, fontWeight: 500 }}
             axisLine={false}
             tickLine={false}
           />
           <Tooltip
+            formatter={(value: number, name: string) => [`${value} entries`, name]}
             contentStyle={{
+              backgroundColor: 'hsl(var(--popover))',
+              color: 'hsl(var(--popover-foreground))',
               borderRadius: '12px',
-              border: 'none',
-              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-              background: isDark ? 'hsl(240 8% 12%)' : '#fff',
-              color: isDark ? '#f3f4f6' : '#111827',
+              border: '1px solid hsl(var(--border))',
+              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
             }}
             cursor={{ fill: 'transparent' }}
           />

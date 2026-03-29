@@ -118,11 +118,11 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-[90vw] max-w-md sm:w-96 max-h-[85vh] bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-white/10">
+        <div className="fixed bottom-6 right-6 z-50 w-[90vw] max-w-md sm:w-96 max-h-[85vh] bg-card dark:bg-gray-900 rounded-3xl shadow-2xl border border-border dark:border-white/10">
           {/* Header */}
           <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-3 sm:p-4 flex items-center justify-between rounded-t-3xl">
             <div className="flex items-center gap-3">
-              <div className="bg-white/20 p-2 rounded-full">
+              <div className="bg-card/80 dark:bg-white/20 p-2 rounded-full">
                 <Bot className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -132,7 +132,7 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
             </div>
             <button
               onClick={handleReset}
-              className="text-white hover:bg-white/20 p-2 rounded-full transition-all"
+              className="text-white hover:bg-card/70 dark:hover:bg-white/20 p-2 rounded-full transition-all"
             >
               <X className="w-5 h-5" />
             </button>
@@ -150,7 +150,7 @@ export default function SimpleLangFlowChatbot({ onEmotionDetected, onAutoNavigat
                 </p>
               </div>
             ) : (
-              <div className="bg-gray-100 dark:bg-white/5 rounded-2xl p-4">
+              <div className="bg-muted dark:bg-white/5 rounded-2xl p-4">
                 <div className="flex items-start gap-2">
                   <Sparkles className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
                   <p className="text-gray-800 dark:text-gray-200 text-sm whitespace-pre-line">{botResponse}</p>

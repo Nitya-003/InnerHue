@@ -17,8 +17,8 @@ type MoodPageProps = {
 
 function MoodPageFallback() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950 flex items-center justify-center">
-      <div className="h-8 w-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
     </div>
   );
 }
