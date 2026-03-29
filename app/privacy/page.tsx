@@ -88,7 +88,7 @@ export default function PrivacyPolicy() {
                                 >
                                     <span className={`h-6 w-[3px] rounded-full transition-all duration-300 ${isActive ? "bg-cyan-400" : "bg-transparent group-hover:bg-cyan-400/40"
                                         }`} />
-                                    <span className={`transition-all duration-300 group-hover:translate-x-1 ${isActive ? "text-cyan-400" : "group-hover:text-cyan-400"
+                                    <span className={`transition-all duration-300 group-hover:translate-x-1 ${isActive ? "text-cyan-500 dark:text-cyan-400" : "group-hover:text-cyan-500 dark:group-hover:text-cyan-400"
                                         }`}>
                                         {section.title}
                                     </span>

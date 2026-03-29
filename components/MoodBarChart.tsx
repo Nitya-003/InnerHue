@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 import {
   BarChart,
   Bar,
@@ -26,7 +28,13 @@ const COLORS = [
 ];
 
 export default function MoodBarChart({ data }: MoodBarChartProps) {
-  // Transform data to include mood names and colors
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme === 'dark';
+  const axisMuted = isDark ? '#a1a1aa' : '#4B5563';
+  const gridStroke = isDark ? '#374151' : '#e5e7eb';
+
   const chartData = data.map((item) => {
     const moodInfo = MoodData.getMoodById(item.mood);
     return {
@@ -37,24 +45,27 @@ export default function MoodBarChart({ data }: MoodBarChartProps) {
   });
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50">
-      <h3 className="text-xl font-bold text-gray-800 mb-6">Mood Frequency</h3>
+    <div className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border">
+      <h3 className="text-xl font-bold text-foreground mb-6">Mood Frequency</h3>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={chartData} layout="vertical">
-          <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+        <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 12, left: 12, bottom: 4 }}>
+          <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={gridStroke} />
           <XAxis type="number" hide />
           <YAxis
             dataKey="name"
             type="category"
-            width={80}
-            tick={{ fill: '#4B5563', fontSize: 12 }}
+            width={108}
+            tick={{ fill: axisMuted, fontSize: 13, fontWeight: 500 }}
             axisLine={false}
             tickLine={false}
           />
           <Tooltip
+            formatter={(value: number, name: string) => [`${value} entries`, name]}
             contentStyle={{
+              backgroundColor: 'hsl(var(--popover))',
+              color: 'hsl(var(--popover-foreground))',
               borderRadius: '12px',
-              border: 'none',
+              border: '1px solid hsl(var(--border))',
               boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
             }}
             cursor={{ fill: 'transparent' }}

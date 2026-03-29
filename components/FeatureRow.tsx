@@ -19,7 +19,7 @@ export default function FeatureRow({
       <Icon className="w-10 h-10 text-purple-400" />
       <div>
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{title}</h3>
-        <p className="text-gray-600 dark:text-white/70">{description}</p>
+        <p className="text-muted-foreground dark:text-white/70">{description}</p>
       </div>
     </div>
   );

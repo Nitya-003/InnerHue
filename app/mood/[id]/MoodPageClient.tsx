@@ -20,18 +20,13 @@ interface MoodWithMeta extends Mood {
 
 export interface MoodPageClientProps {
   routeId: string;
-  initialMoodsQuery?: string;
 }
 
-export default function MoodPageClient({
-  routeId,
-  initialMoodsQuery,
-}: MoodPageClientProps) {
+export default function MoodPageClient({ routeId }: MoodPageClientProps) {
   const routeParams = useParams();
-  const searchParamsHook = useSearchParams();
+  const searchParams = useSearchParams();
   const id = (routeParams?.id as string) || routeId;
-  const moods =
-    searchParamsHook?.get('moods') ?? initialMoodsQuery ?? undefined;
+  const moods = searchParams.get('moods') ?? undefined;
 
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
@@ -85,11 +80,11 @@ export default function MoodPageClient({
 
   if (!moodData.length || !suggestions) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full"
+          className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full"
         />
       </div>
     );
@@ -100,7 +95,7 @@ export default function MoodPageClient({
     visitEntryIds[currentMoodIndex] ?? visitEntryIds[0];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950">
+    <div className="min-h-screen bg-background text-foreground">
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -111,10 +106,10 @@ export default function MoodPageClient({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 p-2 rounded-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="flex items-center space-x-2 p-2 rounded-lg border border-border bg-card/80 backdrop-blur shadow-sm hover:bg-muted hover:shadow-md transition-all"
             >
-              <ArrowLeft className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="text-purple-600 dark:text-purple-400 font-medium">Back</span>
+              <ArrowLeft className="w-5 h-5 text-foreground" />
+              <span className="text-foreground font-medium">Back</span>
             </motion.button>
           </Link>
 
@@ -129,18 +124,18 @@ export default function MoodPageClient({
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       className={`text-2xl p-1 rounded-full transition-all ${index === currentMoodIndex
-                        ? 'bg-white/30 ring-2 ring-purple-400'
-                        : 'hover:bg-white/20'
+                        ? 'bg-primary/10 ring-2 ring-primary/40'
+                        : 'hover:bg-muted'
                         }`}
                     >
                       {mood.emoji}
                     </motion.button>
                   ))}
                 </div>
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                <h1 className="text-2xl font-bold text-foreground">
                   Feeling {currentMood.name}
                   {moodData.length > 1 && (
-                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                    <span className="text-sm text-muted-foreground ml-2">
                       ({currentMoodIndex + 1} of {moodData.length})
                     </span>
                   )}
@@ -149,7 +144,7 @@ export default function MoodPageClient({
             ) : (
               <>
                 <span className="text-2xl">{currentMood.emoji}</span>
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                <h1 className="text-2xl font-bold text-foreground">
                   Feeling {currentMood.name}
                 </h1>
               </>
@@ -161,16 +156,16 @@ export default function MoodPageClient({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="p-2 rounded-lg border border-border bg-card/80 backdrop-blur shadow-sm hover:bg-muted hover:shadow-md transition-all"
             >
-              <Bookmark className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <Bookmark className="w-5 h-5 text-foreground" />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur shadow-sm hover:shadow-md transition-all"
+              className="p-2 rounded-lg border border-border bg-card/80 backdrop-blur shadow-sm hover:bg-muted hover:shadow-md transition-all"
             >
-              <Share2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <Share2 className="w-5 h-5 text-foreground" />
             </motion.button>
           </div>
         </div>
