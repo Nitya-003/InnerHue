@@ -5,7 +5,6 @@ import { TrendingUp, Calendar, Heart, Target } from 'lucide-react';
 import { useMoodStore } from '@/lib/useMoodStore';
 
 export function MoodStats() {
-  // Get stats from Zustand store with selective subscription
   const stats = useMoodStore(state => state.stats);
   const statCards = [
     {
@@ -61,7 +60,6 @@ export function MoodStats() {
 
           <h3 className="text-muted-foreground font-medium">{card.label}</h3>
 
-          {/* Progress animation */}
           <div className="mt-3 h-1 bg-muted rounded-full overflow-hidden">
             <motion.div
               className={`h-full bg-gradient-to-r ${card.color} rounded-full`}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Bookmark, Share2 } from 'lucide-react';
@@ -18,11 +18,13 @@ interface MoodWithMeta extends Mood {
   spotifyPlaylistId?: string;
 }
 
-export default function MoodPageClient() {
-  const routeParams = useParams();
-  const searchParamsHook = useSearchParams();
-  const id = routeParams?.id as string;
-  const moods = searchParamsHook?.get('moods');
+interface MoodPageClientProps {
+  id: string;
+}
+
+export default function MoodPageClient({ id }: MoodPageClientProps) {
+  const searchParams = useSearchParams();
+  const moods = searchParams.get('moods') ?? undefined;
 
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
@@ -39,7 +41,6 @@ export default function MoodPageClient() {
           const traditionalId = getTraditionalMoodId(mid);
           const traditionalMood = MoodData.getMoodById(traditionalId);
 
-          // Create adapter object that combines both systems
           return {
             id: reflectiveMood.id,
             name: reflectiveMood.label,
@@ -51,7 +52,6 @@ export default function MoodPageClient() {
           } as MoodWithMeta;
         }
 
-        // Fall back to traditional mood system
         return MoodData.getMoodById(mid);
       })
       .filter(Boolean) as MoodWithMeta[];
@@ -59,12 +59,10 @@ export default function MoodPageClient() {
     setMoodData(moodsData);
 
     if (moodsData.length > 0) {
-      // Get suggestions for the first mood initially
       const moodSuggestions = MoodData.getSuggestions(moodsData[0].id);
       setSuggestions(moodSuggestions);
     }
 
-    // Save to local storage for analytics
     if (typeof window !== 'undefined') {
       const savedMoods: MoodHistoryEntry[] = JSON.parse(localStorage.getItem('moodHistory') || '[]');
       moodIds.forEach(moodId => {
@@ -97,7 +95,6 @@ export default function MoodPageClient() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -173,7 +170,6 @@ export default function MoodPageClient() {
         </div>
       </motion.header>
 
-      {/* Main Content */}
       <main id="main" className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
           <OrbVisualizer key={currentMood.id} mood={currentMood} />

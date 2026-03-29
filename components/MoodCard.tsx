@@ -1,8 +1,9 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import './moodcard.css';
 
 interface Mood {
@@ -29,13 +30,27 @@ interface MoodCardProps {
   isSelected: boolean;
   onSelect: () => void;
   onDelete?: (moodId: string) => void;
-  onKeyDown?: (event: any) => void;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
   selectionRole?: string;
   ariaLabel?: string;
 }
 
 export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDown }: MoodCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme === 'dark';
+
+  const cardBg = isSelected
+    ? isDark
+      ? 'rgba(35,35,52,0.92)'
+      : 'rgba(255,255,255,0.95)'
+    : isDark
+      ? 'rgba(18,18,32,0.65)'
+      : 'rgba(255,255,255,0.25)';
+
+  const labelColor = isSelected ? (isDark ? '#f3f4f6' : '#1f2937') : '#ffffff';
 
   return (
     <motion.div
@@ -60,20 +75,19 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDow
       onClick={onSelect}
       className="relative aspect-square w-full rounded-3xl p-4 sm:p-6 flex flex-col items-center justify-center cursor-pointer overflow-hidden group backdrop-blur-md border-2"
       style={{
-        background: isSelected
-          ? 'hsl(var(--card) / 0.96)'
-          : 'hsl(var(--card) / 0.58)',
-        borderColor: isSelected ? mood.color : 'hsl(var(--border) / 0.8)',
+        background: cardBg,
+        borderColor: isSelected ? mood.color : isDark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.3)',
         boxShadow: isSelected
           ? `0 20px 45px ${mood.color}50`
-          : '0 10px 30px rgba(0,0,0,0.12)',
+          : isDark
+            ? '0 10px 28px rgba(0,0,0,0.45)'
+            : '0 10px 30px rgba(0,0,0,0.12)',
       }}
       tabIndex={0}
       role="button"
       aria-pressed={isSelected}
       aria-label={`Mood: ${mood.name}`}
     >
-      {/* Delete Button */}
       {onDelete && mood.isCustom && (
         <motion.div
           className="absolute top-2 right-2 z-20"
@@ -95,7 +109,6 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDow
         </motion.div>
       )}
 
-      {/* Emoji */}
       <motion.div
         className="text-4xl sm:text-5xl mb-3 relative z-10 select-none"
         animate={{
@@ -110,11 +123,10 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDow
         {mood.emoji}
       </motion.div>
 
-      {/* Mood Name */}
       <motion.div
         className="text-sm sm:text-base font-semibold relative z-10"
         animate={{
-          color: isSelected ? 'hsl(var(--foreground))' : 'hsl(var(--foreground) / 0.92)',
+          color: labelColor,
           scale: isSelected ? 1.05 : 1,
         }}
         transition={{ duration: 0.3 }}
@@ -122,7 +134,6 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDow
         {mood.name}
       </motion.div>
 
-      {/* Bottom Accent Line */}
       <motion.div
         className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 rounded-full"
         style={{

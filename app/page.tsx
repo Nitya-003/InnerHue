@@ -22,6 +22,7 @@ import FeatureRow from "@/components/landing/FeatureRow";
 import AITherapist from "@/components/AITherapist";
 import { ErrorState } from "@/components/ErrorState";
 import { SkeletonMoodCard } from "@/components/SkeletonMoodCard";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const moods = [
   {
@@ -405,6 +406,7 @@ export default function Home() {
                 <Music className="w-5 h-5 md:w-6 md:h-6 text-foreground dark:text-white" />
               </motion.div>
             </Link>
+            <ThemeToggle />
           </nav>
         </div>
       </motion.header>
@@ -419,10 +421,10 @@ export default function Home() {
             transition={{ delay: 0.4 }}
             className="text-center mb-8 scroll-mt-24"
           >
-            <h3 className="text-2xl md:text-3xl font-bold text-foreground dark:text-white mb-2">
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground dark:text-white mb-3 tracking-tight">
               How are you feeling today?
             </h3>
-            <p className="text-lg md:text-xl text-muted-foreground dark:text-gray-200 max-w-2xl mx-auto drop-shadow mb-6 leading-relaxed">
+            <p className="text-base md:text-lg text-muted-foreground dark:text-gray-200 max-w-2xl mx-auto drop-shadow mb-6 leading-relaxed">
               Choose your emotional state and discover personalized insights,
               prompts, and music to guide your reflection journey.
             </p>

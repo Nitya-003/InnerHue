@@ -25,6 +25,9 @@ const nextConfig = {
   output: shouldStaticExport ? 'export' : 'standalone',
   basePath: repoName,
   assetPrefix: repoName,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: repoName,
+  },
   transpilePackages: [
     '@react-three/fiber',
     '@react-three/drei',

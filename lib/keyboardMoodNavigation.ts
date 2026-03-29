@@ -27,7 +27,7 @@ function detectColumnCount(options: HTMLElement[]): number {
 }
 
 export function handleDirectionalMoodNavigation(
-  event: KeyboardEvent<HTMLElement>,
+  event: KeyboardEvent<Element>,
   container: HTMLElement | null
 ): HTMLElement | null {
   if (!isArrowKey(event.key) || !container) {

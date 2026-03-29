@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 import {
   BarChart,
   Bar,
@@ -26,7 +28,13 @@ const COLORS = [
 ];
 
 export default function MoodBarChart({ data }: MoodBarChartProps) {
-  // Transform data to include mood names and colors
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme === 'dark';
+  const axisMuted = isDark ? '#a1a1aa' : '#4B5563';
+  const gridStroke = isDark ? '#374151' : '#e5e7eb';
+
   const chartData = data.map((item) => {
     const moodInfo = MoodData.getMoodById(item.mood);
     return {
@@ -41,13 +49,13 @@ export default function MoodBarChart({ data }: MoodBarChartProps) {
       <h3 className="text-xl font-bold text-foreground mb-6">Mood Frequency</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 12, left: 12, bottom: 4 }}>
-          <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" horizontal={false} />
+          <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={gridStroke} />
           <XAxis type="number" hide />
           <YAxis
             dataKey="name"
             type="category"
             width={108}
-            tick={{ fill: 'hsl(var(--foreground))', fontSize: 13, fontWeight: 500 }}
+            tick={{ fill: axisMuted, fontSize: 13, fontWeight: 500 }}
             axisLine={false}
             tickLine={false}
           />
