@@ -166,10 +166,57 @@ export const useMoodStore = create<MoodStore>()(
         moodHistory: state.moodHistory,
       }),
       onRehydrateStorage: () => (state) => {
-        // Recompute stats after hydration from localStorage
         if (state) {
           state._computeStats();
         }
+        if (typeof window === 'undefined') return;
+        queueMicrotask(() => {
+          try {
+            const raw = localStorage.getItem('moodHistory');
+            if (!raw) return;
+            const legacy = JSON.parse(raw) as Array<{
+              id?: string;
+              mood: string;
+              timestamp: string;
+              date: string;
+              color?: string;
+              emotion?: string;
+            }>;
+            if (!Array.isArray(legacy)) {
+              localStorage.removeItem('moodHistory');
+              return;
+            }
+            const existingIds = new Set(
+              useMoodStore.getState().moodHistory.map(e => e.id)
+            );
+            const toAdd: MoodEntry[] = [];
+            for (const e of legacy) {
+              const entryId = e.id || crypto.randomUUID();
+              if (existingIds.has(entryId)) continue;
+              existingIds.add(entryId);
+              toAdd.push({
+                id: entryId,
+                mood: e.mood,
+                emotion: e.emotion ?? e.mood,
+                timestamp: e.timestamp,
+                date: e.date,
+                color: e.color,
+              });
+            }
+            if (toAdd.length > 0) {
+              useMoodStore.setState(s => {
+                const moodHistory = [...s.moodHistory, ...toAdd];
+                return {
+                  moodHistory,
+                  stats: computeStats(moodHistory),
+                };
+              });
+            }
+            localStorage.removeItem('moodHistory');
+          } catch {
+            localStorage.removeItem('moodHistory');
+          }
+        });
       },
     }
   )

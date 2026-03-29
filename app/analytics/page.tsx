@@ -7,80 +7,49 @@ import { ArrowLeft, Calendar, Heart, Activity, Trash2, Download, ChevronDown } f
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
-import type { MoodHistoryEntry, MoodStats as MoodStatsType } from '@/types/mood';
+import { useMoodStore, type MoodEntry } from '@/lib/useMoodStore';
 
-interface MoodEntry {
-  id?: string;
-  mood?: string;
-  emotion?: string;
-  timestamp: string;
-  date?: string;
-  color?: string;
+function getExportDateString() {
+  return new Date().toISOString().slice(0, 19).replace(/:/g, '-');
 }
 
-interface Stats {
-  totalEntries: number;
-  todayEntries: number;
-  weekEntries: number;
-  mostCommonMood: string | null;
-  moodCounts: { [key: string]: number };
-  weeklyData: MoodEntry[];
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 export default function AnalyticsPage() {
-  const [moodHistory, setMoodHistory] = useState<MoodEntry[]>([]);
-  const [stats, setStats] = useState<Stats>({
-    totalEntries: 0,
-    todayEntries: 0,
-    weekEntries: 0,
-    mostCommonMood: null,
-    moodCounts: {},
-    weeklyData: []
-  });
+  const moodHistory = useMoodStore(s => s.moodHistory);
+  const stats = useMoodStore(s => s.stats);
+  const clearHistory = useMoodStore(s => s.clearHistory);
+  const deleteMood = useMoodStore(s => s.deleteMood);
 
-  const calculateStats = useCallback((history: MoodEntry[]) => {
-    const moodCounts: { [key: string]: number } = {};
-    const today = new Date().toDateString();
-    const thisWeek: MoodHistoryEntry[] = [];
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 7);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMoodFilter, setSelectedMoodFilter] = useState('all');
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
-    history.forEach((entry) => {
-      // Support both new (emotion) and old (mood) formats
-      const moodKey = entry.emotion || entry.mood || 'unknown';
-      moodCounts[moodKey] = (moodCounts[moodKey] || 0) + 1;
-
-      const entryDate = new Date(entry.timestamp);
-      if (entryDate >= weekStart) {
-        thisWeek.push(entry);
-      }
+  const uniqueMoods = useMemo(() => {
+    const keys = new Set<string>();
+    moodHistory.forEach(e => {
+      const k = (e.emotion || e.mood || '').toLowerCase();
+      if (k) keys.add(k);
     });
+    return Array.from(keys).sort();
+  }, [moodHistory]);
 
-    const mostCommon = Object.entries(moodCounts)
-      .sort(([, a], [, b]) => b - a)[0];
-
-    setStats({
-      totalEntries: history.length,
-      todayEntries: history.filter((entry) => new Date(entry.timestamp).toDateString() === today).length,
-      weekEntries: thisWeek.length,
-      mostCommonMood: mostCommon ? mostCommon[0] : null,
-      moodCounts,
-      weeklyData: thisWeek
-    });
-  }, []);
-
-    return moodHistory.filter((entry: any) => {
+  const filteredHistory = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return moodHistory.filter(entry => {
       const moodLabel = (entry.emotion || entry.mood || '').toLowerCase();
       const notes = (entry.notes || '').toLowerCase();
-
-  useEffect(() => {
-
-    loadData();
-
+      const matchesQuery = !q || moodLabel.includes(q) || notes.includes(q);
       const matchesMood =
         selectedMoodFilter === 'all' ||
-        moodLabel === (selectedMoodFilter || '').toLowerCase();
-
+        moodLabel === selectedMoodFilter.toLowerCase();
       return matchesQuery && matchesMood;
     });
   }, [moodHistory, searchQuery, selectedMoodFilter]);
@@ -92,9 +61,7 @@ export default function AnalyticsPage() {
   };
 
   const handleDeleteEntry = (id: string) => {
-    if (id) {
-      deleteMood(id);
-    }
+    if (id) deleteMood(id);
   };
 
   const exportAsJson = () => {
@@ -115,8 +82,12 @@ export default function AnalyticsPage() {
       return s;
     };
     const headers = ['id', 'mood', 'timestamp', 'date', 'color', 'notes'];
-    const rows = data.map((entry: any) =>
-      headers.map(h => escapeCsv(h === 'mood' ? (entry.emotion ?? entry.mood) : entry[h])).join(',')
+    const rows = data.map((entry: MoodEntry) =>
+      headers.map(h => {
+        if (h === 'mood') return escapeCsv(entry.emotion ?? entry.mood);
+        const v = entry[h as keyof MoodEntry];
+        return escapeCsv(v);
+      }).join(',')
     );
     const csv = [headers.join(','), ...rows].join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -138,7 +109,6 @@ export default function AnalyticsPage() {
     return date.toLocaleDateString();
   };
 
-  // Prepare mood data for charts
   const moodData = useMemo(() => {
     return Object.entries(stats.moodCounts || {})
       .sort(([, a], [, b]) => (b as number) - (a as number))
@@ -151,7 +121,6 @@ export default function AnalyticsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
-      {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -176,11 +145,10 @@ export default function AnalyticsPage() {
             </h1>
           </div>
 
-          <div className="w-20" /> {/* Spacer */}
+          <div className="w-20" />
         </div>
       </motion.header>
 
-      {/* Main */}
       <main id="main" className="px-4 md:px-6 pb-20">
         <div className="max-w-6xl mx-auto">
           {moodHistory.length === 0 ? (
@@ -204,7 +172,6 @@ export default function AnalyticsPage() {
             </motion.div>
           ) : (
             <div className="space-y-8">
-              {/* Stats Cards */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -213,7 +180,6 @@ export default function AnalyticsPage() {
                 <MoodStats />
               </motion.div>
 
-              {/* Charts */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -224,7 +190,6 @@ export default function AnalyticsPage() {
                 <MoodBarChart data={moodData} />
               </motion.div>
 
-              {/* History Dashboard */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -240,6 +205,7 @@ export default function AnalyticsPage() {
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <button
+                        type="button"
                         onClick={() => setExportMenuOpen(prev => !prev)}
                         onBlur={() => setTimeout(() => setExportMenuOpen(false), 150)}
                         className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-700 hover:bg-purple-50 px-3 py-1.5 rounded-full transition-colors font-medium border border-purple-200 hover:border-purple-300"
@@ -251,12 +217,14 @@ export default function AnalyticsPage() {
                       {exportMenuOpen && (
                         <div className="absolute right-0 top-full mt-1 py-1 w-44 bg-white rounded-xl shadow-lg border border-gray-200 z-10">
                           <button
+                            type="button"
                             onClick={exportAsJson}
                             className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-t-lg"
                           >
                             Download as JSON
                           </button>
                           <button
+                            type="button"
                             onClick={exportAsCsv}
                             className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-b-lg"
                           >
@@ -266,6 +234,7 @@ export default function AnalyticsPage() {
                       )}
                     </div>
                     <button
+                      type="button"
                       onClick={handleClearHistory}
                       className="text-sm text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded-full transition-colors font-medium border border-transparent hover:border-red-200"
                     >
@@ -300,9 +269,14 @@ export default function AnalyticsPage() {
                       </button>
                       {uniqueMoods.map(mood => (
                         <button
-                          onClick={() => entry.id && handleDeleteEntry(entry.id, index)}
-                          className="opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                          title="Delete entry"
+                          key={mood}
+                          type="button"
+                          onClick={() => setSelectedMoodFilter(mood)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors capitalize ${
+                            selectedMoodFilter === mood
+                              ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
+                          }`}
                         >
                           {mood}
                         </button>
@@ -311,7 +285,6 @@ export default function AnalyticsPage() {
                   )}
                 </div>
 
-                {/* history cards */}
                 {filteredHistory.length === 0 ? (
                   <p className="py-6 text-center text-sm text-gray-500">
                     No reflections match your current search or filters.
@@ -320,17 +293,19 @@ export default function AnalyticsPage() {
                   <div className="space-y-3">
                     {filteredHistory.slice().reverse().slice(0, 15).map((entry, index) => (
                       <motion.div
-                        key={entry.id || index}
+                        key={entry.id}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.05 * index }}
                         className="group flex items-center justify-between rounded-xl border border-white/40 bg-white/60 p-4 shadow-sm backdrop-blur hover:bg-white/80 hover:shadow-md transition-all"
                       >
                         <div className="flex items-center space-x-4">
-                          {/* Status Dot */}
                           <div
                             className="h-3 w-3 rounded-full shadow-sm"
-                            style={{ backgroundColor: entry.color || '#ddd', boxShadow: `0 0 8px ${entry.color || '#ddd'}` }}
+                            style={{
+                              backgroundColor: entry.color || '#ddd',
+                              boxShadow: `0 0 8px ${entry.color || '#ddd'}`,
+                            }}
                           />
 
                           <div>
@@ -339,7 +314,7 @@ export default function AnalyticsPage() {
                             </div>
                             {entry.notes && (
                               <p className="mt-1 max-w-sm text-sm italic text-gray-600 line-clamp-2">
-                                "{entry.notes}"
+                                {`"${entry.notes}"`}
                               </p>
                             )}
                             <div className="text-xs font-medium text-gray-500">
@@ -350,10 +325,14 @@ export default function AnalyticsPage() {
 
                         <div className="flex items-center space-x-4">
                           <div className="hidden text-sm text-gray-400 sm:block">
-                            {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {new Date(entry.timestamp).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
                           </div>
 
                           <button
+                            type="button"
                             onClick={() => handleDeleteEntry(entry.id)}
                             className="opacity-0 p-2 text-gray-400 transition-all hover:bg-red-50 hover:text-red-500 rounded-full group-hover:opacity-100"
                             title="Delete entry"

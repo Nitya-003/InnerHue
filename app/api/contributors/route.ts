@@ -3,6 +3,16 @@ import { withRateLimit } from '@/lib/rateLimitMiddleware';
 import fs from 'fs/promises';
 import path from 'path';
 
+/** Required for `output: 'export'` static builds (Next.js 15). */
+export const revalidate = 300;
+
+const rateLimitConfig = {
+  maxRequests: 100,
+  windowMs: 15 * 60 * 1000,
+  /** Avoid `request.headers` so this route can be statically prerendered. */
+  keyGenerator: () => 'contributors-endpoint',
+} as const;
+
 export interface GitHubContributor {
   login: string;
   id: number;
@@ -129,8 +139,5 @@ export const GET = withRateLimit(
       );
     }
   },
-  {
-    maxRequests: 100, // 100 requests
-    windowMs: 15 * 60 * 1000, // per 15 minutes
-  }
+  rateLimitConfig
 );

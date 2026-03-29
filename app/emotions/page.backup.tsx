@@ -9,7 +9,7 @@ import { Heart, BarChart3, Music, ArrowLeft, Settings } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { AddMoodModal } from '@/components/AddMoodModal';
 import { MoodData } from '@/lib/moodData';
-import { CustomMoodStorage, CustomMood } from '@/lib/customMoods';
+import { CustomMood } from '@/lib/customMoods';
 
 // Enhanced mood data with categories for better color coding - now loaded dynamically
 const defaultMoods = [
@@ -136,18 +136,6 @@ export default function EmotionsPage() {
     const allMoods = MoodData.getAllMoods();
     setMoods(allMoods);
     setIsAddModalOpen(false);
-  };
-
-  // Handle custom mood deletion
-  const handleMoodDeleted = (moodId: string) => {
-    const success = CustomMoodStorage.deleteCustomMood(moodId);
-    if (success) {
-      // Reload all moods to reflect the deletion
-      const allMoods = MoodData.getAllMoods();
-      setMoods(allMoods);
-      // Remove from selected moods if it was selected
-      setSelectedMoods(prev => prev.filter(id => id !== moodId));
-    }
   };
 
   return (
@@ -328,7 +316,6 @@ export default function EmotionsPage() {
                     return prev;
                   });
                 }}
-                onDelete={handleMoodDeleted}
               />
             ))}
           </motion.div>
