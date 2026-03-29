@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Bookmark, Share2 } from 'lucide-react';
@@ -11,24 +11,28 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { MoodData, Mood, Suggestion } from '@/lib/moodData';
 import { reflectiveMoods } from '@/lib/reflectiveMoods';
 import { getTraditionalMoodId } from '@/lib/moodMapping';
-import type { MoodHistoryEntry } from '@/types/mood';
+import { useMoodStore } from '@/lib/useMoodStore';
 
 interface MoodWithMeta extends Mood {
   traditionalId?: string;
   spotifyPlaylistId?: string;
 }
 
-interface MoodPageClientProps {
-  id: string;
+export interface MoodPageClientProps {
+  routeId: string;
 }
 
-export default function MoodPageClient({ id }: MoodPageClientProps) {
+export default function MoodPageClient({ routeId }: MoodPageClientProps) {
+  const routeParams = useParams();
   const searchParams = useSearchParams();
+  const id = (routeParams?.id as string) || routeId;
   const moods = searchParams.get('moods') ?? undefined;
 
   const [moodData, setMoodData] = useState<MoodWithMeta[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
+  const [visitEntryIds, setVisitEntryIds] = useState<string[]>([]);
+  const addMood = useMoodStore(state => state.addMood);
 
   useEffect(() => {
     const moodIds = moods ? moods.split(',') : [id];
@@ -63,21 +67,16 @@ export default function MoodPageClient({ id }: MoodPageClientProps) {
       setSuggestions(moodSuggestions);
     }
 
-    if (typeof window !== 'undefined') {
-      const savedMoods: MoodHistoryEntry[] = JSON.parse(localStorage.getItem('moodHistory') || '[]');
-      moodIds.forEach(moodId => {
-        const mood = MoodData.getMoodById(moodId);
-        savedMoods.push({
-          id: crypto.randomUUID(),
-          mood: moodId,
-          timestamp: new Date().toISOString(),
-          date: new Date().toDateString(),
-          color: mood?.color
-        });
-      });
-      localStorage.setItem('moodHistory', JSON.stringify(savedMoods));
-    }
-  }, [id, moods]);
+    const ids = moodsData.map(m =>
+      addMood({
+        mood: m.id,
+        emotion: m.name,
+        date: new Date().toDateString(),
+        color: m.color,
+      })
+    );
+    setVisitEntryIds(ids);
+  }, [id, moods, addMood]);
 
   if (!moodData.length || !suggestions) {
     return (
@@ -92,6 +91,8 @@ export default function MoodPageClient({ id }: MoodPageClientProps) {
   }
 
   const currentMood = moodData[currentMoodIndex];
+  const entryIdForPanel =
+    visitEntryIds[currentMoodIndex] ?? visitEntryIds[0];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -176,6 +177,7 @@ export default function MoodPageClient({ id }: MoodPageClientProps) {
           <SuggestionPanel
             suggestions={suggestions}
             mood={currentMood}
+            entryId={entryIdForPanel}
             onRefresh={async () => {
               const suggestionId = currentMood.traditionalId || currentMood.id;
               setSuggestions(MoodData.getSuggestions(suggestionId));
@@ -183,7 +185,6 @@ export default function MoodPageClient({ id }: MoodPageClientProps) {
           />
         </div>
       </main>
-
     </div>
   );
 }

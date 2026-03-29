@@ -23,11 +23,15 @@ function MoodPageFallback() {
   );
 }
 
+/**
+ * `MoodPageClient` reads `?moods=` via `useSearchParams()` (no `await searchParams` here
+ * so the route stays statically exportable).
+ */
 export default async function MoodPage({ params }: MoodPageProps) {
   const { id } = await params;
   return (
     <Suspense fallback={<MoodPageFallback />}>
-      <MoodPageClient id={id} />
+      <MoodPageClient routeId={id} />
     </Suspense>
   );
 }

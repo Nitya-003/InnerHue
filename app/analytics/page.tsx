@@ -10,16 +10,6 @@ import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
 import { useMoodStore } from '@/lib/useMoodStore';
 
-interface MoodEntry {
-  id: string;
-  mood?: string;
-  emotion?: string;
-  timestamp: string;
-  date?: string;
-  color?: string;
-  notes?: string;
-}
-
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -34,7 +24,7 @@ function getExportDateString() {
 }
 
 export default function AnalyticsPage() {
-  const moodHistory = useMoodStore(s => s.moodHistory) as MoodEntry[];
+  const moodHistory = useMoodStore(s => s.moodHistory);
   const stats = useMoodStore(s => s.stats);
   const deleteMood = useMoodStore(s => s.deleteMood);
   const clearHistory = useMoodStore(s => s.clearHistory);
