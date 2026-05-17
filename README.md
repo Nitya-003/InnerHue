@@ -5,6 +5,7 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 <div align="center">
 
 ![Apertre 3.0](https://img.shields.io/badge/Apertre_3.0-Contributor_Favorite-FF4B2B?style=for-the-badge&logo=opensourceinitiative&logoColor=white)
+![SSoC Season 5](https://img.shields.io/badge/SSoC_S5-Selected-8A2BE2?style=for-the-badge&logo=open-source-initiative&logoColor=white)
 ![Open Source Love](https://img.shields.io/badge/Open_Source-❤️-pink?style=for-the-badge)
 
 </div>
