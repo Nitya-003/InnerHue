@@ -1,8 +1,8 @@
-# 🎨 InnerHue Design System
+# InnerHue Design System
 
 This document outlines the design standards and specifications for InnerHue, ensuring consistency across all components and features.
 
-## 🌈 Emotional Color Palette
+## Emotional Color Palette
 
 InnerHue uses a carefully curated color palette that corresponds to emotional states. Each emotion has a primary color and a glow variant for visual effects.
 
@@ -16,7 +16,7 @@ InnerHue uses a carefully curated color palette that corresponds to emotional st
 
 **Note:** These colors are custom and not mapped to standard Tailwind classes. Use the HEX values directly in styles or define custom CSS variables if needed.
 
-## 🔮 Glassmorphism Specifications
+## Glassmorphism Specifications
 
 InnerHue employs glassmorphism effects to create depth and modern aesthetics. Use these standard values for consistent visual hierarchy.
 
@@ -34,7 +34,7 @@ InnerHue employs glassmorphism effects to create depth and modern aesthetics. Us
 - **Medium:** `border-white/40`
 - **Accent:** `border-purple-300` (for selected states)
 
-## 🎭 Animation Presets
+## Animation Presets
 
 All animations use Framer Motion for smooth, professional transitions. Stick to these presets for consistency.
 
@@ -48,7 +48,7 @@ All animations use Framer Motion for smooth, professional transitions. Stick to 
 - **Quick Pulse:** `duration: 2, ease: "easeInOut", repeat: Infinity`
 - **Fade In:** `duration: 0.3, ease: "easeOut"`
 
-## 📝 Typography
+## Typography
 
 InnerHue uses the Inter font family for clean, modern typography.
 
