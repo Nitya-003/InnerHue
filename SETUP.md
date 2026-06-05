@@ -1,10 +1,10 @@
-# 🛠️ InnerHue Setup Guide
+# InnerHue Setup Guide
 
 Complete environment configuration and development setup for InnerHue.
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Node.js**: 18.x or higher (LTS recommended)
 - **npm**: 9.x or higher (comes with Node.js)
@@ -20,7 +20,7 @@ git --version     # Should show 2.x.x or higher
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 For most developers, these three commands are all you need:
 
@@ -35,7 +35,7 @@ Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🔧 Detailed Setup
+## Detailed Setup
 
 ### 1. Clone the Repository
 
@@ -84,7 +84,7 @@ The app will be available at:
 
 ---
 
-## 📦 Available Scripts
+## Available Scripts
 
 | Command | Description |
 |---------|-------------|
@@ -96,7 +96,7 @@ The app will be available at:
 
 ---
 
-## 🐳 Docker Setup (Optional)
+## Docker Setup (Optional)
 
 If you prefer containerized development:
 
@@ -119,7 +119,7 @@ docker-compose up
 
 ---
 
-## 🧪 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -172,7 +172,7 @@ If `npm run build` fails:
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 innerhue/
@@ -207,7 +207,7 @@ innerhue/
 
 ---
 
-## 🔌 IDE Setup
+## IDE Setup
 
 ### VS Code Extensions (Recommended)
 
@@ -234,7 +234,7 @@ Add to your `.vscode/settings.json`:
 
 ---
 
-## 🌐 Browser Support
+## Browser Support
 
 InnerHue supports:
 - Chrome 90+
@@ -244,7 +244,7 @@ InnerHue supports:
 
 ---
 
-## 📝 Contributing Setup
+## Contributing Setup
 
 1. Fork the repository
 2. Create your feature branch: `git checkout -b feature/amazing-feature`
@@ -256,13 +256,13 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 
 ---
 
-## ❓ Need Help?
+## Need Help?
 
-- 📖 Check the [README.md](./README.md) for project overview
-- 🎨 Review [Design.md](./Design.md) for design guidelines
-- 🐛 Open an issue on GitHub
-- 💬 Join our community discussions
+- Check the [README.md](./README.md) for project overview
+- Review [Design.md](./Design.md) for design guidelines
+- Open an issue on GitHub
+- Join our community discussions
 
 ---
 
-**Happy coding!** 🌈✨
+**Happy coding!** 
