@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { motion } from 'framer-motion';
 import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music } from 'lucide-react';
@@ -14,6 +14,7 @@ import { QuoteCard } from '@/components/QuoteCard';
 import { QuoteSkeleton } from '@/components/QuoteSkeleton';
 import { Quote } from '@/data/fallbackQuotes';
 import { Mood, Suggestion } from '@/types/mood';
+import { MoodQuoteCard } from '@/components/MoodQuoteCard';
 
 interface SuggestionPanelProps {
   suggestions: Suggestion;
@@ -100,26 +101,14 @@ export function SuggestionPanel({
           />
         ) : null
       ) : (
-        // Legacy Static Fallback (if props not provided)
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50 dark:border-gray-700/50"
-        >
-          <div className="flex items-start space-x-3 relative">
-            <div className="p-2 rounded-lg bg-pink-100 dark:bg-pink-900/50">
-              <QuoteIcon className="w-5 h-5 text-pink-600 dark:text-pink-400" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Inspirational Quote</h4>
-              <blockquote className="text-gray-700 dark:text-gray-300 italic leading-relaxed mb-2">
-                &ldquo;{suggestions.quote}&rdquo;
-              </blockquote>
-              <cite className="text-sm text-gray-500 dark:text-gray-400">— {suggestions.author}</cite>
-            </div>
-          </div>
-        </motion.div>
+        // Interactive Mood-Based Quote Card
+        <MoodQuoteCard
+          moodId={mood.id}
+          moodColor={mood.color}
+          moodGlow={mood.glow}
+          fallbackQuote={suggestions.quote}
+          fallbackAuthor={suggestions.author}
+        />
       )}
 
         {/* Keywords Cloud */}

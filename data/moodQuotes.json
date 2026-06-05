@@ -1,0 +1,120 @@
+{
+  "happy": [
+    {
+      "content": "Happiness is not something ready-made. It comes from your own actions.",
+      "author": "Dalai Lama"
+    },
+    {
+      "content": "The secret of happiness is not in doing what one likes, but in liking what one does.",
+      "author": "James M. Barrie"
+    },
+    {
+      "content": "Joy is not in things; it is in us.",
+      "author": "Richard Wagner"
+    },
+    {
+      "content": "For every minute you are angry you lose sixty seconds of happiness.",
+      "author": "Ralph Waldo Emerson"
+    }
+  ],
+  "sad": [
+    {
+      "content": "The cure for anything is salt water: sweat, tears or the sea.",
+      "author": "Isak Dinesen"
+    },
+    {
+      "content": "The soul would have no rainbow had the eyes no tears.",
+      "author": "John Vance Cheney"
+    },
+    {
+      "content": "Heavy hearts, like heavy clouds in the sky, are best relieved by the letting of a little water.",
+      "author": "Antoine de Saint-Exupéry"
+    },
+    {
+      "content": "Sadness flies away on the wings of time.",
+      "author": "Jean de La Fontaine"
+    }
+  ],
+  "anxious": [
+    {
+      "content": "You don't have to control your thoughts. You just have to stop letting them control you.",
+      "author": "Dan Millman"
+    },
+    {
+      "content": "Anxiety is the dizziness of freedom.",
+      "author": "Søren Kierkegaard"
+    },
+    {
+      "content": "Breathe. Reset. Continue.",
+      "author": "InnerHue"
+    },
+    {
+      "content": "Do not anticipate trouble, or worry about what may never happen. Keep in the sunlight.",
+      "author": "Benjamin Franklin"
+    }
+  ],
+  "calm": [
+    {
+      "content": "Peace comes from within. Do not seek it without.",
+      "author": "Buddha"
+    },
+    {
+      "content": "Adopt the pace of nature: her secret is patience.",
+      "author": "Ralph Waldo Emerson"
+    },
+    {
+      "content": "Quiet the mind and the soul will speak.",
+      "author": "Ma Jaya Sati Bhagavati"
+    },
+    {
+      "content": "Calmness is the cradle of power.",
+      "author": "Josiah Gilbert Holland"
+    }
+  ],
+  "motivated": [
+    {
+      "content": "The only way to do great work is to love what you do.",
+      "author": "Steve Jobs"
+    },
+    {
+      "content": "Believe you can and you're halfway there.",
+      "author": "Theodore Roosevelt"
+    },
+    {
+      "content": "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+      "author": "Winston Churchill"
+    },
+    {
+      "content": "The secret of getting ahead is getting started.",
+      "author": "Mark Twain"
+    }
+  ],
+  "angry": [
+    {
+      "content": "Anger is an acid that can do more harm to the vessel in which it is stored than to anything on which it is poured.",
+      "author": "Mark Twain"
+    },
+    {
+      "content": "For every minute you remain angry, you give up sixty seconds of peace of mind.",
+      "author": "Ralph Waldo Emerson"
+    },
+    {
+      "content": "The best fighter is never angry.",
+      "author": "Lao Tzu"
+    }
+  ],
+  "general": [
+    {
+      "content": "Every emotion has its place in the human experience.",
+      "author": "Unknown"
+    },
+    {
+      "content": "Every day is a new beginning. Take a deep breath and start again.",
+      "author": "Unknown"
+    },
+    {
+      "content": "Self-awareness is the key to self-mastery.",
+      "author": "Unknown"
+    }
+  ]
+}
