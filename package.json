@@ -27,7 +27,9 @@
     "docker:run": "docker run -p 3000:3000 innerhue",
     "docker:dev": "docker compose --profile dev up innerhue-dev",
     "docker:prod": "docker compose up innerhue",
-    "docker:down": "docker compose down"
+    "docker:down": "docker compose down",
+    "prepare": "husky",
+    "prepare": "husky"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",
@@ -94,6 +96,8 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
     "@types/minimatch": "^3.0.5",
     "@types/node": "^20.0.0",
     "@types/react": "^19.0.0",
@@ -103,6 +107,7 @@
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.2.0",
     "eslint-plugin-react-hooks": "^7.0.1",
+    "husky": "^9.1.7",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.2.0"
