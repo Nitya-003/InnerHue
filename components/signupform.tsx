@@ -5,11 +5,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupSchema } from "@/lib/validation"; 
 import { z } from "zod";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { toast } from "sonner";
 
 type SignupFormData = z.infer<typeof SignupSchema>;
 
 export default function SignupForm() {
   const [serverError, setServerError] = useState<string | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -21,12 +26,27 @@ export default function SignupForm() {
 
   const onSubmit = async (data: SignupFormData) => {
     setServerError(null);
+    const toastId = toast.loading("Creating account...");
     try {
-      console.log("Submitting form:", data);
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Fake network delay
-      alert("Validation Passed! Data ready for backend.");
-    } catch (error) {
-      setServerError("Something went wrong.");
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      
+      // Update the user's profile with their name
+      await updateProfile(userCredential.user, {
+        displayName: data.name
+      });
+
+      toast.dismiss(toastId);
+      toast.success("Account Created!", {
+        description: "Welcome to InnerHue.",
+      });
+      
+      router.push("/");
+    } catch (error: any) {
+      toast.dismiss(toastId);
+      setServerError(error.message || "Something went wrong.");
+      toast.error("Signup failed", {
+        description: error.message || "Please try again.",
+      });
     }
   };
 
