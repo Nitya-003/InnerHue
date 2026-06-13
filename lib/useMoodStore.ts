@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { saveMoodToCloud, deleteMoodFromCloud } from './firebaseSync';
 
 // Types
 export interface MoodEntry {
@@ -31,6 +32,7 @@ interface MoodStore {
   updateMoodNotes: (id: string, notes: string) => void;
   deleteMood: (id: string) => void;
   clearHistory: () => void;
+  setMergedCloudMoods: (moods: MoodEntry[]) => void;
 
   // Selectors
   getMoodById: (id: string) => MoodEntry | undefined;
@@ -102,6 +104,8 @@ export const useMoodStore = create<MoodStore>()(
           timestamp: new Date().toISOString(),
         };
 
+        saveMoodToCloud(newEntry); // Async fire-and-forget
+
         set(state => {
           const newHistory = [...state.moodHistory, newEntry];
           return {
@@ -114,18 +118,28 @@ export const useMoodStore = create<MoodStore>()(
       },
 
       updateMoodNotes: (id, notes) => {
+        let updatedEntry: MoodEntry | null = null;
         set(state => {
-          const newHistory = state.moodHistory.map(entry =>
-            entry.id === id ? { ...entry, notes } : entry
-          );
+          const newHistory = state.moodHistory.map(entry => {
+            if (entry.id === id) {
+              updatedEntry = { ...entry, notes };
+              return updatedEntry;
+            }
+            return entry;
+          });
           return {
             moodHistory: newHistory,
             stats: computeStats(newHistory),
           };
         });
+        
+        if (updatedEntry) {
+          saveMoodToCloud(updatedEntry);
+        }
       },
 
       deleteMood: (id) => {
+        deleteMoodFromCloud(id); // Async fire-and-forget
         set(state => {
           const newHistory = state.moodHistory.filter(entry => entry.id !== id);
           return {
@@ -139,6 +153,23 @@ export const useMoodStore = create<MoodStore>()(
         set({
           moodHistory: [],
           stats: initialStats,
+        });
+      },
+
+      setMergedCloudMoods: (cloudMoods) => {
+        set(state => {
+          const existingIds = new Set(state.moodHistory.map(e => e.id));
+          const toAdd = cloudMoods.filter(m => !existingIds.has(m.id));
+          if (toAdd.length === 0) return state; // No new cloud moods
+
+          const newHistory = [...state.moodHistory, ...toAdd];
+          // Sort by timestamp descending
+          newHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+          
+          return {
+            moodHistory: newHistory,
+            stats: computeStats(newHistory),
+          };
         });
       },
 
