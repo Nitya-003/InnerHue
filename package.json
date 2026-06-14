@@ -13,7 +13,7 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "next.config.js",
   "directories": {
     "lib": "lib"

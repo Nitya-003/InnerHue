@@ -1,3 +1,10 @@
+import nextPwa from 'next-pwa';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const isGithubActions = process.env.GITHUB_ACTIONS || false;
 const shouldStaticExport = process.env.NEXT_OUTPUT_MODE === 'export';
 
@@ -6,8 +13,6 @@ if (isGithubActions) {
   const repo = process.env.GITHUB_REPOSITORY;
   repoName = `/${repo.split('/')[1]}`;
 }
-
-const nextPwa = require('next-pwa');
 
 const pwaOptions = {
   dest: 'public',
@@ -36,12 +41,8 @@ const nextConfig = {
   outputFileTracingRoot: __dirname,
 };
 
-// next-pwa has two API shapes across versions:
-// 1) withPWA(nextConfig) where options live under nextConfig.pwa
-// 2) withPWA(pwaOptions)(nextConfig)
 const probe = nextPwa({});
 
-module.exports =
-  typeof probe === 'function'
-    ? nextPwa(pwaOptions)(nextConfig)
-    : nextPwa({ ...nextConfig, pwa: pwaOptions });
+export default typeof probe === 'function'
+  ? nextPwa(pwaOptions)(nextConfig)
+  : nextPwa({ ...nextConfig, pwa: pwaOptions });
