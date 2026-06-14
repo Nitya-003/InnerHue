@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Target, Hash, CalendarDays, Flame } from 'lucide-react';
+import { Target, Hash, CalendarDays, Flame, TrendingUp } from 'lucide-react';
 import { ServerMoodStats } from '@/hooks/useServerAnalytics';
 
 export function MoodStats({ stats }: { stats: ServerMoodStats }) {
