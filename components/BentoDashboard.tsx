@@ -4,6 +4,8 @@ import { motion, Variants } from 'framer-motion';
 import { TrendingUp, Calendar, Heart, Target, Sparkles } from 'lucide-react';
 import { useMoodStore } from '@/lib/useMoodStore';
 import MoodBarChart from '@/components/MoodBarChart';
+import { useAuth } from '@/hooks/useAuth';
+import { ServerMoodStats, useServerAnalytics } from '@/hooks/useServerAnalytics';
 
 const cardVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -14,7 +16,12 @@ const cardVariants: Variants = {
 };
 
 export function BentoDashboard() {
-    const stats = useMoodStore(state => state.stats);
+    const { user } = useAuth();
+    const { stats: serverStats, loading } = useServerAnalytics();
+    
+    // Fallback to local stats if server fetch fails or is still loading initially
+    const localStats = useMoodStore(state => state.stats);
+    const stats = serverStats || localStats;
     const chartData = Object.entries(stats.moodCounts).map(([mood, count]) => ({
         mood,
         count

@@ -1,21 +1,20 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { TrendingUp, Calendar, Heart, Target } from 'lucide-react';
-import { useMoodStore } from '@/lib/useMoodStore';
+import { Target, Hash, CalendarDays, Flame } from 'lucide-react';
+import { ServerMoodStats } from '@/hooks/useServerAnalytics';
 
-export function MoodStats() {
-  const stats = useMoodStore(state => state.stats);
+export function MoodStats({ stats }: { stats: ServerMoodStats }) {
   const statCards = [
     {
-      icon: Heart,
+      icon: Hash,
       label: 'Total Reflections',
       value: stats.totalEntries,
       color: 'from-purple-500 to-pink-500',
       bgColor: 'bg-purple-100 dark:bg-purple-500/20'
     },
     {
-      icon: Calendar,
+      icon: CalendarDays,
       label: 'Today',
       value: stats.todayEntries,
       color: 'from-blue-500 to-cyan-500',
