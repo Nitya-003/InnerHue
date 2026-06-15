@@ -9,6 +9,7 @@ import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
 import { useMoodStore } from '@/lib/useMoodStore';
+import { useServerAnalytics } from '@/hooks/useServerAnalytics';
 
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
@@ -25,7 +26,12 @@ function getExportDateString() {
 
 export default function AnalyticsPage() {
   const moodHistory = useMoodStore(s => s.moodHistory);
-  const stats = useMoodStore(s => s.stats);
+  const { stats: serverStats, loading, error } = useServerAnalytics();
+  
+  // Fallback to local stats if server fetch fails or is still loading initially (or user is offline)
+  const localStats = useMoodStore(s => s.stats);
+  const stats = serverStats || localStats;
+
   const deleteMood = useMoodStore(s => s.deleteMood);
   const clearHistory = useMoodStore(s => s.clearHistory);
 
@@ -181,7 +187,13 @@ export default function AnalyticsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <MoodStats />
+                {loading && !serverStats ? (
+                  <div className="flex justify-center items-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                  </div>
+                ) : (
+                  <MoodStats stats={stats} />
+                )}
               </motion.div>
 
               <motion.div

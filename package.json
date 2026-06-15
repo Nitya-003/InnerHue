@@ -13,7 +13,7 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "next.config.js",
   "directories": {
     "lib": "lib"
@@ -71,8 +71,11 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
     "firebase": "^12.14.0",
+    "firebase-admin": "^14.0.0",
     "framer-motion": "^11.18.2",
     "input-otp": "^1.2.4",
+    "jose": "^5.0.0",
+    "jwks-rsa": "^3.1.0",
     "lottie-react": "^2.4.1",
     "lru-cache": "^11.2.6",
     "lucide-react": "^0.446.0",
