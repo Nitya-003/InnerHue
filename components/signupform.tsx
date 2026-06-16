@@ -56,8 +56,9 @@ export default function SignupForm() {
 
       {/* Name */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80">Full Name</label>
+        <label htmlFor="name" className="text-sm font-medium text-foreground/80 dark:text-white/80">Full Name</label>
         <input
+         id="name"
           {...register("name")}
           className="bg-background/80 dark:bg-black/20 border border-border dark:border-white/10 p-3 rounded-lg text-foreground dark:text-white placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="Aditya Patra"
@@ -67,8 +68,10 @@ export default function SignupForm() {
 
       {/* Email */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80">Email</label>
+        <label htmlFor="email" className="text-sm font-medium text-foreground/80 dark:text-white/80">Email</label>
         <input
+        id="email"
+        type="email"
           {...register("email")}
           className="bg-background/80 dark:bg-black/20 border border-border dark:border-white/10 p-3 rounded-lg text-foreground dark:text-white placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="you@example.com"
@@ -78,8 +81,9 @@ export default function SignupForm() {
 
       {/* Password */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80">Password</label>
+        <label htmlFor="password" className="text-sm font-medium text-foreground/80 dark:text-white/80">Password</label>
         <input
+          id="password"
           type="password"
           {...register("password")}
           className="bg-background/80 dark:bg-black/20 border border-border dark:border-white/10 p-3 rounded-lg text-foreground dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -89,8 +93,9 @@ export default function SignupForm() {
 
       {/* Confirm Password */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80">Confirm Password</label>
+        <label htmlFor="confirmPassword" className="text-sm font-medium text-foreground/80 dark:text-white/80">Confirm Password</label>
         <input
+          id="confirmPassword"
           type="password"
           {...register("confirmPassword")}
           className="bg-background/80 dark:bg-black/20 border border-border dark:border-white/10 p-3 rounded-lg text-foreground dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
