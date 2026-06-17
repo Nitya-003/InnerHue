@@ -52,6 +52,11 @@ A beautifully animated emotional wellness platform that helps users explore, vis
 - **Data Storage**: Local Storage for client-side persistence
 - **TypeScript**: Full type safety throughout the application
 
+## Repository structure
+
+- `frontend/`: the main Next.js application
+- `backend/`: placeholder for backend services and APIs
+
 ---
 
 ## System Architecture

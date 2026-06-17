@@ -31,13 +31,16 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
+        working-directory: ./frontend
         run: npm ci
 
       - name: Run linter
+        working-directory: ./frontend
         run: npm run lint
         
       - name: Check for critical vulnerabilities (blocking on main)
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        working-directory: ./frontend
         run: |
           echo "Checking for critical security vulnerabilities (blocking on main)..."
           npm audit --audit-level=critical --production
@@ -45,12 +48,14 @@ jobs:
 
       - name: Check for critical vulnerabilities (non-blocking on PRs/other branches)
         if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/main' }}
+        working-directory: ./frontend
         run: |
           echo "Checking for critical security vulnerabilities (non-blocking)..."
           npm audit --audit-level=critical --production || true
           echo "Security audit completed (issues logged but not blocking CI for this event)"
 
       - name: Check for TypeScript errors
+        working-directory: ./frontend
         run: npx tsc --noEmit
 
   build-and-test-docker:

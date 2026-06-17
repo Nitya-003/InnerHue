@@ -4,13 +4,16 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY frontend/package.json frontend/package-lock.json* ./
 
 # Install all dependencies
 RUN \
   if [ -f package-lock.json ]; then npm ci; \
   else npm install; \
   fi
+
+# Copy source code
+COPY frontend .
 
 # Set environment variables
 ENV NEXT_TELEMETRY_DISABLED 1

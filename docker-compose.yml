@@ -33,7 +33,7 @@ services:
     ports:
       - "3001:3000"
     volumes:
-      - .:/app
+      - ./frontend:/app
       - /app/node_modules
       - /app/.next
     environment:

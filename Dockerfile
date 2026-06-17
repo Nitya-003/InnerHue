@@ -5,7 +5,7 @@ FROM node:18-slim AS deps
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY frontend/package.json frontend/package-lock.json* ./
 
 # Install dependencies
 RUN \
@@ -21,7 +21,7 @@ FROM node:18-slim AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY frontend/package.json frontend/package-lock.json* ./
 
 # Install all dependencies (including devDependencies)
 RUN \
@@ -30,7 +30,7 @@ RUN \
   fi
 
 # Copy source code
-COPY . .
+COPY frontend .
 
 # Set environment variable for build
 ENV NEXT_TELEMETRY_DISABLED=1
