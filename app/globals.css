@@ -143,6 +143,17 @@
   button, nav, input, select, textarea {
     font-family: "Work Sans", sans-serif;
   }
+
+  /* Strong visible focus for keyboard users */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  [role="link"]:focus-visible,
+  .focusable:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--glow-purple);
+    border-radius: var(--radius);
+  }
 }
 
 @keyframes shimmer {

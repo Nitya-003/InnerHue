@@ -81,7 +81,7 @@ export function ColorPalettePicker({
           style={{
             background: `linear-gradient(135deg, ${originalColor}, ${originalGlow})`,
           }}
-          title="Original"
+          aria-label="Original color"
         >
           {!currentPalette && (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -117,7 +117,7 @@ export function ColorPalettePicker({
               style={{
                 background: `linear-gradient(135deg, ${option.primary}, ${option.glow})`,
               }}
-              title={option.name}
+              aria-label={option.name}
             >
               {isSelected && (
                 <div className="absolute inset-0 flex items-center justify-center">
