@@ -34,7 +34,7 @@ export function QuoteCard({ quote, loading, onRefresh }: QuoteCardProps) {
             onClick={onRefresh}
             disabled={loading}
             className={`p-2 rounded-full bg-card dark:bg-white/50 hover:bg-card/80 dark:hover:bg-white transition-all shadow-sm ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110 active:scale-95 text-purple-500'}`}
-            title="Refresh quote"
+            aria-label="Refresh quote"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>

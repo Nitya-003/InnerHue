@@ -376,11 +376,10 @@ export default function Home() {
           </div>
 
           <nav className="flex items-center space-x-2 md:space-x-3">
-            <Link href="/emotions">
+            <Link href="/emotions" aria-label="Custom Moods">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-1.5 md:p-2 rounded-lg bg-card/75 dark:bg-white/10 backdrop-blur-xl hover:bg-card dark:hover:bg-white/20 transition-all duration-300 border border-border/80 dark:border-white/20 flex items-center gap-2 text-foreground dark:text-white"
-                title="Custom Moods"
               >
                 <Plus className="w-5 h-5 md:w-6 md:h-6" />
                 <span className="text-sm font-medium hidden sm:block">
@@ -388,11 +387,10 @@ export default function Home() {
                 </span>
               </motion.div>
             </Link>
-            <Link href="/analytics">
+            <Link href="/analytics" aria-label="Analytics">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-card/65 dark:bg-white/5 backdrop-blur-xl hover:bg-card/90 dark:hover:bg-white/10 transition-all duration-300 border border-border/70 dark:border-white/10"
-                title="Analytics"
               >
                 <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-foreground dark:text-white" />
               </motion.div>
@@ -401,7 +399,6 @@ export default function Home() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-card/65 dark:bg-white/5 backdrop-blur-xl hover:bg-card/90 dark:hover:bg-white/10 transition-all duration-300 border border-border/70 dark:border-white/10"
-                title="Music"
               >
                 <Music className="w-5 h-5 md:w-6 md:h-6 text-foreground dark:text-white" />
               </motion.div>
@@ -468,23 +465,36 @@ export default function Home() {
                       <SkeletonMoodCard key={i} />
                     ))
                   : moods.map((mood, index) => (
-                      <MoodCard
-                        key={mood.id}
-                        mood={mood}
-                        index={index}
-                        isSelected={selectedMoods.includes(mood.id)}
-                        onSelect={() => {
-                          setSelectedMoods((prev) => {
-                            if (prev.includes(mood.id)) {
-                              return prev.filter((id) => id !== mood.id);
-                            } else if (prev.length < maxSelections) {
-                              return [...prev, mood.id];
-                            }
-                            return prev;
-                          });
-                        }}
-                      />
-                    ))}
+  <MoodCard
+    key={mood.id}
+    mood={mood}
+    index={index}
+    isSelected={selectedMoods.includes(mood.id)}
+    onSelect={() => {
+      setSelectedMoods((prev) => {
+        if (prev.includes(mood.id)) {
+          return prev.filter((id) => id !== mood.id);
+        } else if (prev.length < maxSelections) {
+          return [...prev, mood.id];
+        }
+        return prev;
+      });
+    }}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setSelectedMoods((prev) => {
+          if (prev.includes(mood.id)) {
+            return prev.filter((id) => id !== mood.id);
+          } else if (prev.length < maxSelections) {
+            return [...prev, mood.id];
+          }
+          return prev;
+        });
+      }
+    }}
+  />
+))}
               </motion.div>
             )}
           </div>
