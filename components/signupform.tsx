@@ -5,11 +5,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupSchema } from "@/lib/validation"; 
 import { z } from "zod";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { toast } from "sonner";
 
 type SignupFormData = z.infer<typeof SignupSchema>;
 
 export default function SignupForm() {
   const [serverError, setServerError] = useState<string | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -21,12 +26,27 @@ export default function SignupForm() {
 
   const onSubmit = async (data: SignupFormData) => {
     setServerError(null);
+    const toastId = toast.loading("Creating account...");
     try {
-      console.log("Submitting form:", data);
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Fake network delay
-      alert("Validation Passed! Data ready for backend.");
-    } catch (error) {
-      setServerError("Something went wrong.");
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      
+      // Update the user's profile with their name
+      await updateProfile(userCredential.user, {
+        displayName: data.name
+      });
+
+      toast.dismiss(toastId);
+      toast.success("Account Created!", {
+        description: "Welcome to InnerHue.",
+      });
+      
+      router.push("/");
+    } catch (error: any) {
+      toast.dismiss(toastId);
+      setServerError(error.message || "Something went wrong.");
+      toast.error("Signup failed", {
+        description: error.message || "Please try again.",
+      });
     }
   };
 
@@ -36,8 +56,9 @@ export default function SignupForm() {
 
       {/* Name */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80">Full Name</label>
+        <label htmlFor="name" className="text-sm font-medium text-foreground/80 dark:text-white/80">Full Name</label>
         <input
+         id="name"
           {...register("name")}
           className="bg-background/80 dark:bg-black/20 border border-border dark:border-white/10 p-3 rounded-lg text-foreground dark:text-white placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="Aditya Patra"
@@ -47,8 +68,10 @@ export default function SignupForm() {
 
       {/* Email */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80">Email</label>
+        <label htmlFor="email" className="text-sm font-medium text-foreground/80 dark:text-white/80">Email</label>
         <input
+        id="email"
+        type="email"
           {...register("email")}
           className="bg-background/80 dark:bg-black/20 border border-border dark:border-white/10 p-3 rounded-lg text-foreground dark:text-white placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="you@example.com"
@@ -58,8 +81,9 @@ export default function SignupForm() {
 
       {/* Password */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80">Password</label>
+        <label htmlFor="password" className="text-sm font-medium text-foreground/80 dark:text-white/80">Password</label>
         <input
+          id="password"
           type="password"
           {...register("password")}
           className="bg-background/80 dark:bg-black/20 border border-border dark:border-white/10 p-3 rounded-lg text-foreground dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -69,8 +93,9 @@ export default function SignupForm() {
 
       {/* Confirm Password */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80">Confirm Password</label>
+        <label htmlFor="confirmPassword" className="text-sm font-medium text-foreground/80 dark:text-white/80">Confirm Password</label>
         <input
+          id="confirmPassword"
           type="password"
           {...register("confirmPassword")}
           className="bg-background/80 dark:bg-black/20 border border-border dark:border-white/10 p-3 rounded-lg text-foreground dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"

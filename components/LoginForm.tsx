@@ -7,11 +7,15 @@ import { z } from "zod";
 import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 type LoginFormData = z.infer<typeof LoginSchema>;
 
 export default function LoginForm() {
   const [serverError, setServerError] = useState<string | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -23,22 +27,22 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     setServerError(null);
+    const toastId = toast.loading("Logging in...");
     try {
-      const toastId = toast.loading("Logging in...");
-      console.log("Logging in with:", data);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      
       toast.dismiss(toastId);
       toast.success("Welcome back!", {
         description: "You have successfully logged in.",
       });
-
-    } catch (error) {
+      
+      router.push("/"); // Redirect to home/dashboard
+    } catch (error: any) {
+      toast.dismiss(toastId);
       toast.error("Login failed", {
-        description: "Please check your email and password.",
+        description: error.message || "Please check your email and password.",
       });
+      setServerError(error.message);
     }
   };
 
