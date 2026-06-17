@@ -228,7 +228,7 @@ export function MoodQuoteCard({
               whileTap={{ scale: 0.95 }}
               className="p-1.5 rounded-full hover:bg-gray-100/10 dark:hover:bg-white/10 transition-all duration-200 shadow-sm border border-transparent hover:border-gray-200/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-gray-600 dark:text-gray-300"
               style={{ color: isHovered ? moodColor : undefined }}
-              title="New Quote"
+              aria-label="New quote"
             >
               <RefreshCw 
                 className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`}

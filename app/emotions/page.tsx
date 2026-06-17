@@ -139,7 +139,7 @@ export default function EmotionsPage() {
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center gap-4">
           <div className="flex items-center space-x-4">
-            <Link href="/">
+            <Link href="/" aria-label="Back to home">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-1.5 md:p-2 rounded-lg bg-card/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all border border-border/80 dark:border-white/20"
@@ -161,34 +161,31 @@ export default function EmotionsPage() {
               whileHover={{ scale: 1.05 }}
               onClick={() => setIsAddModalOpen(true)}
               className="p-1.5 md:p-2 rounded-lg bg-card/70 dark:bg-white/10 backdrop-blur shadow-sm hover:shadow-md transition-all border border-border/80 dark:border-white/20 flex items-center gap-2 text-foreground dark:text-white"
-              title="Custom Moods"
+              aria-label="Open custom moods"
             >
               <Plus className="w-5 h-5 md:w-6 md:h-6" />
               <span className="text-sm font-medium hidden sm:block">Custom Moods</span>
             </motion.button>
-            <Link href="/analytics">
+            <Link href="/analytics" aria-label="Analytics">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-card/55 dark:bg-white/5 backdrop-blur-xl hover:bg-card/80 dark:hover:bg-white/10 transition-all duration-300 border border-border/70 dark:border-white/10"
-                title="Analytics"
               >
                 <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-foreground dark:text-white" />
               </motion.div>
             </Link>
-            <Link href="/music">
+            <Link href="/music" aria-label="Music">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-card/55 dark:bg-white/5 backdrop-blur-xl hover:bg-card/80 dark:hover:bg-white/10 transition-all duration-300 border border-border/70 dark:border-white/10"
-                title="Music"
               >
                 <Music className="w-5 h-5 md:w-6 md:h-6 text-foreground dark:text-white" />
               </motion.div>
             </Link>
-            <Link href="/personalization">
+            <Link href="/personalization" aria-label="Personalization">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-2 rounded-full bg-card/55 dark:bg-white/5 backdrop-blur-xl hover:bg-card/80 dark:hover:bg-white/10 transition-all duration-300 border border-border/70 dark:border-white/10"
-                title="Personalization"
               >
                 <Settings className="w-5 h-5 md:w-6 md:h-6 text-foreground dark:text-white" />
               </motion.div>
@@ -265,13 +262,19 @@ export default function EmotionsPage() {
           >
             {moods.map((mood, index) => (
               <MoodCard
-                key={mood.id}
-                mood={mood}
-                index={index}
-                isSelected={selectedMoods.includes(mood.id)}
-                onSelect={() => handleMoodToggle(mood.id)}
-                onDelete={handleMoodDeleted}
-              />
+  key={mood.id}
+  mood={mood}
+  index={index}
+  isSelected={selectedMoods.includes(mood.id)}
+  onSelect={() => handleMoodToggle(mood.id)}
+  onDelete={handleMoodDeleted}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Space' || e.key === 'Spacebar') {
+      e.preventDefault();
+      handleMoodToggle(mood.id);
+    }
+  }}
+/>
             ))}
           </motion.div>
 
