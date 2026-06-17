@@ -2,6 +2,49 @@
 
 A beautifully animated emotional wellness platform that helps users explore, visualize, and understand their feelings through interactive mood tracking, 3D visualizations, and personalized insights.
 
+## 📁 Project Structure
+
+This is a **monorepo** with separate frontend and backend applications:
+
+```
+InnerHue/
+├── frontend/          # Next.js frontend application
+│   ├── app/          # Next.js app directory
+│   ├── components/   # React components
+│   ├── hooks/        # Custom hooks
+│   ├── lib/          # Utilities
+│   ├── public/       # Static assets
+│   ├── types/        # TypeScript types
+│   ├── data/         # Static data
+│   └── package.json  # Frontend dependencies
+├── backend/          # Backend API (Node.js)
+│   ├── src/         # Source code
+│   ├── package.json # Backend dependencies
+│   └── README.md    # Backend documentation
+├── package.json     # Root monorepo configuration
+└── README.md        # This file
+```
+
+### Quick Start
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+**Backend:**
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+See [frontend/README.md](frontend/README.md) and [backend/README.md](backend/README.md) for detailed documentation.
+
+---
+
 <div align="center">
 
 ![Apertre 3.0](https://img.shields.io/badge/Apertre_3.0-Contributor_Favorite-FF4B2B?style=for-the-badge&logo=opensourceinitiative&logoColor=white)
