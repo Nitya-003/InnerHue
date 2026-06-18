@@ -23,12 +23,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "install-nextjs-docs": "npx @next/codemod@canary agents-md",
     "docker:build": "docker build -t innerhue .",
     "docker:run": "docker run -p 3000:3000 innerhue",
     "docker:dev": "docker compose --profile dev up innerhue-dev",
     "docker:prod": "docker compose up innerhue",
     "docker:down": "docker compose down",
-    "prepare": "husky",
     "prepare": "husky"
   },
   "dependencies": {
