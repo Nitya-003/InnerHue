@@ -14,7 +14,6 @@ import { auth } from "@/lib/firebase";
 type LoginFormData = z.infer<typeof LoginSchema>;
 
 export default function LoginForm() {
-  const [serverError, setServerError] = useState<string | null>(null);
   const router = useRouter();
 
   const {
@@ -26,7 +25,6 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    setServerError(null);
     const toastId = toast.loading("Logging in...");
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
@@ -42,7 +40,7 @@ export default function LoginForm() {
       toast.error("Login failed", {
         description: error.message || "Please check your email and password.",
       });
-      setServerError(error.message);
+    
     }
   };
 
@@ -60,8 +58,10 @@ export default function LoginForm() {
 
       {/* Email Input Group */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80 ml-1">Email Address</label>
+        <label htmlFor="email" className="text-sm font-medium text-foreground/80 dark:text-white/80 ml-1">Email Address</label>
         <input
+          type="email"
+          id="email"
           {...register("email")}
           className="bg-background/80 dark:bg-gray-900/50 border border-border dark:border-white/10 p-3.5 rounded-xl text-foreground dark:text-white placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all duration-200 hover:border-border/80 dark:hover:border-white/20"
           placeholder="you@example.com"
@@ -71,9 +71,10 @@ export default function LoginForm() {
 
       {/* Password Input Group */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-foreground/80 dark:text-white/80 ml-1">Password</label>
+        <label htmlFor="password" className="text-sm font-medium text-foreground/80 dark:text-white/80 ml-1">Password</label>
         <input
           type="password"
+          id="password"
           {...register("password")}
           className="bg-background/80 dark:bg-gray-900/50 border border-border dark:border-white/10 p-3.5 rounded-xl text-foreground dark:text-white placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all duration-200 hover:border-border/80 dark:hover:border-white/20"
           placeholder="••••••••"
