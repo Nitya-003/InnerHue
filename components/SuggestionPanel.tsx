@@ -53,14 +53,19 @@ export function SuggestionPanel({
     }
   }, [entryId, moodHistory]);
 
-  const handleSaveNotes = () => {
-    if (!entryId) return;
-    setIsSaving(true);
-    updateMoodNotes(entryId, notes);
-    setTimeout(() => {
-      setIsSaving(false);
-    }, 1000);
-  };
+useEffect(() => {
+  if (!isSaving) return;
+  const timer = setTimeout(() => {
+    setIsSaving(false);
+  }, 1000);
+  return () => clearTimeout(timer);  //  cleanup on unmount
+}, [isSaving]);
+
+const handleSaveNotes = () => {
+  if (!entryId) return;
+  updateMoodNotes(entryId, notes);
+  setIsSaving(true);
+};
 
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
 
@@ -168,6 +173,7 @@ export function SuggestionPanel({
                   </div>
                 )}
                 <iframe
+                  title="Spotify Soundscape Player"
                   src={`https://open.spotify.com/embed/playlist/${mood.spotifyPlaylistId || '37i9dQZF1DX3Ogo9pFno96'}?utm_source=generator&theme=0`}
                   width="100%"
                   height="152"
