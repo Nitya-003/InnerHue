@@ -42,6 +42,11 @@ interface MoodStore {
   _computeStats: () => void;
 }
 
+// Storage key used by the persist middleware below. Kept as a constant so
+// the cross-tab "storage" listener (added at the bottom of this file) can't
+// drift out of sync with the persist config's `name` option.
+const MOOD_STORAGE_KEY = 'mood-storage';
+
 // Pure function for computing stats
 const computeStats = (history: MoodEntry[]): MoodStats => {
   const moodCounts: Record<string, number> = {};
@@ -191,7 +196,7 @@ export const useMoodStore = create<MoodStore>()(
       },
     }),
     {
-      name: 'mood-storage',
+      name: MOOD_STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         moodHistory: state.moodHistory,
@@ -252,3 +257,29 @@ export const useMoodStore = create<MoodStore>()(
     }
   )
 );
+
+// ---------------------------------------------------------------------------
+// Cross-tab synchronization
+// ---------------------------------------------------------------------------
+// The `persist` middleware above writes to localStorage on every `set()`,
+// but it never *listens* for changes made by other tabs/windows. Each tab
+// holds its own in-memory copy of `moodHistory`, so if Tab A adds a mood
+// entry, Tab B has no idea its in-memory state is now stale. If Tab B then
+// performs its own write (e.g. updateMoodNotes/deleteMood), Zustand's
+// `set()` merges against Tab B's *stale* state and persists that back to
+// localStorage — silently discarding Tab A's entry. This is the race
+// condition described in issue #265.
+//
+// The fix: subscribe to the native `storage` event (fired in every tab
+// *except* the one that made the write) and ask zustand/persist to
+// re-read localStorage and rehydrate the in-memory store whenever our key
+// changes underneath us.
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (event: StorageEvent) => {
+    // `event.key` is null when localStorage.clear() was called elsewhere;
+    // treat that the same as our key changing.
+    if (event.key === MOOD_STORAGE_KEY || event.key === null) {
+      useMoodStore.persist.rehydrate();
+    }
+  });
+}
