@@ -126,6 +126,7 @@ misc changes
 ## Development Workflow
 - **Setup:** Run `npm install` to install the necessary dependencies.
 - **Development:** Use `npm run dev` to launch the local development server.
+- **Next.js Docs:** Run `npm run install-nextjs-docs` to download the latest Next.js documentation locally. This creates a `.next-docs/` directory indexed in `AGENTS.md` for offline reference during development.
 - **Type Safety:** We use **TypeScript** for a robust codebase. Please ensure your code is fully typed and avoid using `any`.
 
 ---

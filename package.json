@@ -13,11 +13,13 @@
     "build": "npm run build --workspace=frontend",
     "start": "npm run start --workspace=frontend",
     "lint": "npm run lint --workspace=frontend",
+    "install-nextjs-docs": "npm run install-nextjs-docs --workspace=frontend",
     "docker:build": "docker build -t innerhue .",
     "docker:run": "docker run -p 3000:3000 innerhue",
     "docker:dev": "docker compose --profile dev up innerhue-dev",
     "docker:prod": "docker compose up innerhue",
-    "docker:down": "docker compose down"
+    "docker:down": "docker compose down",
+    "prepare": "husky"
   },
   "keywords": [
     "mood tracking",

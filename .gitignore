@@ -43,3 +43,6 @@ next-env.d.ts
 build_error.log
 build_output.log
 install_error.txt
+
+# next-agents-md
+.next-docs/
