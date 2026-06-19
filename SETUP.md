@@ -4,6 +4,15 @@ Complete environment configuration and development setup for InnerHue.
 
 ---
 
+## 📁 Project Structure
+
+InnerHue is a **monorepo** with two main applications:
+
+- **Frontend** (`/frontend`): Next.js React application
+- **Backend** (`/backend`): Node.js API server
+
+---
+
 ## Prerequisites
 
 - **Node.js**: 18.x or higher (LTS recommended)
@@ -22,16 +31,33 @@ git --version     # Should show 2.x.x or higher
 
 ## Quick Start
 
-For most developers, these three commands are all you need:
+### Clone & Setup
 
 ```bash
 git clone https://github.com/Nitya-003/innerhue.git
 cd innerhue
 npm install
+```
+
+### Run Frontend
+
+```bash
+npm run dev
+# or
+cd frontend && npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Run Backend (Optional)
+
+```bash
+cd backend
+npm install
 npm run dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) in your browser.
+Backend will run on [http://localhost:3001](http://localhost:3001)
 
 ---
 
@@ -46,11 +72,27 @@ cd innerhue
 
 ### 2. Install Dependencies
 
+Install root dependencies (for monorepo scripts):
 ```bash
 npm install
 ```
 
-This installs:
+Install frontend dependencies:
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+Install backend dependencies (optional):
+```bash
+cd backend
+npm install
+cd ..
+```
+
+### Frontend Dependencies
+
 - Next.js 14 with App Router
 - React 18
 - TypeScript
@@ -60,31 +102,68 @@ This installs:
 - shadcn/ui components
 - Recharts for analytics
 
+### Backend Dependencies
+
+To be configured based on your backend needs (Express, Fastify, etc.)
+
 ### 3. Environment Configuration
 
-Create a `.env.local` file in the project root:
+#### Frontend `.env.local` (in `/frontend`)
+
+Create a `.env.local` file in the frontend directory:
 
 ```bash
 # Optional: Add any API keys here
-# OPENAI_API_KEY=your_key_here
-# COHERE_API_KEY=your_key_here
+# NEXT_PUBLIC_FIREBASE_API_KEY=your_key_here
+# NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id_here
 ```
 
 > **Note**: InnerHue currently runs without external API keys. All data is stored locally in the browser.
 
-### 4. Start Development Server
+#### Backend `.env` (in `/backend`)
+
+Create a `.env` file in the backend directory:
+
+```bash
+PORT=3001
+NODE_ENV=development
+# Add your backend API keys here
+```
+
+### 4. Start Development
+
+#### Frontend Development Server
 
 ```bash
 npm run dev
+# or
+cd frontend && npm run dev
 ```
 
-The app will be available at:
-- Local: [http://localhost:3000](http://localhost:3000)
-- Network: Check your terminal for the network URL
+The app will be available at [http://localhost:3000](http://localhost:3000)
+
+#### Backend Development Server (Optional)
+
+```bash
+cd backend && npm run dev
+```
+
+Backend runs on [http://localhost:3001](http://localhost:3001)
 
 ---
 
 ## Available Scripts
+
+### Root Level
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start frontend development server |
+| `npm run build` | Build frontend for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Lint frontend code |
+
+### Frontend (`cd frontend`)
 
 | Command | Description |
 |---------|-------------|
@@ -92,7 +171,14 @@ The app will be available at:
 | `npm run build` | Create production build |
 | `npm run start` | Start production server (requires build first) |
 | `npm run lint` | Run ESLint for code quality |
-| `npm run lint:fix` | Fix ESLint auto-fixable issues |
+
+### Backend (`cd backend`)
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with watch mode |
+| `npm run build` | Build backend (if applicable) |
+| `npm run start` | Start production server |
 
 ---
 
