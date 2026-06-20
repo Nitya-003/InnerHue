@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -34,7 +34,22 @@ export default function MoodPageClient({ routeId }: MoodPageClientProps) {
   const [visitEntryIds, setVisitEntryIds] = useState<string[]>([]);
   const addMood = useMoodStore(state => state.addMood);
 
+  // Guards against this effect's body (specifically the addMood() calls
+  // below) running twice for the same mood-page "visit". React 18 Strict
+  // Mode intentionally mounts -> unmounts -> remounts components in dev,
+  // which re-runs this effect a second time with the same dependencies.
+  // Without this guard, every visit to a mood page wrote duplicate entries
+  // into mood-storage (visible as repeated identical entries in
+  // localStorage / the analytics history list).
+  const lastProcessedKeyRef = useRef<string | null>(null);
+
   useEffect(() => {
+    const visitKey = `${id}:${moods ?? ''}`;
+    if (lastProcessedKeyRef.current === visitKey) {
+      return;
+    }
+    lastProcessedKeyRef.current = visitKey;
+
     const moodIds = moods ? moods.split(',') : [id];
 
     const moodsData = moodIds
