@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from './useAuth';
-import { auth } from '@/lib/firebase';
+import { auth, isFirebaseConfigured } from '@/lib/firebase';
 
 export interface ServerMoodStats {
   totalEntries: number;
@@ -30,17 +30,22 @@ export function useServerAnalytics() {
 
       try {
         setLoading(true);
-        // Get the Firebase auth token to securely pass to our server
+
+        // Guard: auth is null when Firebase is not configured
+        if (!isFirebaseConfigured || !auth) {
+          throw new Error('Firebase is not configured in this environment');
+        }
+
         const token = await auth.currentUser?.getIdToken(true);
-        
+
         if (!token) {
           throw new Error('Failed to get auth token');
         }
 
         const res = await fetch('/api/analytics', {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         if (!res.ok) {
@@ -52,10 +57,11 @@ export function useServerAnalytics() {
           setStats(data);
           setError(null);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (isMounted) {
-          console.error('Error fetching server analytics:', err);
-          setError(err.message);
+          const message = err instanceof Error ? err.message : 'Unknown error';
+          console.error('Error fetching server analytics:', message);
+          setError(message);
         }
       } finally {
         if (isMounted) {
