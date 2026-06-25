@@ -23,6 +23,7 @@ import AITherapist from "@/components/AITherapist";
 import { ErrorState } from "@/components/ErrorState";
 import { SkeletonMoodCard } from "@/components/SkeletonMoodCard";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const moods = [
   {
@@ -294,17 +295,7 @@ interface Orb {
 }
 
 export default function Home() {
-  const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
-  useEffect(() => {
-  const savedMoods = localStorage.getItem("selectedMoods");
-  if (savedMoods) {
-    setSelectedMoods(JSON.parse(savedMoods));
-  }
-}, []);
-  useEffect(() => {
-  localStorage.setItem("selectedMoods", JSON.stringify(selectedMoods));
-}, [selectedMoods]);
-
+  const [selectedMoods, setSelectedMoods] = useLocalStorage<string[]>('selectedMoods', []);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const [, setOrbs] = useState<{ id: number; color: string; width: number; height: number; left: number; top: number; x: number; y: number; duration: number }[]>([]);
