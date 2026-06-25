@@ -22,6 +22,7 @@ import {
   MoodCombinationBuilder,
   VocabularyBuilder,
 } from "@/components/personalization";
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 // Mood data for the personalization features
 const moods = [
@@ -204,20 +205,8 @@ export default function PersonalizationPage() {
   const [activeTab, setActiveTab] = useState<TabType>("colors");
   const [selectedMood, setSelectedMood] = useState(moods[0]);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-
-  const [reminderEnabled, setReminderEnabled] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("moodReminderEnabled") === "true";
-    }
-    return false;
-  });
-
-  const [reminderTime, setReminderTime] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("moodReminderTime") || "20:00";
-    }
-    return "20:00";
-  });
+  const [reminderEnabled, setReminderEnabled] = useLocalStorage<boolean>('moodReminderEnabled', false);
+  const [reminderTime, setReminderTime] = useLocalStorage<string>('moodReminderTime', '20:00');
 
   useEffect(() => {
     if (!reminderEnabled) return;
@@ -231,16 +220,12 @@ export default function PersonalizationPage() {
 
       if (currentTime === reminderTime) {
         const today = new Date().toDateString();
-        const lastNotified = localStorage.getItem("moodReminderLastSent");
+        const [lastSent, setLastSent] = useLocalStorage<string>('moodReminderLastSent', '');
 
-        if (lastNotified !== today) {
-          new Notification("🌈 Time to Log Your Mood!", {
-            body: "Take a moment to reflect and log how you're feeling today 💜",
-            icon: "/favicon.ico",
-          });
-
-          localStorage.setItem("moodReminderLastSent", today);
-        }
+        if (lastSent !== today) {
+  // ...
+  setLastSent(today);
+}
       }
     }, 60000);
 
@@ -268,23 +253,19 @@ export default function PersonalizationPage() {
   } = usePersonalization();
 
   const handleReminderToggle = async () => {
-    if (!reminderEnabled) {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        alert("Please allow notifications to enable reminders.");
-        return;
-      }
+  if (!reminderEnabled) {
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      alert("Please allow notifications to enable reminders.");
+      return;
     }
+  }
+  setReminderEnabled(!reminderEnabled);
+};
 
-    const newValue = !reminderEnabled;
-    setReminderEnabled(newValue);
-    localStorage.setItem("moodReminderEnabled", String(newValue));
-  };
-
-  const handleTimeChange = (time: string) => {
-    setReminderTime(time);
-    localStorage.setItem("moodReminderTime", time);
-  };
+const handleTimeChange = (time: string) => {
+  setReminderTime(time);
+};
 
   const renderContent = () => {
     switch (activeTab) {
