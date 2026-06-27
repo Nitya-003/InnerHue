@@ -41,12 +41,13 @@ export default function SignupForm() {
       });
       
       router.push("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Something went wrong.";
       toast.dismiss(toastId);
-      setServerError(error.message || "Something went wrong.");
+      setServerError(message);
       toast.error("Signup failed", {
-        description: error.message || "Please try again.",
-      });
+       description: message,
+  });
     }
   };
 

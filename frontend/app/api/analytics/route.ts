@@ -69,8 +69,9 @@ export async function GET(request: Request) {
     };
 
     return NextResponse.json(stats);
-  } catch (error: any) {
-    console.error('Analytics API Error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
+  } catch (error: unknown) {
+  const message = error instanceof Error ? error.message : 'Internal Server Error';
+  console.error('Analytics API Error:', message);
+  return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+}
 }
