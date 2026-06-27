@@ -35,11 +35,12 @@ export default function LoginForm() {
       });
       
       router.push("/"); // Redirect to home/dashboard
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Please check your email and password.";
       toast.dismiss(toastId);
       toast.error("Login failed", {
-        description: error.message || "Please check your email and password.",
-      });
+        description: message,
+  });
     
     }
   };

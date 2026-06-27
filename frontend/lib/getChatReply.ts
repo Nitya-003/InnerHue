@@ -28,9 +28,9 @@ export async function getChatReply(
         return data.reply;
       }
     }
-  } catch (e) {
-    if (e instanceof Error && e.name === 'AbortError') {
-      throw e;
+  } catch (error: unknown) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw error;
     }
     // network / 404 on static hosting
   }

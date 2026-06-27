@@ -296,6 +296,12 @@ interface Orb {
 
 export default function Home() {
   const [selectedMoods, setSelectedMoods] = useLocalStorage<string[]>('selectedMoods', []);
+  const [isMounted, setIsMounted] = useState(false);
+
+useEffect(() => {
+  setIsMounted(true);
+}, []);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const [, setOrbs] = useState<{ id: number; color: string; width: number; height: number; left: number; top: number; x: number; y: number; duration: number }[]>([]);
@@ -460,7 +466,7 @@ export default function Home() {
     key={mood.id}
     mood={mood}
     index={index}
-    isSelected={selectedMoods.includes(mood.id)}
+    isSelected={isMounted && selectedMoods.includes(mood.id)}
     onSelect={() => {
       setSelectedMoods((prev) => {
         if (prev.includes(mood.id)) {
