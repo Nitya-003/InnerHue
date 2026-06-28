@@ -104,6 +104,17 @@ function StreakDetailModal({
         const nudgeList = generateNudges(streakData, logged);
         setNudges(nudgeList);
     }, [streakData]);
+    useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            onClose();
+        }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+    };
+    }, [onClose]);   
 
     const handleDismissNudge = () => {
         dismissNudge();
