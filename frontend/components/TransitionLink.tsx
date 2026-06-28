@@ -19,6 +19,7 @@ export function TransitionLink({ href, children, className = '', onClick }: Tran
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+    if (isTransitioning) return;
     
     // Get click position for ripple effect
     const rect = e.currentTarget.getBoundingClientRect();
@@ -33,6 +34,7 @@ export function TransitionLink({ href, children, className = '', onClick }: Tran
     // Small delay for visual feedback before navigation
     setTimeout(() => {
       router.push(href);
+      setIsTransitioning(false);
     }, 150);
   };
 
