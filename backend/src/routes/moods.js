@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { validate } from '../middleware/validate.js';
+import { createMoodSchema } from '../schemas/moodSchema.js';
 
 const router = Router();
 
@@ -9,10 +11,10 @@ router.get('/', (req, res) => {
   });
 });
 
-router.post('/', (req, res) => {
+router.post('/', validate(createMoodSchema), (req, res) => {
   res.status(201).json({
-    message: 'Mood creation endpoint ready',
-    data: null,
+    message: 'Mood created successfully',
+    data: req.validatedBody,
   });
 });
 
