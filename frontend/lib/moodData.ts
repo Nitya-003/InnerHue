@@ -17,758 +17,2392 @@ export interface Suggestion {
 export const MoodData = {
   moods: {
     happy: {
-      id: 'happy',
-      name: 'Happy',
-      emoji: '😊',
-      color: '#FFD93D',
-      glow: '#FFF176',
-      spotifyPlaylistId: '37i9dQZF1DX3rxVfibe1L0'
+      id: "happy",
+      name: "Happy",
+      emoji: "😊",
+      color: "#FFD93D",
+      glow: "#FFF176",
+      spotifyPlaylistId: "37i9dQZF1DX3rxVfibe1L0",
     },
     sad: {
-      id: 'sad',
-      name: 'Sad',
-      emoji: '😢',
-      color: '#42A5F5',
-      glow: '#64B5F6',
-      spotifyPlaylistId: '37i9dQZF1DX3YSRoSdA634'
+      id: "sad",
+      name: "Sad",
+      emoji: "😢",
+      color: "#42A5F5",
+      glow: "#64B5F6",
+      spotifyPlaylistId: "37i9dQZF1DX3YSRoSdA634",
     },
     anxious: {
-      id: 'anxious',
-      name: 'Anxious',
-      emoji: '😰',
-      color: '#FF7043',
-      glow: '#FF8A65',
-      spotifyPlaylistId: '37i9dQZF1DX1s9ktjP51O3'
+      id: "anxious",
+      name: "Anxious",
+      emoji: "😰",
+      color: "#FF7043",
+      glow: "#FF8A65",
+      spotifyPlaylistId: "37i9dQZF1DX1s9ktjP51O3",
     },
     excited: {
-      id: 'excited',
-      name: 'Excited',
-      emoji: '🤩',
-      color: '#AB47BC',
-      glow: '#BA68C8',
-      spotifyPlaylistId: '37i9dQZF1DX4eRPd9frC1m'
+      id: "excited",
+      name: "Excited",
+      emoji: "🤩",
+      color: "#AB47BC",
+      glow: "#BA68C8",
+      spotifyPlaylistId: "37i9dQZF1DX4eRPd9frC1m",
     },
     calm: {
-      id: 'calm',
-      name: 'Calm',
-      emoji: '😌',
-      color: '#66BB6A',
-      glow: '#81C784',
-      spotifyPlaylistId: '37i9dQZF1DX4sWSpwq3LiO'
+      id: "calm",
+      name: "Calm",
+      emoji: "😌",
+      color: "#66BB6A",
+      glow: "#81C784",
+      spotifyPlaylistId: "37i9dQZF1DX4sWSpwq3LiO",
     },
     angry: {
-      id: 'angry',
-      name: 'Angry',
-      emoji: '😡',
-      color: '#EF5350',
-      glow: '#E57373',
-      spotifyPlaylistId: '37i9dQZF1DX3ladn16YrLx'
+      id: "angry",
+      name: "Angry",
+      emoji: "😡",
+      color: "#EF5350",
+      glow: "#E57373",
+      spotifyPlaylistId: "37i9dQZF1DX3ladn16YrLx",
     },
     confused: {
-      id: 'confused',
-      name: 'Confused',
-      emoji: '😕',
-      color: '#FFA726',
-      glow: '#FFB74D',
-      spotifyPlaylistId: '37i9dQZF1DX8Uebhn9wzrS'
+      id: "confused",
+      name: "Confused",
+      emoji: "😕",
+      color: "#FFA726",
+      glow: "#FFB74D",
+      spotifyPlaylistId: "37i9dQZF1DX8Uebhn9wzrS",
     },
     grateful: {
-      id: 'grateful',
-      name: 'Grateful',
-      emoji: '🙏',
-      color: '#26A69A',
-      glow: '#4DB6AC',
-      spotifyPlaylistId: '37i9dQZF1DWYBO1MoTDhZI'
+      id: "grateful",
+      name: "Grateful",
+      emoji: "🙏",
+      color: "#26A69A",
+      glow: "#4DB6AC",
+      spotifyPlaylistId: "37i9dQZF1DWYBO1MoTDhZI",
     },
     lonely: {
-      id: 'lonely',
-      name: 'Lonely',
-      emoji: '😔',
-      color: '#7E57C2',
-      glow: '#9575CD',
-      spotifyPlaylistId: '37i9dQZF1DWSqBruwoIXkA'
+      id: "lonely",
+      name: "Lonely",
+      emoji: "😔",
+      color: "#7E57C2",
+      glow: "#9575CD",
+      spotifyPlaylistId: "37i9dQZF1DWSqBruwoIXkA",
     },
     hopeful: {
-      id: 'hopeful',
-      name: 'Hopeful',
-      emoji: '🌟',
-      color: '#FFCA28',
-      glow: '#FFD54F',
-      spotifyPlaylistId: '37i9dQZF1DX4fpCWaHOned'
+      id: "hopeful",
+      name: "Hopeful",
+      emoji: "🌟",
+      color: "#FFCA28",
+      glow: "#FFD54F",
+      spotifyPlaylistId: "37i9dQZF1DX4fpCWaHOned",
     },
     stressed: {
-      id: 'stressed',
-      name: 'Stressed',
-      emoji: '😤',
-      color: '#FF5722',
-      glow: '#FF6F00',
-      spotifyPlaylistId: '37i9dQZF1DWXe9gFZP0gtP'
+      id: "stressed",
+      name: "Stressed",
+      emoji: "😤",
+      color: "#FF5722",
+      glow: "#FF6F00",
+      spotifyPlaylistId: "37i9dQZF1DWXe9gFZP0gtP",
     },
     peaceful: {
-      id: 'peaceful',
-      name: 'Peaceful',
-      emoji: '🕊️',
-      color: '#4FC3F7',
-      glow: '#81D4FA',
-      spotifyPlaylistId: '37i9dQZF1DWZqd5JICZI0u'
+      id: "peaceful",
+      name: "Peaceful",
+      emoji: "🕊️",
+      color: "#4FC3F7",
+      glow: "#81D4FA",
+      spotifyPlaylistId: "37i9dQZF1DWZqd5JICZI0u",
     },
     energized: {
-      id: 'energized',
-      name: 'Energized',
-      emoji: '⚡',
-      color: '#FFEB3B',
-      glow: '#FFF176',
-      spotifyPlaylistId: '37i9dQZF1DX76Wlfdnj7AP'
+      id: "energized",
+      name: "Energized",
+      emoji: "⚡",
+      color: "#FFEB3B",
+      glow: "#FFF176",
+      spotifyPlaylistId: "37i9dQZF1DX76Wlfdnj7AP",
     },
     overwhelmed: {
-      id: 'overwhelmed',
-      name: 'Overwhelmed',
-      emoji: '🤯',
-      color: '#F06292',
-      glow: '#F48FB1',
-      spotifyPlaylistId: '37i9dQZF1DWZeKCadgRdKQ'
+      id: "overwhelmed",
+      name: "Overwhelmed",
+      emoji: "🤯",
+      color: "#F06292",
+      glow: "#F48FB1",
+      spotifyPlaylistId: "37i9dQZF1DWZeKCadgRdKQ",
     },
     content: {
-      id: 'content',
-      name: 'Content',
-      emoji: '😊',
-      color: '#AED581',
-      glow: '#C5E1A5',
-      spotifyPlaylistId: '37i9dQZF1DX4WYpdgoICN6'
+      id: "content",
+      name: "Content",
+      emoji: "😊",
+      color: "#AED581",
+      glow: "#C5E1A5",
+      spotifyPlaylistId: "37i9dQZF1DX4WYpdgoICN6",
     },
     frustrated: {
-      id: 'frustrated',
-      name: 'Frustrated',
-      emoji: '😠',
-      color: '#FF8A65',
-      glow: '#FFAB91',
-      spotifyPlaylistId: '37i9dQZF1DWTx0xog3gjnC'
+      id: "frustrated",
+      name: "Frustrated",
+      emoji: "😠",
+      color: "#FF8A65",
+      glow: "#FFAB91",
+      spotifyPlaylistId: "37i9dQZF1DWTx0xog3gjnC",
     },
     inspired: {
-      id: 'inspired',
-      name: 'Inspired',
-      emoji: '💡',
-      color: '#FFD740',
-      glow: '#FFE082',
-      spotifyPlaylistId: '37i9dQZF1DXa2SPFyPhl9V'
+      id: "inspired",
+      name: "Inspired",
+      emoji: "💡",
+      color: "#FFD740",
+      glow: "#FFE082",
+      spotifyPlaylistId: "37i9dQZF1DXa2SPFyPhl9V",
     },
     melancholy: {
-      id: 'melancholy',
-      name: 'Melancholy',
-      emoji: '🌧️',
-      color: '#90A4AE',
-      glow: '#B0BEC5',
-      spotifyPlaylistId: '37i9dQZF1DX59NCqCqJtoH'
+      id: "melancholy",
+      name: "Melancholy",
+      emoji: "🌧️",
+      color: "#90A4AE",
+      glow: "#B0BEC5",
+      spotifyPlaylistId: "37i9dQZF1DX59NCqCqJtoH",
     },
     motivated: {
-      id: 'motivated',
-      name: 'Motivated',
-      emoji: '🔥',
-      color: '#FF6D00',
-      glow: '#FF8F00',
-      spotifyPlaylistId: '37i9dQZF1DXdxcBWuJkbcy'
+      id: "motivated",
+      name: "Motivated",
+      emoji: "🔥",
+      color: "#FF6D00",
+      glow: "#FF8F00",
+      spotifyPlaylistId: "37i9dQZF1DXdxcBWuJkbcy",
     },
     vulnerable: {
-      id: 'vulnerable',
-      name: 'Vulnerable',
-      emoji: '🥺',
-      color: '#F8BBD9',
-      glow: '#FCE4EC',
-      spotifyPlaylistId: '37i9dQZF1DX36edUJpD76c'
+      id: "vulnerable",
+      name: "Vulnerable",
+      emoji: "🥺",
+      color: "#F8BBD9",
+      glow: "#FCE4EC",
+      spotifyPlaylistId: "37i9dQZF1DX36edUJpD76c",
     },
     empowered: {
-      id: 'empowered',
-      name: 'Empowered',
-      emoji: '💪',
-      color: '#6A1B9A',
-      glow: '#8E24AA',
-      spotifyPlaylistId: '37i9dQZF1DWUW2bvSkjcJ6'
+      id: "empowered",
+      name: "Empowered",
+      emoji: "💪",
+      color: "#6A1B9A",
+      glow: "#8E24AA",
+      spotifyPlaylistId: "37i9dQZF1DWUW2bvSkjcJ6",
     },
     nostalgic: {
-      id: 'nostalgic',
-      name: 'Nostalgic',
-      emoji: '📸',
-      color: '#D4A574',
-      glow: '#DDBF94',
-      spotifyPlaylistId: '37i9dQZF1DX4o1oenSJRJd'
+      id: "nostalgic",
+      name: "Nostalgic",
+      emoji: "📸",
+      color: "#D4A574",
+      glow: "#DDBF94",
+      spotifyPlaylistId: "37i9dQZF1DX4o1oenSJRJd",
     },
     jealous: {
-      id: 'jealous',
-      name: 'Jealous',
-      emoji: '😒',
-      color: '#8BC34A',
-      glow: '#9CCC65',
-      spotifyPlaylistId: '37i9dQZF1DX2pSTOxoPbx9'
+      id: "jealous",
+      name: "Jealous",
+      emoji: "😒",
+      color: "#8BC34A",
+      glow: "#9CCC65",
+      spotifyPlaylistId: "37i9dQZF1DX2pSTOxoPbx9",
     },
     proud: {
-      id: 'proud',
-      name: 'Proud',
-      emoji: '😤',
-      color: '#FF9800',
-      glow: '#FFB74D',
-      spotifyPlaylistId: '37i9dQZF1DX0SM0LYsmbMT'
+      id: "proud",
+      name: "Proud",
+      emoji: "😤",
+      color: "#FF9800",
+      glow: "#FFB74D",
+      spotifyPlaylistId: "37i9dQZF1DX0SM0LYsmbMT",
     },
     curious: {
-      id: 'curious',
-      name: 'Curious',
-      emoji: '🤔',
-      color: '#9C27B0',
-      glow: '#BA68C8',
-      spotifyPlaylistId: '37i9dQZF1DWXLeA8Omikj7'
+      id: "curious",
+      name: "Curious",
+      emoji: "🤔",
+      color: "#9C27B0",
+      glow: "#BA68C8",
+      spotifyPlaylistId: "37i9dQZF1DWXLeA8Omikj7",
     },
     bored: {
-      id: 'bored',
-      name: 'Bored',
-      emoji: '😑',
-      color: '#607D8B',
-      glow: '#78909C',
-      spotifyPlaylistId: '37i9dQZF1DX4JAvHpjipBk'
+      id: "bored",
+      name: "Bored",
+      emoji: "😑",
+      color: "#607D8B",
+      glow: "#78909C",
+      spotifyPlaylistId: "37i9dQZF1DX4JAvHpjipBk",
     },
     surprised: {
-      id: 'surprised',
-      name: 'Surprised',
-      emoji: '😲',
-      color: '#FF5722',
-      glow: '#FF7043',
-      spotifyPlaylistId: '37i9dQZF1DX2L0iB23Enbq'
+      id: "surprised",
+      name: "Surprised",
+      emoji: "😲",
+      color: "#FF5722",
+      glow: "#FF7043",
+      spotifyPlaylistId: "37i9dQZF1DX2L0iB23Enbq",
     },
     disgusted: {
-      id: 'disgusted',
-      name: 'Disgusted',
-      emoji: '🤢',
-      color: '#4CAF50',
-      glow: '#66BB6A',
-      spotifyPlaylistId: '37i9dQZF1DX3LDIBRoa8TV'
+      id: "disgusted",
+      name: "Disgusted",
+      emoji: "🤢",
+      color: "#4CAF50",
+      glow: "#66BB6A",
+      spotifyPlaylistId: "37i9dQZF1DX3LDIBRoa8TV",
     },
     embarrassed: {
-      id: 'embarrassed',
-      name: 'Embarrassed',
-      emoji: '😳',
-      color: '#E91E63',
-      glow: '#F06292',
-      spotifyPlaylistId: '37i9dQZF1DWVlYsZJXqdym'
+      id: "embarrassed",
+      name: "Embarrassed",
+      emoji: "😳",
+      color: "#E91E63",
+      glow: "#F06292",
+      spotifyPlaylistId: "37i9dQZF1DWVlYsZJXqdym",
     },
     determined: {
-      id: 'determined',
-      name: 'Determined',
-      emoji: '😤',
-      color: '#3F51B5',
-      glow: '#5C6BC0',
-      spotifyPlaylistId: '37i9dQZF1DX76Wlfdnj7AP'
+      id: "determined",
+      name: "Determined",
+      emoji: "😤",
+      color: "#3F51B5",
+      glow: "#5C6BC0",
+      spotifyPlaylistId: "37i9dQZF1DX76Wlfdnj7AP",
     },
     playful: {
-      id: 'playful',
-      name: 'Playful',
-      emoji: '😜',
-      color: '#FF4081',
-      glow: '#FF80AB',
-      spotifyPlaylistId: '37i9dQZF1DXdPec7S3qG93'
+      id: "playful",
+      name: "Playful",
+      emoji: "😜",
+      color: "#FF4081",
+      glow: "#FF80AB",
+      spotifyPlaylistId: "37i9dQZF1DXdPec7S3qG93",
     },
     dreamy: {
-      id: 'dreamy',
-      name: 'Dreamy',
-      emoji: '😴',
-      color: '#9FA8DA',
-      glow: '#C5CAE9',
-      spotifyPlaylistId: '37i9dQZF1DX2mFHE8XNn7g'
+      id: "dreamy",
+      name: "Dreamy",
+      emoji: "😴",
+      color: "#9FA8DA",
+      glow: "#C5CAE9",
+      spotifyPlaylistId: "37i9dQZF1DX2mFHE8XNn7g",
     },
     adventurous: {
-      id: 'adventurous',
-      name: 'Adventurous',
-      emoji: '🗺️',
-      color: '#FF6F00',
-      glow: '#FF8F00',
-      spotifyPlaylistId: '37i9dQZF1DWWMOmoXKqHTD'
+      id: "adventurous",
+      name: "Adventurous",
+      emoji: "🗺️",
+      color: "#FF6F00",
+      glow: "#FF8F00",
+      spotifyPlaylistId: "37i9dQZF1DWWMOmoXKqHTD",
     },
     romantic: {
-      id: 'romantic',
-      name: 'Romantic',
-      emoji: '💕',
-      color: '#E1BEE7',
-      glow: '#F3E5F5',
-      spotifyPlaylistId: '37i9dQZF1DX50QitC6McUH'
+      id: "romantic",
+      name: "Romantic",
+      emoji: "💕",
+      color: "#E1BEE7",
+      glow: "#F3E5F5",
+      spotifyPlaylistId: "37i9dQZF1DX50QitC6McUH",
     },
     creative: {
-      id: 'creative',
-      name: 'Creative',
-      emoji: '🎨',
-      color: '#FF7043',
-      glow: '#FFAB91',
-      spotifyPlaylistId: '37i9dQZF1DXdxcBWuJkbcy'
+      id: "creative",
+      name: "Creative",
+      emoji: "🎨",
+      color: "#FF7043",
+      glow: "#FFAB91",
+      spotifyPlaylistId: "37i9dQZF1DXdxcBWuJkbcy",
     },
     philosophical: {
-      id: 'philosophical',
-      name: 'Philosophical',
-      emoji: '🤯',
-      color: '#5E35B1',
-      glow: '#7E57C2',
-      spotifyPlaylistId: '37i9dQZF1DWWEJlAGA9gs0'
+      id: "philosophical",
+      name: "Philosophical",
+      emoji: "🤯",
+      color: "#5E35B1",
+      glow: "#7E57C2",
+      spotifyPlaylistId: "37i9dQZF1DWWEJlAGA9gs0",
     },
     rebellious: {
-      id: 'rebellious',
-      name: 'Rebellious',
-      emoji: '😈',
-      color: '#D32F2F',
-      glow: '#F44336',
-      spotifyPlaylistId: '37i9dQZF1DWXRqgorJj26U'
+      id: "rebellious",
+      name: "Rebellious",
+      emoji: "😈",
+      color: "#D32F2F",
+      glow: "#F44336",
+      spotifyPlaylistId: "37i9dQZF1DWXRqgorJj26U",
     },
     silly: {
-      id: 'silly',
-      name: 'Silly',
-      emoji: '🤪',
-      color: '#FFC107',
-      glow: '#FFD54F',
-      spotifyPlaylistId: '37i9dQZF1DX4pUKG1kS0hS'
-    }
+      id: "silly",
+      name: "Silly",
+      emoji: "🤪",
+      color: "#FFC107",
+      glow: "#FFD54F",
+      spotifyPlaylistId: "37i9dQZF1DX4pUKG1kS0hS",
+    },
   },
 
   suggestions: {
     happy: [
       {
-        prompt: "What moment today brought you the most joy? Describe the colors, sounds, and feelings that surrounded you.",
-        quote: "The secret of happiness is not in doing what one likes, but in liking what one does.",
+        prompt:
+          "What moment today brought you the most joy? Describe the colors, sounds, and feelings that surrounded you.",
+        quote:
+          "The secret of happiness is not in doing what one likes, but in liking what one does.",
         author: "James M. Barrie",
-        keywords: ["joy", "celebration", "gratitude", "energy", "light", "warmth", "bliss", "cheerful", "radiant", "vibrant", "elated", "euphoric", "optimistic", "sunshine", "sparkle"],
-        music: "Upbeat indie folk playlist - Artists like Vance Joy, Edward Sharpe & The Magnetic Zeros"
+        keywords: [
+          "joy",
+          "celebration",
+          "gratitude",
+          "energy",
+          "light",
+          "warmth",
+          "bliss",
+          "cheerful",
+          "radiant",
+          "vibrant",
+          "elated",
+          "euphoric",
+          "optimistic",
+          "sunshine",
+          "sparkle",
+        ],
+        music:
+          "Upbeat indie folk playlist - Artists like Vance Joy, Edward Sharpe & The Magnetic Zeros",
       },
       {
-        prompt: "Think about someone who makes you smile. Write them a letter expressing what they mean to you.",
-        quote: "Happiness is not something ready made. It comes from your own actions.",
+        prompt:
+          "Think about someone who makes you smile. Write them a letter expressing what they mean to you.",
+        quote:
+          "Happiness is not something ready made. It comes from your own actions.",
         author: "Dalai Lama",
-        keywords: ["love", "connection", "appreciation", "kindness", "friendship", "care", "affection", "devotion", "tenderness", "compassion", "warmth", "intimacy", "bonding", "cherish", "adoration"],
-        music: "Feel-good acoustic songs - Artists like Jack Johnson, Jason Mraz"
-      }
+        keywords: [
+          "love",
+          "connection",
+          "appreciation",
+          "kindness",
+          "friendship",
+          "care",
+          "affection",
+          "devotion",
+          "tenderness",
+          "compassion",
+          "warmth",
+          "intimacy",
+          "bonding",
+          "cherish",
+          "adoration",
+        ],
+        music:
+          "Feel-good acoustic songs - Artists like Jack Johnson, Jason Mraz",
+      },
     ],
     sad: [
       {
-        prompt: "Sadness often carries wisdom. What is your sadness trying to teach you right now?",
+        prompt:
+          "Sadness often carries wisdom. What is your sadness trying to teach you right now?",
         quote: "The cure for anything is salt water: sweat, tears or the sea.",
         author: "Isak Dinesen",
-        keywords: ["healing", "reflection", "depth", "compassion", "processing", "release", "grief", "melancholy", "sorrow", "tears", "mourning", "loneliness", "heavy", "vulnerable", "tender"],
-        music: "Gentle melancholic melodies - Artists like Bon Iver, Iron & Wine",
+        keywords: [
+          "healing",
+          "reflection",
+          "depth",
+          "compassion",
+          "processing",
+          "release",
+          "grief",
+          "melancholy",
+          "sorrow",
+          "tears",
+          "mourning",
+          "loneliness",
+          "heavy",
+          "vulnerable",
+          "tender",
+        ],
+        music:
+          "Gentle melancholic melodies - Artists like Bon Iver, Iron & Wine",
         breathing: {
-          technique: "Gentle Release Breathing - Honor your sadness with compassionate breaths",
-          steps: ["Inhale slowly and deeply", "Pause and acknowledge your feelings", "Exhale gently with a soft sigh", "Let tears flow if they come"],
+          technique:
+            "Gentle Release Breathing - Honor your sadness with compassionate breaths",
+          steps: [
+            "Inhale slowly and deeply",
+            "Pause and acknowledge your feelings",
+            "Exhale gently with a soft sigh",
+            "Let tears flow if they come",
+          ],
           cycles: 10,
-          intervalSeconds: 6
+          intervalSeconds: 6,
         },
         actionItem: {
           title: "Comfort Ritual",
-          description: "Create a small comfort for yourself: make tea, wrap in a soft blanket, listen to soothing music, or call someone who cares about you.",
-          timeEstimate: "15-30 minutes"
-        }
+          description:
+            "Create a small comfort for yourself: make tea, wrap in a soft blanket, listen to soothing music, or call someone who cares about you.",
+          timeEstimate: "15-30 minutes",
+        },
       },
       {
-        prompt: "Imagine your sadness as a color. What would it look like, and how might you add other colors to create something beautiful?",
+        prompt:
+          "Imagine your sadness as a color. What would it look like, and how might you add other colors to create something beautiful?",
         quote: "Tears are words that need to be written.",
         author: "Paulo Coelho",
-        keywords: ["expression", "creativity", "transformation", "art", "emotions", "beauty", "passionate", "intense", "fiery", "expressive", "dramatic", "colorful", "vivid", "artistic", "inspired"],
+        keywords: [
+          "expression",
+          "creativity",
+          "transformation",
+          "art",
+          "emotions",
+          "beauty",
+          "passionate",
+          "intense",
+          "fiery",
+          "expressive",
+          "dramatic",
+          "colorful",
+          "vivid",
+          "artistic",
+          "inspired",
+        ],
         music: "Soothing instrumental music - Max Richter, Ólafur Arnalds",
         breathing: {
-          technique: "Color Breathing - Transform sadness through visualization",
-          steps: ["Inhale blue (your sadness)", "Hold and accept this feeling", "Exhale while adding warm colors", "See beauty emerging from the mix"],
+          technique:
+            "Color Breathing - Transform sadness through visualization",
+          steps: [
+            "Inhale blue (your sadness)",
+            "Hold and accept this feeling",
+            "Exhale while adding warm colors",
+            "See beauty emerging from the mix",
+          ],
           cycles: 8,
-          intervalSeconds: 6
+          intervalSeconds: 6,
         },
         actionItem: {
           title: "Express Through Art",
-          description: "Write in a journal, draw, color, or create something that represents your feelings. No judgment, just expression.",
-          timeEstimate: "20-45 minutes"
-        }
-      }
+          description:
+            "Write in a journal, draw, color, or create something that represents your feelings. No judgment, just expression.",
+          timeEstimate: "20-45 minutes",
+        },
+      },
     ],
     anxious: [
       {
-        prompt: "What would you tell a dear friend who was feeling exactly what you're feeling right now?",
-        quote: "You have been assigned this mountain to show others it can be moved.",
+        prompt:
+          "What would you tell a dear friend who was feeling exactly what you're feeling right now?",
+        quote:
+          "You have been assigned this mountain to show others it can be moved.",
         author: "Mel Robbins",
-        keywords: ["courage", "strength", "support", "breathe", "ground", "present", "worry", "tension", "nervousness", "restless", "overwhelmed", "stressed", "uncertain", "jittery", "racing"],
+        keywords: [
+          "courage",
+          "strength",
+          "support",
+          "breathe",
+          "ground",
+          "present",
+          "worry",
+          "tension",
+          "nervousness",
+          "restless",
+          "overwhelmed",
+          "stressed",
+          "uncertain",
+          "jittery",
+          "racing",
+        ],
         music: "Calming ambient sounds - Nature sounds, lo-fi beats",
         breathing: {
-          technique: "Box Breathing - Calm your nervous system with structured breathing",
-          steps: ["Inhale slowly for 4 counts", "Hold gently for 4 counts", "Exhale slowly for 4 counts", "Hold empty for 4 counts"],
+          technique:
+            "Box Breathing - Calm your nervous system with structured breathing",
+          steps: [
+            "Inhale slowly for 4 counts",
+            "Hold gently for 4 counts",
+            "Exhale slowly for 4 counts",
+            "Hold empty for 4 counts",
+          ],
           cycles: 10,
-          intervalSeconds: 4
+          intervalSeconds: 4,
         },
         actionItem: {
           title: "Grounding Exercise",
-          description: "Name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, 1 you can taste. This brings you back to the present moment.",
-          timeEstimate: "5 minutes"
-        }
+          description:
+            "Name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, 1 you can taste. This brings you back to the present moment.",
+          timeEstimate: "5 minutes",
+        },
       },
       {
-        prompt: "List three things you can see, two things you can hear, and one thing you can touch right now.",
+        prompt:
+          "List three things you can see, two things you can hear, and one thing you can touch right now.",
         quote: "Anxiety is the dizziness of freedom.",
         author: "Søren Kierkegaard",
-        keywords: ["grounding", "mindfulness", "awareness", "calm", "focus", "safety", "present", "centered", "balanced", "serene", "peaceful", "stillness", "tranquil", "steady", "clear"],
+        keywords: [
+          "grounding",
+          "mindfulness",
+          "awareness",
+          "calm",
+          "focus",
+          "safety",
+          "present",
+          "centered",
+          "balanced",
+          "serene",
+          "peaceful",
+          "stillness",
+          "tranquil",
+          "steady",
+          "clear",
+        ],
         music: "Meditation music - Tibetan bowls, soft piano instrumentals",
         breathing: {
           technique: "4-7-8 Breathing - Reduce anxiety naturally",
-          steps: ["Inhale through nose for 4 counts", "Hold breath for 7 counts", "Exhale through mouth for 8 counts", "Feel tension melting away"],
+          steps: [
+            "Inhale through nose for 4 counts",
+            "Hold breath for 7 counts",
+            "Exhale through mouth for 8 counts",
+            "Feel tension melting away",
+          ],
           cycles: 4,
-          intervalSeconds: 19
+          intervalSeconds: 19,
         },
         actionItem: {
           title: "Worry Time Box",
-          description: "Set aside 10 minutes to write down your worries. Then close the notebook and tell yourself you'll address them during tomorrow's worry time.",
-          timeEstimate: "10 minutes"
-        }
-      }
+          description:
+            "Set aside 10 minutes to write down your worries. Then close the notebook and tell yourself you'll address them during tomorrow's worry time.",
+          timeEstimate: "10 minutes",
+        },
+      },
     ],
     excited: [
       {
-        prompt: "Channel this energy into something creative. What could you build, write, or create right now?",
+        prompt:
+          "Channel this energy into something creative. What could you build, write, or create right now?",
         quote: "The way to get started is to quit talking and begin doing.",
         author: "Walt Disney",
-        keywords: ["creation", "action", "passion", "momentum", "possibility", "adventure", "enthusiastic", "energetic", "anticipation", "thrilled", "eager", "pumped", "exhilarated", "dynamic", "electric"],
+        keywords: [
+          "creation",
+          "action",
+          "passion",
+          "momentum",
+          "possibility",
+          "adventure",
+          "enthusiastic",
+          "energetic",
+          "anticipation",
+          "thrilled",
+          "eager",
+          "pumped",
+          "exhilarated",
+          "dynamic",
+          "electric",
+        ],
         music: "High-energy electronic - Artists like ODESZA, Porter Robinson",
         breathing: {
           technique: "Excitement Breathing - Channel your creative energy",
-          steps: ["Take a quick energizing breath in", "Hold while feeling the excitement", "Exhale with a whoosh of creativity", "Feel the energy ready to create"],
+          steps: [
+            "Take a quick energizing breath in",
+            "Hold while feeling the excitement",
+            "Exhale with a whoosh of creativity",
+            "Feel the energy ready to create",
+          ],
           cycles: 12,
-          intervalSeconds: 4
+          intervalSeconds: 4,
         },
         actionItem: {
           title: "Creative Sprint",
-          description: "Start something creative right now - write 3 sentences, sketch for 5 minutes, or brainstorm 10 ideas for that project you've been thinking about.",
-          timeEstimate: "10-15 minutes"
-        }
+          description:
+            "Start something creative right now - write 3 sentences, sketch for 5 minutes, or brainstorm 10 ideas for that project you've been thinking about.",
+          timeEstimate: "10-15 minutes",
+        },
       },
       {
-        prompt: "Your excitement is contagious! Who could you share this energy with? Plan something fun with a friend or loved one.",
-        quote: "Enthusiasm is the electricity of life. How do you increase it? You turn up the connections.",
+        prompt:
+          "Your excitement is contagious! Who could you share this energy with? Plan something fun with a friend or loved one.",
+        quote:
+          "Enthusiasm is the electricity of life. How do you increase it? You turn up the connections.",
         author: "Gordon Parks",
-        keywords: ["sharing", "connection", "fun", "celebration", "enthusiasm", "joy", "social", "laughter", "playful", "outgoing", "bubbly", "animated", "spirited", "friendly", "warm"],
+        keywords: [
+          "sharing",
+          "connection",
+          "fun",
+          "celebration",
+          "enthusiasm",
+          "joy",
+          "social",
+          "laughter",
+          "playful",
+          "outgoing",
+          "bubbly",
+          "animated",
+          "spirited",
+          "friendly",
+          "warm",
+        ],
         music: "Upbeat pop anthems - Artists like Dua Lipa, The Weeknd",
         breathing: {
           technique: "Sharing Breath - Prepare to spread your excitement",
-          steps: ["Inhale joy and enthusiasm", "Hold and feel it bubble up", "Exhale with a smile", "Ready to share this energy!"],
+          steps: [
+            "Inhale joy and enthusiasm",
+            "Hold and feel it bubble up",
+            "Exhale with a smile",
+            "Ready to share this energy!",
+          ],
           cycles: 6,
-          intervalSeconds: 4
+          intervalSeconds: 4,
         },
         actionItem: {
           title: "Connection Spark",
-          description: "Text, call, or video chat someone you care about. Share something exciting that happened to you, or ask about their day with genuine enthusiasm.",
-          timeEstimate: "15-30 minutes"
-        }
+          description:
+            "Text, call, or video chat someone you care about. Share something exciting that happened to you, or ask about their day with genuine enthusiasm.",
+          timeEstimate: "15-30 minutes",
+        },
       },
       {
-        prompt: "What new adventure or challenge has been calling your name? Use this excited energy to take the first step.",
+        prompt:
+          "What new adventure or challenge has been calling your name? Use this excited energy to take the first step.",
         quote: "Life is either a daring adventure or nothing at all.",
         author: "Helen Keller",
-        keywords: ["adventure", "risk", "growth", "courage", "exploration", "boldness", "daring", "fearless", "confident", "brave", "determined", "ambitious", "pioneering", "unstoppable", "powerful"],
+        keywords: [
+          "adventure",
+          "risk",
+          "growth",
+          "courage",
+          "exploration",
+          "boldness",
+          "daring",
+          "fearless",
+          "confident",
+          "brave",
+          "determined",
+          "ambitious",
+          "pioneering",
+          "unstoppable",
+          "powerful",
+        ],
         music: "Energetic rock - Artists like Imagine Dragons, OneRepublic",
         breathing: {
           technique: "Courage Breathing - Fuel your adventurous spirit",
-          steps: ["Breathe in courage and possibility", "Hold and feel your brave heart", "Exhale any limiting thoughts", "Step forward with confidence!"],
+          steps: [
+            "Breathe in courage and possibility",
+            "Hold and feel your brave heart",
+            "Exhale any limiting thoughts",
+            "Step forward with confidence!",
+          ],
           cycles: 10,
-          intervalSeconds: 5
+          intervalSeconds: 5,
         },
         actionItem: {
           title: "First Adventure Step",
-          description: "Take one small but concrete step toward that adventure or goal you've been excited about - research, make a list, book something, or reach out to someone.",
-          timeEstimate: "20-45 minutes"
-        }
-      }
+          description:
+            "Take one small but concrete step toward that adventure or goal you've been excited about - research, make a list, book something, or reach out to someone.",
+          timeEstimate: "20-45 minutes",
+        },
+      },
     ],
     energized: [
       {
-        prompt: "You're bursting with energy! What positive action could you take right now to make the most of this feeling?",
+        prompt:
+          "You're bursting with energy! What positive action could you take right now to make the most of this feeling?",
         quote: "Energy and persistence conquer all things.",
         author: "Benjamin Franklin",
-        keywords: ["creation", "action", "passion", "momentum", "possibility", "adventure", "enthusiastic", "energetic", "anticipation", "thrilled", "eager", "pumped", "exhilarated", "dynamic", "electric"],
+        keywords: [
+          "creation",
+          "action",
+          "passion",
+          "momentum",
+          "possibility",
+          "adventure",
+          "enthusiastic",
+          "energetic",
+          "anticipation",
+          "thrilled",
+          "eager",
+          "pumped",
+          "exhilarated",
+          "dynamic",
+          "electric",
+        ],
         music: "High-energy workout music - Hip-hop and electronic beats",
         breathing: {
-          technique: "Power Breathing - Channel your energy with focused breath control",
-          steps: ["Inhale powerfully for 4 counts", "Hold with strength for 4 counts", "Exhale with force for 6 counts", "Feel the energy flow through you"],
+          technique:
+            "Power Breathing - Channel your energy with focused breath control",
+          steps: [
+            "Inhale powerfully for 4 counts",
+            "Hold with strength for 4 counts",
+            "Exhale with force for 6 counts",
+            "Feel the energy flow through you",
+          ],
           cycles: 8,
-          intervalSeconds: 4
+          intervalSeconds: 4,
         },
         actionItem: {
           title: "Energy Burst Challenge",
-          description: "Use this high energy to tackle one task you've been putting off. Start with something that can be completed quickly for immediate satisfaction.",
-          timeEstimate: "15-30 minutes"
-        }
+          description:
+            "Use this high energy to tackle one task you've been putting off. Start with something that can be completed quickly for immediate satisfaction.",
+          timeEstimate: "15-30 minutes",
+        },
       },
       {
-        prompt: "This vibrant energy is perfect for connecting with others. Who could you inspire or energize today?",
+        prompt:
+          "This vibrant energy is perfect for connecting with others. Who could you inspire or energize today?",
         quote: "The way to get started is to quit talking and begin doing.",
         author: "Walt Disney",
-        keywords: ["sharing", "connection", "fun", "celebration", "enthusiasm", "joy", "social", "laughter", "playful", "outgoing", "bubbly", "animated", "spirited", "friendly", "warm"],
+        keywords: [
+          "sharing",
+          "connection",
+          "fun",
+          "celebration",
+          "enthusiasm",
+          "joy",
+          "social",
+          "laughter",
+          "playful",
+          "outgoing",
+          "bubbly",
+          "animated",
+          "spirited",
+          "friendly",
+          "warm",
+        ],
         music: "Upbeat dance music - Artists like Calvin Harris, David Guetta",
         breathing: {
           technique: "Energizing Breath - Fuel your social connections",
-          steps: ["Quick inhale through nose for 2 counts", "Sharp exhale through mouth for 2 counts", "Repeat rapidly but controlled", "Feel the buzz of social energy"],
+          steps: [
+            "Quick inhale through nose for 2 counts",
+            "Sharp exhale through mouth for 2 counts",
+            "Repeat rapidly but controlled",
+            "Feel the buzz of social energy",
+          ],
           cycles: 15,
-          intervalSeconds: 2
+          intervalSeconds: 2,
         },
         actionItem: {
           title: "Spread the Energy",
-          description: "Send a motivating message, make that phone call, or plan something fun with a friend. Your energy is contagious - share it!",
-          timeEstimate: "10-20 minutes"
-        }
-      }
+          description:
+            "Send a motivating message, make that phone call, or plan something fun with a friend. Your energy is contagious - share it!",
+          timeEstimate: "10-20 minutes",
+        },
+      },
     ],
     calm: [
       {
-        prompt: "In this peaceful moment, what are you most grateful for? Let your mind wander to life's simple pleasures.",
+        prompt:
+          "In this peaceful moment, what are you most grateful for? Let your mind wander to life's simple pleasures.",
         quote: "Peace comes from within. Do not seek it without.",
         author: "Buddha",
-        keywords: ["serenity", "balance", "gratitude", "mindfulness", "harmony", "stillness", "tranquil", "peaceful", "gentle", "soft", "quiet", "relaxed", "content", "stable", "grounded"],
+        keywords: [
+          "serenity",
+          "balance",
+          "gratitude",
+          "mindfulness",
+          "harmony",
+          "stillness",
+          "tranquil",
+          "peaceful",
+          "gentle",
+          "soft",
+          "quiet",
+          "relaxed",
+          "content",
+          "stable",
+          "grounded",
+        ],
         music: "Peaceful classical - Ludovico Einaudi, Max Richter",
         breathing: {
-          technique: "Natural Breathing - Simply observe and appreciate each breath",
-          steps: ["Breathe naturally, no forcing", "Notice the gentle rise and fall", "Feel gratitude for this moment", "Let peace expand with each breath"],
+          technique:
+            "Natural Breathing - Simply observe and appreciate each breath",
+          steps: [
+            "Breathe naturally, no forcing",
+            "Notice the gentle rise and fall",
+            "Feel gratitude for this moment",
+            "Let peace expand with each breath",
+          ],
           cycles: 15,
-          intervalSeconds: 5
+          intervalSeconds: 5,
         },
         actionItem: {
           title: "Mindful Moment",
-          description: "Choose one simple activity (drinking tea, looking out the window, feeling your hands) and do it with complete presence and gratitude.",
-          timeEstimate: "5-10 minutes"
-        }
+          description:
+            "Choose one simple activity (drinking tea, looking out the window, feeling your hands) and do it with complete presence and gratitude.",
+          timeEstimate: "5-10 minutes",
+        },
       },
       {
-        prompt: "Take five deep breaths and notice the sensations in your body. What does true relaxation feel like to you?",
-        quote: "The present moment is the only time over which we have dominion.",
+        prompt:
+          "Take five deep breaths and notice the sensations in your body. What does true relaxation feel like to you?",
+        quote:
+          "The present moment is the only time over which we have dominion.",
         author: "Thích Nhất Hạnh",
-        keywords: ["presence", "breathing", "awareness", "relaxation", "body", "now", "mindful", "centered", "flowing", "natural", "organic", "rhythmic", "smooth", "effortless", "alive"],
-        music: "Nature sounds with soft piano - Rain, ocean waves, gentle instrumentals",
+        keywords: [
+          "presence",
+          "breathing",
+          "awareness",
+          "relaxation",
+          "body",
+          "now",
+          "mindful",
+          "centered",
+          "flowing",
+          "natural",
+          "organic",
+          "rhythmic",
+          "smooth",
+          "effortless",
+          "alive",
+        ],
+        music:
+          "Nature sounds with soft piano - Rain, ocean waves, gentle instrumentals",
         breathing: {
-          technique: "Body Scan Breathing - Connect breath with physical relaxation",
-          steps: ["Inhale and notice your shoulders", "Exhale and let them drop", "Inhale and scan your body", "Exhale and release any tension"],
+          technique:
+            "Body Scan Breathing - Connect breath with physical relaxation",
+          steps: [
+            "Inhale and notice your shoulders",
+            "Exhale and let them drop",
+            "Inhale and scan your body",
+            "Exhale and release any tension",
+          ],
           cycles: 12,
-          intervalSeconds: 5
+          intervalSeconds: 5,
         },
         actionItem: {
           title: "Digital Detox Mini",
-          description: "Put away all screens for the next 20 minutes. Sit by a window, in nature, or simply in a comfortable space without digital input.",
-          timeEstimate: "20 minutes"
-        }
+          description:
+            "Put away all screens for the next 20 minutes. Sit by a window, in nature, or simply in a comfortable space without digital input.",
+          timeEstimate: "20 minutes",
+        },
       },
       {
-        prompt: "Imagine your perfect peaceful place. Describe every detail - the sounds, smells, colors, and textures.",
+        prompt:
+          "Imagine your perfect peaceful place. Describe every detail - the sounds, smells, colors, and textures.",
         quote: "Calmness is the cradle of power.",
         author: "Josiah Gilbert Holland",
-        keywords: ["visualization", "sanctuary", "imagination", "peace", "comfort", "safety", "dreamy", "ethereal", "floating", "weightless", "transcendent", "magical", "mystical", "sacred", "divine"],
+        keywords: [
+          "visualization",
+          "sanctuary",
+          "imagination",
+          "peace",
+          "comfort",
+          "safety",
+          "dreamy",
+          "ethereal",
+          "floating",
+          "weightless",
+          "transcendent",
+          "magical",
+          "mystical",
+          "sacred",
+          "divine",
+        ],
         music: "Ambient meditation music - Singing bowls, soft chimes",
         breathing: {
-          technique: "Visualization Breathing - Breathe life into your peaceful place",
-          steps: ["Inhale and see your peaceful place", "Hold and add more details", "Exhale and feel yourself there", "Rest in this sacred space"],
+          technique:
+            "Visualization Breathing - Breathe life into your peaceful place",
+          steps: [
+            "Inhale and see your peaceful place",
+            "Hold and add more details",
+            "Exhale and feel yourself there",
+            "Rest in this sacred space",
+          ],
           cycles: 15,
-          intervalSeconds: 6
+          intervalSeconds: 6,
         },
         actionItem: {
           title: "Create a Calm Space",
-          description: "Organize or beautify one small area in your home to serve as your designated calm space. Light a candle, arrange some items mindfully.",
-          timeEstimate: "15-25 minutes"
-        }
-      }
+          description:
+            "Organize or beautify one small area in your home to serve as your designated calm space. Light a candle, arrange some items mindfully.",
+          timeEstimate: "15-25 minutes",
+        },
+      },
     ],
     angry: [
       {
-        prompt: "What boundary needs to be set or what truth needs to be spoken? How can you honor this feeling constructively?",
-        quote: "Anger is an acid that can do more harm to the vessel in which it is stored than to anything on which it is poured.",
+        prompt:
+          "What boundary needs to be set or what truth needs to be spoken? How can you honor this feeling constructively?",
+        quote:
+          "Anger is an acid that can do more harm to the vessel in which it is stored than to anything on which it is poured.",
         author: "Mark Twain",
-        keywords: ["boundaries", "justice", "power", "transformation", "release", "clarity", "rage", "fury", "frustrated", "irritated", "heated", "explosive", "intense", "fierce", "burning"],
-        music: "Cathartic rock - Artists like Foo Fighters, Queens of the Stone Age",
+        keywords: [
+          "boundaries",
+          "justice",
+          "power",
+          "transformation",
+          "release",
+          "clarity",
+          "rage",
+          "fury",
+          "frustrated",
+          "irritated",
+          "heated",
+          "explosive",
+          "intense",
+          "fierce",
+          "burning",
+        ],
+        music:
+          "Cathartic rock - Artists like Foo Fighters, Queens of the Stone Age",
         breathing: {
-          technique: "Anger Release Breathing - Transform fiery energy into clarity",
-          steps: ["Inhale deeply through nose for 4 counts", "Hold and acknowledge your anger", "Exhale forcefully through mouth", "Feel the energy transform, not disappear"],
+          technique:
+            "Anger Release Breathing - Transform fiery energy into clarity",
+          steps: [
+            "Inhale deeply through nose for 4 counts",
+            "Hold and acknowledge your anger",
+            "Exhale forcefully through mouth",
+            "Feel the energy transform, not disappear",
+          ],
           cycles: 10,
-          intervalSeconds: 4
+          intervalSeconds: 4,
         },
         actionItem: {
           title: "Boundary Setting",
-          description: "Write down what boundary needs to be set or what needs to be communicated. Plan how you'll address this respectfully but firmly.",
-          timeEstimate: "10-20 minutes"
-        }
+          description:
+            "Write down what boundary needs to be set or what needs to be communicated. Plan how you'll address this respectfully but firmly.",
+          timeEstimate: "10-20 minutes",
+        },
       },
       {
-        prompt: "Write a letter to your anger. What is it trying to protect you from? What message does it have for you?",
-        quote: "Anger, if not restrained, is frequently more hurtful to us than the injury that provokes it.",
+        prompt:
+          "Write a letter to your anger. What is it trying to protect you from? What message does it have for you?",
+        quote:
+          "Anger, if not restrained, is frequently more hurtful to us than the injury that provokes it.",
         author: "Seneca",
-        keywords: ["protection", "message", "understanding", "communication", "insight", "wisdom", "assertive", "direct", "honest", "truth", "authentic", "genuine", "real", "straightforward", "clear"],
-        music: "Intense alternative rock - Artists like Breaking Benjamin, Three Days Grace",
+        keywords: [
+          "protection",
+          "message",
+          "understanding",
+          "communication",
+          "insight",
+          "wisdom",
+          "assertive",
+          "direct",
+          "honest",
+          "truth",
+          "authentic",
+          "genuine",
+          "real",
+          "straightforward",
+          "clear",
+        ],
+        music:
+          "Intense alternative rock - Artists like Breaking Benjamin, Three Days Grace",
         breathing: {
           technique: "Understanding Breath - Listen to your anger's message",
-          steps: ["Breathe in self-compassion", "Hold and ask: what is anger protecting?", "Exhale with understanding", "Honor the message within the emotion"],
+          steps: [
+            "Breathe in self-compassion",
+            "Hold and ask: what is anger protecting?",
+            "Exhale with understanding",
+            "Honor the message within the emotion",
+          ],
           cycles: 12,
-          intervalSeconds: 5
+          intervalSeconds: 5,
         },
         actionItem: {
           title: "Anger Letter",
-          description: "Write a letter to your anger asking what it's trying to tell you. Listen without judgment. Then write a response with understanding.",
-          timeEstimate: "15-25 minutes"
-        }
+          description:
+            "Write a letter to your anger asking what it's trying to tell you. Listen without judgment. Then write a response with understanding.",
+          timeEstimate: "15-25 minutes",
+        },
       },
       {
-        prompt: "Channel this fiery energy into physical movement. How can you release this intensity in a healthy way?",
+        prompt:
+          "Channel this fiery energy into physical movement. How can you release this intensity in a healthy way?",
         quote: "The best fighter is never angry.",
         author: "Lao Tzu",
-        keywords: ["movement", "exercise", "release", "physical", "channel", "transformation", "active", "kinetic", "dynamic", "flowing", "energetic", "vigorous", "athletic", "strong", "mobile"],
+        keywords: [
+          "movement",
+          "exercise",
+          "release",
+          "physical",
+          "channel",
+          "transformation",
+          "active",
+          "kinetic",
+          "dynamic",
+          "flowing",
+          "energetic",
+          "vigorous",
+          "athletic",
+          "strong",
+          "mobile",
+        ],
         music: "High-energy workout music - Hip hop, metal, electronic dance",
         breathing: {
           technique: "Power Release Breathing - Channel anger into strength",
-          steps: ["Sharp inhale through nose", "Tense muscles while holding", "Explosive exhale while releasing tension", "Feel anger becoming power, not destruction"],
+          steps: [
+            "Sharp inhale through nose",
+            "Tense muscles while holding",
+            "Explosive exhale while releasing tension",
+            "Feel anger becoming power, not destruction",
+          ],
           cycles: 10,
-          intervalSeconds: 3
+          intervalSeconds: 3,
         },
         actionItem: {
           title: "Physical Release",
-          description: "Do something physical: push-ups, run, punch a pillow, dance intensely, or scream into a pillow. Move the energy through your body.",
-          timeEstimate: "10-30 minutes"
-        }
-      }
+          description:
+            "Do something physical: push-ups, run, punch a pillow, dance intensely, or scream into a pillow. Move the energy through your body.",
+          timeEstimate: "10-30 minutes",
+        },
+      },
     ],
     confused: [
       {
-        prompt: "Sometimes confusion is clarity waiting to emerge. What questions are most important for you to explore right now?",
-        quote: "The only way to make sense out of change is to plunge into it, move with it, and join the dance.",
+        prompt:
+          "Sometimes confusion is clarity waiting to emerge. What questions are most important for you to explore right now?",
+        quote:
+          "The only way to make sense out of change is to plunge into it, move with it, and join the dance.",
         author: "Alan Watts",
-        keywords: ["questions", "exploration", "patience", "discovery", "uncertainty", "growth", "curious", "wondering", "seeking", "puzzled", "contemplating", "searching", "investigating", "exploring", "inquiring"],
-        music: "Contemplative indie - Artists like Radiohead, Thom Yorke"
+        keywords: [
+          "questions",
+          "exploration",
+          "patience",
+          "discovery",
+          "uncertainty",
+          "growth",
+          "curious",
+          "wondering",
+          "seeking",
+          "puzzled",
+          "contemplating",
+          "searching",
+          "investigating",
+          "exploring",
+          "inquiring",
+        ],
+        music: "Contemplative indie - Artists like Radiohead, Thom Yorke",
       },
       {
-        prompt: "Confusion often signals growth. What old beliefs or patterns might be ready to evolve in your life?",
-        quote: "In the midst of winter, I found there was, within me, an invincible summer.",
+        prompt:
+          "Confusion often signals growth. What old beliefs or patterns might be ready to evolve in your life?",
+        quote:
+          "In the midst of winter, I found there was, within me, an invincible summer.",
         author: "Albert Camus",
-        keywords: ["evolution", "change", "transformation", "beliefs", "patterns", "growth", "shifting", "developing", "expanding", "learning", "adapting", "progressing", "advancing", "improving", "becoming"],
-        music: "Reflective indie folk - Artists like Bon Iver, Fleet Foxes"
+        keywords: [
+          "evolution",
+          "change",
+          "transformation",
+          "beliefs",
+          "patterns",
+          "growth",
+          "shifting",
+          "developing",
+          "expanding",
+          "learning",
+          "adapting",
+          "progressing",
+          "advancing",
+          "improving",
+          "becoming",
+        ],
+        music: "Reflective indie folk - Artists like Bon Iver, Fleet Foxes",
       },
       {
-        prompt: "What would happen if you embraced not knowing for a while? How might uncertainty become a doorway?",
-        quote: "The important thing is not to stop questioning. Curiosity has its own reason for existence.",
+        prompt:
+          "What would happen if you embraced not knowing for a while? How might uncertainty become a doorway?",
+        quote:
+          "The important thing is not to stop questioning. Curiosity has its own reason for existence.",
         author: "Albert Einstein",
-        keywords: ["embrace", "uncertainty", "doorway", "curiosity", "questioning", "mystery", "unknown", "ambiguous", "unclear", "unsure", "undefined", "open", "possibility", "potential", "maybe"],
-        music: "Ambient experimental - Artists like Brian Eno, Stars of the Lid"
-      }
+        keywords: [
+          "embrace",
+          "uncertainty",
+          "doorway",
+          "curiosity",
+          "questioning",
+          "mystery",
+          "unknown",
+          "ambiguous",
+          "unclear",
+          "unsure",
+          "undefined",
+          "open",
+          "possibility",
+          "potential",
+          "maybe",
+        ],
+        music:
+          "Ambient experimental - Artists like Brian Eno, Stars of the Lid",
+      },
     ],
     grateful: [
       {
-        prompt: "Write about a small act of kindness you witnessed or experienced recently. How did it impact you?",
-        quote: "Gratitude turns what we have into enough, and more. It turns denial into acceptance, chaos into order, confusion into clarity.",
+        prompt:
+          "Write about a small act of kindness you witnessed or experienced recently. How did it impact you?",
+        quote:
+          "Gratitude turns what we have into enough, and more. It turns denial into acceptance, chaos into order, confusion into clarity.",
         author: "Melody Beattie",
-        keywords: ["appreciation", "abundance", "kindness", "connection", "blessing", "warmth", "thankful", "grateful", "blessed", "fortunate", "rich", "fulfilled", "complete", "satisfied", "content"],
-        music: "Uplifting soul music - Artists like Leon Bridges, Aloe Blacc"
+        keywords: [
+          "appreciation",
+          "abundance",
+          "kindness",
+          "connection",
+          "blessing",
+          "warmth",
+          "thankful",
+          "grateful",
+          "blessed",
+          "fortunate",
+          "rich",
+          "fulfilled",
+          "complete",
+          "satisfied",
+          "content",
+        ],
+        music: "Uplifting soul music - Artists like Leon Bridges, Aloe Blacc",
       },
       {
-        prompt: "List five things you can see right now that you've never properly appreciated. What makes each one special?",
+        prompt:
+          "List five things you can see right now that you've never properly appreciated. What makes each one special?",
         quote: "Be thankful for what you have; you'll end up having more.",
         author: "Oprah Winfrey",
-        keywords: ["observation", "appreciation", "abundance", "awareness", "beauty", "presence", "noticing", "witnessing", "seeing", "recognizing", "perceiving", "mindful", "attentive", "conscious", "alert"],
-        music: "Warm acoustic - Artists like James Taylor, Norah Jones"
+        keywords: [
+          "observation",
+          "appreciation",
+          "abundance",
+          "awareness",
+          "beauty",
+          "presence",
+          "noticing",
+          "witnessing",
+          "seeing",
+          "recognizing",
+          "perceiving",
+          "mindful",
+          "attentive",
+          "conscious",
+          "alert",
+        ],
+        music: "Warm acoustic - Artists like James Taylor, Norah Jones",
       },
       {
-        prompt: "Think of someone who shaped your life positively. How can you honor their influence today?",
-        quote: "Gratitude is not only the greatest of virtues but the parent of all others.",
+        prompt:
+          "Think of someone who shaped your life positively. How can you honor their influence today?",
+        quote:
+          "Gratitude is not only the greatest of virtues but the parent of all others.",
         author: "Cicero",
-        keywords: ["influence", "honor", "legacy", "impact", "virtue", "remembrance", "respect", "admiration", "inspiration", "reverence", "dignity", "noble", "meaningful", "significant", "important"],
-        music: "Heartfelt indie - Artists like The Head and the Heart, Of Monsters and Men"
-      }
+        keywords: [
+          "influence",
+          "honor",
+          "legacy",
+          "impact",
+          "virtue",
+          "remembrance",
+          "respect",
+          "admiration",
+          "inspiration",
+          "reverence",
+          "dignity",
+          "noble",
+          "meaningful",
+          "significant",
+          "important",
+        ],
+        music:
+          "Heartfelt indie - Artists like The Head and the Heart, Of Monsters and Men",
+      },
     ],
     lonely: [
       {
-        prompt: "How can you extend kindness to yourself right now? What would comfort and companionship look like if it came from within?",
-        quote: "The greatest thing in the world is to know how to belong to oneself.",
+        prompt:
+          "How can you extend kindness to yourself right now? What would comfort and companionship look like if it came from within?",
+        quote:
+          "The greatest thing in the world is to know how to belong to oneself.",
         author: "Michel de Montaigne",
-        keywords: ["self-compassion", "solitude", "connection", "belonging", "understanding", "comfort"],
-        music: "Warm indie folk - Artists like Phoebe Bridgers, Julien Baker"
+        keywords: [
+          "self-compassion",
+          "solitude",
+          "connection",
+          "belonging",
+          "understanding",
+          "comfort",
+        ],
+        music: "Warm indie folk - Artists like Phoebe Bridgers, Julien Baker",
       },
       {
-        prompt: "Write a letter to your future self about this moment. What wisdom would you want to remember?",
-        quote: "Loneliness is not lack of company, loneliness is lack of purpose.",
+        prompt:
+          "Write a letter to your future self about this moment. What wisdom would you want to remember?",
+        quote:
+          "Loneliness is not lack of company, loneliness is lack of purpose.",
         author: "Guillermo Maldonado",
-        keywords: ["future", "wisdom", "purpose", "reflection", "growth", "meaning"],
-        music: "Comforting singer-songwriter - Artists like Sufjan Stevens, Elliott Smith"
+        keywords: [
+          "future",
+          "wisdom",
+          "purpose",
+          "reflection",
+          "growth",
+          "meaning",
+        ],
+        music:
+          "Comforting singer-songwriter - Artists like Sufjan Stevens, Elliott Smith",
       },
       {
-        prompt: "What's one small way you could reach out and brighten someone else's day? Sometimes giving connection helps us find it.",
-        quote: "The best way to find yourself is to lose yourself in the service of others.",
+        prompt:
+          "What's one small way you could reach out and brighten someone else's day? Sometimes giving connection helps us find it.",
+        quote:
+          "The best way to find yourself is to lose yourself in the service of others.",
         author: "Mahatma Gandhi",
-        keywords: ["giving", "reaching", "connection", "service", "empathy", "community"],
-        music: "Uplifting folk - Artists like The Lumineers, Mumford & Sons"
-      }
+        keywords: [
+          "giving",
+          "reaching",
+          "connection",
+          "service",
+          "empathy",
+          "community",
+        ],
+        music: "Uplifting folk - Artists like The Lumineers, Mumford & Sons",
+      },
     ],
     jealous: [
       {
-        prompt: "What does this jealousy reveal about what you truly value? How can you channel this energy into self-improvement?",
+        prompt:
+          "What does this jealousy reveal about what you truly value? How can you channel this energy into self-improvement?",
         quote: "Comparison is the thief of joy.",
         author: "Theodore Roosevelt",
-        keywords: ["comparison", "growth", "values", "self-worth", "transformation", "focus"],
-        music: "Introspective indie - Artists like Phoebe Bridgers, Clairo"
+        keywords: [
+          "comparison",
+          "growth",
+          "values",
+          "self-worth",
+          "transformation",
+          "focus",
+        ],
+        music: "Introspective indie - Artists like Phoebe Bridgers, Clairo",
       },
       {
-        prompt: "Instead of focusing on what others have, what can you celebrate about your own unique journey and achievements?",
-        quote: "Jealousy is simply and clearly the fear that you do not have value.",
+        prompt:
+          "Instead of focusing on what others have, what can you celebrate about your own unique journey and achievements?",
+        quote:
+          "Jealousy is simply and clearly the fear that you do not have value.",
         author: "Jennifer James",
-        keywords: ["celebration", "unique", "journey", "achievements", "value", "self-worth"],
-        music: "Empowering pop - Artists like Lizzo, Dua Lipa"
+        keywords: [
+          "celebration",
+          "unique",
+          "journey",
+          "achievements",
+          "value",
+          "self-worth",
+        ],
+        music: "Empowering pop - Artists like Lizzo, Dua Lipa",
       },
       {
-        prompt: "How can you transform this jealous energy into motivation? What specific steps could you take toward your own goals?",
-        quote: "The jealous are troublesome to others, but a torment to themselves.",
+        prompt:
+          "How can you transform this jealous energy into motivation? What specific steps could you take toward your own goals?",
+        quote:
+          "The jealous are troublesome to others, but a torment to themselves.",
         author: "William Penn",
-        keywords: ["transformation", "motivation", "goals", "action", "progress", "ambition"],
-        music: "Motivational hip-hop - Artists like Kendrick Lamar, J. Cole"
-      }
+        keywords: [
+          "transformation",
+          "motivation",
+          "goals",
+          "action",
+          "progress",
+          "ambition",
+        ],
+        music: "Motivational hip-hop - Artists like Kendrick Lamar, J. Cole",
+      },
     ],
     proud: [
       {
-        prompt: "What achievement or moment are you most proud of today? How did you overcome challenges to get there?",
-        quote: "Pride is not the opposite of shame, but its source. True humility is the only antidote to shame.",
+        prompt:
+          "What achievement or moment are you most proud of today? How did you overcome challenges to get there?",
+        quote:
+          "Pride is not the opposite of shame, but its source. True humility is the only antidote to shame.",
         author: "Uncle Iroh",
-        keywords: ["achievement", "success", "confidence", "growth", "celebration", "humility"],
-        music: "Triumphant orchestral - Epic movie soundtracks, Two Steps From Hell"
+        keywords: [
+          "achievement",
+          "success",
+          "confidence",
+          "growth",
+          "celebration",
+          "humility",
+        ],
+        music:
+          "Triumphant orchestral - Epic movie soundtracks, Two Steps From Hell",
       },
       {
-        prompt: "How can you use this sense of accomplishment to inspire and encourage others on their journey?",
+        prompt:
+          "How can you use this sense of accomplishment to inspire and encourage others on their journey?",
         quote: "Be proud of how hard you are trying.",
         author: "Unknown",
-        keywords: ["inspiration", "encouragement", "sharing", "mentoring", "support", "leadership"],
-        music: "Uplifting contemporary - Artists like Coldplay, U2"
+        keywords: [
+          "inspiration",
+          "encouragement",
+          "sharing",
+          "mentoring",
+          "support",
+          "leadership",
+        ],
+        music: "Uplifting contemporary - Artists like Coldplay, U2",
       },
       {
-        prompt: "Reflect on the person you were before this achievement. What growth and learning brought you to this moment?",
-        quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+        prompt:
+          "Reflect on the person you were before this achievement. What growth and learning brought you to this moment?",
+        quote:
+          "Success is not final, failure is not fatal: it is the courage to continue that counts.",
         author: "Winston Churchill",
-        keywords: ["growth", "learning", "journey", "courage", "perseverance", "evolution"],
-        music: "Reflective alternative - Artists like Imagine Dragons, OneRepublic"
-      }
+        keywords: [
+          "growth",
+          "learning",
+          "journey",
+          "courage",
+          "perseverance",
+          "evolution",
+        ],
+        music:
+          "Reflective alternative - Artists like Imagine Dragons, OneRepublic",
+      },
     ],
     curious: [
       {
-        prompt: "What is one thing you've always wondered about? How could you start exploring that topic today?",
+        prompt:
+          "What is one thing you've always wondered about? How could you start exploring that topic today?",
         quote: "I have no special talent. I am only passionately curious.",
         author: "Albert Einstein",
-        keywords: ["learning", "exploration", "wonder", "discovery", "passion", "questions"],
-        music: "Intriguing electronic - Artists like Aphex Twin, Boards of Canada"
+        keywords: [
+          "learning",
+          "exploration",
+          "wonder",
+          "discovery",
+          "passion",
+          "questions",
+        ],
+        music:
+          "Intriguing electronic - Artists like Aphex Twin, Boards of Canada",
       },
       {
-        prompt: "Look at a familiar object in your room as if you're seeing it for the first time. What new details do you notice?",
+        prompt:
+          "Look at a familiar object in your room as if you're seeing it for the first time. What new details do you notice?",
         quote: "Curiosity is the wick in the candle of learning.",
         author: "William Arthur Ward",
-        keywords: ["observation", "details", "perspective", "learning", "mindfulness", "freshness"],
-        music: "Playful jazz - Artists like Dave Brubeck, Thelonious Monk"
-      }
+        keywords: [
+          "observation",
+          "details",
+          "perspective",
+          "learning",
+          "mindfulness",
+          "freshness",
+        ],
+        music: "Playful jazz - Artists like Dave Brubeck, Thelonious Monk",
+      },
     ],
     bored: [
       {
-        prompt: "Boredom is often the birthplace of creativity. If you could create anything right now without limits, what would it be?",
+        prompt:
+          "Boredom is often the birthplace of creativity. If you could create anything right now without limits, what would it be?",
         quote: "Boredom is the dream bird that hatches the egg of experience.",
         author: "Walter Benjamin",
-        keywords: ["creativity", "imagination", "potential", "dreaming", "innovation", "spark"],
-        music: "Experimental pop - Artists like Glass Animals, Gorillaz"
+        keywords: [
+          "creativity",
+          "imagination",
+          "potential",
+          "dreaming",
+          "innovation",
+          "spark",
+        ],
+        music: "Experimental pop - Artists like Glass Animals, Gorillaz",
       },
       {
-        prompt: "What is a hobby or skill you've neglected recently? How would it feel to pick it up again for just 15 minutes?",
+        prompt:
+          "What is a hobby or skill you've neglected recently? How would it feel to pick it up again for just 15 minutes?",
         quote: "To be bored is an insult to oneself.",
         author: "Jules Renard",
-        keywords: ["hobbies", "skills", "reconnection", "engagement", "activity", "interest"],
-        music: "Upbeat funk - Artists like Vulfpeck, Thundercat"
-      }
-    ]
-    // Note: Additional suggestions for other moods would be added here in a full implementation
+        keywords: [
+          "hobbies",
+          "skills",
+          "reconnection",
+          "engagement",
+          "activity",
+          "interest",
+        ],
+        music: "Upbeat funk - Artists like Vulfpeck, Thundercat",
+      },
+    ],
+    hopeful: [
+      {
+        prompt:
+          "What small sign of hope have you noticed recently, even in a difficult time? How can you nurture it?",
+        quote:
+          "Hope is being able to see that there is light despite all of the darkness.",
+        author: "Desmond Tutu",
+        keywords: [
+          "light",
+          "optimism",
+          "future",
+          "possibility",
+          "faith",
+          "renewal",
+          "trust",
+          "belief",
+          "anticipation",
+          "promise",
+        ],
+        music:
+          "Uplifting indie pop - Artists like Coldplay, Florence + The Machine",
+      },
+      {
+        prompt:
+          "If your hope had a voice, what would it be telling you right now about tomorrow?",
+        quote:
+          "We must accept finite disappointment, but never lose infinite hope.",
+        author: "Martin Luther King Jr.",
+        keywords: [
+          "resilience",
+          "tomorrow",
+          "vision",
+          "courage",
+          "encouragement",
+          "growth",
+          "patience",
+          "perseverance",
+          "dreams",
+          "horizon",
+        ],
+        music:
+          "Soaring orchestral pop - Artists like Sigur Rós, Explosions in the Sky",
+      },
+    ],
+    stressed: [
+      {
+        prompt:
+          "What is the one thing on your plate right now that, if you set it down for ten minutes, would feel like relief?",
+        quote: "You can't pour from an empty cup. Take care of yourself first.",
+        author: "Unknown",
+        keywords: [
+          "pressure",
+          "overwhelm",
+          "tension",
+          "burden",
+          "deadline",
+          "exhaustion",
+          "pace",
+          "demands",
+          "strain",
+          "fatigue",
+        ],
+        music: "Calming lo-fi beats - Artists like Nujabes, Idealism",
+      },
+      {
+        prompt:
+          "Break down what's stressing you into one thing you can control today and one thing you have to let go of.",
+        quote: "It's not stress that kills us, it is our reaction to it.",
+        author: "Hans Selye",
+        keywords: [
+          "control",
+          "release",
+          "priorities",
+          "clarity",
+          "boundaries",
+          "balance",
+          "breathe",
+          "perspective",
+          "letting go",
+          "focus",
+        ],
+        music: "Soft acoustic instrumentals - Artists like Nils Frahm, Kiasmos",
+      },
+    ],
+    peaceful: [
+      {
+        prompt:
+          "Describe this peaceful feeling as if you were explaining it to someone who has never felt calm before.",
+        quote:
+          "Within you, there is a stillness and a sanctuary to which you can retreat at any time.",
+        author: "Hermann Hesse",
+        keywords: [
+          "serenity",
+          "stillness",
+          "sanctuary",
+          "ease",
+          "harmony",
+          "quiet",
+          "gentle",
+          "balance",
+          "presence",
+          "rest",
+        ],
+        music: "Ambient soundscapes - Artists like Brian Eno, Hammock",
+      },
+      {
+        prompt:
+          "What habits or choices led you to feel this peaceful today? How could you keep more of them in your life?",
+        quote:
+          "Peace is not the absence of conflict, but the presence of calm within it.",
+        author: "Unknown",
+        keywords: [
+          "habits",
+          "routine",
+          "calm",
+          "clarity",
+          "groundedness",
+          "simplicity",
+          "contentment",
+          "ease",
+          "flow",
+          "softness",
+        ],
+        music:
+          "Gentle piano instrumentals - Artists like Ólafur Arnalds, Yiruma",
+      },
+    ],
+    overwhelmed: [
+      {
+        prompt:
+          "If you could only handle one thing today, what would matter most? What can wait until tomorrow?",
+        quote:
+          "You don't have to see the whole staircase, just take the first step.",
+        author: "Martin Luther King Jr.",
+        keywords: [
+          "pressure",
+          "chaos",
+          "too much",
+          "priorities",
+          "breathing room",
+          "pause",
+          "capacity",
+          "limits",
+          "overload",
+          "relief",
+        ],
+        music:
+          "Slow ambient piano - Artists like Max Richter, Dustin O'Halloran",
+      },
+      {
+        prompt:
+          "Imagine setting everything down for just five minutes. What would your mind and body need in that pause?",
+        quote:
+          "Almost everything will work again if you unplug it for a few minutes, including you.",
+        author: "Anne Lamott",
+        keywords: [
+          "pause",
+          "rest",
+          "reset",
+          "recovery",
+          "boundaries",
+          "stillness",
+          "grounding",
+          "space",
+          "slowdown",
+          "compassion",
+        ],
+        music:
+          "Soothing nature sounds with soft strings - Calm app style instrumentals",
+      },
+    ],
+    content: [
+      {
+        prompt:
+          "What does 'enough' feel like for you right now? Describe this quiet sense of satisfaction.",
+        quote: "Contentment is natural wealth, luxury is artificial poverty.",
+        author: "Socrates",
+        keywords: [
+          "satisfaction",
+          "ease",
+          "fulfillment",
+          "simplicity",
+          "gratitude",
+          "balance",
+          "wholeness",
+          "presence",
+          "stability",
+          "warmth",
+        ],
+        music:
+          "Warm folk instrumentals - Artists like Iron & Wine, Fleet Foxes",
+      },
+      {
+        prompt:
+          "Think of an ordinary moment from today that felt quietly good. Why did it stay with you?",
+        quote:
+          "Happiness is not a matter of intensity but of balance and order and rhythm and harmony.",
+        author: "Thomas Merton",
+        keywords: [
+          "ordinary",
+          "rhythm",
+          "stillness",
+          "harmony",
+          "appreciation",
+          "comfort",
+          "simplicity",
+          "presence",
+          "ease",
+          "calm",
+        ],
+        music: "Mellow acoustic - Artists like José González, Bon Iver",
+      },
+    ],
+    frustrated: [
+      {
+        prompt:
+          "What outcome were you expecting that didn't happen? Naming it clearly often loosens the frustration's grip.",
+        quote:
+          "Obstacles are those frightful things you see when you take your eyes off your goal.",
+        author: "Henry Ford",
+        keywords: [
+          "blocked",
+          "irritation",
+          "tension",
+          "setback",
+          "expectation",
+          "resistance",
+          "stuck",
+          "friction",
+          "impatience",
+          "annoyance",
+        ],
+        music:
+          "Driving alternative rock - Artists like Foo Fighters, Linkin Park",
+      },
+      {
+        prompt:
+          "If frustration is energy looking for an outlet, what's one productive place you could send it right now?",
+        quote:
+          "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.",
+        author: "Thomas Edison",
+        keywords: [
+          "redirect",
+          "energy",
+          "persistence",
+          "outlet",
+          "problem-solving",
+          "momentum",
+          "drive",
+          "push",
+          "effort",
+          "determination",
+        ],
+        music: "Energetic alt-rock - Artists like Twenty One Pilots, Muse",
+      },
+    ],
+    inspired: [
+      {
+        prompt:
+          "What just sparked this feeling of inspiration? How could you act on it before the spark fades?",
+        quote: "Inspiration exists, but it has to find you working.",
+        author: "Pablo Picasso",
+        keywords: [
+          "spark",
+          "creativity",
+          "vision",
+          "ideas",
+          "drive",
+          "imagination",
+          "possibility",
+          "momentum",
+          "passion",
+          "clarity",
+        ],
+        music:
+          "Cinematic instrumentals - Artists like Explosions in the Sky, Hans Zimmer",
+      },
+      {
+        prompt:
+          "If you followed this inspired feeling for just the next hour, what would you create or start?",
+        quote:
+          "You can't use up creativity. The more you use, the more you have.",
+        author: "Maya Angelou",
+        keywords: [
+          "creation",
+          "action",
+          "vision",
+          "flow",
+          "imagination",
+          "purpose",
+          "energy",
+          "ideas",
+          "expression",
+          "drive",
+        ],
+        music:
+          "Uplifting instrumental folk - Artists like The Album Leaf, Helios",
+      },
+    ],
+    melancholy: [
+      {
+        prompt:
+          "Melancholy often has a quiet beauty to it. What is this feeling helping you notice about your life right now?",
+        quote:
+          "There is a pleasure in the pathless woods, there is a rapture on the lonely shore.",
+        author: "Lord Byron",
+        keywords: [
+          "wistfulness",
+          "longing",
+          "quiet",
+          "reflection",
+          "bittersweet",
+          "tenderness",
+          "depth",
+          "stillness",
+          "softness",
+          "ache",
+        ],
+        music:
+          "Atmospheric indie folk - Artists like Phoebe Bridgers, The National",
+      },
+      {
+        prompt:
+          "What memory or thought keeps drifting through your mind today? Let yourself sit with it gently.",
+        quote: "Melancholy is the happiness of being sad.",
+        author: "Victor Hugo",
+        keywords: [
+          "memory",
+          "drift",
+          "nostalgia",
+          "gentleness",
+          "introspection",
+          "fading",
+          "softness",
+          "quiet sorrow",
+          "depth",
+          "reflection",
+        ],
+        music:
+          "Soft piano and strings - Artists like Agnes Obel, Ólafur Arnalds",
+      },
+    ],
+    motivated: [
+      {
+        prompt:
+          "What goal feels closest within reach right now? What's the very next small step toward it?",
+        quote: "The future depends on what you do today.",
+        author: "Mahatma Gandhi",
+        keywords: [
+          "drive",
+          "goals",
+          "action",
+          "discipline",
+          "momentum",
+          "ambition",
+          "focus",
+          "purpose",
+          "progress",
+          "determination",
+        ],
+        music: "High-energy hip-hop - Artists like Kendrick Lamar, Eminem",
+      },
+      {
+        prompt:
+          "Write down three things you want to accomplish this week while this motivation is strong.",
+        quote: "It always seems impossible until it's done.",
+        author: "Nelson Mandela",
+        keywords: [
+          "planning",
+          "ambition",
+          "discipline",
+          "drive",
+          "focus",
+          "consistency",
+          "willpower",
+          "achievement",
+          "progress",
+          "resolve",
+        ],
+        music:
+          "Pump-up workout anthems - Artists like Kanye West, Imagine Dragons",
+      },
+    ],
+    vulnerable: [
+      {
+        prompt:
+          "What would it mean to let someone see this softer, more honest side of you today?",
+        quote:
+          "Vulnerability is not weakness; it's our greatest measure of courage.",
+        author: "Brené Brown",
+        keywords: [
+          "openness",
+          "honesty",
+          "fragility",
+          "courage",
+          "exposure",
+          "softness",
+          "trust",
+          "rawness",
+          "authenticity",
+          "tenderness",
+        ],
+        music: "Intimate acoustic - Artists like Bon Iver, Daughter",
+      },
+      {
+        prompt:
+          "What do you need to hear right now that would help this vulnerable feeling feel a little safer?",
+        quote:
+          "Owning our story and loving ourselves through that process is the bravest thing we'll ever do.",
+        author: "Brené Brown",
+        keywords: [
+          "safety",
+          "self-compassion",
+          "tenderness",
+          "trust",
+          "fragility",
+          "honesty",
+          "comfort",
+          "exposure",
+          "gentleness",
+          "care",
+        ],
+        music: "Soft indie ballads - Artists like Lucy Dacus, Julien Baker",
+      },
+    ],
+    empowered: [
+      {
+        prompt:
+          "What recent choice made you feel like you were in control of your own story? Write about that moment.",
+        quote:
+          "You have power over your mind, not outside events. Realize this, and you will find strength.",
+        author: "Marcus Aurelius",
+        keywords: [
+          "strength",
+          "control",
+          "confidence",
+          "agency",
+          "self-belief",
+          "power",
+          "boldness",
+          "ownership",
+          "capability",
+          "resolve",
+        ],
+        music: "Bold anthemic pop - Artists like Beyoncé, Lizzo",
+      },
+      {
+        prompt:
+          "What is one boundary or decision you're proud of standing firm on recently?",
+        quote: "No one can make you feel inferior without your consent.",
+        author: "Eleanor Roosevelt",
+        keywords: [
+          "boundaries",
+          "confidence",
+          "self-respect",
+          "power",
+          "resilience",
+          "firmness",
+          "agency",
+          "strength",
+          "voice",
+          "conviction",
+        ],
+        music: "Empowering hip-hop - Artists like Cardi B, Megan Thee Stallion",
+      },
+    ],
+    nostalgic: [
+      {
+        prompt:
+          "What memory keeps replaying in your mind today? What does it still mean to you now?",
+        quote:
+          "Nostalgia is a file that removes the rough edges from the good old days.",
+        author: "Doug Larson",
+        keywords: [
+          "memory",
+          "past",
+          "longing",
+          "sentiment",
+          "reminiscence",
+          "warmth",
+          "fondness",
+          "old days",
+          "reflection",
+          "bittersweet",
+        ],
+        music: "Nostalgic indie pop - Artists like Tame Impala, MGMT",
+      },
+      {
+        prompt:
+          "If you could relive one ordinary day from your past, which one would you choose, and why that one?",
+        quote: "The past is never dead. It's not even past.",
+        author: "William Faulkner",
+        keywords: [
+          "memory",
+          "reminiscence",
+          "longing",
+          "time",
+          "reflection",
+          "fondness",
+          "sentiment",
+          "echoes",
+          "moments",
+          "remembering",
+        ],
+        music: "Dreamy retro synth-pop - Artists like Tame Impala, The 1975",
+      },
+    ],
+    surprised: [
+      {
+        prompt:
+          "What just happened that you didn't see coming? How is it shifting the way you think about today?",
+        quote:
+          "Life is full of surprises and serendipity. Being open to unexpected turns in the road is an important part of success.",
+        author: "Priscilla Presley",
+        keywords: [
+          "unexpected",
+          "shock",
+          "wonder",
+          "shift",
+          "newness",
+          "amazement",
+          "spontaneity",
+          "discovery",
+          "jolt",
+          "astonishment",
+        ],
+        music: "Playful electronic - Artists like Flume, ODESZA",
+      },
+      {
+        prompt:
+          "Surprises can be doors. What new possibility might this unexpected moment be opening up for you?",
+        quote:
+          "The biggest adventure you can take is to live the life of your dreams.",
+        author: "Oprah Winfrey",
+        keywords: [
+          "possibility",
+          "doorway",
+          "newness",
+          "change",
+          "wonder",
+          "curiosity",
+          "spontaneity",
+          "openness",
+          "shift",
+          "discovery",
+        ],
+        music: "Eclectic indie pop - Artists like Vampire Weekend, MGMT",
+      },
+    ],
+    disgusted: [
+      {
+        prompt:
+          "What boundary or value does this disgust point to? Sometimes this feeling protects something important to you.",
+        quote:
+          "Disgust is, perhaps, the most undervalued emotion. It is a survival instinct.",
+        author: "Unknown",
+        keywords: [
+          "boundary",
+          "aversion",
+          "protection",
+          "values",
+          "repulsion",
+          "discomfort",
+          "rejection",
+          "instinct",
+          "alertness",
+          "clarity",
+        ],
+        music:
+          "Cleansing ambient instrumentals - Artists like Nils Frahm, Olafur Arnalds",
+      },
+      {
+        prompt:
+          "What would help you feel like you've put distance between yourself and whatever triggered this feeling?",
+        quote:
+          "Sometimes you have to get away from something to truly understand it.",
+        author: "Unknown",
+        keywords: [
+          "distance",
+          "clarity",
+          "release",
+          "boundary",
+          "discomfort",
+          "separation",
+          "reset",
+          "space",
+          "relief",
+          "perspective",
+        ],
+        music:
+          "Calming instrumental piano - Artists like Ólafur Arnalds, Hania Rani",
+      },
+    ],
+    embarrassed: [
+      {
+        prompt:
+          "What happened that made you feel embarrassed? If a close friend told you the same story, how would you respond to them?",
+        quote:
+          "Embarrassment is the necessary cost of trying anything new or interesting.",
+        author: "Unknown",
+        keywords: [
+          "self-consciousness",
+          "discomfort",
+          "exposure",
+          "compassion",
+          "humility",
+          "humanness",
+          "awkwardness",
+          "shyness",
+          "vulnerability",
+          "perspective",
+        ],
+        music:
+          "Light comforting indie - Artists like Rex Orange County, Clairo",
+      },
+      {
+        prompt:
+          "How might this embarrassing moment look to you a year from now? Try writing about it with a little humor.",
+        quote:
+          "You can either let it define you, refine you, or you can choose to ignore it.",
+        author: "Drew Barrymore",
+        keywords: [
+          "perspective",
+          "humor",
+          "self-compassion",
+          "time",
+          "growth",
+          "lightness",
+          "humility",
+          "release",
+          "acceptance",
+          "reframe",
+        ],
+        music: "Easygoing lo-fi pop - Artists like beabadoobee, Clairo",
+      },
+    ],
+    determined: [
+      {
+        prompt:
+          "What is the goal you're most determined to reach right now? Write down exactly why it matters to you.",
+        quote:
+          "Strength does not come from winning. Your struggles develop your strengths.",
+        author: "Arnold Schwarzenegger",
+        keywords: [
+          "resolve",
+          "willpower",
+          "focus",
+          "discipline",
+          "grit",
+          "persistence",
+          "drive",
+          "ambition",
+          "commitment",
+          "tenacity",
+        ],
+        music: "Driving motivational beats - Artists like Eminem, Linkin Park",
+      },
+      {
+        prompt:
+          "What obstacle is standing between you and your goal, and what's your plan to push through it?",
+        quote: "Champions keep playing until they get it right.",
+        author: "Billie Jean King",
+        keywords: [
+          "obstacle",
+          "grit",
+          "focus",
+          "perseverance",
+          "strategy",
+          "commitment",
+          "resolve",
+          "strength",
+          "discipline",
+          "willpower",
+        ],
+        music:
+          "Intense instrumental rock - Artists like Two Steps From Hell, Audiomachine",
+      },
+    ],
+    playful: [
+      {
+        prompt:
+          "What's the silliest thing you could do right now just for the fun of it? Give yourself permission to do it.",
+        quote:
+          "We don't stop playing because we grow old; we grow old because we stop playing.",
+        author: "George Bernard Shaw",
+        keywords: [
+          "fun",
+          "laughter",
+          "lightness",
+          "spontaneity",
+          "joy",
+          "silliness",
+          "freedom",
+          "whimsy",
+          "delight",
+          "mischief",
+        ],
+        music: "Fun upbeat pop - Artists like Bruno Mars, Kacey Musgraves",
+      },
+      {
+        prompt:
+          "Who's someone you could be playful with today? What inside joke or game could you bring back to life?",
+        quote: "Play is the highest form of research.",
+        author: "Albert Einstein",
+        keywords: [
+          "connection",
+          "humor",
+          "lightness",
+          "joy",
+          "spontaneity",
+          "games",
+          "friendship",
+          "fun",
+          "creativity",
+          "delight",
+        ],
+        music: "Quirky indie pop - Artists like Tierra Whack, Mac DeMarco",
+      },
+    ],
+    dreamy: [
+      {
+        prompt:
+          "Describe the daydream or fantasy your mind keeps drifting toward right now. What pulls you toward it?",
+        quote:
+          "All men dream, but not equally. Those who dream by night... dream with open eyes, to make it possible.",
+        author: "T.E. Lawrence",
+        keywords: [
+          "fantasy",
+          "imagination",
+          "drifting",
+          "wonder",
+          "softness",
+          "escapism",
+          "vision",
+          "wandering",
+          "ethereal",
+          "longing",
+        ],
+        music: "Dreamy shoegaze - Artists like Beach House, Cocteau Twins",
+      },
+      {
+        prompt:
+          "If your dream world were real for just one day, what would you do first?",
+        quote:
+          "There are far, far better things ahead than any we leave behind.",
+        author: "C.S. Lewis",
+        keywords: [
+          "imagination",
+          "wonder",
+          "fantasy",
+          "possibility",
+          "escape",
+          "vision",
+          "softness",
+          "drifting",
+          "magic",
+          "hope",
+        ],
+        music: "Ethereal ambient pop - Artists like Lana Del Rey, Beach House",
+      },
+    ],
+    adventurous: [
+      {
+        prompt:
+          "What new experience has been calling to you lately? What's stopping you from saying yes to it?",
+        quote: "Adventure is worthwhile in itself.",
+        author: "Amelia Earhart",
+        keywords: [
+          "exploration",
+          "boldness",
+          "risk",
+          "freedom",
+          "courage",
+          "discovery",
+          "spontaneity",
+          "wanderlust",
+          "openness",
+          "thrill",
+        ],
+        music:
+          "Energetic indie rock - Artists like Foster the People, Glass Animals",
+      },
+      {
+        prompt:
+          "Plan one small adventure you could take this week, even if it's just exploring a new street or trying something unfamiliar.",
+        quote: "Not all those who wander are lost.",
+        author: "J.R.R. Tolkien",
+        keywords: [
+          "wandering",
+          "discovery",
+          "freedom",
+          "spontaneity",
+          "exploration",
+          "courage",
+          "curiosity",
+          "openness",
+          "journey",
+          "novelty",
+        ],
+        music:
+          "Upbeat folk rock - Artists like Of Monsters and Men, The Lumineers",
+      },
+    ],
+    romantic: [
+      {
+        prompt:
+          "What does love or connection feel like to you in this moment? Describe it without naming a person.",
+        quote: "Whatever our souls are made of, his and mine are the same.",
+        author: "Emily Brontë",
+        keywords: [
+          "love",
+          "intimacy",
+          "tenderness",
+          "warmth",
+          "connection",
+          "affection",
+          "longing",
+          "closeness",
+          "passion",
+          "devotion",
+        ],
+        music: "Soft romantic R&B - Artists like Sade, H.E.R.",
+      },
+      {
+        prompt:
+          "Write a few lines as if you were telling someone exactly how they make you feel.",
+        quote: "Love is composed of a single soul inhabiting two bodies.",
+        author: "Aristotle",
+        keywords: [
+          "affection",
+          "closeness",
+          "devotion",
+          "tenderness",
+          "warmth",
+          "passion",
+          "intimacy",
+          "vulnerability",
+          "care",
+          "connection",
+        ],
+        music: "Mellow love songs - Artists like John Legend, Norah Jones",
+      },
+    ],
+    creative: [
+      {
+        prompt:
+          "What idea has been quietly forming in the back of your mind? Give it a few minutes of your full attention now.",
+        quote: "Creativity takes courage.",
+        author: "Henri Matisse",
+        keywords: [
+          "imagination",
+          "ideas",
+          "flow",
+          "expression",
+          "originality",
+          "inspiration",
+          "vision",
+          "art",
+          "exploration",
+          "innovation",
+        ],
+        music:
+          "Inventive instrumental jazz - Artists like Kamasi Washington, Robert Glasper",
+      },
+      {
+        prompt:
+          "If there were no rules or judgment, what would you make right now? Sketch, write, or build it, just for yourself.",
+        quote:
+          "You can't use up creativity. The more you use, the more you have.",
+        author: "Maya Angelou",
+        keywords: [
+          "freedom",
+          "expression",
+          "exploration",
+          "play",
+          "originality",
+          "flow",
+          "imagination",
+          "art",
+          "ideas",
+          "spontaneity",
+        ],
+        music:
+          "Eclectic experimental beats - Artists like Flying Lotus, Tame Impala",
+      },
+    ],
+    philosophical: [
+      {
+        prompt:
+          "What question about life or meaning has been on your mind lately? Sit with it instead of rushing to answer it.",
+        quote: "The unexamined life is not worth living.",
+        author: "Socrates",
+        keywords: [
+          "meaning",
+          "questions",
+          "reflection",
+          "existence",
+          "wonder",
+          "depth",
+          "truth",
+          "purpose",
+          "introspection",
+          "wisdom",
+        ],
+        music:
+          "Contemplative ambient - Artists like Brian Eno, Stars of the Lid",
+      },
+      {
+        prompt:
+          "What belief about yourself or the world have you been quietly reconsidering recently?",
+        quote: "He who has a why to live can bear almost any how.",
+        author: "Friedrich Nietzsche",
+        keywords: [
+          "beliefs",
+          "reflection",
+          "meaning",
+          "truth",
+          "purpose",
+          "depth",
+          "introspection",
+          "wisdom",
+          "existence",
+          "clarity",
+        ],
+        music:
+          "Minimalist piano compositions - Artists like Max Richter, Nils Frahm",
+      },
+    ],
+    rebellious: [
+      {
+        prompt:
+          "What rule or expectation are you tired of following? What would it look like to push back, even quietly?",
+        quote: "Well-behaved women seldom make history.",
+        author: "Laurel Thatcher Ulrich",
+        keywords: [
+          "defiance",
+          "freedom",
+          "boldness",
+          "nonconformity",
+          "independence",
+          "resistance",
+          "questioning",
+          "boundaries",
+          "voice",
+          "courage",
+        ],
+        music:
+          "Raw punk rock - Artists like Rage Against the Machine, Patti Smith",
+      },
+      {
+        prompt:
+          "What part of yourself have you been told to tone down? What would it feel like to let it out today?",
+        quote:
+          "The reasonable man adapts himself to the world; the unreasonable one persists in trying to adapt the world to himself.",
+        author: "George Bernard Shaw",
+        keywords: [
+          "authenticity",
+          "freedom",
+          "boldness",
+          "individuality",
+          "defiance",
+          "voice",
+          "nonconformity",
+          "courage",
+          "expression",
+          "independence",
+        ],
+        music: "Edgy alternative rock - Artists like The Clash, Bikini Kill",
+      },
+    ],
+    silly: [
+      {
+        prompt:
+          "What's the goofiest thought that's crossed your mind today? Write it down exactly as silly as it is.",
+        quote: "A day without laughter is a day wasted.",
+        author: "Charlie Chaplin",
+        keywords: [
+          "humor",
+          "fun",
+          "lightness",
+          "laughter",
+          "playfulness",
+          "joy",
+          "absurdity",
+          "silliness",
+          "delight",
+          "whimsy",
+        ],
+        music: "Goofy feel-good pop - Artists like Weezer, Cage the Elephant",
+      },
+      {
+        prompt:
+          "If you could turn today into a cartoon, what ridiculous thing would happen next?",
+        quote: "Those who don't believe in magic will never find it.",
+        author: "Roald Dahl",
+        keywords: [
+          "imagination",
+          "fun",
+          "absurdity",
+          "lightness",
+          "play",
+          "humor",
+          "whimsy",
+          "joy",
+          "spontaneity",
+          "delight",
+        ],
+        music:
+          "Quirky upbeat indie - Artists like Vulfpeck, They Might Be Giants",
+      },
+    ],
   },
 
   getMoodById(id: string) {
@@ -777,8 +2411,8 @@ export const MoodData = {
     if (defaultMood) return defaultMood;
 
     // Then check custom moods
-    if (typeof window !== 'undefined') {
-      const { CustomMoodStorage } = require('./customMoods');
+    if (typeof window !== "undefined") {
+      const { CustomMoodStorage } = require("./customMoods");
       const customMoods = CustomMoodStorage.getCustomMoods();
       return customMoods.find((mood: any) => mood.id === id) || null;
     }
@@ -791,28 +2425,28 @@ export const MoodData = {
     const defaultMoods = Object.values(this.moods);
 
     // Get custom moods if in browser environment
-    if (typeof window !== 'undefined') {
-      const { CustomMoodStorage } = require('./customMoods');
+    if (typeof window !== "undefined") {
+      const { CustomMoodStorage } = require("./customMoods");
       const customMoods = CustomMoodStorage.getCustomMoods();
       const allMoods = [...defaultMoods, ...customMoods];
 
       // Add isCustom flag to distinguish between default and custom moods
       return allMoods.map((mood: any) => ({
         ...mood,
-        isCustom: mood.hasOwnProperty('isCustom') ? mood.isCustom : false
+        isCustom: mood.hasOwnProperty("isCustom") ? mood.isCustom : false,
       }));
     }
 
     // Add isCustom: false to all default moods when on server
     return defaultMoods.map((mood: any) => ({
       ...mood,
-      isCustom: false
+      isCustom: false,
     }));
   },
 
   getCustomMoods() {
-    if (typeof window !== 'undefined') {
-      const { CustomMoodStorage } = require('./customMoods');
+    if (typeof window !== "undefined") {
+      const { CustomMoodStorage } = require("./customMoods");
       return CustomMoodStorage.getCustomMoods();
     }
     return [];
@@ -824,25 +2458,30 @@ export const MoodData = {
 
   getSuggestions(moodId: string) {
     // Check if it's a custom mood
-    if (typeof window !== 'undefined' && moodId.startsWith('custom_')) {
+    if (typeof window !== "undefined" && moodId.startsWith("custom_")) {
       // Return generic suggestions for custom moods
       return {
-        prompt: "Take a moment to breathe deeply and reflect on this unique feeling.",
-        quote: "Every emotion, even the ones we create ourselves, has value in our journey.",
+        prompt:
+          "Take a moment to breathe deeply and reflect on this unique feeling.",
+        quote:
+          "Every emotion, even the ones we create ourselves, has value in our journey.",
         author: "InnerHue",
         keywords: ["reflection", "custom", "personal", "awareness"],
-        music: "Personalized ambient music"
+        music: "Personalized ambient music",
       };
     }
 
     // Default mood suggestions
-    const moodSuggestions = this.suggestions[moodId as keyof typeof this.suggestions] || [];
-    return moodSuggestions[Math.floor(Math.random() * moodSuggestions.length)] || {
-      prompt: "Take a moment to breathe deeply and reflect on this feeling.",
-      quote: "Every emotion has its place in the human experience.",
-      author: "Unknown",
-      keywords: ["reflection", "breathing", "awareness"],
-      music: "Calming ambient music"
-    };
-  }
+    const moodSuggestions =
+      this.suggestions[moodId as keyof typeof this.suggestions] || [];
+    return (
+      moodSuggestions[Math.floor(Math.random() * moodSuggestions.length)] || {
+        prompt: "Take a moment to breathe deeply and reflect on this feeling.",
+        quote: "Every emotion has its place in the human experience.",
+        author: "Unknown",
+        keywords: ["reflection", "breathing", "awareness"],
+        music: "Calming ambient music",
+      }
+    );
+  },
 };
