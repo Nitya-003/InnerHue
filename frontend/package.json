@@ -29,10 +29,7 @@
     "docker:dev": "docker compose --profile dev up innerhue-dev",
     "docker:prod": "docker compose up innerhue",
     "docker:down": "docker compose down",
-    "prepare": "husky",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "prepare": "husky"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",
@@ -104,9 +101,6 @@
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@types/jest": "^30.0.0",
     "@types/minimatch": "^3.0.5",
     "@types/node": "^20.0.0",
     "@types/react": "^19.0.0",
@@ -117,11 +111,8 @@
     "eslint-config-next": "^15.2.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "husky": "^9.1.7",
-    "jest": "^30.4.2",
-    "jest-environment-jsdom": "^30.4.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.0",
-    "ts-jest": "^29.4.11",
     "tsx": "^4.23.1",
     "typescript": "^5.2.0"
   },

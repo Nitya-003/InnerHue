@@ -75,7 +75,7 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDow
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       onClick={onSelect}
-      className="relative aspect-square w-full rounded-3xl p-4 sm:p-6 flex flex-col items-center justify-center cursor-pointer overflow-hidden group backdrop-blur-md border-2"
+      className="relative aspect-square w-full rounded-2xl sm:rounded-3xl p-2.5 sm:p-4 md:p-6 flex flex-col items-center justify-center gap-1 sm:gap-2 cursor-pointer overflow-hidden group backdrop-blur-md border-2"
       style={{
         background: cardBg,
         borderColor: isSelected ? mood.color : isDark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.3)',
@@ -112,7 +112,7 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDow
       )}
 
       <motion.div
-        className="text-4xl sm:text-5xl mb-3 relative z-10 select-none"
+        className="text-3xl sm:text-4xl md:text-5xl mb-1 sm:mb-2 relative z-10 select-none leading-none"
         animate={{
           y: isHovered ? -5 : 0,
           scale: isHovered ? 1.1 : 1,
@@ -126,7 +126,7 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDow
       </motion.div>
 
       <motion.div
-        className="text-sm sm:text-base font-semibold relative z-10"
+        className="text-[0.7rem] sm:text-sm md:text-base font-semibold relative z-10 text-center leading-tight px-1"
         animate={{
           color: labelColor,
           scale: isSelected ? 1.05 : 1,
