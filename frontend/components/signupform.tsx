@@ -27,28 +27,36 @@ export default function SignupForm() {
   const onSubmit = async (data: SignupFormData) => {
     setServerError(null);
     const toastId = toast.loading("Creating account...");
+    let userCredential;
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-      
-      // Update the user's profile with their name
-      await updateProfile(userCredential.user, {
-        displayName: data.name
-      });
-
-      toast.dismiss(toastId);
-      toast.success("Account Created!", {
-        description: "Welcome to InnerHue.",
-      });
-      
-      router.push("/");
+        userCredential = await createUserWithEmailAndPassword(
+            auth,
+            data.email,
+            data.password
+        );
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Something went wrong.";
-      toast.dismiss(toastId);
-      setServerError(message);
-      toast.error("Signup failed", {
-       description: message,
-  });
+        const message =
+            error instanceof Error ? error.message : "Something went wrong." ;
+        toast.dismiss(toastId);
+        setServerError(message) ;
+        toast.error("Signup failed", {
+            description: message,
+        });
+        return ;// stop here — don't try updateProfile if account creation failed
     }
+    try {
+        await updateProfile(userCredential.user, {
+            displayName: data.name,
+        });
+    } catch (profileError) {
+        console.error("Failed to set display name:", profileError) ;
+    }
+
+    toast.dismiss(toastId);
+    toast.success("Account Created!", {
+      description: "Welcome to InnerHue.",
+    });
+     router.push("/");
   };
 
   return (
