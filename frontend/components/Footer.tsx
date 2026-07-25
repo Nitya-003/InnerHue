@@ -17,6 +17,7 @@ export function Footer() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Mood Selection", href: "/#mood-selection" },
+    { name: "Memory Capsules", href: "/capsules" },
     { name: "Insights", href: "/insights" },
     { name: "Music", href: "/music" },
     { name: "About", href: "/about" },
@@ -157,7 +158,7 @@ export function Footer() {
               </div>
 
               <div className="mt-4 flex -space-x-3">
-                // TO
+                {/* Top contributors */}
                   {contributors && contributors.slice(0, 8).map((c: Contributor, i: number) => (
                   <a
                     key={c.login + i}

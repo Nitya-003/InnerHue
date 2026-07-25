@@ -11,6 +11,7 @@ import {
   Sparkles,
   ArrowRight,
   Plus,
+  Lock,
 } from "lucide-react";
 import { MoodCard } from "@/components/MoodCard";
 import { FloatingBackground } from "@/components/FloatingBackground";
@@ -373,6 +374,17 @@ useEffect(() => {
           </div>
 
           <nav className="flex items-center space-x-2 md:space-x-3">
+            <Link href="/capsules" aria-label="Memory Capsules">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 md:p-2 rounded-lg bg-card/75 dark:bg-white/10 backdrop-blur-xl hover:bg-card dark:hover:bg-white/20 transition-all duration-300 border border-border/80 dark:border-white/20 flex items-center gap-2 text-foreground dark:text-white"
+              >
+                <Lock className="w-4 h-4 md:w-5 md:h-5 text-indigo-500 dark:text-purple-400" />
+                <span className="text-sm font-medium hidden sm:block">
+                  Capsules
+                </span>
+              </motion.div>
+            </Link>
             <Link href="/emotions" aria-label="Custom Moods">
               <motion.div
                 whileHover={{ scale: 1.05 }}

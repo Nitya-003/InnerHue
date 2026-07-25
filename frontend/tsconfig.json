@@ -37,6 +37,8 @@
   ],
   "exclude": [
     "node_modules",
-    "**/*.backup.tsx"
+    "**/*.backup.tsx",
+    "__tests__",
+    "jest.config.ts"
   ]
 }

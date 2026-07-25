@@ -207,6 +207,7 @@ export default function PersonalizationPage() {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [reminderEnabled, setReminderEnabled] = useLocalStorage<boolean>('moodReminderEnabled', false);
   const [reminderTime, setReminderTime] = useLocalStorage<string>('moodReminderTime', '20:00');
+  const [lastSent, setLastSent] = useLocalStorage<string>('moodReminderLastSent', '');
 
   useEffect(() => {
     if (!reminderEnabled) return;
@@ -220,17 +221,14 @@ export default function PersonalizationPage() {
 
       if (currentTime === reminderTime) {
         const today = new Date().toDateString();
-        const [lastSent, setLastSent] = useLocalStorage<string>('moodReminderLastSent', '');
-
         if (lastSent !== today) {
-  // ...
-  setLastSent(today);
-}
+          setLastSent(today);
+        }
       }
     }, 60000);
 
     return () => clearInterval(interval);
-  }, [reminderEnabled, reminderTime]);
+  }, [reminderEnabled, reminderTime, lastSent, setLastSent]);
 
   const {
     settings,
