@@ -15,6 +15,7 @@ import { useMoodStore } from '@/lib/useMoodStore';
 import { useServerAnalytics } from '@/hooks/useServerAnalytics';
 import { AchievementGallery } from '@/components/AchievementGallery';
 import { EmotionWeatherCard } from '@/components/EmotionWeatherCard';
+import { EmotionTimelineReplay } from '@/components/EmotionTimelineReplay';
 
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
@@ -254,6 +255,14 @@ export default function AnalyticsPage() {
                 transition={{ delay: 0.15 }}
               >
                 <EmotionWeatherCard moodHistory={moodHistory} />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18 }}
+              >
+                <EmotionTimelineReplay moodHistory={moodHistory} />
               </motion.div>
 
               <motion.div
