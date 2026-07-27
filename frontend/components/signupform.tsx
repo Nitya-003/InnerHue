@@ -11,6 +11,22 @@ import { auth } from "@/lib/firebase";
 import { toast } from "sonner";
 
 type SignupFormData = z.infer<typeof SignupSchema>;
+  function getFriendlyErrorMessage(error: unknown): string {
+      const code = (error as { code?: string })?.code
+
+      switch (code) {
+          case "auth/email-already-in-use":
+              return "This email is already registered. Try logging in instead."
+          case "auth/weak-password":
+              return "Password should be at least 6 characters."
+          case "auth/invalid-email":
+              return "Please enter a valid email address."
+          case "auth/network-request-failed":
+              return "Network error. Please check your connection and try again."
+          default:
+              return "Something went wrong. Please try again."
+      }
+  }
 
 export default function SignupForm() {
   const [serverError, setServerError] = useState<string | null>(null);
@@ -35,8 +51,7 @@ export default function SignupForm() {
             data.password
         );
     } catch (error: unknown) {
-        const message =
-            error instanceof Error ? error.message : "Something went wrong." ;
+        const message = getFriendlyErrorMessage(error);
         toast.dismiss(toastId);
         setServerError(message) ;
         toast.error("Signup failed", {
