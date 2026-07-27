@@ -3,12 +3,13 @@
 import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Activity, Heart, Calendar, Download, ChevronDown, Trash2, Flame, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Activity, Heart, Calendar, Download, ChevronDown, Trash2, Flame, TrendingUp, Sparkles } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip as RechartsTooltip, XAxis, YAxis } from 'recharts';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
+import { GrowthReport } from '@/components/GrowthReport';
 import { buildHourlyDistribution, buildMoodTrendData, getMoodStreakSummary } from '@/lib/moodAnalytics';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { useServerAnalytics } from '@/hooks/useServerAnalytics';
@@ -40,6 +41,8 @@ export default function AnalyticsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMoodFilter, setSelectedMoodFilter] = useState<string>('all');
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
+  const [isGrowthReportOpen, setIsGrowthReportOpen] = useState(false);
+  const [growthReportTimeframe, setGrowthReportTimeframe] = useState<'weekly' | 'monthly'>('weekly');
 
   const uniqueMoods = useMemo(() => {
     const set = new Set<string>();
@@ -188,7 +191,19 @@ export default function AnalyticsPage() {
             </h1>
           </div>
 
-          <div className="flex items-center justify-end min-w-[5rem]">
+          <div className="flex items-center justify-end space-x-2 min-w-[5rem]">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setGrowthReportTimeframe('weekly');
+                setIsGrowthReportOpen(true);
+              }}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md transition-all"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Export Report</span>
+            </motion.button>
             <ThemeToggle />
           </div>
         </div>
@@ -457,6 +472,12 @@ export default function AnalyticsPage() {
           )}
         </div>
       </main>
+
+      <GrowthReport
+        isOpen={isGrowthReportOpen}
+        onClose={() => setIsGrowthReportOpen(false)}
+        initialTimeframe={growthReportTimeframe}
+      />
     </div>
   );
 }
