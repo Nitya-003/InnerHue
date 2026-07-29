@@ -21,12 +21,15 @@ export function useAuth() {
     return () => unsubscribe();
   }, []);
 
-  const signOut = async () => {
-    if (!isFirebaseConfigured || !auth) return;
+
+  const signOut = async (): Promise<{ success: boolean; error?: unknown }> => {
+    if (!isFirebaseConfigured || !auth) return { success: false };
     try {
       await firebaseSignOut(auth);
+      return { success: true };
     } catch (error) {
       console.error('Error signing out: ', error);
+      return { success: false, error };
     }
   };
 
