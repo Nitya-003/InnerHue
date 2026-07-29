@@ -13,6 +13,9 @@ import { GrowthReport } from '@/components/GrowthReport';
 import { buildHourlyDistribution, buildMoodTrendData, getMoodStreakSummary } from '@/lib/moodAnalytics';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { useServerAnalytics } from '@/hooks/useServerAnalytics';
+import { AchievementGallery } from '@/components/AchievementGallery';
+import { EmotionWeatherCard } from '@/components/EmotionWeatherCard';
+import { EmotionTimelineReplay } from '@/components/EmotionTimelineReplay';
 
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
@@ -249,6 +252,22 @@ export default function AnalyticsPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+              >
+                <EmotionWeatherCard moodHistory={moodHistory} />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18 }}
+              >
+                <EmotionTimelineReplay moodHistory={moodHistory} />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6"
               >
@@ -307,6 +326,14 @@ export default function AnalyticsPage() {
                   <p className="text-sm text-muted-foreground">Latest reflection</p>
                   <p className="mt-2 text-lg font-semibold text-foreground">{streakSummary.latestEntryDate ? new Date(streakSummary.latestEntryDate).toLocaleDateString() : 'No entries yet'}</p>
                 </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.28 }}
+              >
+                <AchievementGallery moodHistory={moodHistory} />
               </motion.div>
 
               <motion.div

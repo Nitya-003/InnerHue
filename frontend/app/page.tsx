@@ -25,6 +25,7 @@ import { ErrorState } from "@/components/ErrorState";
 import { SkeletonMoodCard } from "@/components/SkeletonMoodCard";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { EmotionWheel } from "@/components/EmotionWheel";
 
 const moods = [
   {
@@ -297,6 +298,7 @@ interface Orb {
 
 export default function Home() {
   const [selectedMoods, setSelectedMoods] = useLocalStorage<string[]>('selectedMoods', []);
+  const [viewMode, setViewMode] = useLocalStorage<'grid' | 'wheel'>('viewMode', 'grid');
   const [isMounted, setIsMounted] = useState(false);
 
 useEffect(() => {
@@ -449,12 +451,62 @@ useEffect(() => {
             </Link>
           </motion.div>
 
-          {/* Grid Area: Error, Loading, or Success */}
+          {/* View Toggle */}
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex p-1 rounded-full bg-slate-200/50 dark:bg-slate-800/50 border border-black/5 dark:border-white/5 backdrop-blur-md">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
+                  viewMode === 'grid'
+                    ? 'bg-white dark:bg-slate-700 text-foreground dark:text-white shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground dark:hover:text-white'
+                }`}
+                aria-pressed={viewMode === 'grid'}
+              >
+                Grid View
+              </button>
+              <button
+                onClick={() => setViewMode('wheel')}
+                className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
+                  viewMode === 'wheel'
+                    ? 'bg-white dark:bg-slate-700 text-foreground dark:text-white shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground dark:hover:text-white'
+                }`}
+                aria-pressed={viewMode === 'wheel'}
+              >
+                Wheel Explorer
+              </button>
+            </div>
+          </div>
+
+          {/* Grid Area or Emotion Wheel: Error, Loading, or Success */}
           <div className="min-h-[300px] flex items-center justify-center w-full">
             {error ? (
               <ErrorState
                 message="We couldn't load your mood data. Please check your connection."
                 onRetry={fetchData}
+              />
+            ) : isLoading ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-3 md:gap-4 max-w-7xl mx-auto w-full">
+                {Array.from({ length: 16 }).map((_, i) => (
+                  <SkeletonMoodCard key={i} />
+                ))}
+              </div>
+            ) : viewMode === 'wheel' ? (
+              <EmotionWheel
+                moods={moods}
+                selectedMoods={selectedMoods}
+                onSelect={(moodId) => {
+                  setSelectedMoods((prev) => {
+                    if (prev.includes(moodId)) {
+                      return prev.filter((id) => id !== moodId);
+                    } else if (prev.length < maxSelections) {
+                      return [...prev, moodId];
+                    }
+                    return prev;
+                  });
+                }}
+                maxSelections={maxSelections}
               />
             ) : (
               <motion.div
@@ -469,41 +521,37 @@ useEffect(() => {
                   },
                 }}
               >
-                {isLoading
-                  ? Array.from({ length: 16 }).map((_, i) => (
-                      <SkeletonMoodCard key={i} />
-                    ))
-                  : moods.map((mood, index) => (
-  <MoodCard
-    key={mood.id}
-    mood={mood}
-    index={index}
-    isSelected={isMounted && selectedMoods.includes(mood.id)}
-    onSelect={() => {
-      setSelectedMoods((prev) => {
-        if (prev.includes(mood.id)) {
-          return prev.filter((id) => id !== mood.id);
-        } else if (prev.length < maxSelections) {
-          return [...prev, mood.id];
-        }
-        return prev;
-      });
-    }}
-    onKeyDown={(e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        setSelectedMoods((prev) => {
-          if (prev.includes(mood.id)) {
-            return prev.filter((id) => id !== mood.id);
-          } else if (prev.length < maxSelections) {
-            return [...prev, mood.id];
-          }
-          return prev;
-        });
-      }
-    }}
-  />
-))}
+                {moods.map((mood, index) => (
+                  <MoodCard
+                    key={mood.id}
+                    mood={mood}
+                    index={index}
+                    isSelected={isMounted && selectedMoods.includes(mood.id)}
+                    onSelect={() => {
+                      setSelectedMoods((prev) => {
+                        if (prev.includes(mood.id)) {
+                          return prev.filter((id) => id !== mood.id);
+                        } else if (prev.length < maxSelections) {
+                          return [...prev, mood.id];
+                        }
+                        return prev;
+                      });
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setSelectedMoods((prev) => {
+                          if (prev.includes(mood.id)) {
+                            return prev.filter((id) => id !== mood.id);
+                          } else if (prev.length < maxSelections) {
+                            return [...prev, mood.id];
+                          }
+                          return prev;
+                        });
+                      }
+                    }}
+                  />
+                ))}
               </motion.div>
             )}
           </div>
