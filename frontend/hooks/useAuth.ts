@@ -13,10 +13,18 @@ export function useAuth() {
       return;
     }
 
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
+  const unsubscribe = onAuthStateChanged(
+  auth,
+  (currentUser) => {
+    setUser(currentUser);
+    setLoading(false);
+  },
+  (error) => {
+    console.error('Auth state change error:', error);
+    setUser(null);
+    setLoading(false);
+  }
+);
 
     return () => unsubscribe();
   }, []);
