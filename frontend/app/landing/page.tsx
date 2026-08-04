@@ -16,7 +16,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground relative overflow-x-clip">
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(6)].map((_, i) => (
@@ -52,7 +52,7 @@ export default function LandingPage() {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 px-4 py-6 sm:px-6"
+        className="sticky top-0 z-50 px-4 py-4 sm:px-6 backdrop-blur-md bg-slate-50/80 dark:bg-[hsl(var(--page-gradient-from))]/80 border-b border-black/5 dark:border-white/10 transition-colors"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center gap-4">
           <div className="flex items-center space-x-3">

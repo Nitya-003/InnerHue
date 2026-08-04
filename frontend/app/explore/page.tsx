@@ -92,7 +92,7 @@ export default function ExplorePage() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground"
+      className="min-h-screen relative overflow-x-clip bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground"
     >
       <FloatingBackground />
 
@@ -105,7 +105,7 @@ export default function ExplorePage() {
           delay: 0.2,
           ease: "easeOut"
         }}
-        className="relative z-10 p-6"
+        className="sticky top-0 z-50 p-4 md:p-6 backdrop-blur-md bg-slate-50/80 dark:bg-[hsl(var(--page-gradient-from))]/80 border-b border-black/5 dark:border-white/10 transition-colors"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4">

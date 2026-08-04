@@ -196,7 +196,7 @@ export default function MusicPage() {
   const HeroIcon = currentSoundscape.icon;
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] relative overflow-x-clip transition-colors duration-500">
 
       {/* Ambient glow — visible in dark, subtle in light */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -214,10 +214,9 @@ export default function MusicPage() {
         />
       </div>
 
-      <main id="main" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8 pb-20">
-
-        {/* ── Header ── */}
-        <div className="flex items-center justify-between mb-10">
+      {/* ── Header ── */}
+      <header className="sticky top-0 z-50 px-4 py-4 sm:px-6 backdrop-blur-md bg-background/80 border-b border-black/5 dark:border-white/10 transition-colors">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link
             href="/"
             className="inline-flex items-center text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors group"
@@ -227,6 +226,9 @@ export default function MusicPage() {
           </Link>
           <ThemeToggle />
         </div>
+      </header>
+
+      <main id="main" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8 pb-20">
 
         {/* ── Hero Player ── */}
         <motion.div
