@@ -318,7 +318,6 @@ export default function ContributorsPage() {
               </a>
             </motion.div>
           </div>
-        </motion.div>
 
         {/* Stats banner */}
         {contributors.length > 0 && (
