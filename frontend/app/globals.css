@@ -191,6 +191,20 @@
   transition-property: background-color, border-color, color, box-shadow;
 }
 
+/* GPU-accelerated particle pulse — replaces per-element framer-motion so the
+   compositor can batch 12 small transforms per frame instead of forcing the
+   React reconciler to recompute state for every particle. See #266. */
+@keyframes orbParticlePulse {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate3d(0, -4px, 0) scale(1.5);
+    opacity: 0.8;
+  }
+}
+
 /* Custom scrollbar for streak detail timeline */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;

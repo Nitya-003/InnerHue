@@ -21,8 +21,22 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPulse, setShowPulse] = useState(false);
   const [confetti, setConfetti] = useState<{ id: number; x: number; y: number; angle: number; drift: number }[]>([]);
+  // Detect low-end devices once on mount so we can scale particle count down
+  // to keep main-thread work cheap on mobile / integrated-GPU laptops.
+  const [particleCount, setParticleCount] = useState(12);
   const clickCountRef = useRef(0);
   const lastClickTimeRef = useRef(0);
+
+  useEffect(() => {
+    const reduce =
+      typeof window !== 'undefined' &&
+      (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ||
+        // @ts-expect-error - navigator.deviceMemory is non-standard but widely available in Chromium
+        (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+        // @ts-expect-error - navigator.hardwareConcurrency is widely supported
+        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
+    if (reduce) setParticleCount(5);
+  }, []);
 
   const handleEmojiClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -42,11 +56,13 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
   };
 
   const triggerConfetti = () => {
-    const newConfetti = Array.from({ length: 20 }, (_, i) => ({
+    // Reduce confetti count from 20 to 10 — still feels celebratory but
+    // half the DOM nodes to mount + animate on a click burst.
+    const newConfetti = Array.from({ length: 10 }, (_, i) => ({
       id: Date.now() + i,
       x: 0,
       y: 0,
-      angle: (i * 18) * (Math.PI / 180),
+      angle: (i * 36) * (Math.PI / 180),
       drift: Math.random() * 50 - 25
     }));
     setConfetti(newConfetti);
@@ -75,9 +91,11 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     },
   };
 
+  // Static-only animation: scale + opacity. Drop the scale [0.8, 1.5] range
+  // and pin to opacity for cheaper paint; the transform itself is GPU-
+  // accelerated because of `will-change: transform`.
   const particleVariants: Variants = {
     animate: {
-      scale: [0.8, 1.5, 0.8],
       opacity: [0.2, 0.8, 0.2],
       transition: {
         repeat: Infinity,
@@ -91,13 +109,13 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
 
   useEffect(() => {
 
-    setParticles(Array.from({ length: 12 }, (_, i) => ({
+    setParticles(Array.from({ length: particleCount }, (_, i) => ({
       id: i,
-      angle: (i * 30) * (Math.PI / 180),
+      angle: (i * (360 / particleCount)) * (Math.PI / 180),
       distance: 150 + Math.random() * 50,
       duration: 3 + Math.random() * 2 // Moved here
     })));
-  }, []);
+  }, [particleCount]);
 
   return (
     <div className="relative">
@@ -113,21 +131,20 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
 
         <div className="relative h-80 flex items-center justify-center">
           {particles.map((particle) => (
-            <motion.div
+            <div
               key={particle.id}
               className="absolute w-2 h-2 rounded-full"
               style={{
                 left: `calc(50% + ${Math.cos(particle.angle) * particle.distance}px)`,
                 top: `calc(50% + ${Math.sin(particle.angle) * particle.distance}px)`,
                 backgroundColor: mood.glow,
+                willChange: 'transform, opacity',
+                transform: 'translate3d(0, 0, 0)',
+                // CSS keyframes replace the per-element framer-motion driver
+                // so the browser can batch them onto the compositor thread
+                // instead of recomputing layout per particle per frame.
+                animation: `orbParticlePulse ${particle.duration}s ease-in-out ${particle.id * 0.2}s infinite`,
               } as React.CSSProperties}
-              variants={particleVariants}
-              initial="animate"
-              animate="animate"
-              transition={{
-                delay: particle.id * 0.2,
-                duration: particle.duration,
-              }}
             />
           ))}
 
@@ -157,6 +174,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
                 y: '-50%',
                 left: '50%',
                 top: '50%',
+                willChange: 'transform, opacity',
               }}
               animate={{
                 scale: [1, 1.2, 1],
@@ -198,6 +216,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
                 borderColor: mood.color,
                 x: '-50%',
                 y: '-50%',
+                willChange: 'transform, opacity',
               } as React.CSSProperties}
               animate={{
                 scale: [1, 1.2, 1],
@@ -222,6 +241,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
                 borderColor: mood.glow,
                 x: '-50%',
                 y: '-50%',
+                willChange: 'transform, opacity',
               } as React.CSSProperties}
               initial={{ width: 200, height: 200, opacity: 0.8, borderWidth: 4 }}
               animate={{ width: 400, height: 400, opacity: 0, borderWidth: 0 }}
@@ -239,6 +259,7 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
                 top: '50%',
                 x: '-50%',
                 y: '-50%',
+                willChange: 'transform, opacity',
               }}
               initial={{ scale: 0, opacity: 1, x: '-50%', y: '-50%' }}
               animate={{
@@ -269,4 +290,3 @@ export function OrbVisualizer({ mood }: OrbVisualizerProps) {
     </div>
   );
 }
-
