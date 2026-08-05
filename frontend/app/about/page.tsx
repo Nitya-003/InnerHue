@@ -28,17 +28,12 @@ export default function AboutUs() {
     };
 
     return (
-        <main id="main" className="min-h-screen relative overflow-hidden text-foreground dark:text-white font-sans bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))]">
+        <div className="min-h-screen relative overflow-x-clip text-foreground dark:text-white font-sans bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))]">
             <FloatingBackground />
 
-            <div className="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-20">
-                <motion.header
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="mb-16 relative"
-                >
-                    {/* Back Link */}
+            {/* Sticky Header Nav */}
+            <header className="sticky top-0 z-50 px-6 py-4 backdrop-blur-md bg-slate-50/80 dark:bg-[hsl(var(--page-gradient-from))]/80 border-b border-black/5 dark:border-white/10 transition-colors">
+                <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <motion.div
                         whileHover={{ x: -4 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
@@ -46,17 +41,23 @@ export default function AboutUs() {
                     >
                         <Link
                             href="/"
-                            className="inline-flex items-center text-muted-foreground dark:text-white/60 hover:text-foreground dark:hover:text-white mb-6 transition-colors duration-200 group"
+                            className="inline-flex items-center text-muted-foreground dark:text-white/60 hover:text-foreground dark:hover:text-white transition-colors duration-200 group"
                         >
                             <ChevronLeft className="w-5 h-5 mr-1 transition-transform duration-200 group-hover:-translate-x-1" />
                             Back to Home
                         </Link>
                     </motion.div>
+                    <ThemeToggle />
+                </div>
+            </header>
 
-                    <div className="absolute right-0 top-0">
-                        <ThemeToggle />
-                    </div>
-
+            <main id="main" className="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-16">
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="mb-16"
+                >
                     <div className="text-center md:text-left">
                         <div className="flex items-center justify-center md:justify-start space-x-3 mb-4">
                             {/* Animated Heart Icon */}
@@ -74,7 +75,7 @@ export default function AboutUs() {
                             Your mindful companion for navigating the complex landscape of human emotions.
                         </p>
                     </div>
-                </motion.header>
+                </motion.div>
 
                 <motion.div
                     variants={containerVariants}
@@ -187,7 +188,7 @@ export default function AboutUs() {
                     </motion.div>
 
                 </motion.div>
-            </div>
-        </main>
+            </main>
+        </div>
     );
 }

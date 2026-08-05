@@ -230,29 +230,30 @@ export default function ContributorsPage() {
   const totalCommits = contributors.reduce((sum, c) => sum + c.contributions, 0);
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden text-foreground font-sans">
+    <div className="min-h-screen bg-background relative overflow-x-clip text-foreground font-sans">
       <FloatingBackground />
 
-      <main id="main" className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-20">
-        {/* Header */}
-        <motion.header
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-12"
-        >
-          <div className="flex items-center justify-between mb-8">
-            <Link
-              href="/"
-              className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors group"
-            >
-              <ChevronLeft className="w-5 h-5 mr-1 group-hover:-translate-x-1 transition-transform" />
-              Back to Home
-            </Link>
-            <ThemeToggle />
-          </div>
+      {/* Sticky Header Nav */}
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="sticky top-0 z-50 px-4 py-4 sm:px-6 backdrop-blur-md bg-background/80 border-b border-black/5 dark:border-white/10 transition-colors"
+      >
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <Link
+            href="/"
+            className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors group"
+          >
+            <ChevronLeft className="w-5 h-5 mr-1 group-hover:-translate-x-1 transition-transform" />
+            Back to Home
+          </Link>
+          <ThemeToggle />
+        </div>
+      </motion.header>
 
-          <div className="text-center">
+      <main id="main" className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+        <div className="text-center mb-12">
             {/* Icon cluster */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -317,7 +318,6 @@ export default function ContributorsPage() {
               </a>
             </motion.div>
           </div>
-        </motion.header>
 
         {/* Stats banner */}
         {contributors.length > 0 && (

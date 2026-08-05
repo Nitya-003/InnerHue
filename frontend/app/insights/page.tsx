@@ -8,21 +8,14 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function Insights() {
   return (
-    <div className="relative min-h-screen overflow-hidden px-6 py-24 bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground dark:text-white">
+    <div className="relative min-h-screen overflow-x-clip bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground dark:text-white">
 
       {/* ✨ Floating Particles */}
       <Particles />
 
-      <main id="main" className="max-w-6xl mx-auto relative z-10">
-
-        {/* Header with Back Button and Theme Toggle */}
-        <motion.header
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-16 relative"
-        >
-          {/* Back Link */}
+      {/* Sticky Header Nav */}
+      <header className="sticky top-0 z-50 px-6 py-4 backdrop-blur-md bg-slate-50/80 dark:bg-[hsl(var(--page-gradient-from))]/80 border-b border-black/5 dark:border-white/10 transition-colors">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
           <motion.div
             whileHover={{ x: -4 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
@@ -30,17 +23,23 @@ export default function Insights() {
           >
             <Link
               href="/"
-              className="inline-flex items-center text-muted-foreground dark:text-white/60 hover:text-foreground dark:hover:text-white mb-6 transition-colors duration-200 group"
+              className="inline-flex items-center text-muted-foreground dark:text-white/60 hover:text-foreground dark:hover:text-white transition-colors duration-200 group"
             >
               <ChevronLeft className="w-5 h-5 mr-1 transition-transform duration-200 group-hover:-translate-x-1" />
               Back to Home
             </Link>
           </motion.div>
+          <ThemeToggle />
+        </div>
+      </header>
 
-          <div className="absolute right-0 top-0">
-            <ThemeToggle />
-          </div>
-
+      <main id="main" className="max-w-6xl mx-auto relative z-10 px-6 py-12 md:py-16">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-16"
+        >
           {/* Title */}
           <div className="text-center">
             <motion.h1
@@ -54,7 +53,7 @@ export default function Insights() {
               Insights
             </motion.h1>
           </div>
-        </motion.header>
+        </motion.div>
 
         {/* Description */}
         <motion.p 

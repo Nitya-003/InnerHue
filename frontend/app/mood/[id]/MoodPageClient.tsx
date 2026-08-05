@@ -121,7 +121,7 @@ export default function MoodPageClient({ routeId }: MoodPageClientProps) {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 relative z-10"
+        className="sticky top-0 z-50 p-4 md:p-6 backdrop-blur-md bg-background/80 border-b border-black/5 dark:border-white/10 transition-colors"
       >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <Link href="/">

@@ -9,7 +9,7 @@ import { MemoryCapsule } from '@/components/MemoryCapsule';
 
 export default function CapsulesPage() {
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground transition-colors duration-500">
+    <div className="min-h-screen relative overflow-x-clip bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground transition-colors duration-500">
       {/* Background Animated Aurora */}
       <FloatingBackground />
 
@@ -18,7 +18,7 @@ export default function CapsulesPage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 p-4 md:p-6"
+        className="sticky top-0 z-50 p-4 md:p-6 backdrop-blur-md bg-slate-50/80 dark:bg-[hsl(var(--page-gradient-from))]/80 border-b border-black/5 dark:border-white/10 transition-colors"
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
           {/* Back & Brand */}
